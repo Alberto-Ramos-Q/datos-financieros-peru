@@ -1,0 +1,3 @@
+# Las plantillas HTML de los tableros no cuentan para el lenguaje del repositorio:
+# es un proyecto de Python y las plantillas son solo la presentación de los tableros.
+descargas-*/src/plantillas/*.html linguist-detectable=false
