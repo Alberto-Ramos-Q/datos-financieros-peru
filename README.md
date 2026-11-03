@@ -12,7 +12,7 @@ oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de n
 
 **Portada con los 11 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
 
-[![Tablero de indicadores del sistema financiero](img/tablero_indicadores.png)](https://claude.ai/artifact/RpcG5c5WpCXR6GU5Sa3Kjv)
+[![Portada con los 11 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
 
 | Tablero | Qué muestra |
 |---|---|
