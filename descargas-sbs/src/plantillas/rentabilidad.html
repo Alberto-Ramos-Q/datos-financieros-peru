@@ -1,0 +1,2217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rentabilidad del sistema financiero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas), con la paleta
+   de la SBS: azul #001E6B y gris #B2B4B5. Subsistemas: un tono fijo cada uno (s1–s5, validados para
+   daltonismo en claro y en oscuro); el sistema en gris discontinuo. Entidad: azul SBS, su subsistema en azul
+   medio y el sistema en gris discontinuo. Cascadas (como en estados financieros): lo que suma en azul medio,
+   lo que resta en gris y los subtotales en azul SBS; el signo va siempre escrito. Personal por categoría:
+   rampa ordinal del gris SBS al azul SBS (q1, q2, q4, q6) en el orden del cuadro. Variaciones: mejora en
+   azul, deterioro en morado, siempre con flecha. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a; --s5: #8bb0b2; --sys: #868a93;
+  --up: #001e6b; --bad: #5a2a85;
+  --c-ent: #001e6b; --c-sub: #6a7ca6;
+  --w-add: #6a7ca6; --w-sub: #b2b4b5; --w-tot: #001e6b;
+  --cg: #001e6b; --cf: #475d96; --ce: #8e99b4; --co: #b2b4b5;
+  --on-cg: #ffffff; --on-cf: #ffffff; --on-ce: #111a30; --on-co: #111a30;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4; --s5: #356e6e; --sys: #8a8f9c;
+  --up: #9fb2e6; --bad: #d2b4f0;
+  --c-ent: #c6d2f3; --c-sub: #6e89cc;
+  --w-add: #6e89cc; --w-sub: #545a6c; --w-tot: #c6d2f3;
+  --cg: #dce3f5; --cf: #93aae0; --ce: #4f68a8; --co: #4a5573;
+  --on-cg: #0b1022; --on-cf: #0b1022; --on-ce: #e6e9f0; --on-co: #e6e9f0;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 32px 0 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 3; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-family: var(--font-head); }
+.tile.hero .val { font-size: 48px; }
+.tile.hero .val.long { font-size: 34px; }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 6px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+.d-bad { color: var(--bad); font-weight: 600; }
+.d-good { color: var(--up); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.sqr { border-radius: 2px; }
+.dot.hollow { background: var(--surface); box-shadow: inset 0 0 0 2px var(--muted); }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--ink2) 0 3px, transparent 3px 5px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 32px 0; text-align: center; margin: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+.filters .ind-groups { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.filters .ind-groups .glab { font-size: 12px; color: var(--ink2); }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.lag { color: var(--muted); }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button:hover { color: var(--ink); }
+th[aria-sort] button { color: var(--ink); }
+tr.sum td { font-weight: 620; }
+
+/* Paneles pequeños: partidas en el tiempo y cascadas por ámbito */
+.smgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px 18px; margin-top: 12px; }
+.wfgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px 24px; margin-top: 12px; }
+.sm { border-top: 1px solid var(--grid); padding-top: 10px; min-width: 0; }
+.sm h3 { font-size: 13.5px; display: flex; align-items: center; gap: 6px; }
+.sm .v { font-size: 13px; color: var(--ink2); margin: 2px 0 4px; }
+.sm .v b { color: var(--ink); font-weight: 620; font-size: 15px; }
+.sm.sel { border-top: 2px solid var(--accent); padding-top: 9px; }
+
+/* Cascada */
+.wfl { font-size: 12.5px; fill: var(--ink); }
+.wfl.subt { font-weight: 620; }
+.wfv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.wfrow { outline: none; }
+.wfrow .bg { fill: transparent; }
+.wfrow:hover .bg, .wfrow:focus-visible .bg { fill: var(--wash); }
+.wfrow:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.roe-line { font-size: 13px; color: var(--ink2); margin: 6px 0 0; font-variant-numeric: tabular-nums; }
+.roe-line b { color: var(--ink); font-weight: 620; }
+
+/* Ranking, dispersión y pérdidas */
+.rank-row { cursor: pointer; }
+.rank-row .bg { fill: transparent; }
+.rank-row:hover .bg, .rank-row:focus-visible .bg { fill: var(--wash); }
+.rank-row.sel .bg { fill: var(--wash); }
+.rank-row.sel .nm { font-weight: 650; fill: var(--ink); }
+.rank-row:focus-visible { outline: none; }
+.rank-row:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.pt { cursor: pointer; outline: none; }
+.pt circle.m { stroke: var(--surface); stroke-width: 2; }
+.pt:hover circle.m, .pt:focus-visible circle.m, .pt.sel circle.m { stroke: var(--ink); stroke-width: 2; }
+.ptl { font-size: 11.5px; fill: var(--ink2); pointer-events: none; }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.rv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rs { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ent-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 4px; }
+.ent-stats div { min-width: 0; }
+.ent-stats .lab { font-size: 12.5px; color: var(--ink2); }
+.ent-stats .val { font-size: 20px; font-weight: 620; line-height: 1.25; }
+.ent-stats .sub { font-size: 12px; color: var(--ink2); }
+.ent-wf { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px 24px; margin-top: 8px; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.14); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+/* Pestañas */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, th button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña de metodología */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 16px; margin: 18px 0 6px; font-weight: 600; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 16px; }
+.defs dt { font-weight: 620; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.edu .table-wrap { max-height: none; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .tile.staff { grid-column: 1 / -1; }
+  .ent-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+  .wfgrid, .ent-wf { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 24px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Rentabilidad y eficiencia del sistema financiero</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto ganan los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos del Perú, de dónde sale esa ganancia y cuánto les cuesta operar y cubrir el riesgo de sus créditos, mes a mes.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-sistema" aria-controls="tab-sistema" aria-selected="true">Sistema y subsistemas</button>
+    <button type="button" role="tab" id="tabbtn-entidades" aria-controls="tab-entidades" aria-selected="false" tabindex="-1">Entidades</button>
+    <button type="button" role="tab" id="tabbtn-metodologia" aria-controls="tab-metodologia" aria-selected="false" tabindex="-1">Cómo leer los datos</button>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtros">
+    <div class="f"><span class="lab" id="lab-ind">Indicador</span>
+      <div class="ind-groups">
+        <span class="glab" id="lab-ren">Rentabilidad</span><div class="seg" id="f-ind-ren" role="group" aria-labelledby="lab-ren"></div>
+        <span class="glab" id="lab-cos">Márgenes y costos</span><div class="seg" id="f-ind-cos" role="group" aria-labelledby="lab-cos"></div>
+        <span class="glab" id="lab-trab">Personal</span><div class="seg" id="f-ind-trab" role="group" aria-labelledby="lab-trab"></div>
+      </div>
+    </div>
+    <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+    <div class="f"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+  </div>
+
+  <!-- ===================== Sistema y subsistemas ===================== -->
+  <div id="tab-sistema" role="tabpanel" aria-labelledby="tabbtn-sistema">
+    <div class="section-title">Resumen</div>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Ámbito del resumen">
+      <div class="f"><span class="lab" id="lab-scope">Ámbito</span><div class="seg" id="f-scope" role="group" aria-labelledby="lab-scope"></div></div>
+    </div>
+    <section class="kpis" id="kpis" aria-label="Indicadores del mes seleccionado"></section>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-evo">
+      <div class="card-head">
+        <div>
+          <h2 id="evo-title">ROE por subsistema</h2>
+          <p id="evo-desc"></p>
+        </div>
+        <button class="btn" data-table="evo">Ver tabla</button>
+      </div>
+      <div class="legend" id="evo-legend"></div>
+      <div class="chart" id="ch-evo"></div>
+      <p class="note" id="evo-note" hidden></p>
+      <div class="table-wrap" id="tb-evo" hidden></div>
+    </figure>
+
+    <div class="section-title">De dónde sale la utilidad</div>
+    <figure class="card" id="card-wf">
+      <div class="card-head">
+        <div>
+          <h2 id="wf-title">Del ingreso financiero a la utilidad, por subsistema</h2>
+          <p id="wf-desc"></p>
+        </div>
+        <button class="btn" data-table="wf">Ver tabla</button>
+      </div>
+      <div class="legend" id="wf-legend"></div>
+      <div class="wfgrid" id="wf-grid"></div>
+      <p class="note" id="wf-note"></p>
+      <div class="table-wrap" id="tb-wf" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-sm">
+      <div class="card-head">
+        <div>
+          <h2 id="sm-title">Partidas del ROA en el tiempo</h2>
+          <p id="sm-desc"></p>
+        </div>
+        <button class="btn" data-table="sm">Ver tabla</button>
+      </div>
+      <div class="legend" id="sm-legend"></div>
+      <div class="smgrid" id="sm-grid"></div>
+      <p class="note">Cada panel tiene su propia escala vertical, para que se vea la tendencia de cada partida. Para comparar niveles entre partidas, use las cascadas de arriba.</p>
+      <div class="table-wrap" id="tb-sm" hidden></div>
+    </figure>
+
+    <div class="section-title">Personal por categoría</div>
+    <figure class="card" id="card-mix">
+      <div class="card-head">
+        <div>
+          <h2 id="mix-title">Personal por categoría</h2>
+          <p id="mix-desc"></p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="f-mixu" role="group" aria-label="Unidad del gráfico de personal"></div>
+          <button class="btn" data-table="mix">Ver tabla</button>
+        </div>
+      </div>
+      <div class="legend" id="mix-legend"></div>
+      <div class="chart" id="ch-mixbars"></div>
+      <h3 id="mix-evo-title" style="margin:18px 0 0"></h3>
+      <div class="chart" id="ch-mix"></div>
+      <p class="note" id="mix-note"></p>
+      <div class="table-wrap" id="tb-mix" hidden></div>
+    </figure>
+
+    <div class="section-title">Participación de los trabajadores en las utilidades</div>
+    <figure class="card" id="card-ptu">
+      <div class="card-head">
+        <div>
+          <h2 id="ptu-title">Participación de los trabajadores en las utilidades</h2>
+          <p id="ptu-desc"></p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="f-ptuy" role="group" aria-label="Ejercicio"></div>
+          <button class="btn" data-table="ptu">Ver tabla</button>
+        </div>
+      </div>
+      <div class="legend" id="ptu-legend"></div>
+      <div class="chart" id="ch-ptu"></div>
+      <p class="note" id="ptu-note"></p>
+      <div class="table-wrap" id="tb-ptu" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Entidades ===================== -->
+  <div id="tab-entidades" role="tabpanel" aria-labelledby="tabbtn-entidades" hidden>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Subsistema">
+      <div class="f"><span class="lab" id="lab-sub">Subsistema</span><div class="seg" id="f-sub" role="group" aria-labelledby="lab-sub"></div></div>
+    </div>
+
+    <figure class="card" id="card-rank">
+      <div class="card-head">
+        <div>
+          <h2 id="rank-title">ROE por entidad</h2>
+          <p id="rank-desc"></p>
+        </div>
+        <button class="btn" data-table="rank">Ver tabla</button>
+      </div>
+      <div class="legend" id="rank-legend"></div>
+      <div class="chart" id="ch-rank"></div>
+      <p class="note" id="rank-note"></p>
+      <div class="table-wrap" id="tb-rank" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-sc">
+      <div class="card-head">
+        <div>
+          <h2 id="sc-title">Rentabilidad y mora por entidad</h2>
+          <p id="sc-desc"></p>
+        </div>
+        <div class="card-tools">
+          <span class="note" id="lab-scx" style="margin:0">Eje horizontal</span>
+          <div class="seg" id="f-scx" role="group" aria-labelledby="lab-scx"></div>
+        </div>
+      </div>
+      <div class="legend" id="sc-legend"></div>
+      <div class="chart" id="ch-sc"></div>
+      <p class="note" id="sc-note"></p>
+    </figure>
+
+    <figure class="card" id="card-loss">
+      <div class="card-head">
+        <div>
+          <h2 id="loss-title">Entidades con pérdidas</h2>
+          <p id="loss-desc"></p>
+        </div>
+        <button class="btn" data-table="loss">Ver tabla</button>
+      </div>
+      <div class="legend" id="loss-legend"></div>
+      <div class="chart" id="ch-loss-n"></div>
+      <div class="chart" id="ch-loss" style="margin-top:14px"></div>
+      <p class="note" id="loss-note"></p>
+      <div class="table-wrap" id="tb-loss" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-ent">
+      <div class="card-head">
+        <div>
+          <h2 id="ent-title">Detalle de la entidad</h2>
+          <p id="ent-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-ent" style="margin:0">Entidad</label>
+          <select class="btn" id="f-ent"></select>
+          <button class="btn" data-table="ent">Ver tabla</button>
+        </div>
+      </div>
+      <div class="ent-stats" id="ent-stats"></div>
+      <div class="legend" id="ent-legend"></div>
+      <div class="chart" id="ch-ent"></div>
+      <p class="note" id="ent-note" hidden></p>
+      <h3 style="margin:18px 0 0">Del ingreso financiero a la utilidad, frente a su subsistema</h3>
+      <div class="ent-wf" id="ent-wf"></div>
+      <div class="card-head" style="margin-top:18px; align-items:center">
+        <h3 id="ent-mix-title">Personal por categoría</h3>
+        <div class="seg" id="f-mixu-ent" role="group" aria-label="Unidad del gráfico de personal de la entidad"></div>
+      </div>
+      <div class="legend" id="ent-mix-legend"></div>
+      <div class="chart" id="ch-ent-mix"></div>
+      <p class="note" id="ent-mix-note"></p>
+      <div class="table-wrap" id="tb-ent" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Metodología ===================== -->
+  <div id="tab-metodologia" role="tabpanel" aria-labelledby="tabbtn-metodologia" hidden>
+    <div class="edu">
+      <section id="rentabilidad">
+        <h2>Rentabilidad</h2>
+        <p>El ROE y el ROA comparan la utilidad neta de los últimos 12 meses con lo que la entidad tuvo, en promedio, durante esos mismos 12 meses: su patrimonio o su activo.</p>
+        <dl class="defs">
+          <dt>Utilidad neta</dt><dd>Lo que queda después de restar a los ingresos todos los gastos, las provisiones y el impuesto a la renta. Es la última línea del estado de resultados («resultado neto del ejercicio»). Si es negativa, es una pérdida.</dd>
+          <dt>Patrimonio</dt><dd>Patrimonio contable: el activo menos el pasivo. Incluye el capital que aportaron los accionistas, las reservas y las utilidades que no se repartieron.</dd>
+          <dt>Activo total</dt><dd>Todo lo que la entidad tiene, sobre todo créditos, inversiones y fondos disponibles. Se financia con pasivo (depósitos, adeudos, valores emitidos y otras deudas) y con patrimonio.</dd>
+        </dl>
+        <h3>ROE: rentabilidad del patrimonio</h3>
+        <div class="formula">ROE = utilidad neta de los últimos 12 meses ÷ patrimonio promedio de los últimos 12 meses</div>
+        <p>Cuánto ganó la entidad por cada sol de sus accionistas. Un ROE de 20% significa que en los últimos 12 meses ganó S/ 20 por cada S/ 100 de patrimonio promedio. Si el patrimonio promedio es cero o negativo, el ROE no se calcula.</p>
+        <h3>ROA: rentabilidad del activo</h3>
+        <div class="formula">ROA = utilidad neta de los últimos 12 meses ÷ activo total promedio de los últimos 12 meses</div>
+        <p>Cuánto ganó por cada sol de activo, sin importar cómo se financió. Un ROA de 2% son S/ 2 por cada S/ 100 de activo. Como la mayor parte del activo de una entidad financiera se financia con depósitos y otras deudas, y no con patrimonio, el ROE es varias veces el ROA (ver «Del ROA al ROE»).</p>
+        <p>En los dos, más alto es mejor para la entidad, pero una rentabilidad alta no dice cuánto riesgo se tomó para lograrla: conviene leerla junto con la mora, el costo del riesgo y la solvencia.</p>
+        <p>Son los indicadores del Glosario de Términos e Indicadores de la SBS «Utilidad neta anualizada / patrimonio promedio» (ROAE) y «Utilidad neta anualizada / activo total promedio» (ROAA): la utilidad de los últimos 12 meses frente al patrimonio contable o al activo total promedio de los últimos 12 meses. La «A» de ROAE y ROAA es de <i>average</i> (promedio); aquí se usa la forma corta, ROE y ROA.</p>
+        <h3>Utilidad de los últimos 12 meses</h3>
+        <p>La SBS publica el estado de resultados <b>acumulado de enero al mes</b>: la utilidad de agosto es la de enero a agosto. Para tener un año completo en cualquier mes, se usa la regla de las notas de los cuadros de indicadores de la SBS, que llaman «anualizado» a este monto:</p>
+        <div class="formula">Valor de 12 meses = acumulado del mes + acumulado de diciembre del año anterior − acumulado del mismo mes del año anterior</div>
+        <p>Por ejemplo, la utilidad de 12 meses a agosto de 2026 es la de enero a agosto de 2026, más la de enero a diciembre de 2025, menos la de enero a agosto de 2025: queda la de setiembre de 2025 a agosto de 2026. En diciembre es simplemente el acumulado del año. «Anualizado» no significa multiplicar el acumulado por 12 y dividirlo entre los meses transcurridos: es la suma de los 12 meses que de verdad pasaron.</p>
+        <h3>Promedio de 12 meses</h3>
+        <p>Las notas de la SBS dicen que «el promedio corresponde a los últimos doce meses». Aquí es el promedio simple de los 12 saldos de fin de mes: el del mes elegido y los de los 11 meses anteriores. Con esa regla se reproducen los valores publicados. Como hace falta un año de historia, los indicadores empiezan en <span data-v="from"></span>; para una entidad nueva, unos 12 meses después de su primer dato.</p>
+        <h3>Utilidad de 12 meses en soles</h3>
+        <p>Es el monto de la utilidad neta de los últimos 12 meses, en soles corrientes. No es lo mismo que la utilidad <b>acumulada en el año</b> (de enero al mes), que es la que muestran los cuadros mensuales de la SBS; el tablero la muestra aparte en el resumen, en el detalle de cada entidad y en la tabla de pérdidas.</p>
+      </section>
+
+      <section id="descomposicion">
+        <h2>De dónde sale la utilidad</h2>
+        <p>La cascada recorre el estado de resultados de arriba abajo. Cada partida es su monto de los últimos 12 meses dividido entre el activo total promedio, así que todas quedan en la misma unidad que el ROA y suman exactamente el ROA. Las barras azules suman a la utilidad, las grises restan y las de azul más marcado son subtotales. Por ejemplo, unos gastos de operación de −3.00 significan que operar le costó a la entidad S/ 3 por cada S/ 100 de activo en esos 12 meses.</p>
+        <dl class="defs">
+          <dt>Ingresos financieros</dt><dd>Intereses y comisiones de los créditos, intereses del disponible y de las inversiones, ganancias por valorización de inversiones, por diferencia de cambio y por derivados, entre otros (rubro «Ingresos financieros» del estado de resultados).</dd>
+          <dt>Gastos financieros</dt><dd>Lo que paga la entidad por sus fondos: intereses por los depósitos y otras obligaciones con el público, por los adeudos y por los valores que emite, y primas al Fondo de Seguro de Depósitos. Incluye también pérdidas por valorización de inversiones, por diferencia de cambio y por derivados, entre otros.</dd>
+          <dt>Margen financiero bruto</dt><dd>Ingresos financieros menos gastos financieros: lo que deja la intermediación antes de cualquier otro costo.</dd>
+          <dt>Provisiones para créditos</dt><dd>Rubro «Provisiones para créditos directos»: el gasto del periodo para cubrir el riesgo de que los créditos no se paguen, según la clasificación de riesgo de cada deudor. Es neto de las provisiones que se revierten, así que puede ser negativo cuando una entidad libera más provisiones de las que constituye.</dd>
+          <dt>Servicios financieros netos</dt><dd>Ingresos por servicios financieros menos gastos por servicios financieros. En el cuadro de la SBS, los ingresos incluyen los de créditos indirectos (avales y cartas fianza, por ejemplo), fideicomisos y comisiones de confianza, cuentas por cobrar e «ingresos diversos».</dd>
+          <dt>Gastos de operación</dt><dd>Gastos administrativos (personal, directorio, servicios recibidos de terceros, impuestos y contribuciones) más depreciación y amortización. Es la definición de gastos de operación del glosario de la SBS.<span data-hist> Hasta 2010 se les suma la participación de los trabajadores en las utilidades, que entonces era una línea aparte del estado de resultados y desde 2011 es gasto de personal (ver «Participación de los trabajadores en las utilidades»).</span></dd>
+          <dt>Otros</dt><dd>Resultado por venta de cartera, otras provisiones (créditos indirectos, cuentas por cobrar, bienes adjudicados, inversiones y otras) y otros ingresos y gastos. Puede sumar o restar.</dd>
+          <dt>Impuesto a la renta</dt><dd>Impuesto a la renta del estado de resultados.</dd>
+          <dt>Utilidad neta = ROA</dt><dd>Lo que queda al final, como % del activo promedio: es el ROA.</dd>
+        </dl>
+        <p>El cuadro de la SBS ordena las mismas partidas con otros subtotales: margen financiero bruto − provisiones para créditos directos = <b>margen financiero neto</b>; + ingresos y − gastos por servicios financieros + resultado por venta de cartera = <b>margen operacional</b>; − gastos administrativos = <b>margen operacional neto</b>; − provisiones, depreciación y amortización + otros ingresos y gastos = resultado antes del impuesto a la renta; − impuesto = resultado neto del ejercicio. La cascada pasa la depreciación y la amortización a gastos de operación y junta en «Otros» la venta de cartera, las demás provisiones y los otros ingresos y gastos. La utilidad final es la misma.</p>
+        <h3>Del ROA al ROE: el apalancamiento</h3>
+        <div class="formula">ROE = ROA × apalancamiento, con apalancamiento = activo promedio ÷ patrimonio promedio (en veces)</div>
+        <p>Es una identidad, porque la utilidad es la misma y solo cambia el denominador: (utilidad ÷ activo) × (activo ÷ patrimonio) = utilidad ÷ patrimonio. Es exacta porque el ROA y el apalancamiento usan el mismo activo promedio, y el ROE y el apalancamiento el mismo patrimonio promedio, todos de los mismos 12 meses; si se mezclaran, por ejemplo, el activo a fin de mes con el patrimonio promedio, ya no cuadraría. Un apalancamiento de 8 veces significa S/ 8 de activo por cada S/ 1 de patrimonio: los otros S/ 7 se financian con pasivo. Con más apalancamiento, el mismo ROA se convierte en un ROE más alto, pero una pérdida también se convierte en un ROE más negativo, y hay menos patrimonio para absorberla. Las cifras se muestran redondeadas, así que al multiplicarlas el resultado puede no coincidir exactamente con el ROE mostrado.</p>
+        <p>Este apalancamiento es un cálculo propio. No es el indicador «pasivo total / capital social y reservas» que publica la SBS en sus cuadros de indicadores, ni el ratio de capital global, que compara el patrimonio efectivo con los activos ponderados por riesgo.</p>
+        <h3>Margen financiero</h3>
+        <div class="formula">Margen financiero = margen financiero bruto de 12 meses ÷ activo total promedio</div>
+        <p>Cuánto le deja a la entidad la intermediación (lo que cobra menos lo que paga por sus fondos) por cada sol de activo. Es un cálculo propio y se mide sobre el activo total para que encaje en la cascada del ROA; por eso suele ser más bajo que si se midiera solo sobre los activos que generan intereses (el «activo productivo» que la SBS usa, por ejemplo, en su indicador «ingresos financieros anualizados / activo productivo promedio»). No es el «margen financiero neto» del estado de resultados, que ya resta las provisiones.</p>
+      </section>
+
+      <section id="costos">
+        <h2>Eficiencia y costo del riesgo</h2>
+        <h3>Eficiencia</h3>
+        <div class="formula">Eficiencia = gastos de operación ÷ margen financiero total, con margen financiero total = margen financiero bruto + ingresos por servicios financieros − gastos por servicios financieros</div>
+        <p>Es la parte del margen financiero total (los ingresos netos de la entidad, antes de provisiones) que se va en gastos de operación. Una eficiencia de 40% significa que de cada S/ 100 de margen, S/ 40 se gastan en operar. <b>Más bajo es mejor</b>: aunque el indicador se llame «eficiencia», un valor más alto indica una entidad menos eficiente. Por encima de 100%, los gastos de operación superan al margen.</p>
+        <p>En el tablero, los dos montos son de los últimos 12 meses en todos los subsistemas, para poder comparar. El glosario de la SBS de 2011 define ambos montos como acumulados en el año, y así publica la SBS el indicador de banca y de financieras («Gastos de Operación / Margen Financiero Total»). Los cuadros de cajas municipales, cajas rurales y empresas de créditos, en cambio, lo publican con montos anualizados de 12 meses («Gastos de Operación Anualizados / Margen Financiero Total Anualizado»). Por eso, en banca y financieras, el valor del tablero puede diferir del publicado.</p>
+        <p>El glosario de 2011 suma también «otros ingresos y gastos» en el margen financiero total. Las cifras publicadas (revisadas desde 2015) se reproducen sin esa partida, y así se calcula aquí.</p>
+        <h3>Costo del riesgo</h3>
+        <div class="formula">Costo del riesgo = provisiones para créditos directos de 12 meses ÷ créditos directos promedio de los últimos 12 meses</div>
+        <p>Cuánto gastó la entidad en provisiones para créditos en los últimos 12 meses por cada sol prestado: un costo del riesgo de 3% son S/ 3 por cada S/ 100 de créditos promedio. Es un cálculo propio con la definición habitual en el análisis bancario (gasto en provisiones para créditos ÷ créditos promedio); la SBS no lo publica en sus cuadros de indicadores. Los créditos directos son los vigentes, refinanciados, reestructurados, vencidos y en cobranza judicial (definición del glosario de la SBS), sin restar provisiones; el promedio se calcula igual que el del activo.</p>
+        <p><b>Más bajo es mejor</b>, con un cuidado: como el gasto en provisiones es neto de las que se revierten, un costo bajo o negativo puede reflejar provisiones liberadas y no solo una cartera de mejor calidad.</p>
+        <h3>Mora</h3>
+        <div class="formula">Mora = créditos atrasados ÷ créditos directos, a fin de mes</div>
+        <p>Los créditos atrasados son los vencidos y en cobranza judicial. Un crédito pasa a vencido según los días de atraso y el tipo de crédito; las notas de los cuadros de la SBS dan los plazos. <b>Más bajo es mejor.</b> Se usa en el gráfico de dispersión de la pestaña de entidades. El tablero de colocaciones y morosidad la detalla por tipo de crédito.</p>
+      </section>
+
+      <section id="trabajador">
+        <h2>Utilidad y créditos por trabajador</h2>
+        <p>Estos dos indicadores ponen la utilidad y los créditos en relación con el número de personas que trabajan en la entidad. Muestran cuánto negocio y cuánta ganancia hay por persona; <b>no</b> miden la productividad del trabajo ni los sueldos (ver «Cómo leerlos»).</p>
+        <dl class="defs">
+          <dt>Personal (trabajadores)</dt><dd>Número de personas que trabajan en la entidad al cierre de cada mes, según el cuadro «Personal según Categoría Laboral por Empresa…» del Boletín Estadístico de la SBS (en el índice del boletín, «Número de Personal»). La nota al pie del cuadro indica que la información sale del Anexo N.° 10, «Depósitos, colocaciones y personal por oficinas», que cada entidad reporta oficina por oficina. La nota 2/ de ese anexo pide considerar «a todo el personal, de acuerdo con la función que desempeñan, independientemente de si son nombrados, contratos [sic] o contratados por terceros». El glosario de la SBS lo define igual: el «total de trabajadores de las instituciones financieras, independientemente de si son nombrados, contratados por la institución financiera o por terceros». Es decir, por definición el conteo <b>incluye al personal tercerizado</b> (ver «Tercerización» más abajo).</dd>
+          <dt>Categorías</dt><dd>El cuadro separa al personal en gerentes, funcionarios, empleados y otros. La nota 2/ del Anexo N.° 10 pide considerar al personal «de acuerdo con la función que desempeñan», pero ni el anexo ni el glosario de la SBS definen qué es un gerente, un funcionario o un empleado, ni qué va en «otros». Una nota del cuadro de empresas de créditos de octubre de 2021 indica que la SBS tiene criterios para clasificar al personal («antes de octubre 2021, la Edpyme había considerando [sic] criterios distintos a los de esta superintendencia»), pero no los encontramos publicados. La clasificación la hace y la reporta cada entidad. Por eso los indicadores por trabajador usan solo el total, y la composición se muestra aparte (ver «Personal por categoría»).</dd>
+        </dl>
+        <h3>Utilidad por trabajador</h3>
+        <div class="formula">Utilidad por trabajador = utilidad neta de los últimos 12 meses ÷ personal promedio de los últimos 12 meses</div>
+        <p>Cuántos soles de utilidad neta generó la entidad en un año por cada persona que trabajó en ella, en promedio, durante ese año. Si la entidad tuvo pérdida, es negativa. Es un cálculo propio: no está entre los indicadores financieros que publica la SBS en su boletín.</p>
+        <p><b>Por qué el promedio y no el conteo de fin de mes.</b> La utilidad es un flujo de 12 meses y el personal, un saldo que cambia cada mes. Para que el numerador y el denominador cubran el mismo periodo, el personal es el promedio simple de los 12 conteos de fin de mes (el del mes elegido y los de los 11 anteriores), igual que el activo y el patrimonio promedio del ROA y el ROE. Con el conteo de un solo mes, una entidad que contrató mucho, absorbió a otra o redujo su planilla durante el año aparecería con una utilidad por trabajador que no corresponde al personal con que la generó. Si falta alguno de los 12 conteos, el indicador no se calcula.</p>
+        <p id="upt-example"></p>
+        <h3>Sistema y subsistemas</h3>
+        <p>Se suman las utilidades de las entidades y se divide entre la suma de su personal: no es el promedio de los valores de las entidades, así que las entidades grandes pesan más. La utilidad sigue la misma regla de perímetro que el ROE (ver «Sistema, subsistemas y entidades»). El personal de cada mes es el de las entidades que estaban en el subsistema ese mes, y se promedian esos 12 totales mensuales, igual que el activo del ROA. Si a una entidad del subsistema le falta el conteo de un mes, el personal del subsistema queda sin dato ese mes. Hay una excepción: si una entidad no figura en el cuadro de un mes y el total publicado cuadra con las entidades listadas, su personal se toma como cero. Es el caso de la Financiera Edyficar residual, sin créditos tras su fusión con Mibanco, de marzo a noviembre de 2015: el cuadro la lista con cero trabajadores algunos meses y la omite otros.<span data-hist> La caja rural Nuestra Gente (enero a abril de 2013, unos 1,570 trabajadores) y Amérika Financiera (agosto y setiembre de 2013) no figuran en el cuadro de personal de esos meses, y el total publicado tampoco las incluye. El tablero usa su último personal publicado (diciembre de 2012 y julio de 2013) y lo suma al total.</span> <span id="staff-check"></span></p>
+        <h3>Créditos por trabajador</h3>
+        <div class="formula">Créditos por trabajador = créditos directos ÷ personal, ambos a fin de mes</div>
+        <p>Cuántos soles de créditos directos (vigentes, refinanciados, reestructurados, vencidos y en cobranza judicial) tiene la entidad por cada persona que trabaja en ella. Se usa el saldo a fin de mes porque el numerador y el denominador son saldos del mismo día. Es un cálculo propio, con los créditos del balance y el total del cuadro de personal. Aquí se muestra en soles; la SBS publica indicadores parecidos en miles de soles.</p>
+        <p><b>Comparación con la SBS.</b> Los cuadros de indicadores financieros de banca múltiple y de financieras traen «Créditos directos / personal», que el glosario de la SBS describe como «el monto promedio de créditos colocados por cada empleado». Los de cajas municipales, cajas rurales y empresas de créditos traen, en cambio, «Créditos directos / empleados», y los datos muestran que ahí el denominador es solo la categoría «empleados» del cuadro de personal, sin gerentes, funcionarios ni otros. El tablero divide entre el <b>total del personal en todos los subsistemas</b>, para que sean comparables; por eso coincide con lo publicado en banca y financieras (salvo el matiz de las sucursales en el exterior que se explica más abajo), pero da valores menores que los publicados en cajas y empresas de créditos. <span id="cpt-check"></span></p>
+        <h3>Cómo leerlos: no es productividad ni salario</h3>
+        <ul>
+          <li><b>Dependen del modelo de negocio.</b> Prestar S/ 1 millón en créditos de S/ 5,000 son 200 créditos que evaluar, desembolsar y cobrar; prestar S/ 1 millón a una gran empresa puede ser una sola operación. Cabe esperar, entonces, que las entidades que dan créditos pequeños tengan menos créditos por trabajador, y los datos son coherentes con eso. En agosto de 2026 se tomaron las 46 entidades con al menos S/ 10 millones de activo, todas con dato de deudores. Ordenadas por crédito promedio por deudor (créditos directos ÷ número de deudores del cuadro de deudores por tipo de crédito), quedan en un orden muy parecido al de los créditos por trabajador (correlación de rangos de Spearman de 0.80). El orden se parece menos al de la utilidad por trabajador (0.69). Es una asociación entre entidades, no una medida de causa y efecto: no dice cuánto cambiaría la utilidad por trabajador de una entidad si cambiara el tamaño de sus créditos. <span id="upt-model"></span></li>
+          <li><b>No es productividad laboral.</b> La utilidad depende también del capital, del costo de los fondos, de las provisiones y de los impuestos, no solo del trabajo. Una entidad con una cartera grande por persona puede tener una utilidad por trabajador alta sin que su personal sea más productivo que el de otra.</li>
+          <li><b>No es un sueldo ni un costo laboral.</b> Es utilidad: lo que queda después de pagar, entre otras cosas, al personal. En el Manual de Contabilidad de la SBS, la cuenta 4501 (gastos de personal) registra «los gastos generados por concepto de remuneraciones y las contribuciones por leyes sociales y otros incurridos a favor del personal», incluida la participación de los trabajadores en las utilidades. Los servicios recibidos de terceros van en otra cuenta, la 4503, que tiene subcuentas como vigilancia y protección, limpieza o trabajos eventuales. Lo que la entidad paga por personal contratado por terceros se registra, en principio, como un servicio en esa otra cuenta, mientras que el conteo de personal sí incluye a esas personas. Como el gasto de personal y el número de trabajadores no tendrían la misma cobertura, el tablero no calcula un «gasto de personal por trabajador».</li>
+          <li><b>Tercerización.</b> Dos entidades con el mismo negocio pueden reportar números distintos de trabajadores según cuánto trabajo tercericen. El Anexo N.° 10 pide incluir a los contratados por terceros, pero el cuadro no separa cuántos son, y no es posible verificar con datos públicos que todas las entidades los cuenten igual.</li>
+          <li><b>Cambios de subsistema.</b> Cuando una entidad entra o sale de un subsistema (fusiones, conversiones, liquidaciones), su personal entra o sale del total del subsistema ese mes; el promedio de 12 meses se ajusta poco a poco y la utilidad sigue la regla de perímetro. El indicador del subsistema puede moverse sin que cambie nada en las demás entidades. Cuando una entidad entra a un subsistema a mitad de año, su personal solo cuenta desde que entra. Para que la utilidad cubra los mismos meses, en la utilidad por trabajador del subsistema se resta lo que la entidad había ganado en ese año antes de entrar. Por eso, en los 12 meses que siguen a una entrada, la utilidad del numerador puede diferir un poco de la «Utilidad de 12 meses» que usan el ROE y el ROA, que sí la incluyen (ver «Sistema, subsistemas y entidades»). El caso con más efecto es el de las cajas rurales entre marzo de 2019 y febrero de 2020: sin este ajuste, su utilidad por trabajador habría quedado entre S/ 0.7 mil y S/ 1.0 mil más alta, cuando la del subsistema estaba cerca de cero.</li>
+          <li><b>Sucursales en el exterior.</b> En banca, el cuadro de personal muestra al Banco de Crédito «con sucursales en el exterior», mientras que su utilidad y sus créditos en este tablero son los de la columna sin sucursales. Su utilidad es prácticamente la misma en las dos columnas (la diferencia no llega a 0.2%). Sus créditos sin sucursales, en cambio, son entre 0.4% y 2% menores, así que sus créditos por trabajador en el tablero quedan por debajo de los que publica la SBS en esa proporción. Lo mismo pasa, con diferencias menores al 0.3%, con Interbank hasta 2020 y Scotiabank hasta 2016, que el cuadro de personal también mostraba con sus sucursales en el exterior.</li>
+          <li><b>Saltos en el conteo.</b> Una entidad puede cambiar mucho su conteo de un mes a otro. En agosto de 2026, por ejemplo, una empresa de créditos pasó de 406 a 1,378 trabajadores, casi todo en la categoría «otros»; el cuadro no explica el cambio. Con el promedio de 12 meses, un salto así entra poco a poco en la utilidad por trabajador; los créditos por trabajador, que usan el conteo de fin de mes, lo reflejan de inmediato.</li>
+          <li><b>Entidades muy pequeñas.</b> Con pocas decenas de trabajadores, la utilidad por trabajador puede ser muy alta o muy baja; el ranking y la dispersión cortan la escala.</li>
+          <li id="staff-imputed" hidden></li>
+        </ul>
+        <h3>Personal por categoría</h3>
+        <p>El gráfico «Personal por categoría» de la pestaña del sistema y el detalle de cada entidad muestran cuántos gerentes, funcionarios, empleados y otros reporta cada entidad a fin de mes, en número de personas o como porcentaje de su total. Para el sistema y los subsistemas se suman las entidades. En el cuadro, un guion («-») se lee como cero: así, las cuatro categorías suman el total en todas las filas. El sistema y la banca múltiple no tienen dato en noviembre de 2023, porque el cuadro de personal de banca publicado para ese mes trae la fecha y las cifras de diciembre de 2023 (el personal estimado que usan los indicadores por trabajador ese mes no tiene categorías).</p>
+        <ul>
+          <li><b>Sirve para seguir a una misma entidad o subsistema en el tiempo</b>, mientras la entidad no cambie su manera de clasificar.</li>
+          <li><b>No sirve para comparar entidades.</b> En agosto de 2026, BBVA Perú reportó 5,428 funcionarios y 1,862 empleados, e Interbank, con un número de trabajadores parecido (7,907 y 6,839 en total), 66 funcionarios y 6,562 empleados. Una diferencia así puede venir de criterios de clasificación distintos más que de organizaciones distintas, y con los datos publicados no se puede separar una cosa de la otra. Lo mismo vale para los subsistemas: que la banca tenga más funcionarios en proporción que las cajas no prueba por sí solo que tenga una estructura más jerárquica.</li>
+          <li><b>Reclasificaciones.</b> Un salto de un mes a otro puede ser un cambio de clasificación y no contrataciones ni despidos. En agosto de 2025, Interbank pasó de 4,661 funcionarios y 2,015 empleados a 63 funcionarios y 6,650 empleados, con un total casi igual (de 6,896 a 6,921 personas); el cuadro no trae una nota al respecto. Ese cambio basta para explicar la caída de la proporción de funcionarios de la banca múltiple, de 33.2% en julio a 27.1% en agosto de 2025: los funcionarios de la banca bajaron en 4,519 y los de Interbank, en 4,598. Hay un caso que la propia SBS documenta: en octubre de 2021, la Edpyme Micasita pasó de 15 a 5 funcionarios y de 46 a 56 empleados, con 69 trabajadores en ambos meses, y una nota del cuadro lo atribuye a que antes clasificaba con criterios distintos a los de la SBS.</li>
+          <li><b>«Otros» no está definido.</b> En agosto de 2026 es el 59% del personal de las empresas de créditos, casi todo de una sola entidad, que pasó de 260 a 1,232 personas en «otros» de julio a agosto. El cuadro no dice quiénes son. El personal contratado por terceros entra en el conteo, pero el cuadro no indica en qué categoría.</li>
+          <li><b>Totales del cuadro.</b> De abril a junio de 2026, las categorías de la fila de total que imprime el cuadro de banca múltiple no son la suma de las entidades que lista (diferencias de hasta 50 personas por categoría y de hasta 8 en el total). El tablero usa la suma de las entidades.</li>
+        </ul>
+        <h3>¿Por qué no hay utilidad por gerente o por empleado?</h3>
+        <p>Dividir la utilidad entre el número de gerentes o de empleados es una cuenta fácil, pero el resultado no mide cuánto gana la entidad gracias a cada grupo. La utilidad es de toda la entidad: la producen juntos su personal de todas las categorías, su capital y sus fondos, y los datos publicados no permiten atribuir una parte a cada categoría. Además, el cociente dependería de cómo clasifica cada entidad. Con la utilidad neta de 12 meses y el conteo de fin de mes, la «utilidad por funcionario» de Interbank habría pasado de unos S/ 0.3 millones en julio de 2025 a unos S/ 22 millones en agosto, más de 70 veces, casi todo por el cambio en el número de funcionarios, que parece una reclasificación (el total de trabajadores casi no cambió). Los estados financieros del Boletín Estadístico de la SBS tampoco separan el gasto de personal por categoría: traen una sola línea, «Personal». Que la utilidad no se pueda atribuir a un grupo vale también para la utilidad por trabajador, que por eso no se presenta como productividad; la diferencia es que el total no depende de cómo se clasifique al personal. Por eso el tablero divide la utilidad solo entre el total del personal.</p>
+      </section>
+
+      <section id="participacion">
+        <h2>Participación de los trabajadores en las utilidades</h2>
+        <p>En el Perú, las empresas que generan rentas de tercera categoría reparten entre sus trabajadores un porcentaje de su renta anual antes de impuestos (Decreto Legislativo 892). Están excluidas, entre otras, las que no tienen más de 20 trabajadores (art. 9 del D. Leg. 677; el promedio se calcula según el art. 2 del D.S. 009-98-TR). A las entidades financieras les corresponde el 5%, el porcentaje de las «empresas que realizan otras actividades». Es la parte de la renta que, por ley, se reparte entre los trabajadores.</p>
+        <dl class="defs">
+          <dt>Base</dt><dd>El «saldo de la renta imponible del ejercicio», después de compensar las pérdidas tributarias de años anteriores y sin deducir la propia participación (art. 4 del D. Leg. 892 y Ley 28873). Es una base tributaria, no la utilidad contable.</dd>
+          <dt>Reparto</dt><dd>El 50% se reparte según los días laborados por cada trabajador y el otro 50% en proporción a su remuneración (art. 2).</dd>
+          <dt>Tope</dt><dd>Cada trabajador recibe como máximo 18 remuneraciones mensuales, las vigentes al cierre del ejercicio. Lo que exceda ese tope (el «remanente») no se reparte entre los demás: va a FONDOEMPLEO, para capacitación y promoción del empleo, y lo que en una región pase de 2,200 UIT por ejercicio va al gobierno regional para proyectos de inversión pública (arts. 2 y 3 del D. Leg. 892 y art. 8 del D.S. 009-98-TR).</dd>
+          <dt>Quiénes</dt><dd>Los trabajadores de la entidad en el régimen laboral privado, incluidos los gerentes (los de tiempo parcial, en proporción). También cobran quienes dejaron de trabajar durante el año, por el tiempo laborado. Los practicantes no, porque las modalidades formativas no son una relación laboral. El personal de empresas de servicios o contratistas participa, si corresponde, en las utilidades de su propio empleador, no en las de la entidad donde presta servicios.</dd>
+          <dt>Pago</dt><dd>Dentro de los 30 días naturales siguientes al vencimiento de la declaración jurada anual del impuesto a la renta (art. 6): la participación de un ejercicio se paga en el año siguiente.</dd>
+        </dl>
+        <h3>De dónde salen las cifras</h3>
+        <p>Hasta 2010, el estado de resultados del Boletín Estadístico de la SBS traía una línea «Participación de trabajadores». La Resolución SBS 2740-2011, del 25 de febrero de 2011, dispuso que desde el ejercicio 2011 la participación se registre como gasto de personal, en la partida «gastos de personal y directorio» de los gastos de administración (de acuerdo con la NIC 19). En el Boletín, esa línea aparece en cero en 2011 y 2012<span data-hist> (salvo tres entidades en enero de 2011, cuyo monto vuelve a cero en febrero)</span> y desaparece en 2013, así que el Boletín ya no separa el monto.<span data-hist> Para que los gastos de operación y la eficiencia sean comparables entre años, el tablero suma el monto de esa línea de 2010 (y de enero de 2011) a los gastos administrativos, donde se registra desde 2011, como pidió la Res. SBS N.° 2740-2011 para fines de comparación.</span> El tablero toma el monto de las notas de los estados financieros auditados individuales de cada entidad, publicados en el portal de la SMV o en su web; la tabla da el documento y la página de cada cifra. Solo aparecen las entidades y los años en que el documento revela el monto: varias entidades grandes lo incluyen en el gasto de personal sin separarlo. Por eso no hay un total del sistema ni de los subsistemas. Cuando el documento solo muestra un cero o un guion, se publica el cero; si la nota simplemente no trae la línea, la entidad no aparece.</p>
+        <h3>Cómo leerla</h3>
+        <ul>
+          <li><b>Por persona.</b> Es el monto dividido entre el personal promedio del año (los 12 conteos de fin de mes del cuadro de personal de la SBS). Es una referencia aproximada. El conteo de la SBS puede incluir personal contratado por terceros, que no cobra esta participación de la entidad, y eso la reduce. Pero también cobran quienes trabajaron solo parte del año, y lo que pasa del tope de 18 remuneraciones no va a los trabajadores, y eso la aumenta. No es lo que recibió cada uno: con el reparto por días y por remuneración, quien gana más recibe más.</li>
+          <li><b>% de la utilidad.</b> Es el monto dividido entre la utilidad antes de participación e impuesto a la renta, que se obtiene sumando el monto a la utilidad antes de impuesto del Boletín (la utilidad publicada ya lo descuenta). No tiene por qué ser 5%: la base es la renta imponible, que difiere de la utilidad contable por ingresos exonerados o inafectos, gastos no deducibles y pérdidas de años anteriores. <span id="ptu-median"></span> Hay entidades que registran participación en un año de pérdida contable (a veces por ajustes de ejercicios anteriores) y alguna sin participación en un año con una utilidad pequeña.</li>
+          <li><b>Participación adicional.</b> Algunas entidades reparten además una participación voluntaria. Se muestra aparte cuando el documento la separa (el Banco de Crédito, que también paga una parte en acciones). En el Banco de Crédito, la utilidad usada para el porcentaje ya descuenta esa participación adicional, que también es gasto de personal; sumándola, el porcentaje baja unas dos décimas. Interbank y Mibanco reportan la legal y la adicional en una sola línea (marcadas con *), así que su cifra no es comparable con las demás.</li>
+          <li><b>Ejercicio.</b> Las cifras son del ejercicio en que se generó la utilidad (de enero a diciembre). La utilidad del Boletín puede diferir un poco de la de los estados auditados, que se publican después.</li>
+        </ul>
+      </section>
+
+      <section id="agregados">
+        <h2>Sistema, subsistemas y entidades</h2>
+        <p>El <b>sistema</b> en este tablero son las entidades de los cinco subsistemas de empresas de operaciones múltiples cuyos estados financieros publica la SBS en su Boletín Estadístico: banca múltiple, empresas financieras, cajas municipales de ahorro y crédito, cajas rurales de ahorro y crédito y empresas de créditos. No incluye al Banco de la Nación, Agrobanco ni COFIDE, ni a las cooperativas.</p>
+        <p>Los indicadores del sistema y de cada subsistema se calculan sumando los montos de las entidades y dividiendo después: no son el promedio simple de los ratios de las entidades. Por eso una entidad grande pesa más que una pequeña, y el sistema se parece mucho a la banca, que tiene la mayor parte del activo.</p>
+        <p>Los saldos de cada subsistema (activo, patrimonio, créditos) son la suma de las entidades que estaban en él cada mes, que coincide con la columna total del cuadro. En el estado de resultados se agrega una regla que <b>no está escrita en las notas de la SBS</b>: se dedujo de los datos, porque con ella se reproduce el ROE que publica la SBS para los subsistemas. Una entidad que sale del subsistema durante el año (porque se fusiona, cambia de subsistema o deja de operar) sigue sumando, hasta diciembre de ese año, el resultado que acumuló hasta su salida. Así sus ganancias o pérdidas de ese año no desaparecen de la utilidad de 12 meses. Las notas de los cuadros de indicadores de banca y financieras describen un criterio parecido, pero solo para la cartera atrasada ajustada: se consideran los flujos de cada entidad «desde las fechas correspondientes a su entrada al grupo y/o hasta la última fecha de reporte previo a su salida». El sistema aplica la regla a todas las entidades juntas, para no contar dos veces a una entidad que cambia de subsistema a mitad de año.</p>
+        <p>Una entidad que cambia de subsistema aparece en cada uno solo en los meses en que perteneció a él, pero su utilidad y sus promedios de 12 meses se calculan con toda su historia.</p>
+        <p>En banca se usa el Banco de Crédito sin sus sucursales en el exterior, que es la columna que suma el total del cuadro de estados financieros. El cuadro de indicadores muestra a ese banco con sus sucursales; su utilidad y su patrimonio son prácticamente iguales en las dos columnas, y su activo con sucursales es algo mayor.</p>
+        <h3>Comparación con el ROE publicado por la SBS</h3>
+        <p>Desde 2016, el cálculo reproduce el ROE que publica la SBS para cada entidad con una diferencia menor de 0.1 puntos porcentuales en el 99.6% de los casos (entidad y mes)<span data-hist>; de julio de 2011 a 2015, en el 98.9%</span>. Para los subsistemas, desde 2016 coincide (con una diferencia de 0.05 puntos o menos) en todos los meses en financieras y cajas municipales, en el 97% de los meses en cajas rurales, en el 88% en banca y en el 80% en empresas de créditos.</p>
+        <p>En banca, la diferencia es pequeña (menos de 0.07 puntos) y aparece desde junio de 2025, cuando una financiera se convirtió en banco a mitad de año. Los datos indican que la SBS suma al total de banca solo el resultado que la entidad obtuvo desde su entrada, mientras que el tablero suma su resultado de todo el año. Quedan diferencias de hasta 3.2 puntos en cuatro meses de 2016 en cajas rurales y de hasta 2.3 puntos en varios meses de 2020 a 2022 en empresas de créditos, que no se pudieron explicar con los cuadros publicados.</p>
+        <p><span data-hist>De julio de 2011 a diciembre de 2015, el ajuste de los subsistemas es menor: la diferencia es de 0.05 puntos o menos en todos los meses en cajas municipales, en el 78% de los meses en banca (nunca pasa de 0.13 puntos), en el 67% en empresas de créditos, en el 57% en cajas rurales y en el 48% en financieras. Las mayores diferencias llegan a 0.7 puntos en financieras (de 2012 a 2014), a 0.6 puntos en empresas de créditos (agosto de 2012) y a 1.6 puntos en cajas rurales (julio y agosto de 2015). Tampoco se pudieron explicar con los cuadros publicados. En financieras se reducen en parte si, de las entidades que entraron al subsistema a mitad de año, se suma solo el resultado obtenido desde su entrada, como en banca desde 2025; no se aplica porque no las elimina. </span>La tabla compara el último mes:</p>
+        <div class="table-wrap" id="tb-pub"></div>
+      </section>
+
+      <section id="cuidado">
+        <h2>Antes de comparar</h2>
+        <ul>
+          <li>Los cambios de un porcentaje se expresan en <b>puntos porcentuales (pp)</b>: si el ROE pasa de 18% a 20%, sube 2 pp, no 2%. Los porcentajes del tablero usan punto decimal.</li>
+          <li>El ROE de una entidad con poco patrimonio puede ser muy alto o muy bajo con una utilidad pequeña. Mírelo junto con el ROA, que no depende del apalancamiento.</li>
+          <li>Más ingresos financieros no significan más rentabilidad. Las cajas municipales, por ejemplo, obtienen más ingresos financieros por cada sol de activo que la banca, pero también gastan más en operar y en provisiones. La cascada muestra cuánto queda después de cada partida.</li>
+          <li>El costo del riesgo y la mora no miden lo mismo: la mora es el saldo atrasado a fin de mes; el costo del riesgo, el gasto en provisiones de los últimos 12 meses. Castigar un crédito (sacarlo del balance cuando ya está provisionado por completo) baja la mora, pero no es un gasto nuevo: ese gasto se registró antes, al constituir las provisiones.</li>
+          <li>Los gráficos muestran asociaciones, no causas: si las entidades con más mora tienen menos ROE, eso no prueba por sí solo que una cosa cause la otra.</li>
+          <li>Los indicadores de 12 meses de un subsistema pueden saltar cuando una entidad entra o sale de él (fusiones, conversiones, liquidaciones), sin que cambie la rentabilidad de las demás.</li>
+          <li>El resultado por venta de cartera aparece como línea propia del estado de resultados desde setiembre de 2015 (agosto en las cajas municipales). Antes, el cuadro no tiene esa línea.</li>
+          <li data-hist>Hasta diciembre de 2012, los estados financieros del Boletín siguen el Manual de Contabilidad antes de la modificación de la Resolución SBS N.° 7036-2012, que lo armonizó con las NIIF desde la información de enero de 2013. La utilidad neta, el activo, el patrimonio y los rubros principales del estado de resultados son comparables; la composición de «Otros» (otras provisiones y otros ingresos y gastos) no del todo. Desde enero de 2013, además, los créditos directos se presentan netos de los ingresos no devengados por arrendamiento financiero y lease-back (en la banca, unos S/ 2,700 millones, cerca de 2% de sus créditos).</li>
+          <li data-hist>De enero a abril de 2014, el cuadro de cajas municipales repite para la CMAC Pisco sus cifras de diciembre de 2013 (lo indica su nota al pie); el total del estado de resultados no la incluye, pero el del balance sí. El tablero omite esos cuatro meses de esa caja, cuya disolución e inicio de liquidación declaró la SBS el 21 de mayo de 2014.</li>
+          <li>Los montos están en soles corrientes, sin descontar la inflación.</li>
+          <li>Las cifras son las que publica la SBS en cada cuadro mensual. Si la SBS corrige un cuadro ya publicado, el tablero refleja la versión descargada más reciente.</li>
+        </ul>
+      </section>
+
+      <section id="fuentes">
+        <h2>Fuentes</h2>
+        <ul class="srcs">
+          <li>SBS, Boletín Estadístico del sistema financiero: Balance General y Estado de Ganancias y Pérdidas por empresa (cuadros B-2201 de banca múltiple, B-3101 de financieras, C-1101 de cajas municipales, C-2101 de cajas rurales y C-4103 de empresas de créditos). <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Boletín Estadístico: Indicadores Financieros por empresa (B-2401, B-3301, C-1301, C-2301 y C-4301), para comparar el ROE y el ROA publicados; sus notas definen la anualización y el promedio de 12 meses. Ejemplo: <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2026/Agosto/C-1301-ag2026.XLS" target="_blank" rel="noopener">C-1301 de agosto de 2026</a></li>
+          <li>SBS, Glosario de términos e indicadores del sistema financiero (abril de 2011): utilidad neta anualizada sobre patrimonio y activo promedio (ROAE y ROAA), patrimonio contable, gastos de operación, gastos de administración, ingresos y gastos financieros, margen financiero bruto, gastos de operación / margen financiero total, créditos directos, cartera atrasada, créditos indirectos, créditos castigados, personal y créditos directos / personal. <a href="https://www.sbs.gob.pe/app/stats/Glosarios/Glosario(Abril2011).docx" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Boletín Estadístico: «Personal según Categoría Laboral» por empresa («Número de Personal»: cuadros B-2305 de banca múltiple, B-3202 de financieras, C-1202 de cajas municipales, C-2202 de cajas rurales y C-4206 de empresas de créditos), mensual; nota al pie: información del Anexo N.° 10. Ejemplo: <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2026/Agosto/B-2305-ag2026.XLS" target="_blank" rel="noopener">B-2305 de agosto de 2026</a></li>
+          <li>SBS, Anexo N.° 10 «Depósitos, colocaciones y personal por oficinas» (formato del Manual de Contabilidad), nota 2/ sobre el personal, en la versión de 2017 y en la vigente desde la información de setiembre de 2025 (Res. SBS 1661-2025). <a href="https://www.sbs.gob.pe/Portals/0/jer/REGUL_SISFIN_BFO/2025/Mayo/Anexo%2010%20Vig.%202025-09%20(Res.%201661-2025).xlsx" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Manual de Contabilidad para las Empresas del Sistema Financiero, capítulo IV (descripción y dinámica de cuentas): rubros 43 (provisiones) y 54 (reversión de provisiones), y cuentas 4501 (gastos de personal) y 4503 (servicios recibidos de terceros). <a href="https://www.sbs.gob.pe/regulacion/plan-de-cuentas/sistema-financiero/bancos-financieras-y-otros" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li><a href="https://leyes.congreso.gob.pe/Documentos/DecretosLegislativos/00892.pdf" target="_blank" rel="noopener">Decreto Legislativo 892</a>, que regula la participación de los trabajadores en las utilidades, con los arts. 2 y 5 modificados por la <a href="https://leyes.congreso.gob.pe/Documentos/2016_2021/ADLP/Normas_Legales/31110-LEY.pdf" target="_blank" rel="noopener">Ley 31110</a>; reglamento: D.S. 009-98-TR (modificado por el D.S. 017-2011-TR); exclusión de las empresas de hasta 20 trabajadores: <a href="https://leyes.congreso.gob.pe/Documentos/DecretosLegislativos/00677.pdf" target="_blank" rel="noopener">D. Leg. 677</a>, art. 9; base de cálculo: <a href="https://leyes.congreso.gob.pe/Documentos/Leyes/28873.pdf" target="_blank" rel="noopener">Ley 28873</a>. Ministerio de Trabajo, <a href="https://cdn.www.gob.pe/uploads/document/file/8050269/6757894-guia_participacion_en_utilidades.pdf" target="_blank" rel="noopener">guía de participación en las utilidades</a>.</li>
+          <li>SBS, Resolución 2740-2011 (25 de febrero de 2011), que dispuso registrar la participación de los trabajadores como gasto de personal desde el ejercicio 2011 (NIC 19).</li>
+          <li>Estados financieros auditados individuales de cada entidad (nota de gastos de personal o de participación), en el portal de la <a href="https://www.smv.gob.pe/" target="_blank" rel="noopener">SMV</a> o en la web de la entidad. La tabla de la tarjeta enlaza el documento de cada cifra.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('rentabilidad-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('rentabilidad-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const MES_L = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre'];
+// «enero a agosto», o solo «enero» si el mes es enero.
+const ytdLabel = m => { const k = +m.slice(5, 7) - 1; return k === 0 ? 'enero' : 'enero a ' + MES_L[k]; };
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = D.months, N = MONTHS.length, SC = D.scopes;
+const FI = Object.fromEntries(D.fields.map((f, i) => [f, i]));
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const f2 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const fx = (v, d = 2) => v == null ? '—' : (+v.toFixed(d) < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 2) => v == null ? '—' : fx(v, d) + '%';
+const sgn = (v, d) => { const r = +v.toFixed(d); return r > 0 ? '+' : r < 0 ? '−' : ''; };
+const spct = (v, d = 1) => v == null ? '—' : sgn(v, d) + Math.abs(v).toFixed(d) + '%';
+const spp = (v, d = 2) => v == null ? '—' : sgn(v, d) + Math.abs(v).toFixed(d) + ' pp';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const idxOf = m => MONTHS.indexOf(m);
+// Montos: los datos vienen en miles de soles.
+const money = v => {
+  if (v == null) return '—';
+  const a = Math.abs(v), s = v < 0 ? '−' : '';
+  return s + (a >= 1e6 ? 'S/ ' + f1.format(a / 1e6) + ' mil mill.' : 'S/ ' + f0.format(a / 1e3) + ' mill.');
+};
+// Soles por trabajador (los indicadores por trabajador ya vienen en soles, no en miles).
+const perW = v => {
+  if (v == null) return '—';
+  const a = Math.abs(v), s = v < 0 ? '−' : '';
+  return s + (a >= 1e6 ? 'S/ ' + f2.format(a / 1e6) + ' mill.' : a >= 1e3 ? 'S/ ' + f1.format(a / 1e3) + ' mil' : 'S/ ' + f0.format(a));
+};
+const people = v => v == null ? '—' : f0.format(Math.round(v));
+
+const SUBS = D.subs;
+const SUB_COLOR = {'banca-multiple': 'var(--s1)', 'empresas-financieras': 'var(--s2)', 'cajas-municipales': 'var(--s3)',
+  'cajas-rurales': 'var(--s4)', 'empresas-credito': 'var(--s5)'};
+const SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+// u: unidad (money = miles de S/, pct = %, x = veces, spt = soles por trabajador). good: +1 subir es mejor, −1 subir es peor, 0 neutro.
+// d: decimales. g: grupo del selector. clamp: corte de escala en el ranking y la dispersión.
+const IND = [
+  {k: 'roe', g: 'ren', u: 'pct', d: 1, good: 1, l: 'ROE', name: 'ROE', lower: 'ROE', long: 'rentabilidad del patrimonio', clamp: [-50, 60]},
+  {k: 'roa', g: 'ren', u: 'pct', d: 2, good: 1, l: 'ROA', name: 'ROA', lower: 'ROA', long: 'rentabilidad del activo', clamp: [-10, 10]},
+  {k: 'uti', g: 'ren', u: 'money', d: 0, good: 1, l: 'Utilidad', name: 'Utilidad de 12 meses', lower: 'utilidad de 12 meses'},
+  {k: 'mfb', g: 'cos', u: 'pct', d: 2, good: 1, l: 'Margen financiero', name: 'Margen financiero', lower: 'margen financiero', clamp: [-10, 40]},
+  {k: 'efi', g: 'cos', u: 'pct', d: 1, good: -1, l: 'Eficiencia', name: 'Eficiencia', lower: 'eficiencia', clamp: [0, 150]},
+  {k: 'cr', g: 'cos', u: 'pct', d: 2, good: -1, l: 'Costo del riesgo', name: 'Costo del riesgo', lower: 'costo del riesgo', clamp: [-2, 20]},
+  {k: 'apal', g: 'cos', u: 'x', d: 1, good: 0, l: 'Apalancamiento', name: 'Apalancamiento', lower: 'apalancamiento', clamp: [0, 20]},
+  {k: 'upt', g: 'trab', u: 'spt', d: 0, good: 1, l: 'Utilidad por trabajador', name: 'Utilidad por trabajador', lower: 'utilidad por trabajador', long: 'utilidad neta de 12 meses por trabajador promedio', clamp: [-150000, 600000]},
+  {k: 'cpt', g: 'trab', u: 'spt', d: 0, good: 0, l: 'Créditos por trabajador', name: 'Créditos por trabajador', lower: 'créditos por trabajador', long: 'créditos directos por trabajador, a fin de mes', clamp: [0, 30e6]},
+];
+const IND_BY = Object.fromEntries(IND.map(x => [x.k, x]));
+const MORA = {k: 'mora', u: 'pct', d: 2, good: -1, name: 'Mora', lower: 'mora', clamp: [0, 25]};
+const MIN_ACT = 10000;   // miles de S/: entidades con activo menor a S/ 10 millones no entran al ranking ni a la dispersión
+
+// ---------- Estado ----------
+// Mes inicial: el último con los cinco subsistemas (el sistema llega hasta ahí); el selector llega al último mes publicado.
+const ALL_LAST = D.allHasta && idxOf(D.allHasta) >= 0 ? idxOf(D.allHasta) : N - 1;
+const state = {ind: 'roe', mi: ALL_LAST, range: '5a', scope: 'sistema', sub: 'banca-multiple', ent: null, scx: 'mora', mixU: 'pct', ptuY: null};
+
+// ---------- Datos ----------
+function raw(scope, i) {
+  const s = SC[scope];
+  if (!s || i < 0) return null;
+  const j = i - s.a;
+  if (j < 0 || j >= s.V[0].length) return null;
+  if (s.V[FI.ac][j] == null) return null;
+  const r = {};
+  for (const f of D.fields) r[f] = s.V[FI[f]][j];
+  return r;
+}
+// Flujos derivados (miles de S/, 12 meses): null si falta alguno.
+const has = (r, ...ks) => r && ks.every(k => r[k] != null);
+function parts(r) {
+  if (!has(r, 'if', 'gf', 'pr', 'si', 'sg', 'vc', 'ga', 'da', 'op', 'oi', 'ir', 'rn')) return null;
+  return {if: r.if, gf: -r.gf, mfb: r.if - r.gf, pr: -r.pr, sv: r.si - r.sg, go: -(r.ga + r.da), ot: r.vc - r.op + r.oi, ir: -r.ir, rn: r.rn,
+    mft: r.if - r.gf + r.si - r.sg, gop: r.ga + r.da};
+}
+function ind(scope, i, k = state.ind) {
+  const r = raw(scope, i);
+  if (!r) return null;
+  if (k === 'mora') return r.cd > 0 && r.at != null ? 100 * r.at / r.cd : null;
+  if (k === 'apal') return r.A > 0 && r.P > 0 ? r.A / r.P : null;
+  if (k === 'uti') return r.rn;
+  // Por trabajador, en soles: créditos (miles de S/) a fin de mes ÷ personal a fin de mes;
+  // utilidad de 12 meses (miles de S/) ÷ personal promedio de 12 meses (Ts = suma de los 12 conteos).
+  if (k === 'cpt') return r.np > 0 && r.cd != null ? 1000 * r.cd / r.np : null;
+  if (r.rn == null) return null;
+  // Utilidad por trabajador: rw excluye lo ganado por una entidad antes de entrar al agregado (su personal solo cuenta desde la entrada).
+  if (k === 'upt') return r.Ts > 0 ? 1000 * (r.rw ?? r.rn) / (r.Ts / 12) : null;
+  if (k === 'roe') return r.P > 0 ? 100 * r.rn / r.P : null;
+  if (k === 'roa') return r.A > 0 ? 100 * r.rn / r.A : null;
+  if (k === 'mfb') return r.A > 0 ? 100 * (r.if - r.gf) / r.A : null;
+  if (k === 'cr') return r.C > 0 ? 100 * r.pr / r.C : null;
+  if (k === 'efi') { const p = parts(r); return p && p.mft > 0 ? 100 * p.gop / p.mft : null; }
+  return null;
+}
+// ---------- Último mes con dato por ámbito ----------
+// La SBS publica cada subsistema por separado. Si el ámbito (el sistema, un subsistema o el subsistema de una
+// entidad) todavía no publica el mes elegido, se usa su último mes con dato y se marca ese mes.
+const pubLast = sc => sc === 'sistema' ? ALL_LAST : lastIdx(SUB_BY[sc] ? sc : SC[sc].s);
+function effIdx(sc, i) {
+  if (!SC[sc] || raw(sc, i)) return i;
+  const L = pubLast(sc);
+  return L < i && raw(sc, L) ? L : i;
+}
+// « · ago 2026» si el valor no es del mes elegido.
+const lagTag = (i, ie) => ie !== i ? ' · ' + mLabel(MONTHS[ie]) : '';
+const subArt = k => (k === 'banca-multiple' ? 'la ' : 'las ') + SUB_BY[k].l.toLowerCase();
+const joinY = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1] : a[0] || '';
+// Nota cuando el mes elegido no lo publicaron los cinco subsistemas. `shown`: ámbitos de un gráfico de un solo mes,
+// para decir cuáles se muestran con su último mes.
+function lagNote(i, shown) {
+  if (i <= ALL_LAST) return '';
+  const miss = SUBS.filter(s => lastIdx(s.k) < i).map(s => s.k);
+  // Plural si son varios o si el único es un subsistema en plural («las empresas de créditos»).
+  const plural = ks => ks.length > 1 || (SUB_BY[ks[0]] && ks[0] !== 'banca-multiple');
+  let t = 'El sistema llega hasta ' + mLabel(MONTHS[ALL_LAST]) + ': ' + joinY(miss.map(subArt)) + ' todavía no publica' + (plural(miss) ? 'n ' : ' ') + mLabel(MONTHS[i]) + '. ';
+  const by = {};
+  for (const sc of shown || []) { const ie = effIdx(sc, i); if (ie !== i) (by[ie] = by[ie] || []).push(sc); }
+  for (const ie in by) {
+    const s = joinY(by[ie].map(sc => sc === 'sistema' ? 'el sistema' : SUB_BY[sc] ? subArt(sc) : SC[sc].n));
+    t += s[0].toUpperCase() + s.slice(1) + (plural(by[ie]) ? ' se muestran' : ' se muestra') + ' con ' + mLabel(MONTHS[ie]) + '. ';
+  }
+  return t;
+}
+const indDef = k => IND_BY[k] || MORA;
+const scopeColor = k => k === 'sistema' ? 'var(--sys)' : SUB_COLOR[k];
+const scopeLabel = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc].l;
+const scopeName = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc] ? SUB_BY[sc].l : SC[sc].n;
+const scopeShort = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc].s;
+const fmtInd = (k, v) => { const I = indDef(k); return I.u === 'money' ? money(v) : I.u === 'spt' ? perW(v) : I.u === 'x' ? (v == null ? '—' : fx(v, 1) + ' veces') : pct(v, I.d); };
+const fmtDelta = (k, d) => {
+  const I = indDef(k);
+  if (I.u === 'spt') return (d > 0 ? '+' : d < 0 ? '−' : '') + perW(Math.abs(d));
+  return I.u === 'x' ? (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(d).toFixed(1) + ' veces' : spp(d, I.d);
+};
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+// Escala del eje: montos en miles de millones o millones de soles; % o veces.
+function axisOf(u, absMax) {
+  if (u === 'x') return {div: 1, unit: 'Veces', tick: t => numTick(t)};
+  if (u === 'spt') {
+    const big = absMax >= 1e6;
+    return {div: big ? 1e6 : 1e3, unit: big ? 'Millones de S/ por trabajador' : 'Miles de S/ por trabajador', short: big ? 'Mill. S/' : 'Miles S/',
+      tick: t => Math.abs(t) >= 1000 ? (t < 0 ? '−' : '') + f0.format(Math.abs(t)) : numTick(t)};
+  }
+  if (u !== 'money') return {div: 1, unit: null, tick: t => (t === 0 ? '0' : numTick(t)) + '%'};
+  const big = absMax >= 1e6;
+  return {div: big ? 1e6 : 1e3, unit: big ? 'Miles de millones de S/' : 'Millones de S/', tick: t => Math.abs(t) >= 1000 ? (t < 0 ? '−' : '') + f0.format(Math.abs(t)) : numTick(t)};
+}
+
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+function hoverable(node, show) {
+  node.addEventListener('pointermove', show);
+  node.addEventListener('pointerleave', hideTip);
+  node.addEventListener('focus', () => show(null));
+  node.addEventListener('blur', hideTip);
+}
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text;
+}
+// Primer mes con indicadores (hace falta un año de historia).
+const FIRST = (() => { for (let i = 0; i < N; i++) if (ind('sistema', i, 'roe') != null) return i; return 0; })();
+const RANGES = [
+  {id: '3a', label: '3 años', n: 36},
+  {id: '5a', label: '5 años', n: 60},
+  {id: '10a', label: '10 años', n: 120},
+  {id: 'todo', label: 'Desde ' + MONTHS[FIRST].slice(0, 4), n: N},
+];
+function visIdx() {
+  const r = RANGES.find(z => z.id === state.range);
+  const out = [];
+  for (let i = Math.max(FIRST, N - r.n); i < N; i++) out.push(i);
+  return out;
+}
+// Hover y teclado compartidos por los gráficos de tiempo: mueve un índice de mes.
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide) {
+  const n = idx.length;
+  let cur = null;
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    show(at(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt);
+  });
+  hit.addEventListener('pointerleave', onHide);
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(at((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+
+// ---------- Gráfico de líneas (cruz y tooltip compartidos por grupo) ----------
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, mLabel(MONTHS[i]), g.charts.flatMap(c => c.rows(i)));
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+let clipSeq = 0;
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const series = cfg.series, fmt = cfg.fmt || pct;
+  const idx = trimIdx(cfg.idx, i => series.some(s => s.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return null; }
+  let lo = 0, hi = 0;
+  for (const i of idx) for (const s of series) { const v = s.get(i); if (v == null) continue; if (v > hi) hi = v; if (v < lo) lo = v; }
+  // cfg.clip = [mín, máx]: la escala no pasa de ahí y las líneas se recortan (el tooltip da el valor completo).
+  const clipped = cfg.clip && (lo < cfg.clip[0] || hi > cfg.clip[1]);
+  if (cfg.clip) { lo = Math.max(lo, cfg.clip[0]); hi = Math.min(hi, cfg.clip[1]); }
+  const ax = axisOf(cfg.u, Math.max(-lo, hi));
+  const compact = !!cfg.compact, narrow = W < 600, hasUnit = !!ax.unit;
+  const showEnd = cfg.endLabels && !narrow;
+  const m = {l: compact ? 40 : 46, r: showEnd ? (cfg.u === 'money' || cfg.u === 'spt' ? 170 : 130) : (compact ? 8 : 14), t: (compact ? 8 : 12) + (hasUnit ? 14 : 0), b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(lo / ax.div * (lo < 0 ? 1.04 : 1), hi / ax.div * 1.04, compact ? 3 : 5);
+  const y = v => m.t + (dom.hi - v / ax.div) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, t => y(t * ax.div), m.l, m.l + pw, ax.tick);
+  if (ax.unit) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  const pathOf = s => {
+    let d = '', pen = false;
+    for (const i of idx) {
+      const v = s.get(i);
+      if (v == null) { pen = false; continue; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1);
+      pen = true;
+    }
+    return d;
+  };
+  let clipId = null;
+  if (clipped) {
+    clipId = 'clip' + (++clipSeq);
+    svgEl('rect', {x: m.l - 4, y: m.t, width: pw + 8, height: ph}, svgEl('clipPath', {id: clipId}, svgEl('defs', {}, svg)));
+  }
+  for (const s of series) {
+    const a = {d: pathOf(s), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    if (clipId) a['clip-path'] = 'url(#' + clipId + ')';
+    svgEl('path', a, svg);
+  }
+  if (showEnd) {
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      for (let j = n - 1; j >= 0; j--) { const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; }
+      return null;
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      e.y = Math.max(m.t, Math.min(m.t + ph, e.y));
+      if (y(e.v) < m.t || y(e.v) > m.t + ph) continue;
+      svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = fmt(e.v);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] ? s.get(i) : null;
+        dots[j].setAttribute('visibility', v == null || y(v) < m.t || y(v) > m.t + ph ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      // Las series sin dato ese mes (p. ej. el sistema en un mes que no publicaron los cinco) no entran al tooltip.
+      const r = series.filter(s => !s.noTip).map(s => ({v: s.get(i), label: s.label, color: s.color}));
+      return (r.some(x => x.v != null) ? r.filter(x => x.v != null) : r)
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+    },
+  };
+  group.charts.push(chart);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => group.show(i, evt, chart), group.hide);
+  return chart;
+}
+
+// ---------- Cascada horizontal: del ingreso financiero a la utilidad (% del activo promedio) ----------
+const WF_ITEMS = [
+  {k: 'if', l: 'Ingresos financieros'},
+  {k: 'gf', l: 'Gastos financieros'},
+  {k: 'mfb', l: 'Margen financiero bruto', s: 'Margen fin. bruto', subt: true},
+  {k: 'pr', l: 'Provisiones para créditos', s: 'Provisiones créditos'},
+  {k: 'sv', l: 'Servicios financieros netos', s: 'Servicios fin. netos'},
+  {k: 'go', l: 'Gastos de operación'},
+  {k: 'ot', l: 'Otros'},
+  {k: 'ir', l: 'Impuesto a la renta'},
+  {k: 'rn', l: 'Utilidad neta = ROA', s: 'Utilidad = ROA', subt: true},
+];
+// Filas de la cascada: {k, l, v (% del activo), amt (miles de S/), a (inicio), b (fin), subt}.
+function wfRows(scope, i) {
+  const r = raw(scope, i), p = parts(r);
+  if (!p || !(r.A > 0)) return null;
+  let cum = 0;
+  return WF_ITEMS.map(it => {
+    const v = 100 * p[it.k] / r.A;
+    if (it.subt) return {...it, v, amt: p[it.k], a: 0, b: v};
+    const a = cum; cum += v;
+    return {...it, v, amt: p[it.k], a, b: cum};
+  });
+}
+function wfDomain(scopes, i) {
+  let lo = 0, hi = 0;
+  for (const sc of scopes) { const rows = wfRows(sc, effIdx(sc, i)); if (rows) for (const r of rows) { lo = Math.min(lo, r.a, r.b); hi = Math.max(hi, r.a, r.b); } }
+  return niceDomain(lo, hi * 1.02, 4);
+}
+function wfChart(box, scope, i, dom) {
+  box.replaceChildren();
+  const rows = wfRows(scope, i);
+  if (!rows) { emptyMsg(box, 'Sin datos de 12 meses en ' + mLabel(MONTHS[i]) + '.'); return; }
+  const W = box.clientWidth;
+  if (!W) return;
+  const short = W < 380, labW = short ? 124 : 158, valW = 54, rowH = 24, top = 18;
+  const x0 = labW + 6, x1 = W - valW - 4, H = top + rows.length * rowH + 4;
+  const x = v => x0 + (v - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Cascada del ROA, ' + scopeName(scope)}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top - 4, y2: H - 2, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(t), y: top - 7, 'text-anchor': 'middle'}, g).textContent = numTick(t) + '%';
+  }
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    // Conector: del final de la barra anterior al inicio de esta.
+    if (k > 0 && !r.subt) svgEl('line', {x1: x(r.a), x2: x(r.a), y1: yc - rowH, y2: yc - 6, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '2 2'}, svg);
+    const gr = svgEl('g', {class: 'wfrow', tabindex: 0, role: 'img', 'aria-label': r.l + ': ' + spct(r.v, 2) + ' del activo'}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'wfl' + (r.subt ? ' subt' : ''), x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = short && r.s ? r.s : r.l;
+    const lo = Math.min(r.a, r.b), hi = Math.max(r.a, r.b);
+    const color = r.subt ? 'var(--w-tot)' : r.v >= 0 ? 'var(--w-add)' : 'var(--w-sub)';
+    svgEl('rect', {x: x(lo), y: yc - 7, width: Math.max(1.5, x(hi) - x(lo)), height: 14, rx: 3, fill: color}, gr);
+    svgEl('text', {class: 'wfv', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = (r.subt ? '' : r.v >= 0 ? '+' : '') + fx(r.v, 2);
+    hoverable(gr, evt => showTip(...anchorOf(evt, gr), r.l + ' · ' + scopeName(scope), [
+      {value: (r.subt ? '' : r.v >= 0 ? '+' : '') + pct(r.v, 2), label: 'del activo promedio', color, sq: true},
+      {value: money(r.amt), label: 'en los últimos 12 meses'}]));
+  });
+  return rows;
+}
+// Texto bajo la cascada: ROA × apalancamiento = ROE.
+function roeLine(box, scope, i) {
+  const roa = ind(scope, i, 'roa'), ap = ind(scope, i, 'apal'), roe = ind(scope, i, 'roe');
+  box.replaceChildren();
+  if (roa == null || ap == null || roe == null) { box.textContent = ' '; return; }
+  box.append('ROA ');
+  htmlEl('b', {text: pct(roa, 2)}, box);
+  box.append(' × apalancamiento ');
+  htmlEl('b', {text: fx(ap, 1) + ' veces'}, box);
+  box.append(' = ROE ');
+  htmlEl('b', {text: pct(roe, 1)}, box);
+}
+
+// ---------- Columnas apiladas: número de entidades con pérdidas por subsistema ----------
+function countChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const idx = trimIdx(cfg.idx, i => cfg.get(i) != null);
+  while (idx.length && cfg.get(idx[idx.length - 1]) == null) idx.pop();   // termina en el último mes con dato
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box); return; }
+  const hi = Math.max(1, ...idx.map(i => cfg.get(i).reduce((a, b) => a + b, 0)));
+  const narrow = W < 600, m = {l: 46, r: narrow ? 14 : 110, t: 12, b: 26}, H = cfg.H || 200, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(0, hi, 4);
+  dom.ticks = dom.ticks.filter(t => Number.isInteger(t));
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const bw = pw / n, x = i => m.l + (i - idx[0] + 0.5) * bw, gap = bw >= 6 ? 2 : bw >= 3 ? 1 : 0, cw = Math.max(1, bw - gap);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, t => String(t));
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  const hl = svgEl('rect', {y: m.t, height: ph, width: bw, fill: 'var(--wash)', visibility: 'hidden'}, svg);
+  for (const i of idx) {
+    let cum = 0;
+    cfg.get(i).forEach((v, k) => {
+      if (!v) return;
+      svgEl('rect', {x: x(i) - cw / 2, y: y(cum + v), width: cw, height: Math.max(0, y(cum) - y(cum + v) - (gap ? 1 : 0)), fill: SUB_COLOR[SUBS[k].k]}, svg);
+      cum += v;
+    });
+  }
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker <= idx[n - 1] && !narrow) {
+    const tot = cfg.get(cfg.marker).reduce((a, b) => a + b, 0);
+    const t = svgEl('text', {x: m.l + pw + 10, y: y(tot) + 4, class: 'dlbl'}, svg);
+    svgEl('tspan', {class: 'dval'}, t).textContent = String(tot);
+    svgEl('tspan', {}, t).textContent = ' en ' + mShort(MONTHS[cfg.marker]);
+  }
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l + bw / 2, Math.max(1, pw - bw), (i, evt) => {
+    hl.setAttribute('x', x(i) - bw / 2); hl.setAttribute('visibility', 'visible');
+    const c = cfg.get(i), tot = c.reduce((a, b) => a + b, 0);
+    const rows = [{value: String(tot), label: 'Entidades con pérdida en 12 meses'}]
+      .concat(SUBS.map((s, k) => ({value: String(c[k]), label: s.l, color: SUB_COLOR[s.k], sq: true})).filter(r => r.value !== '0'));
+    showTip(...anchorOf(evt, hl), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); hl.setAttribute('visibility', 'hidden'); });
+}
+
+// ---------- Personal por categoría ----------
+// D.mix[ámbito].V: [gerentes, funcionarios, empleados, otros] a fin de mes. Rampa ordinal del gris SBS al azul
+// SBS (más jerarquía = azul más marcado; en oscuro, más luminoso) y el gris SBS para «otros». Se apila de abajo arriba: empleados,
+// funcionarios, gerentes y otros, así gerentes (banda delgada) queda entre dos colores bien distintos.
+const MIX = [
+  {k: 0, l: 'Gerentes', lower: 'gerentes', color: 'var(--cg)', on: 'var(--on-cg)'},
+  {k: 1, l: 'Funcionarios', lower: 'funcionarios', color: 'var(--cf)', on: 'var(--on-cf)'},
+  {k: 2, l: 'Empleados', lower: 'empleados', color: 'var(--ce)', on: 'var(--on-ce)'},
+  {k: 3, l: 'Otros', lower: 'otros', color: 'var(--co)', on: 'var(--on-co)'},
+];
+const MIX_STACK = [2, 1, 0, 3];
+function mixAt(sc, i) {
+  const s = D.mix && D.mix[sc];
+  if (!s || i < 0) return null;
+  const j = i - s.a;
+  if (j < 0 || j >= s.V[0].length) return null;
+  const v = s.V.map(x => x[j]);
+  return v.some(x => x == null) ? null : v;
+}
+const mixTot = v => v.reduce((a, b) => a + b, 0);
+const mixPct = (v, k) => { const t = mixTot(v); return t > 0 ? 100 * v[k] / t : null; };
+const pct1 = v => v == null ? '—' : f1.format(v) + '%';
+function mixLegend(box) {
+  box.replaceChildren();
+  for (const c of MIX) { const s = htmlEl('span', null, box); htmlEl('i', {cls: 'dot sqr'}, s).style.background = c.color; s.appendChild(document.createTextNode(c.l)); }
+}
+function mixTipRows(v) {
+  return [{value: people(mixTot(v)), label: 'Total'}]
+    .concat(MIX.map(c => ({value: pct1(mixPct(v, c.k)), label: c.l + ': ' + people(v[c.k]), color: c.color, sq: true})));
+}
+// Barras al 100%: una por ámbito, en el mes i.
+function mixBars(box, scopes, i) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = scopes.map(sc => { const ie = effIdx(sc, i); return {sc, ie, v: mixAt(sc, ie)}; });
+  if (!rows.some(r => r.v)) { emptyMsg(box, 'No hay cuadro de personal en ' + mLabel(MONTHS[i]) + '.'); return; }
+  const narrow = W < 600, labW = narrow ? 64 : 150, valW = narrow ? 52 : 70, rowH = 30, top = 4;
+  const x0 = labW + 8, x1 = W - valW - 6, pw = Math.max(1, x1 - x0), H = top + rows.length * rowH;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Personal por categoría, por ámbito, ' + mLabel(MONTHS[i])}, box);
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end', 'font-weight': r.sc === state.scope ? 650 : 400}, svg).textContent = narrow ? scopeShort(r.sc) : scopeLabel(r.sc);
+    if (!r.v) { svgEl('text', {class: 'rs', x: x0, y: yc + 4}, svg).textContent = (r.sc === 'sistema' ? 'sin dato de banca múltiple ese mes' : 'sin dato ese mes'); return; }
+    const t = mixTot(r.v);
+    let cum = 0;
+    for (const c of MIX_STACK.map(q => MIX[q])) {
+      const w = t > 0 ? pw * r.v[c.k] / t : 0, xa = x0 + cum;
+      cum += w;
+      if (w <= 0) continue;
+      const g = svgEl('g', {tabindex: 0, role: 'img', 'aria-label': scopeLabel(r.sc) + ', ' + c.lower + ': ' + pct1(mixPct(r.v, c.k)) + ', ' + people(r.v[c.k]) + ' personas'}, svg);
+      // 2 px de superficie entre segmentos (borde derecho), sin comerse los segmentos muy delgados.
+      svgEl('rect', {x: xa, y: yc - 9, width: Math.max(1, w - (w > 4 ? 2 : 0)), height: 18, fill: c.color, rx: 2}, g);
+      const p = mixPct(r.v, c.k), lab = w >= 46 ? pct1(p) : w >= 30 ? f0.format(p) + '%' : '';
+      if (lab) svgEl('text', {x: xa + w / 2 - 1, y: yc + 4, 'text-anchor': 'middle', 'font-size': 11.5, fill: c.on, 'pointer-events': 'none', style: 'font-variant-numeric: tabular-nums'}, g).textContent = lab;
+      hoverable(g, evt => showTip(...anchorOf(evt, g), scopeLabel(r.sc) + ' · ' + mLabel(MONTHS[r.ie]), mixTipRows(r.v)));
+    }
+    svgEl('text', {class: 'rv', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, svg).textContent = people(t);
+  });
+}
+// Áreas apiladas en el tiempo: % del personal o número de personas.
+function mixArea(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const idx = trimIdx(cfg.idx, i => cfg.get(i) != null), n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  const share = state.mixU === 'pct';
+  const val = (v, k) => share ? mixPct(v, k) : v[k];
+  const narrow = W < 600, m = {l: 50, r: narrow ? 10 : 120, t: share ? 10 : 24, b: 26}, H = cfg.H || 260, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  let dom;
+  if (share) dom = {lo: 0, hi: 100, ticks: [0, 25, 50, 75, 100]};
+  else { const hi = Math.max(1, ...idx.map(i => { const v = cfg.get(i); return v ? mixTot(v) : 0; })); dom = niceDomain(0, hi * 1.02, 4); }
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, share ? (t => t + '%') : (t => f0.format(t)));
+  if (!share) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = 'Personas';
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  // Una banda por categoría, cortada donde falta el dato.
+  const segs = [];
+  let cur = [];
+  for (const i of idx) { if (cfg.get(i)) cur.push(i); else if (cur.length) { segs.push(cur); cur = []; } }
+  if (cur.length) segs.push(cur);
+  for (const seg of segs) {
+    const base = seg.map(() => 0);
+    for (const c of MIX_STACK.map(q => MIX[q])) {
+      const lo = base.slice(), hi = seg.map((i, j) => base[j] + val(cfg.get(i), c.k));
+      hi.forEach((v, j) => { base[j] = v; });
+      const xs = seg.length === 1 ? [x(seg[0]) - 1.5, x(seg[0]) + 1.5] : seg.map(x);
+      const up = seg.length === 1 ? [hi[0], hi[0]] : hi, dn = seg.length === 1 ? [lo[0], lo[0]] : lo;
+      let d = '';
+      xs.forEach((xv, j) => { d += (j ? 'L' : 'M') + xv.toFixed(1) + ',' + y(up[j]).toFixed(1); });
+      for (let j = xs.length - 1; j >= 0; j--) d += 'L' + xs[j].toFixed(1) + ',' + y(dn[j]).toFixed(1);
+      svgEl('path', {d: d + 'Z', fill: c.color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+    }
+  }
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1])
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  // Etiquetas directas al final: centro de cada banda en el último mes con dato.
+  if (!narrow) {
+    const last = idx[n - 1], v = cfg.get(last);
+    if (v) {
+      let cum = 0;
+      const ends = MIX_STACK.map(q => MIX[q]).map(c => { const a = cum; cum += val(v, c.k); return {c, y: y((a + cum) / 2), p: mixPct(v, c.k)}; })
+        .filter(e => e.p > 0).sort((a, b) => a.y - b.y);
+      for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+      const over = ends.length ? ends[ends.length - 1].y - (m.t + ph) : 0;
+      if (over > 0) ends.forEach(e => { e.y -= over; });
+      for (const e of ends) {
+        const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+        svgEl('tspan', {class: 'dval'}, t).textContent = pct1(e.p);
+        svgEl('tspan', {}, t).textContent = ' ' + e.c.lower;
+      }
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+    const v = cfg.get(i);
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), v ? mixTipRows(v) : [{value: '—', label: 'Sin cuadro de personal ese mes'}]);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+}
+function renderMix() {
+  const i = state.mi, sc = state.scope, scopes = WF_SCOPES();
+  document.getElementById('mix-title').textContent = 'Personal por categoría · ' + mLabel(MONTHS[i]);
+  document.getElementById('mix-desc').textContent = 'Gerentes, funcionarios, empleados y otros a fin de mes, como los reporta cada entidad a la SBS. Las barras comparan el sistema y los subsistemas; el número de la derecha es el total de trabajadores. Las categorías no son comparables entre entidades (ver la nota).';
+  mixLegend(document.getElementById('mix-legend'));
+  mixBars(document.getElementById('ch-mixbars'), scopes, i);
+  document.getElementById('mix-evo-title').textContent = 'Composición en el tiempo · ' + scopeLabel(sc) + (sc === 'sistema' ? '' : ' (cambie el ámbito en el selector del resumen)');
+  mixArea(document.getElementById('ch-mix'), {idx: visIdx(), H: 260, marker: i, get: k => mixAt(sc, k), aria: 'Personal por categoría en el tiempo, ' + scopeLabel(sc)});
+  const gap = sc === 'sistema' || sc === 'banca-multiple' ? ' El hueco de noviembre de 2023 se debe a que el cuadro de personal de banca múltiple de ese mes trae las cifras de diciembre.' : '';
+  document.getElementById('mix-note').textContent = lagNote(i, scopes) + 'Cada entidad clasifica y reporta a su personal; ni el Anexo N.° 10 ni el glosario de la SBS definen las categorías, así que no conviene comparar las proporciones de una entidad con las de otra. Un salto de un mes a otro puede ser una reclasificación y no contrataciones ni despidos: en agosto de 2025, Interbank pasó de 4,661 funcionarios y 2,015 empleados a 63 funcionarios y 6,650 empleados, con un total casi igual (de 6,896 a 6,921), y por eso cae la proporción de funcionarios de la banca ese mes. Según el Anexo N.° 10, el personal incluye a los contratados por terceros, pero el cuadro no dice en qué categoría se cuentan.' + gap;
+}
+function renderEntMix(k) {
+  const E = SC[k];
+  mixLegend(document.getElementById('ent-mix-legend'));
+  mixArea(document.getElementById('ch-ent-mix'), {idx: visIdx(), H: 220, marker: state.mi, get: j => mixAt(k, j), aria: 'Personal por categoría de ' + E.n,
+    empty: 'No hay cuadro de personal de la entidad en el periodo.'});
+  const ie = effIdx(k, state.mi), v = mixAt(k, ie), s = D.mix[k], j = idxOf('2023-11');
+  // Nota del hueco solo si la serie de la entidad pasa por ese mes y le falta el dato.
+  const hole = s && j > s.a && j < s.a + s.V[0].length - 1 && mixAt(k, j) == null && visIdx().includes(j);
+  document.getElementById('ent-mix-note').textContent = (v ? 'En ' + mLabel(MONTHS[ie]) + ': ' + MIX.map(c => people(v[c.k]) + ' ' + c.lower).join(', ') + ' (total ' + people(mixTot(v)) + '). ' : '') +
+    'Las categorías las asigna la entidad. Si la composición cambia de golpe y el total casi no se mueve, puede ser un cambio de clasificación más que contrataciones o despidos.' +
+    (hole ? ' El hueco de noviembre de 2023 se debe a que el cuadro de personal de banca múltiple de ese mes trae las cifras de diciembre.' : '');
+}
+
+// ---------- Participación de los trabajadores en las utilidades (EEFF auditados) ----------
+// D.ptu: [{k: ámbito de la entidad en diciembre, y: ejercicio, p: participación legal (miles de S/), ad: participación
+// adicional revelada aparte, al: 'legal' o 'legal_y_adicional', z: 'declarado' si el documento muestra cero, n: personal
+// promedio del año (conteo SBS), U: utilidad antes de IR de diciembre (Boletín, ya neta de la participación), u, loc: fuente}].
+const PTU = D.ptu || [];
+const PTU_YEARS = [...new Set(PTU.map(r => r.y))].sort();
+// Montos de participación (miles de S/): también los menores de S/ 1 millón.
+const ptuMoney = v => v == null ? '—' : v >= 1e6 ? money(v) : v >= 10000 ? 'S/ ' + f0.format(v / 1e3) + ' mill.' : v >= 1000 ? 'S/ ' + f1.format(v / 1e3) + ' mill.' : 'S/ ' + f0.format(v) + ' mil';
+const ptuPer = r => r.n > 0 ? 1000 * r.p / r.n : null;                       // soles por persona del conteo SBS
+const ptuShare = r => r.U + r.p > 0 ? 100 * r.p / (r.U + r.p) : null;        // % de la utilidad antes de participación e IR
+function ptuRows(y) {
+  return PTU.filter(r => r.y === y).map(r => ({...r, n2: SC[r.k] ? SC[r.k].n : r.k, s: r.k.split('/')[0], per: ptuPer(r), sh: ptuShare(r)}))
+    .sort((a, b) => (b.per ?? -1) - (a.per ?? -1));
+}
+// Entidades con 1,000 trabajadores o más en diciembre del ejercicio que no tienen dato (no lo revelan por separado).
+function ptuMissing(y) {
+  const i = idxOf(y + '-12'), have = new Set(PTU.filter(r => r.y === y).map(r => r.k.split('/')[1]));
+  if (i < 0) return [];
+  return D.entities.filter(k => { const r = raw(k, i); return r && r.np >= 1000 && !have.has(k.split('/')[1]); })
+    .sort((a, b) => raw(b, i).np - raw(a, i).np).map(k => SC[k].n);
+}
+const ptuMedian = (() => {
+  const v = PTU.filter(r => r.p > 0 && r.U + r.p > 0 && r.al === 'legal').map(ptuShare).sort((a, b) => a - b);
+  return v.length ? (v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2) : null;
+})();
+function renderPtu() {
+  const box = document.getElementById('ch-ptu');
+  box.replaceChildren();
+  if (!PTU_YEARS.length) { emptyMsg(box, 'Sin datos.'); return; }
+  if (!PTU_YEARS.includes(state.ptuY)) state.ptuY = PTU_YEARS[PTU_YEARS.length - 1];
+  const y = state.ptuY, rows = ptuRows(y);
+  document.getElementById('ptu-title').textContent = 'Participación de los trabajadores en las utilidades · ejercicio ' + y;
+  document.getElementById('ptu-desc').textContent = 'Lo que cada entidad registró como participación legal de sus trabajadores en las utilidades del ejercicio (5% de su renta imponible), según sus estados financieros auditados. La barra es el monto dividido entre su personal promedio del año; a la derecha, ese valor y el monto total. Solo aparecen las entidades que revelan el monto por separado.';
+  const lg = document.getElementById('ptu-legend');
+  lg.replaceChildren();
+  for (const s of SUBS.filter(s => rows.some(r => r.s === s.k))) { const sp = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot'}, sp).style.background = SUB_COLOR[s.k]; sp.appendChild(document.createTextNode(s.l)); }
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600, labW = narrow ? 110 : 190, valW = narrow ? 112 : 190, rowH = 24, top = 18;
+  const x0 = labW + 8, x1 = W - valW - 6, H = top + rows.length * rowH + 4;
+  const hi = Math.max(1, ...rows.map(r => r.per || 0)), dom = niceDomain(0, hi, narrow ? 2 : 5);
+  const x = v => x0 + v / dom.hi * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Participación de los trabajadores por persona, ejercicio ' + y}, box);
+  if (narrow) dom.ticks = dom.ticks.filter((t, j) => j % 2 === 0 || j === dom.ticks.length - 1);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top - 4, y2: H - 2, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(t), y: top - 7, 'text-anchor': 'middle'}, g).textContent = t >= 1000 ? f0.format(t / 1000) + ' mil' : f0.format(t);
+  }
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row', tabindex: 0, role: 'img', 'aria-label': r.n2 + ': ' + perW(r.per) + ' por persona; ' + ptuMoney(r.p)}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = (narrow && r.n2.length > 16 ? r.n2.slice(0, 15) + '…' : r.n2) + (r.al === 'legal_y_adicional' ? ' *' : '');
+    if (r.per > 0) svgEl('rect', {x: x0, y: yc - 7, width: Math.max(2, x(r.per) - x0), height: 14, rx: 3, fill: SUB_COLOR[r.s]}, gr);
+    const t = svgEl('text', {class: 'rv', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr);
+    t.textContent = perW(r.per);
+    svgEl('tspan', {class: 'rs'}, t).textContent = r.p === 0 ? ' · sin participación' : ' · ' + ptuMoney(r.p);
+    hoverable(gr, evt => showTip(...anchorOf(evt, gr), r.n2 + ' · ejercicio ' + y, [
+      {value: ptuMoney(r.p), label: r.al === 'legal_y_adicional' ? 'participación legal y adicional (una sola línea)' : 'participación legal', color: SUB_COLOR[r.s], sq: true},
+      {value: perW(r.per), label: 'por persona (' + people(r.n) + ' en promedio, conteo SBS)'},
+      {value: r.sh == null ? '—' : pct(r.sh, 1), label: 'de la utilidad antes de participación e IR'},
+    ].concat(r.ad ? [{value: ptuMoney(r.ad), label: 'participación adicional voluntaria (aparte)'}] : [])
+     .concat(r.z === 'declarado' ? [{value: '0', label: 'el documento muestra cero'}] : [])));
+  });
+  const miss = ptuMissing(y), ad = rows.filter(r => r.ad);
+  document.getElementById('ptu-note').textContent =
+    (rows.some(r => r.al === 'legal_y_adicional') ? '* Reporta' + (rows.filter(r => r.al === 'legal_y_adicional').length > 1 ? 'n' : '') + ' la participación legal y la adicional en una sola línea: ' + rows.filter(r => r.al === 'legal_y_adicional').map(r => r.n2).join(' y ') + '. ' : '') +
+    (ad.length ? ad.map(r => r.n2 + ' registró además ' + ptuMoney(r.ad) + ' de participación adicional voluntaria (parte en acciones), que no está en la barra. ') .join('') : '') +
+    'El valor por persona es una referencia aproximada (monto ÷ personal promedio de la SBS), no lo que recibió cada trabajador: el reparto depende de los días trabajados y de la remuneración, y también cobran quienes salieron durante el año. ' +
+    (miss.length ? 'Sin dato en ' + y + ' (no separan el monto, la nota no trae la línea —varias tuvieron pérdida— o no se encontraron): ' + miss.slice(0, 8).join(', ') + (miss.length > 8 ? ' y otras ' + (miss.length - 8) : '') + ' entre las entidades con 1,000 trabajadores o más. Por eso no hay total del sistema.' : '');
+}
+function fillPtuTable(wrap) {
+  const y = state.ptuY, rows = ptuRows(y);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  ['Entidad · ' + y, 'Subsistema', 'Participación', 'Personal promedio (SBS)', 'Por persona', '% de la utilidad antes de participación e IR', 'Adicional voluntaria', 'Fuente']
+    .forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  for (const r of rows) {
+    const row = htmlEl('tr', null, tb);
+    [r.n2 + (r.al === 'legal_y_adicional' ? ' (legal y adicional)' : ''), SUB_BY[r.s].l, r.p === 0 ? '0 (el documento muestra cero)' : ptuMoney(r.p), people(r.n), perW(r.per), r.sh == null ? '—' : pct(r.sh, 1), r.ad ? ptuMoney(r.ad) : '—']
+      .forEach(c => htmlEl('td', {text: c}, row));
+    const td = htmlEl('td', {style: 'text-align:left; white-space:normal; min-width:340px'}, row);
+    htmlEl('a', {href: r.u, target: '_blank', rel: 'noopener', text: 'documento'}, td);
+    td.appendChild(document.createTextNode(' · ' + r.loc));
+  }
+}
+
+// ---------- Textos dinámicos ----------
+function deltaSpan(parent, d, k, suffix, i = state.mi) {
+  if (d == null) { htmlEl('span', {text: 'sin dato de hace 12 meses'}, parent); return; }
+  const I = indDef(k), r = Math.abs(d) < (I.u === 'x' ? 0.05 : I.u === 'spt' ? 0.5 : 0.005);
+  const cls = r || !I.good ? '' : (d > 0) === (I.good > 0) ? 'd-good' : 'd-bad';
+  const s = htmlEl('span', {cls}, parent);
+  s.textContent = r ? '= sin cambio' : (d > 0 ? '▲ ' : '▼ ') + fmtDelta(k, Math.abs(d)).replace(/^\+/, '');
+  parent.appendChild(document.createTextNode(suffix != null ? suffix : ' frente a ' + mShort(MONTHS[i - 12])));
+}
+function descOf(k) {
+  if (k === 'roe') return 'Utilidad neta de los últimos 12 meses como % del patrimonio promedio de esos 12 meses.';
+  if (k === 'roa') return 'Utilidad neta de los últimos 12 meses como % del activo total promedio de esos 12 meses.';
+  if (k === 'uti') return 'Utilidad neta de los últimos 12 meses, en soles corrientes.';
+  if (k === 'mfb') return 'Ingresos menos gastos financieros de los últimos 12 meses, como % del activo total promedio.';
+  if (k === 'efi') return 'Gastos de operación como % del margen financiero total (margen bruto más servicios financieros netos), ambos de 12 meses. Más bajo es mejor: un valor más alto indica una entidad menos eficiente.';
+  if (k === 'cr') return 'Gasto en provisiones para créditos directos de los últimos 12 meses, neto de reversiones, como % de los créditos directos promedio. Más bajo es mejor.';
+  if (k === 'upt') return 'Utilidad neta de los últimos 12 meses dividida entre el personal promedio de esos 12 meses, en soles por trabajador. Según la SBS, el personal incluye a los contratados por terceros. Cálculo propio; no mide la productividad del trabajo ni los sueldos: depende del modelo de negocio.';
+  if (k === 'cpt') return 'Créditos directos divididos entre el total del personal, ambos a fin de mes, en soles por trabajador (cálculo propio). En cajas y empresas de créditos la SBS publica un indicador parecido que divide solo entre la categoría «empleados»; aquí se usa el total en todos los subsistemas.';
+  return 'Activo total promedio dividido entre el patrimonio promedio de los últimos 12 meses: cuántos soles de activo hay por cada sol de patrimonio.';
+}
+
+// ---------- Resumen (KPIs) ----------
+function tileSub(d, k, sc, i) {
+  const sub = htmlEl('div', {cls: 'sub'}, d);
+  const v = ind(sc, i, k), p = i >= 12 ? ind(sc, i - 12, k) : null;
+  if (v == null) { sub.textContent = '—'; return; }
+  if (k === 'uti') {
+    sub.textContent = 'Hace 12 meses: ' + money(p);
+    const r = raw(sc, i);
+    if (r && r.ut != null) htmlEl('div', {cls: 'sub', text: 'Acumulada de ' + ytdLabel(MONTHS[i]) + ': ' + money(r.ut)}, d);
+  } else deltaSpan(sub, p == null ? null : v - p, k, null, i);
+  // Por trabajador: el cálculo a la vista (numerador ÷ denominador).
+  const r = raw(sc, i);
+  if (k === 'upt') htmlEl('div', {cls: 'sub', text: money(r.rw ?? r.rn) + ' ÷ ' + people(r.Ts / 12) + ' trabajadores (promedio de 12 meses)'}, d);
+  if (k === 'cpt') htmlEl('div', {cls: 'sub', text: money(r.cd) + ' ÷ ' + people(r.np) + ' trabajadores a fin de mes'}, d);
+}
+// Tile de contexto: el denominador (personal a fin de mes y promedio de 12 meses).
+function staffTile(box, sc, i, tag = '') {
+  const d = htmlEl('div', {cls: 'tile staff'}, box);
+  const r = raw(sc, i), p = i >= 12 ? raw(sc, i - 12) : null;
+  htmlEl('div', {cls: 'lab', text: 'Trabajadores a fin de mes' + tag}, d);
+  htmlEl('div', {cls: 'val', text: people(r && r.np)}, d);
+  const sub = htmlEl('div', {cls: 'sub'}, d);
+  if (!r || r.np == null) { sub.textContent = '—'; return; }
+  if (p && p.np > 0) {
+    const ch = 100 * (r.np / p.np - 1);
+    const s = htmlEl('span', null, sub);
+    s.textContent = Math.abs(ch) < 0.05 ? '= sin cambio' : (ch > 0 ? '▲ ' : '▼ ') + f1.format(Math.abs(ch)) + '%';
+    sub.appendChild(document.createTextNode(' frente a ' + mShort(MONTHS[i - 12]) + ' (' + people(p.np) + ')'));
+  } else sub.textContent = 'sin dato de hace 12 meses';
+  if (r.Ts > 0) htmlEl('div', {cls: 'sub', text: 'Promedio de 12 meses: ' + people(r.Ts / 12)}, d);
+  if (staffImputed(sc, i)) htmlEl('div', {cls: 'sub', text: 'Incluye personal estimado: ese mes no hay cuadro de personal válido (ver «Cómo leer los datos»).'}, d);
+}
+// ¿El personal de este ámbito (o entidad) en el mes i incluye un conteo estimado?
+function staffImputed(sc, i) {
+  const s = SC[sc] ? SC[sc].s : null;
+  return ((D.staff && D.staff.imp) || []).some(x => x.m === MONTHS[i] && (sc === 'sistema' || sc === x.s || s === x.s));
+}
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.replaceChildren();
+  const sc = state.scope, i = effIdx(sc, state.mi), tag = lagTag(state.mi, i);
+  const scName = sc === 'sistema' ? 'del sistema' : 'de ' + SUB_BY[sc].l.toLowerCase();
+  const main = IND_BY[state.ind];
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: main.name + ' ' + scName}, hero);
+  const hv = htmlEl('div', {cls: 'val' + (main.u !== 'pct' ? ' long' : ''), text: fmtInd(main.k, ind(sc, i))}, hero);
+  htmlEl('span', {cls: 'unit', text: mLabel(MONTHS[i])}, hv);
+  tileSub(hero, main.k, sc, i);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  htmlEl('div', {cls: 'sub', text: 'Últimos 3 años'}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  for (const o of IND.filter(x => x.k !== main.k)) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: o.name + tag}, d);
+    htmlEl('div', {cls: 'val', text: fmtInd(o.k, ind(sc, i, o.k))}, d);
+    tileSub(d, o.k, sc, i);
+  }
+  staffTile(box, sc, i, tag);
+  const idx = [];
+  for (let k = Math.max(FIRST, i - 35); k <= i; k++) idx.push(k);
+  lineChart(spark, {idx, H: 140, compact: true, u: main.u, fmt: v => fmtInd(main.k, v), aria: main.name + ', últimos tres años',
+    empty: 'Todavía no hay meses anteriores para trazar la línea.',
+    series: [{label: main.name, color: scopeColor(sc), w: 2, get: k => ind(sc, k)}]});
+}
+
+// ---------- Evolución por subsistema ----------
+function evoSeries() {
+  const out = SUBS.map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, get: i => ind(s.k, i)}));
+  if (state.ind !== 'uti') out.unshift({k: 'sistema', label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => ind('sistema', i)});
+  return out;
+}
+const EVO_CLIP = {roe: [-30, 40], roa: [-5, 6], efi: [0, 100], cr: [-1, 12]};
+function renderEvo() {
+  const I = IND_BY[state.ind];
+  document.getElementById('evo-title').textContent = I.name + ' por subsistema';
+  document.getElementById('evo-desc').textContent = descOf(state.ind) +
+    (state.ind === 'uti' ? ' Una línea por subsistema.' : ' La línea gris discontinua es el sistema: las entidades de los cinco subsistemas, juntas.');
+  const series = evoSeries();
+  const lg = document.getElementById('evo-legend');
+  lg.replaceChildren();
+  for (const s of series) {
+    const sp = htmlEl('span', null, lg);
+    const ln = htmlEl('i', {cls: 'ln' + (s.dash ? ' dash' : '')}, sp);
+    ln.style.background = s.color;
+    sp.appendChild(document.createTextNode(s.label));
+  }
+  lineChart(document.getElementById('ch-evo'), {idx: visIdx(), H: 340, endLabels: true, series, marker: state.mi, u: I.u, fmt: v => fmtInd(I.k, v),
+    clip: EVO_CLIP[state.ind] || null, aria: I.name + ' por subsistema'});
+  const note = document.getElementById('evo-note');
+  const clip = EVO_CLIP[state.ind];
+  const msg = (state.ind === 'efi' ? 'La SBS publica la eficiencia de banca y financieras con montos acumulados en el año; aquí todos los subsistemas usan 12 meses. ' : '') +
+    (I.u === 'spt' ? 'Soles corrientes, sin descontar la inflación. El personal es el que reporta cada entidad; según las instrucciones de la SBS, incluye al contratado por terceros. ' : '') +
+    (clip ? 'Si una línea sale de la escala (' + numTick(clip[0]) + '% a ' + numTick(clip[1]) + '%), se corta; pase el cursor para ver el valor completo. ' : '') +
+    'Los indicadores de un subsistema pueden saltar cuando una entidad entra o sale de él (fusiones, conversiones, liquidaciones).';
+  note.hidden = false;
+  note.textContent = lagNote(state.mi) + msg;
+}
+
+// ---------- Cascadas por ámbito ----------
+const WF_SCOPES = () => ['sistema'].concat(SUBS.map(s => s.k));
+function wfLegend(box) {
+  box.replaceChildren();
+  [['var(--w-add)', 'Suma a la utilidad'], ['var(--w-sub)', 'Resta'], ['var(--w-tot)', 'Subtotal']].forEach(([c, t]) => {
+    const s = htmlEl('span', null, box); htmlEl('i', {cls: 'dot sqr'}, s).style.background = c; s.appendChild(document.createTextNode(t));
+  });
+}
+function renderWf() {
+  const i = state.mi;
+  document.getElementById('wf-title').textContent = 'Del ingreso financiero a la utilidad · ' + mLabel(MONTHS[i]);
+  document.getElementById('wf-desc').textContent = 'Cada partida del estado de resultados de los últimos 12 meses, como % del activo total promedio. Bajando por la cascada, lo que queda al final es el ROA; multiplicado por el apalancamiento da el ROE. Todas las cascadas usan la misma escala.';
+  wfLegend(document.getElementById('wf-legend'));
+  const grid = document.getElementById('wf-grid');
+  grid.replaceChildren();
+  const scopes = WF_SCOPES(), dom = wfDomain(scopes, i);
+  for (const sc of scopes) {
+    const cell = htmlEl('div', {cls: 'sm' + (sc === state.scope ? ' sel' : '')}, grid), ie = effIdx(sc, i);
+    const h = htmlEl('h3', null, cell);
+    const dot = htmlEl('i', {cls: 'dot'}, h); dot.style.background = scopeColor(sc);
+    h.appendChild(document.createTextNode(scopeLabel(sc) + lagTag(i, ie)));
+    const box = htmlEl('div', {cls: 'chart'}, cell);
+    wfChart(box, sc, ie, dom);
+    roeLine(htmlEl('p', {cls: 'roe-line'}, cell), sc, ie);
+  }
+  // Lectura automática: diferencia de ROA entre banca y cajas municipales, por partida.
+  // d > 0: la partida le deja más (o le quita menos) a la banca, en puntos del activo promedio.
+  const ia = effIdx('banca-multiple', i), ib = effIdx('cajas-municipales', i);
+  const a = wfRows('banca-multiple', ia), b = wfRows('cajas-municipales', ib);
+  let txt = '';
+  if (a && b && ia === ib) {
+    const diff = a.filter(r => !r.subt).map((r, k) => ({l: r.l, d: r.v - b.filter(x => !x.subt)[k].v})).sort((p, q) => Math.abs(q.d) - Math.abs(p.d));
+    const roaA = a[a.length - 1].v, roaB = b[b.length - 1].v, cmp = +roaA.toFixed(2) - +roaB.toFixed(2);
+    txt = 'En ' + mLabel(MONTHS[ia]) + ', el ROA de la banca múltiple (' + pct(roaA, 2) + ') es ' + (cmp > 0 ? 'mayor que' : cmp < 0 ? 'menor que' : 'igual a') + ' el de las cajas municipales (' + pct(roaB, 2) +
+      '). Las partidas en que más se diferencian, en puntos porcentuales del activo, son ' +
+      diff.slice(0, 2).map(x => x.l.toLowerCase() + ' (' + fx(Math.abs(x.d), 2) + ' pp a favor de ' + ((x.d > 0) ? 'la banca' : 'las cajas') + ')').join(' y ') +
+      ' («a favor» quiere decir que la partida le suma más, o le resta menos, a ese subsistema). ';
+  }
+  document.getElementById('wf-note').textContent = lagNote(i, scopes) + txt + '«Otros», los servicios financieros netos y hasta las provisiones (si se liberan más de las que se constituyen) pueden sumar o restar.';
+}
+
+// ---------- Partidas en el tiempo ----------
+const SM_ITEMS = [
+  {k: 'if', l: 'Ingresos financieros'}, {k: 'gf', l: 'Gastos financieros', neg: true}, {k: 'mfb', l: 'Margen financiero bruto'},
+  {k: 'pr', l: 'Provisiones para créditos', neg: true}, {k: 'sv', l: 'Servicios financieros netos'}, {k: 'go', l: 'Gastos de operación', neg: true},
+  {k: 'ot', l: 'Otros'}, {k: 'ir', l: 'Impuesto a la renta', neg: true}, {k: 'rn', l: 'Utilidad neta = ROA'},
+];
+// Partida como % del activo promedio; los gastos se muestran como número positivo (cuánto restan).
+function item(scope, i, k, neg) {
+  const r = raw(scope, i), p = parts(r);
+  if (!p || !(r.A > 0)) return null;
+  return (neg ? -1 : 1) * 100 * p[k] / r.A;
+}
+function renderSmall() {
+  const sc = state.scope, cmp = sc !== 'sistema';
+  document.getElementById('sm-title').textContent = 'Partidas del ROA en el tiempo · ' + scopeLabel(sc);
+  document.getElementById('sm-desc').textContent = 'Cada partida de 12 meses como % del activo promedio. Los gastos, provisiones e impuestos se muestran en positivo: cuánto restan. Use el selector «Ámbito» del resumen para cambiar de subsistema.' +
+    (cmp ? ' La línea gris discontinua es el sistema.' : '');
+  const lg = document.getElementById('sm-legend');
+  lg.replaceChildren();
+  const a = htmlEl('span', null, lg); htmlEl('i', {cls: 'ln'}, a).style.background = scopeColor(sc); a.appendChild(document.createTextNode(scopeLabel(sc)));
+  if (cmp) { const b = htmlEl('span', null, lg); htmlEl('i', {cls: 'ln dash'}, b); b.appendChild(document.createTextNode('Sistema')); }
+  const grid = document.getElementById('sm-grid');
+  grid.replaceChildren();
+  const group = makeGroup(), idx = visIdx(), i = state.mi;
+  for (const it of SM_ITEMS) {
+    const cell = htmlEl('div', {cls: 'sm'}, grid);
+    htmlEl('h3', {text: it.l}, cell);
+    const ie = effIdx(sc, i), v = item(sc, ie, it.k, it.neg), p = ie >= 12 ? item(sc, ie - 12, it.k, it.neg) : null;
+    const line = htmlEl('div', {cls: 'v'}, cell);
+    htmlEl('b', {text: pct(v, 2)}, line);
+    line.appendChild(document.createTextNode(' en ' + mShort(MONTHS[ie]) + ' · '));
+    if (v == null) line.appendChild(document.createTextNode('sin dato'));
+    else line.appendChild(document.createTextNode((p == null ? 'sin dato de hace 12 meses' : spp(v - p, 2) + ' en 12 meses')));
+    const box = htmlEl('div', {cls: 'chart'}, cell);
+    const series = [];
+    if (cmp) series.push({label: 'Sistema', color: 'var(--sys)', w: 1.5, dash: '4 3', noTip: true, get: k => item('sistema', k, it.k, it.neg)});
+    series.push({label: it.l, color: scopeColor(sc), w: 2, get: k => item(sc, k, it.k, it.neg)});
+    lineChart(box, {idx, H: 150, compact: true, group, series, marker: i, u: 'pct', fmt: v => pct(v, 2), aria: it.l + ', % del activo'});
+  }
+}
+
+// ---------- Ranking de entidades (mancuerna: hace 12 meses → mes elegido) ----------
+function entRow(k, i) {
+  const r = raw(k, i);
+  if (!r) return null;
+  const o = {k, n: SC[k].n, ac: r.ac, rn: r.rn, ut: r.ut, np: r.np, Ts: r.Ts, cd: r.cd};
+  for (const x of IND) o[x.k] = ind(k, i, x.k);
+  o.mora = ind(k, i, 'mora');
+  return o;
+}
+// Valor de hace 12 meses (si la entidad estaba en otro subsistema, se usa esa serie).
+function prevVal(k, i, key) {
+  if (i < 12) return null;
+  const v = ind(k, i - 12, key);
+  if (v != null) return v;
+  for (const o of SC[k].o || []) { const q = ind(o, i - 12, key); if (q != null) return q; }
+  return null;
+}
+function rankRows() {
+  const sub = state.sub, i = effIdx(sub, state.mi), k0 = state.ind;
+  const out = [];
+  let small = 0, none = 0;
+  for (const k of D.entities) {
+    if (SC[k].s !== sub) continue;
+    const e = entRow(k, i);
+    if (!e) continue;
+    if (e.ac < MIN_ACT) { small++; continue; }
+    e.v = e[k0];
+    if (e.v == null) { none++; continue; }
+    e.p = prevVal(k, i, k0);
+    out.push(e);
+  }
+  out.sort((a, b) => b.v - a.v);
+  return {rows: out, small, none};
+}
+function renderRank() {
+  const I = IND_BY[state.ind], sub = state.sub, i = effIdx(sub, state.mi), S = SUB_BY[sub];
+  document.getElementById('rank-title').textContent = I.name + ' por entidad · ' + S.l;
+  document.getElementById('rank-desc').textContent = 'Entidades ordenadas de mayor a menor ' + I.lower + ' en ' + mLabel(MONTHS[i]) +
+    (I.good < 0 ? ' (más bajo es mejor)' : '') + '. El punto hueco es el valor de hace 12 meses. Haga clic en una entidad para ver su detalle abajo.';
+  const lg = document.getElementById('rank-legend');
+  lg.replaceChildren();
+  const a = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot'}, a).style.background = SUB_COLOR[sub]; a.appendChild(document.createTextNode(mLabel(MONTHS[i])));
+  if (i >= 12) { const b = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot hollow'}, b); b.appendChild(document.createTextNode(mLabel(MONTHS[i - 12]))); }
+  if (I.k !== 'uti') { const c = htmlEl('span', null, lg); htmlEl('i', {cls: 'vref'}, c); c.appendChild(document.createTextNode('Total de ' + S.l.toLowerCase())); }
+  const box = document.getElementById('ch-rank');
+  box.replaceChildren();
+  const {rows, small, none} = rankRows();
+  const cl = I.clamp || [-Infinity, Infinity], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
+  document.getElementById('rank-note').textContent = (i !== state.mi ? lagNote(state.mi, [sub]) : '') +
+    (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 10 millones de activo y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
+    (none ? none + (none === 1 ? ' entidad no tiene' : ' entidades no tienen') + ' dato de ' + I.lower + ' en ' + mLabel(MONTHS[i]) +
+      ' (' + (none === 1 ? 'le' : 'les') + (I.k === 'cpt' ? ' falta el conteo de personal de ese mes' : I.k === 'upt' ? ' falta un año de historia o algún conteo de personal' : ' falta un año de historia o el denominador es cero o negativo') + ') y no se muestra' + (none === 1 ? '' : 'n') + '. ' : '') +
+    (document.getElementById('ch-rank').clientWidth >= 600 ? (I.u === 'spt' ? 'A la derecha, el personal a fin de mes. ' : 'A la derecha, el activo total. ') : '') +
+    (I.clamp ? 'La escala se corta en ' + (I.k === 'cpt' ? fmtInd(I.k, cl[1]) : fmtInd(I.k, cl[0]) + ' y ' + fmtInd(I.k, cl[1])) + '; el número muestra el valor completo.' : '');
+  if (!rows.length) { emptyMsg(box, 'No hay entidades con datos para esta combinación.'); return; }
+  const W = box.clientWidth, narrow = W < 600;
+  const spt = I.u === 'spt';
+  const labW = narrow ? 112 : 200, valW = I.u === 'money' || spt ? (narrow ? 92 : 118) : (narrow ? 58 : 76), totW = narrow ? 0 : 118, rowH = 28, top = 24;
+  const subV = I.k === 'uti' ? null : ind(sub, i);
+  const x0 = labW + 8, x1 = W - valW - totW - 8, H = top + rows.length * rowH + (subV != null ? 22 : 6);
+  const vals = rows.flatMap(r => [r.v, r.p]).filter(v => v != null).map(clamp).concat(subV != null ? [subV] : []);
+  const ax = axisOf(I.u, Math.max(...vals.map(Math.abs)));
+  const dom = niceDomain(Math.min(0, ...vals) / ax.div, Math.max(0, ...vals) / ax.div, narrow ? 3 : 5);
+  const x = v => x0 + (clamp(v) / ax.div - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': I.name + ' por entidad en ' + S.l}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk * ax.div), x2: x(tk * ax.div), y1: top - 4, y2: H - 4, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk * ax.div), y: top - 10, 'text-anchor': 'middle'}, g).textContent = ax.tick(tk);
+  }
+  if (ax.unit) svgEl('text', {x: labW, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = narrow ? (ax.short || (ax.div === 1e6 ? 'Mil mill. S/' : ax.div === 1e3 ? 'Mill. S/' : ax.unit)) : (spt ? ax.short : ax.unit);
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = spt ? 'Trabajadores' : 'Activo';
+  if (subV != null) svgEl('line', {x1: x(subV), x2: x(subV), y1: top - 4, y2: H - 4, stroke: 'var(--ink2)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2'}, svg);
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': r.n + ': ' + fmtInd(I.k, r.v) + (r.p != null ? ', hace 12 meses ' + fmtInd(I.k, r.p) : '')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = trunc(r.n, narrow ? 15 : 28);
+    if (r.p != null) {
+      svgEl('line', {x1: x(r.p), x2: x(r.v), y1: yc, y2: yc, stroke: 'var(--axis)', 'stroke-width': 2}, gr);
+      svgEl('circle', {cx: x(r.p), cy: yc, r: 4, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 2}, gr);
+    }
+    svgEl('circle', {cx: x(r.v), cy: yc, r: 5.5, fill: SUB_COLOR[sub], stroke: 'var(--surface)', 'stroke-width': 2}, gr);
+    svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = fmtInd(I.k, r.v).replace(' veces', '');
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = spt ? people(r.np) : money(r.ac);
+    hoverable(gr, evt => {
+      const rowsT = [{value: fmtInd(I.k, r.v), label: I.name + ' en ' + mShort(MONTHS[i]), color: SUB_COLOR[sub], sq: true}];
+      if (r.p != null) rowsT.push({value: fmtInd(I.k, r.p), label: 'hace 12 meses'});
+      if (I.k === 'cpt') rowsT.push({value: money(r.cd), label: 'Créditos directos'});
+      else if (I.k !== 'uti') rowsT.push({value: money(r.rn), label: 'Utilidad de 12 meses'});
+      if (spt) {
+        rowsT.push({value: people(r.np), label: 'Trabajadores a fin de mes'});
+        if (I.k === 'upt') rowsT.push({value: people(r.Ts / 12), label: 'Trabajadores, promedio de 12 meses'});
+      }
+      rowsT.push({value: money(r.ac), label: 'Activo total'});
+      showTip(...anchorOf(evt, gr), r.n, rowsT);
+    });
+    gr.addEventListener('click', () => pickEnt(r.k));
+    gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(r.k); } });
+  });
+  if (subV != null) {
+    const lx = x(subV);
+    svgEl('text', {x: lx + 4, y: H - 4, class: 'lbl', 'text-anchor': lx > x1 - 80 ? 'end' : 'start'}, svg).textContent = 'Subsistema ' + fmtInd(I.k, subV);
+  }
+}
+function pickEnt(k) {
+  state.ent = k; hideTip(); renderRank(); renderScatter(); fillEntSelect(); renderEnt();
+  if (!document.getElementById('tb-ent').hidden) fillTable('ent');
+  document.getElementById('card-ent').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+}
+
+// ---------- Dispersión: rentabilidad × mora, eficiencia o costo del riesgo ----------
+const SCX = [{id: 'mora', label: 'Mora'}, {id: 'efi', label: 'Eficiencia'}, {id: 'cr', label: 'Costo del riesgo'}, {id: 'cpt', label: 'Créditos por trabajador'}];
+function renderScatter() {
+  const sub = state.sub, i = effIdx(sub, state.mi), S = SUB_BY[sub];
+  // Eje vertical: el ROA si está elegido; la utilidad por trabajador con los indicadores de personal; si no, el ROE.
+  const yk = state.ind === 'roa' ? 'roa' : IND_BY[state.ind].g === 'trab' ? 'upt' : 'roe', Y = IND_BY[yk], X = indDef(state.scx);
+  document.getElementById('sc-title').textContent = Y.name + ' y ' + X.lower + ' por entidad · ' + S.l;
+  const right = {mora: 'más mora', efi: 'más gasto de operación por cada sol de margen (menos eficiente)', cr: 'más gasto en provisiones por cada sol prestado',
+    cpt: 'más créditos por cada trabajador'}[state.scx];
+  const swap = yk === 'roa' ? 'Elija «ROE» o «Utilidad por trabajador» arriba para cambiar el eje vertical. ' : yk === 'upt' ? 'Elija «ROE» o «ROA» arriba para cambiar el eje vertical. ' : 'Elija «ROA» o «Utilidad por trabajador» arriba para cambiar el eje vertical. ';
+  document.getElementById('sc-desc').textContent = 'Cada círculo es una entidad en ' + mLabel(MONTHS[i]) + ': más arriba, ' + (yk === 'upt' ? 'más utilidad por trabajador' : 'más rentable') + '; más a la derecha, ' + right +
+    '. El tamaño es el activo total. Las líneas punteadas marcan el total del subsistema. La posición de cada entidad muestra una asociación, no una causa. ' + swap + 'Haga clic en una entidad para ver su detalle.';
+  const lg = document.getElementById('sc-legend');
+  lg.replaceChildren();
+  const a = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot'}, a).style.background = SUB_COLOR[sub]; a.appendChild(document.createTextNode(S.l));
+  const b = htmlEl('span', null, lg); htmlEl('i', {cls: 'vref'}, b); b.appendChild(document.createTextNode('Total del subsistema'));
+  const c2 = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot hollow'}, c2); c2.appendChild(document.createTextNode('Fuera de escala'));
+  const box = document.getElementById('ch-sc');
+  box.replaceChildren();
+  const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, i)).filter(e => e && e.ac >= MIN_ACT && e[yk] != null && e[state.scx] != null);
+  const XC = X.clamp, YC = Y.clamp;
+  document.getElementById('sc-note').textContent = (i !== state.mi ? lagNote(state.mi, [sub]) : '') + 'Solo entidades con al menos S/ 10 millones de activo y con dato de los dos indicadores (hace falta un año de historia). La escala se corta en ' + fmtInd(yk, YC[0]) + ' y ' + fmtInd(yk, YC[1]) +
+    ' de ' + Y.lower + ' y en ' + (XC[0] < 0 ? fmtInd(state.scx, XC[0]) + ' y ' : '') + fmtInd(state.scx, XC[1]) + ' de ' + X.lower + '; pase el cursor sobre un círculo hueco para ver su valor.';
+  if (pts.length < 2) { emptyMsg(box, 'No hay suficientes entidades con datos para esta combinación.'); return; }
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
+  const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const cx = v => Math.max(XC[0], Math.min(XC[1], v)), cy = v => Math.max(YC[0], Math.min(YC[1], v));
+  const sx = ind(sub, i, state.scx), sy = ind(sub, i, yk);
+  const xs = pts.map(p => cx(p[state.scx])).concat(sx != null ? [sx] : []), ys = pts.map(p => cy(p[yk])).concat(sy != null ? [sy] : []);
+  // Ejes en la unidad de cada indicador (%, o miles / millones de S/ por trabajador).
+  const axX = axisOf(X.u, Math.max(...xs.map(Math.abs))), axY = axisOf(Y.u, Math.max(...ys.map(Math.abs)));
+  const dx = niceDomain(Math.min(0, ...xs) / axX.div, Math.max(...xs) * 1.04 / axX.div, narrow ? 4 : 6), dy = niceDomain(Math.min(0, ...ys) * 1.08 / axY.div, Math.max(0, ...ys) * 1.12 / axY.div, 5);
+  const x = v => m.l + (cx(v) / axX.div - dx.lo) / (dx.hi - dx.lo) * pw, y = v => m.t + (dy.hi - cy(v) / axY.div) / (dy.hi - dy.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': Y.name + ' y ' + X.lower + ' por entidad en ' + S.l}, box);
+  drawYGrid(svg, dy.ticks, t => y(t * axY.div), m.l, m.l + pw, axY.tick);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dx.ticks) {
+    svgEl('line', {x1: x(tk * axX.div), x2: x(tk * axX.div), y1: m.t, y2: m.t + ph, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk * axX.div), y: m.t + ph + 16, 'text-anchor': 'middle'}, g).textContent = axX.tick(tk);
+  }
+  const unitOf = ax => ax.short ? (ax.div === 1e6 ? ' (millones de S/)' : ' (miles de S/)') : '';
+  svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = X.name + unitOf(axX) + ' →';
+  svgEl('text', {x: 0, y: 10, class: 'lbl'}, svg).textContent = '↑ ' + Y.name + unitOf(axY);
+  if (sx != null) svgEl('line', {x1: x(sx), x2: x(sx), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  if (sy != null) svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(sy), y2: y(sy), stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  const maxT = Math.max(...pts.map(p => p.ac)), rad = v => 4 + (narrow ? 13 : 18) * Math.sqrt(v / maxT);
+  const sorted = pts.slice().sort((a, b) => b.ac - a.ac);
+  const labelled = new Set(sorted.slice(0, narrow ? 3 : 6).map(p => p.k).concat(state.ent ? [state.ent] : []));
+  for (const p of sorted) {
+    const out = p[state.scx] !== cx(p[state.scx]) || p[yk] !== cy(p[yk]);
+    const gp = svgEl('g', {class: 'pt' + (p.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': p.n + ': ' + Y.name + ' ' + fmtInd(yk, p[yk]) + ', ' + X.lower + ' ' + fmtInd(state.scx, p[state.scx])}, svg);
+    const attrs = {class: 'm', cx: x(p[state.scx]), cy: y(p[yk]), r: rad(p.ac), fill: out ? 'var(--surface)' : SUB_COLOR[sub], 'fill-opacity': out ? 1 : 0.75};
+    if (out) attrs.style = 'stroke:' + SUB_COLOR[sub];
+    svgEl('circle', attrs, gp);
+    hoverable(gp, evt => showTip(...anchorOf(evt, gp), p.n, [
+      {value: fmtInd(yk, p[yk]), label: Y.name, color: SUB_COLOR[sub], sq: true},
+      {value: fmtInd(state.scx, p[state.scx]), label: X.name},
+      {value: money(p.rn), label: 'Utilidad de 12 meses'}]
+      .concat(yk === 'upt' || state.scx === 'cpt' ? [{value: people(p.np), label: 'Trabajadores a fin de mes'}] : [])
+      .concat([{value: money(p.ac), label: 'Activo total'}])));
+    gp.addEventListener('click', () => pickEnt(p.k));
+    gp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(p.k); } });
+  }
+  const placed = [];
+  const order = sorted.filter(p => labelled.has(p.k)).sort((a, b) => (b.k === state.ent) - (a.k === state.ent));
+  for (const p of order) {
+    const px = x(p[state.scx]), py = y(p[yk]), r = rad(p.ac);
+    const n = p.n.length > 18 ? p.n.slice(0, 17) + '…' : p.n, w = n.length * 6.4, h = 14;
+    const cands = [[px + r + 4, py - h / 2, 'start'], [px - r - 4 - w, py - h / 2, 'end'], [px - w / 2, py - r - h - 2, 'middle'], [px - w / 2, py + r + 2, 'middle']];
+    const ok = cands.find(([bx, by]) => bx >= m.l && bx + w <= m.l + pw && by >= m.t && by + h <= m.t + ph &&
+      !placed.some(o => bx < o[0] + o[2] && bx + w > o[0] && by < o[1] + o[3] && by + h > o[1]));
+    if (!ok) continue;
+    const [bx, by, anchor] = ok;
+    placed.push([bx, by, w, h]);
+    const tx = anchor === 'start' ? bx : anchor === 'end' ? bx + w : bx + w / 2;
+    svgEl('text', {class: 'ptl', x: tx, y: by + 11, 'text-anchor': anchor}, svg).textContent = n;
+  }
+}
+
+// ---------- Entidades con pérdidas ----------
+function lossCount(i) {
+  if (i > ALL_LAST) return null;   // total de los cinco subsistemas: llega hasta donde llega el sistema
+  const c = SUBS.map(() => 0);
+  let any = false;
+  for (const k of D.entities) {
+    const r = raw(k, i);
+    if (!r || r.rn == null) continue;
+    any = true;
+    if (r.rn < 0) c[SUBS.findIndex(s => s.k === SC[k].s)]++;
+  }
+  return any ? c : null;
+}
+function lossRows(i) {
+  const out = [];
+  for (const k of D.entities) {
+    const ie = effIdx(k, i), r = raw(k, ie);
+    if (!r) continue;
+    if ((r.rn != null && r.rn < 0) || (r.ut != null && r.ut < 0)) out.push({k, n: SC[k].n, s: SC[k].s, m: ie, rn: r.rn, ut: r.ut, roe: ind(k, ie, 'roe'), ac: r.ac});
+  }
+  return out.sort((a, b) => (a.rn ?? a.ut) - (b.rn ?? b.ut));
+}
+function renderLoss() {
+  const i = state.mi;
+  document.getElementById('loss-title').textContent = 'Entidades con pérdidas · todos los subsistemas';
+  document.getElementById('loss-desc').textContent = 'Arriba, cuántas entidades tuvieron pérdida en los 12 meses que terminan en cada mes. Abajo, las entidades con pérdida a ' + mLabel(MONTHS[i]) +
+    ' en los últimos 12 meses o en lo que va del año. Haga clic en una entidad para ver su detalle.';
+  const lg = document.getElementById('loss-legend');
+  lg.replaceChildren();
+  for (const s of SUBS) { const sp = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot sqr'}, sp).style.background = SUB_COLOR[s.k]; sp.appendChild(document.createTextNode(s.l)); }
+  countChart(document.getElementById('ch-loss-n'), {idx: visIdx(), H: 190, marker: Math.min(i, ALL_LAST), get: lossCount, aria: 'Número de entidades con pérdida en 12 meses, por subsistema'});
+  const box = document.getElementById('ch-loss');
+  box.replaceChildren();
+  const rows = lossRows(i);
+  document.getElementById('loss-note').textContent = lagNote(i, SUBS.map(s => s.k)) + (rows.length ? 'Barra: utilidad (pérdida) de los últimos 12 meses. ' + (document.getElementById('ch-loss').clientWidth >= 600 ? 'A la derecha' : 'En la tabla') + ', la utilidad acumulada de ' + ytdLabel(MONTHS[i]) + '. Una entidad puede ganar en 12 meses y perder en lo que va del año, o al revés.' : '');
+  if (!rows.length) { emptyMsg(box, 'Ninguna entidad tuvo pérdidas en ' + mLabel(MONTHS[i]) + '.'); return; }
+  const W = box.clientWidth, narrow = W < 600, labW = narrow ? 112 : 200, valW = narrow ? 84 : 110, ytdW = narrow ? 0 : 150, rowH = 28, top = 24;
+  const x0 = labW + 8, x1 = W - valW - ytdW - 8, H = top + rows.length * rowH + 6;
+  const vals = rows.map(r => r.rn).filter(v => v != null);
+  const ax = axisOf('money', Math.max(1, ...vals.map(Math.abs)));
+  const dom = niceDomain(Math.min(0, ...vals) / ax.div, Math.max(0, ...vals) / ax.div, narrow ? 3 : 4);
+  const x = v => x0 + (v / ax.div - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Entidades con pérdidas en ' + mLabel(MONTHS[i])}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk * ax.div), x2: x(tk * ax.div), y1: top - 4, y2: H - 4, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk * ax.div), y: top - 10, 'text-anchor': 'middle'}, g).textContent = ax.tick(tk);
+  }
+  svgEl('text', {x: labW, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = narrow ? (ax.div === 1e6 ? 'Mil mill. S/' : 'Mill. S/') : ax.unit;
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Acumulada en el año';
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button', 'aria-label': r.n + ': utilidad de 12 meses ' + money(r.rn)}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = r.n.length > (narrow ? 15 : 28) ? r.n.slice(0, narrow ? 14 : 27) + '…' : r.n;
+    if (r.rn != null) {
+      const a = Math.min(x(0), x(r.rn)), b = Math.max(x(0), x(r.rn));
+      svgEl('rect', {x: a, y: yc - 7, width: Math.max(1.5, b - a), height: 14, rx: 3, fill: SUB_COLOR[r.s]}, gr);
+    }
+    svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = money(r.rn);
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = money(r.ut);
+    hoverable(gr, evt => showTip(...anchorOf(evt, gr), r.n + lagTag(i, r.m), [
+      {value: money(r.rn), label: 'Utilidad de 12 meses', color: SUB_COLOR[r.s], sq: true},
+      {value: money(r.ut), label: 'Acumulada en el año'},
+      {value: pct(r.roe, 1), label: 'ROE'},
+      {value: money(r.ac), label: 'Activo total'},
+      {value: SUB_BY[r.s].l, label: ''}]));
+    gr.addEventListener('click', () => { state.sub = r.s; syncSub(); pickEnt(r.k); });
+    gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.sub = r.s; syncSub(); pickEnt(r.k); } });
+  });
+}
+
+// ---------- Detalle de una entidad ----------
+function entOptions() {
+  const sub = state.sub, i = effIdx(sub, state.mi);
+  const list = D.entities.filter(k => SC[k].s === sub).map(k => { const r = raw(k, i); return {k, n: SC[k].n, ac: r ? r.ac : null}; });
+  const active = list.filter(e => e.ac != null).sort((a, b) => b.ac - a.ac);
+  const gone = list.filter(e => e.ac == null).sort((a, b) => a.n.localeCompare(b.n, 'es'));
+  return {active, gone};
+}
+function lastIdx(k) { const s = SC[k]; let j = s.V[FI.ac].length - 1; while (j > 0 && s.V[FI.ac][j] == null) j--; return s.a + j; }
+function fillEntSelect() {
+  const sel = document.getElementById('f-ent');
+  const {active, gone} = entOptions(), i = effIdx(state.sub, state.mi);
+  if (!state.ent || SC[state.ent].s !== state.sub) state.ent = (active[0] || gone[0] || {}).k || null;
+  sel.replaceChildren();
+  const g1 = htmlEl('optgroup', {label: 'Con datos en ' + mLabel(MONTHS[i])}, sel);
+  active.forEach(e => htmlEl('option', {value: e.k, text: e.n}, g1));
+  if (gone.length) {
+    const g2 = htmlEl('optgroup', {label: 'Sin datos en ese mes'}, sel);
+    gone.forEach(e => htmlEl('option', {value: e.k, text: e.n + ' (' + (lastIdx(e.k) < i ? 'hasta ' + mShort(MONTHS[lastIdx(e.k)]) : 'desde ' + mShort(MONTHS[SC[e.k].a])) + ')'}, g2));
+  }
+  if (state.ent) sel.value = state.ent;
+}
+function renderEnt() {
+  const k = state.ent, box = document.getElementById('ch-ent'), stats = document.getElementById('ent-stats'), wf = document.getElementById('ent-wf');
+  box.replaceChildren(); stats.replaceChildren(); wf.replaceChildren();
+  if (!k) return;
+  const E = SC[k], sub = E.s, i = effIdx(k, state.mi), I = IND_BY[state.ind], tag = lagTag(state.mi, i);
+  document.getElementById('ent-title').textContent = E.n;
+  document.getElementById('ent-desc').textContent = I.name + (state.ind === 'uti' ? ' de la entidad.' : ' de la entidad, frente a su subsistema (' + SUB_BY[sub].l.toLowerCase() + ') y al sistema.');
+  const e = entRow(k, i) || {};
+  const chg = o => { const v = ind(k, i, o), p = prevVal(k, i, o); return v == null || p == null ? '' : fmtDelta(o, v - p) + ' en 12 meses'; };
+  const items = [
+    {lab: 'ROE', val: pct(e.roe, 1), sub: chg('roe')},
+    {lab: 'ROA', val: pct(e.roa, 2), sub: chg('roa')},
+    {lab: 'Utilidad de 12 meses', val: money(e.rn), sub: 'acumulada en el año: ' + money(e.ut)},
+    {lab: 'Activo total', val: money(e.ac), sub: e.apal == null ? '' : 'apalancamiento ' + fx(e.apal, 1) + ' veces'},
+    {lab: 'Margen financiero', val: pct(e.mfb, 2), sub: chg('mfb')},
+    {lab: 'Eficiencia', val: pct(e.efi, 1), sub: chg('efi')},
+    {lab: 'Costo del riesgo', val: pct(e.cr, 2), sub: chg('cr')},
+    {lab: 'Mora', val: pct(e.mora, 2), sub: chg('mora')},
+    {lab: 'Utilidad por trabajador', val: perW(e.upt), sub: chg('upt')},
+    {lab: 'Créditos por trabajador', val: perW(e.cpt), sub: chg('cpt')},
+    {lab: 'Trabajadores a fin de mes', val: people(e.np), sub: (e.Ts > 0 ? 'promedio de 12 meses: ' + people(e.Ts / 12) : '') + (e.np != null && staffImputed(k, i) ? (e.Ts > 0 ? '; ' : '') + 'estimado (sin cuadro válido ese mes)' : '')},
+    {lab: 'Créditos directos', val: money(e.cd), sub: ''},
+  ];
+  for (const it of items) {
+    const d = htmlEl('div', null, stats);
+    htmlEl('div', {cls: 'lab', text: it.lab + tag}, d);
+    htmlEl('div', {cls: 'val', text: it.val}, d);
+    htmlEl('div', {cls: 'sub', text: it.sub || ' '}, d);
+  }
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--c-ent)', w: 2.5, get: j => ind(k, j)}];
+  if (state.ind !== 'uti') {
+    series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, get: j => ind(sub, j)});
+    series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 1.5, dash: '5 4', get: j => ind('sistema', j)});
+  }
+  const lg = document.getElementById('ent-legend');
+  lg.replaceChildren();
+  if (series.length > 1) for (const s of series) {
+    const sp = htmlEl('span', null, lg);
+    const ln = htmlEl('i', {cls: 'ln' + (s.dash ? ' dash' : '')}, sp);
+    ln.style.background = s.color;
+    sp.appendChild(document.createTextNode(s.label));
+  }
+  lineChart(box, {idx: visIdx(), H: 320, endLabels: true, series, marker: state.mi, u: I.u, fmt: v => fmtInd(I.k, v), aria: I.name + ' de ' + E.n,
+    clip: I.clamp || null, empty: 'La entidad no tiene 12 meses de historia en el periodo.'});
+  const note = document.getElementById('ent-note');
+  const msg = lagNote(state.mi, [k, sub]) + (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. Su utilidad y sus promedios de 12 meses usan toda su historia.' : '');
+  note.hidden = !msg; note.textContent = msg;
+  // Cascadas de la entidad y de su subsistema, en la misma escala.
+  const dom = wfDomain([k, sub], i);
+  for (const sc of [k, sub]) {
+    const cell = htmlEl('div', {cls: 'sm'}, wf), ie = effIdx(sc, state.mi);
+    const h = htmlEl('h3', null, cell);
+    const dot = htmlEl('i', {cls: 'dot'}, h); dot.style.background = sc === k ? 'var(--c-ent)' : 'var(--c-sub)';
+    h.appendChild(document.createTextNode((sc === k ? E.n : SUB_BY[sub].l) + lagTag(state.mi, ie)));
+    wfChart(htmlEl('div', {cls: 'chart'}, cell), sc, ie, dom);
+    roeLine(htmlEl('p', {cls: 'roe-line'}, cell), sc, ie);
+  }
+  renderEntMix(k);
+}
+
+// ---------- Tablas ----------
+let rankSort = {col: 1, dir: -1};
+const TABLES = {
+  evo() {
+    const series = evoSeries(), idx = visIdx().slice().reverse(), f = v => fmtInd(state.ind, v);
+    const pubs = state.ind === 'roe' || state.ind === 'roa' ? SUBS.map(s => ({l: s.s + ' publicado', get: i => D.pub[s.k][state.ind][i]})) : [];
+    return [['Mes'].concat(series.map(s => s.label)).concat(pubs.map(p => p.l)),
+      idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => f(s.get(i)))).concat(pubs.map(p => pct(p.get(i), state.ind === 'roe' ? 1 : 2))))
+        .filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  wf() {
+    const i = state.mi, scopes = WF_SCOPES(), E = scopes.map(sc => effIdx(sc, i)), R = scopes.map((sc, j) => wfRows(sc, E[j]));
+    const rows = WF_ITEMS.map((it, k) => [it.l + ' (% del activo)'].concat(R.map(r => r ? fx(r[k].v, 2) : '—')));
+    rows.push(['Apalancamiento (veces)'].concat(scopes.map((sc, j) => fx(ind(sc, E[j], 'apal'), 1))));
+    rows.push(['ROE'].concat(scopes.map((sc, j) => pct(ind(sc, E[j], 'roe'), 1))));
+    rows.push(['Eficiencia'].concat(scopes.map((sc, j) => pct(ind(sc, E[j], 'efi'), 1))));
+    rows.push(['Costo del riesgo'].concat(scopes.map((sc, j) => pct(ind(sc, E[j], 'cr'), 2))));
+    rows.push(['Utilidad de 12 meses'].concat(scopes.map((sc, j) => money(ind(sc, E[j], 'uti')))));
+    rows.push(['Utilidad por trabajador'].concat(scopes.map((sc, j) => perW(ind(sc, E[j], 'upt')))));
+    rows.push(['Créditos por trabajador'].concat(scopes.map((sc, j) => perW(ind(sc, E[j], 'cpt')))));
+    rows.push(['Trabajadores a fin de mes'].concat(scopes.map((sc, j) => { const r = raw(sc, E[j]); return people(r && r.np); })));
+    return [['Partida · ' + mLabel(MONTHS[i])].concat(scopes.map((sc, j) => scopeShort(sc) + lagTag(i, E[j]))), rows];
+  },
+  sm() {
+    const sc = state.scope, idx = visIdx().slice().reverse();
+    return [['Mes'].concat(SM_ITEMS.map(t => t.l)), idx.map(i => [mLabel(MONTHS[i])].concat(SM_ITEMS.map(t => pct(item(sc, i, t.k, t.neg), 2))))
+      .filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  loss() {
+    const i = state.mi;
+    return [['Entidad', 'Subsistema', 'Utilidad de 12 meses', 'Acumulada en el año', 'ROE', 'Activo total'],
+      lossRows(i).map(r => [r.n + lagTag(i, r.m), SUB_BY[r.s].l, money(r.rn), money(r.ut), pct(r.roe, 1), money(r.ac)])];
+  },
+  ent() {
+    const k = state.ent;
+    if (!k) return [['Mes'], []];
+    const sub = SC[k].s, idx = visIdx().slice().reverse();
+    return [['Mes', 'ROE', 'ROA', 'Utilidad 12 m', 'Acumulada', 'Margen financiero', 'Eficiencia', 'Costo del riesgo', 'Mora', 'Activo', 'ROE de ' + SUB_BY[sub].s,
+      'Utilidad por trabajador', 'Créditos por trabajador', 'Trabajadores a fin de mes'].concat(MIX.map(c => c.l)),
+      idx.map(i => { const r = raw(k, i), v = mixAt(k, i); return r ? [mLabel(MONTHS[i]), pct(ind(k, i, 'roe'), 1), pct(ind(k, i, 'roa')), money(r.rn), money(r.ut), pct(ind(k, i, 'mfb')),
+        pct(ind(k, i, 'efi'), 1), pct(ind(k, i, 'cr')), pct(ind(k, i, 'mora')), money(r.ac), pct(ind(sub, i, 'roe'), 1),
+        perW(ind(k, i, 'upt')), perW(ind(k, i, 'cpt')), people(r.np)].concat(MIX.map(c => v ? people(v[c.k]) : '—')) : null; }).filter(Boolean)];
+  },
+};
+// Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
+// muestra el último valor publicado de la columna, con su mes (nunca un hueco).
+const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));
+const cellText = c => c && typeof c === 'object' ? c.v : c;
+function lagFill(head, rows) {
+  if (head[0] !== 'Mes' || ALL_LAST >= N - 1) return rows;
+  return rows.map(r => {
+    const i = LABEL_IDX.get(r[0]);
+    if (!(i > ALL_LAST)) return r;
+    return r.map((c, j) => {
+      if (j === 0 || cellText(c) !== '—') return c;
+      let src = null;
+      for (const q of rows) {
+        const k = LABEL_IDX.get(q[0]);
+        if (k < i && cellText(q[j]) !== '—' && (!src || k > src.k)) src = {k, q};
+      }
+      if (!src) return c;
+      return {v: cellText(src.q[j]) + ' (' + src.q[0] + ')', cls: 'lag', title: 'Último dato publicado, de ' + src.q[0] + '. ' +
+        (/sistema/i.test(head[j]) ? 'El sistema se calcula solo con los meses en que publicaron los cinco subsistemas.'
+          : 'La SBS todavía no publica ' + r[0] + ' para esta columna.')};
+    });
+  });
+}
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const p = {text: c.v, cls: c.cls || ''};
+  if (c.title) p.title = c.title;
+  return htmlEl('td', p, row);
+}
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  if (key === 'rank') return fillRankTable(wrap);
+  if (key === 'mix') return fillMixTable(wrap);
+  if (key === 'ptu') return fillPtuTable(wrap);
+  const [head, rows0] = TABLES[key](), rows = lagFill(head, rows0);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+// Dos tablas: el mes elegido por ámbito y la serie del ámbito elegido.
+function fillMixTable(wrap) {
+  const i = state.mi, sc = state.scope;
+  const head = c => [c].concat(MIX.map(x => x.l), ['Total'], MIX.map(x => '% ' + x.lower));
+  const cells = v => v ? MIX.map(x => people(v[x.k])).concat([people(mixTot(v))], MIX.map(x => pct1(mixPct(v, x.k)))) : MIX.map(() => '—').concat(['—'], MIX.map(() => '—'));
+  const table = (title, h, rows) => {
+    htmlEl('p', {cls: 'note', text: title, style: 'margin:8px 10px 4px'}, wrap);
+    const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    h.forEach(x => htmlEl('th', {text: x, scope: 'col'}, tr));
+    lagFill(h, rows).forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+  };
+  table('Por ámbito, ' + mLabel(MONTHS[i]), head('Ámbito'), WF_SCOPES().map(s => { const ie = effIdx(s, i); return [scopeLabel(s) + lagTag(i, ie)].concat(cells(mixAt(s, ie))); }));
+  table(scopeLabel(sc) + ', por mes', head('Mes'), visIdx().slice().reverse().map(k => [mLabel(MONTHS[k])].concat(cells(mixAt(sc, k)))));
+}
+function fillRankTable(wrap) {
+  const {rows} = rankRows();
+  const cols = [
+    {l: 'Entidad', get: r => r.n, fmt: v => v},
+    {l: 'ROE', get: r => r.roe, fmt: v => pct(v, 1)},
+    {l: 'ROA', get: r => r.roa, fmt: v => pct(v)},
+    {l: 'Utilidad 12 m', get: r => r.rn, fmt: money},
+    {l: 'Margen financiero', get: r => r.mfb, fmt: v => pct(v)},
+    {l: 'Eficiencia', get: r => r.efi, fmt: v => pct(v, 1)},
+    {l: 'Costo del riesgo', get: r => r.cr, fmt: v => pct(v)},
+    {l: 'Apalancamiento', get: r => r.apal, fmt: v => fx(v, 1)},
+    {l: 'Mora', get: r => r.mora, fmt: v => pct(v)},
+    {l: 'Activo', get: r => r.ac, fmt: money},
+    {l: 'Utilidad por trabajador', get: r => r.upt, fmt: perW},
+    {l: 'Créditos por trabajador', get: r => r.cpt, fmt: perW},
+    {l: 'Trabajadores a fin de mes', get: r => r.np, fmt: people},
+  ];
+  const c = cols[rankSort.col];
+  rows.sort((a, b) => {
+    const va = c.get(a), vb = c.get(b);
+    if (va == null) return 1; if (vb == null) return -1;
+    return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * rankSort.dir;
+  });
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  cols.forEach((col, j) => {
+    const th = htmlEl('th', {scope: 'col'}, tr);
+    if (j === rankSort.col) th.setAttribute('aria-sort', rankSort.dir > 0 ? 'ascending' : 'descending');
+    const b = htmlEl('button', {type: 'button', text: col.l + (j === rankSort.col ? (rankSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
+    b.addEventListener('click', () => {
+      rankSort = {col: j, dir: j === rankSort.col ? -rankSort.dir : (j === 0 ? 1 : -1)};
+      fillTable('rank');
+      wrap.querySelectorAll('th button')[j].focus();
+    });
+  });
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); cols.forEach(col => htmlEl('td', {text: col.fmt(col.get(r))}, row)); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+function refreshTables() {
+  for (const k of ['evo', 'wf', 'sm', 'mix', 'ptu', 'rank', 'loss', 'ent']) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+}
+// Tabla de la metodología: ROE y ROA propios vs. publicados, último mes.
+(function fillPub() {
+  const i = N - 1, wrap = document.getElementById('tb-pub');
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  ['Subsistema · ' + mLabel(MONTHS[i]), 'ROE calculado', 'ROE publicado', 'Diferencia', 'ROA calculado', 'ROA publicado', 'Diferencia']
+    .forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  for (const s of SUBS) {
+    const ie = effIdx(s.k, i), a = ind(s.k, ie, 'roe'), b = D.pub[s.k].roe[ie], c = ind(s.k, ie, 'roa'), d = D.pub[s.k].roa[ie];
+    const row = htmlEl('tr', null, tb);
+    [s.l + lagTag(i, ie), pct(a, 2), pct(b, 2), a == null || b == null ? '—' : spp(a - b, 2), pct(c, 2), pct(d, 2), c == null || d == null ? '—' : spp(c - d, 2)]
+      .forEach(v => htmlEl('td', {text: v}, row));
+  }
+})();
+
+// ---------- Filtros ----------
+function segment(id, items, get, set, after) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get() === it.id)}, box);
+    b.dataset.k = it.id;
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      if (after) after(); else box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      renderVisible();
+    });
+  }
+}
+const syncInd = () => document.querySelectorAll('#f-ind-ren button, #f-ind-cos button, #f-ind-trab button')
+  .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === state.ind)));
+const syncSub = () => document.querySelectorAll('#f-sub button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === state.sub)));
+for (const grp of ['ren', 'cos', 'trab']) {
+  segment('f-ind-' + grp, IND.filter(x => x.g === grp).map(x => ({id: x.k, label: x.l, title: x.long || x.name})), () => state.ind, v => { state.ind = v; }, syncInd);
+}
+segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+segment('f-scope', [{id: 'sistema', label: 'Sistema'}].concat(SUBS.map(s => ({id: s.k, label: s.s, title: s.l}))), () => state.scope, v => { state.scope = v; });
+segment('f-sub', SUBS.map(s => ({id: s.k, label: s.s, title: s.l})), () => state.sub, v => { state.sub = v; state.ent = null; });
+segment('f-scx', SCX, () => state.scx, v => { state.scx = v; });
+const MIXU = [{id: 'pct', label: '% del personal'}, {id: 'n', label: 'Personas'}];
+const syncMixU = () => document.querySelectorAll('#f-mixu button, #f-mixu-ent button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === state.mixU)));
+segment('f-mixu', MIXU, () => state.mixU, v => { state.mixU = v; }, syncMixU);
+segment('f-mixu-ent', MIXU, () => state.mixU, v => { state.mixU = v; }, syncMixU);
+state.ptuY = PTU_YEARS[PTU_YEARS.length - 1] ?? null;
+segment('f-ptuy', PTU_YEARS.map(y => ({id: y, label: String(y)})), () => state.ptuY, v => { state.ptuY = v; });
+(function fillMonths() {
+  const sel = document.getElementById('f-mes');
+  for (let i = N - 1; i >= FIRST; i--) htmlEl('option', {value: String(i), text: mLabel(MONTHS[i])}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+})();
+document.getElementById('f-ent').addEventListener('change', e => { state.ent = e.target.value; renderRank(); renderScatter(); renderLoss(); renderEnt(); if (!document.getElementById('tb-ent').hidden) fillTable('ent'); });
+
+// ---------- Pestañas ----------
+const TABS = ['sistema', 'entidades', 'metodologia'];
+let tab = 'sistema';
+function renderVisible() {
+  hideTip();
+  if (tab === 'sistema') { renderKpis(); renderEvo(); renderWf(); renderSmall(); renderMix(); renderPtu(); }
+  else if (tab === 'entidades') { fillEntSelect(); renderRank(); renderScatter(); renderLoss(); renderEnt(); }
+  refreshTables();
+}
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'metodologia';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+// ---------- Textos de metodología y pie ----------
+document.querySelectorAll('[data-v]').forEach(e => { e.textContent = {from: mLabel(MONTHS[FIRST])}[e.dataset.v] || '—'; });
+// Textos de «Utilidad y créditos por trabajador» con las cifras del último mes.
+(function fillStaffTexts() {
+  let i = N - 1;
+  while (i > FIRST && ind('sistema', i, 'upt') == null) i--;
+  // Mes en palabras para el texto corrido («agosto de 2026»).
+  const mLong = mm => MES_L[+mm.slice(5, 7) - 1] + ' de ' + mm.slice(0, 4);
+  const r = raw('sistema', i), m = mLong(MONTHS[i]);
+  const ex = document.getElementById('upt-example');
+  const rw = r ? (r.rw ?? r.rn) : null;
+  if (r && r.Ts > 0 && rw != null) {
+    const avg = r.Ts / 12, u = 1000 * rw / avg, uEnd = r.np > 0 ? 1000 * rw / r.np : null;
+    ex.textContent = 'Ejemplo, el sistema en ' + m + ': la utilidad neta de los 12 meses fue ' + money(rw) + ' (S/ ' + f0.format(1000 * rw) + '). Los 12 conteos de personal de fin de mes suman ' +
+      people(r.Ts) + ', así que el promedio es ' + people(r.Ts) + ' ÷ 12 = ' + f1.format(avg) + ' trabajadores. Utilidad por trabajador = S/ ' + f0.format(1000 * rw) + ' ÷ ' + f1.format(avg) + ' = S/ ' + f0.format(u) +
+      ' (en el tablero, ' + perW(u) + ').' + (uEnd != null ? ' Con el conteo de fin de mes (' + people(r.np) + ' trabajadores) habría salido ' + perW(uEnd) + '.' : '');
+  }
+  const chk = D.staff && D.staff.chk;
+  if (chk) {
+    const all = SUBS.every(s => chk.tot[s.k] && chk.tot[s.k][0] === chk.tot[s.k][1]);
+    const bad = SUBS.filter(s => chk.tot[s.k] && chk.tot[s.k][0] < chk.tot[s.k][1]).map(s => s.l.toLowerCase() + ' (' + (chk.tot[s.k][1] - chk.tot[s.k][0]) + ' de ' + chk.tot[s.k][1] + ' meses)');
+    document.getElementById('staff-check').textContent = all
+      ? 'La suma del personal de las entidades es igual al total que publica la SBS en el cuadro de personal en todos los meses.'
+      : 'La suma del personal de las entidades es igual al total que publica la SBS en el cuadro de personal salvo en ' + (bad.length > 1 ? bad.slice(0, -1).join(', ') + ' y ' + bad[bad.length - 1] : bad[0]) +
+        ', en que el total impreso no es la suma de las entidades que lista el mismo cuadro (diferencias de pocas personas). El tablero usa la suma de las entidades.';
+    if (chk.cpt) {
+      const share = (subs, base) => { let ok = 0, n = 0; for (const k of subs) { const c = chk.cpt[k]; if (c) { ok += c[base][0]; n += c[base][1]; } } return n ? f1.format(100 * ok / n) + '%' : '—'; };
+      const tot = ['banca-multiple', 'empresas-financieras'], emp = ['cajas-municipales', 'cajas-rurales', 'empresas-credito'];
+      document.getElementById('cpt-check').textContent = 'Comprobación: dividiendo los créditos directos del balance (con las sucursales en el exterior, cuando el cuadro de personal las incluye) entre el total del personal, se reproduce el valor publicado de cada entidad de banca y financieras, con una diferencia de 1% o menos, en el ' +
+        share(tot, 'total') + ' de los casos (entidad y mes) desde ' + mLong(MONTHS[0]) + '. En cajas y empresas de créditos, el valor publicado se reproduce dividiendo entre la categoría «empleados», en el ' + share(emp, 'empleados') + ' de los casos.';
+    }
+  }
+  const b = 'banca-multiple', c = 'cajas-municipales';
+  const cb = ind(b, i, 'cpt'), cc = ind(c, i, 'cpt'), ub = ind(b, i, 'upt'), uc = ind(c, i, 'upt');
+  if (cb != null && cc != null && ub != null && uc != null)
+    document.getElementById('upt-model').textContent = 'Por subsistema, en ' + m + ' la banca múltiple tenía ' + perW(cb) + ' de créditos por trabajador y las cajas municipales, ' + perW(cc) +
+      '; la utilidad por trabajador fue de ' + perW(ub) + ' y ' + perW(uc) + ', respectivamente.';
+  const imp = (D.staff && D.staff.imp) || [];
+  if (imp.length) {
+    const li = document.getElementById('staff-imputed');
+    li.hidden = false;
+    li.replaceChildren();
+    htmlEl('b', {text: 'Personal estimado.'}, li);
+    const known = imp.some(x => x.s === 'banca-multiple' && x.m === '2023-11');
+    li.append(' ' + (imp.length === 1 ? 'Mes' : 'Meses') + ' sin cuadro de personal válido: ' + imp.map(x => SUB_BY[x.s].l.toLowerCase() + ', ' + mLong(x.m)).join('; ') + '. ' +
+      (known ? 'El archivo de la SBS de banca múltiple de noviembre de 2023 trae la fecha y las cifras de diciembre, así que no hay un conteo publicado de noviembre. ' : '') +
+      'Para no perder 12 meses del promedio, el personal de cada entidad se estimó con el indicador «créditos directos / personal» que la SBS publicó para ese mes: créditos directos (con las sucursales en el exterior, como en el cuadro de personal) ÷ indicador, redondeado. Es una estimación propia. Aplicado a los meses de banca múltiple en que sí hay cuadro, este método da el conteo publicado con una diferencia de 5 personas o menos en el 98.5% de los casos (entidad y mes).');
+  }
+})();
+(function fillPtuMedian() {
+  const el = document.getElementById('ptu-median');
+  const n = PTU.filter(r => r.p > 0 && r.U + r.p > 0 && r.al === 'legal').length;
+  if (ptuMedian != null) el.textContent = 'En los ' + n + ' casos (entidad y ejercicio) con participación legal positiva y utilidad antes de participación positiva, la mediana fue ' + pct(ptuMedian, 1) + '.';
+})();
+document.getElementById('lede').textContent =
+  'Cuánto ganan los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos del Perú, de dónde sale esa ganancia y cuánto les cuesta operar y cubrir el riesgo de sus créditos, y cuánto ganan y prestan por trabajador. Datos de la SBS de ' + mLabel(MONTHS[FIRST]) + ' a ' + mLabel(D.hasta) + ', con la utilidad de los últimos 12 meses.';
+[
+  'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), Boletín Estadístico. Balance General y Estado de Ganancias y Pérdidas: cuadros B-2201 (banca múltiple), B-3101 (financieras), C-1101 (cajas municipales), C-2101 (cajas rurales) y C-4103 (empresas de créditos). ROE y ROA publicados, para comparar: Indicadores Financieros B-2401, B-3301, C-1301, C-2301 y C-4301. Personal: B-2305, B-3202, C-1202, C-2202 y C-4206 (Anexo N.° 10). Participación de los trabajadores en las utilidades: estados financieros auditados de las entidades que la revelan por separado (SMV o web de la entidad, a veces dentro de su memoria anual).',
+  'Los indicadores, la descomposición del ROA, la eficiencia de 12 meses, el margen financiero, el costo del riesgo, el apalancamiento, la utilidad y los créditos por trabajador, la participación de los trabajadores por persona y como % de la utilidad, el personal estimado de banca múltiple en noviembre de 2023 y los agregados del sistema y de los subsistemas son cálculos propios a partir de esos datos. Montos en soles corrientes; cifras con punto decimal y coma para los miles.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, document.getElementById('foot')));
+
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'sistema', false);
+// Redibuja solo cuando cambia el ancho (el alto cambia con cada redibujo).
+let rt, lastW = 0;
+new ResizeObserver(es => {
+  const w = Math.round(es[0].contentRect.width);
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+}).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

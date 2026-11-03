@@ -1,0 +1,1681 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tasas de interés activas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas), con la paleta
+   de la SBS: azul #001E6B y gris #B2B4B5. Subsistemas: un tono fijo cada uno (s1–s5, validados para
+   daltonismo en claro y en oscuro). La tasa máxima del BCRP en morado punteado (--cap; sus cifras en el
+   morado más oscuro, --bad). La entidad elegida en azul SBS y el promedio de su subsistema en gris
+   discontinuo. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a; --s5: #8bb0b2; --sys: #868a93;
+  --cap: #876baa; --bad: #5a2a85; --c-ent: #001e6b;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4; --s5: #356e6e; --sys: #8a8f9c;
+  --cap: #9686b7; --bad: #d2b4f0; --c-ent: #c6d2f3;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 32px 0 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-family: var(--font-head); }
+.tile.hero .val { font-size: 48px; }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 6px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .sub.cap { color: var(--bad); }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+.tile.na .val { color: var(--muted); }
+.d-up, .d-down { color: var(--ink); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.card-tools .tool { display: inline-flex; gap: 8px; align-items: center; white-space: nowrap; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.ln.capdash { background: repeating-linear-gradient(90deg, var(--cap) 0 5px, transparent 5px 8px) !important; height: 2px; }
+.ln.thick { height: 3px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.hollow { background: var(--surface); box-shadow: inset 0 0 0 2px var(--muted); }
+.sq { width: 14px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--ink2) 0 3px, transparent 3px 5px); }
+.vref.cap { background: repeating-linear-gradient(180deg, var(--cap) 0 4px, transparent 4px 6px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 32px 0; text-align: center; margin: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: 100%; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+#f-prod { max-width: min(340px, 100%); }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.lag { color: var(--muted); }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button:hover { color: var(--ink); }
+th[aria-sort] button { color: var(--ink); }
+td.lv1 { padding-left: 22px; color: var(--ink2); }
+td.lft { text-align: left; white-space: normal; min-width: 180px; }
+
+/* Ranking, puntos y dispersión */
+.rank-row { cursor: pointer; }
+.rank-row .bg { fill: transparent; }
+.rank-row:hover .bg, .rank-row:focus-visible .bg { fill: var(--wash); }
+.rank-row.sel .bg { fill: var(--wash); }
+.rank-row.sel .nm { font-weight: 650; fill: var(--ink); }
+.rank-row:focus-visible { outline: none; }
+.rank-row:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.pt { cursor: pointer; outline: none; }
+.pt circle.m { stroke: var(--surface); stroke-width: 2; }
+.pt:hover circle.m, .pt:focus-visible circle.m, .pt.sel circle.m { stroke: var(--ink); stroke-width: 2; }
+.ptl { font-size: 11.5px; fill: var(--ink2); pointer-events: none; }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.nm.lv1 { fill: var(--ink2); }
+.nm.b { font-weight: 650; }
+.rv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rs { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ent-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 4px; }
+.ent-stats div { min-width: 0; }
+.ent-stats .lab { font-size: 12.5px; color: var(--ink2); }
+.ent-stats .val { font-size: 20px; font-weight: 620; line-height: 1.25; overflow-wrap: anywhere; }
+.ent-stats .sub { font-size: 12px; color: var(--ink2); }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.caplbl { font-size: 11.5px; fill: var(--bad); font-weight: 600; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.14); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+/* Pestañas */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, th button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña de metodología */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 16px; margin: 18px 0 6px; font-weight: 600; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul, .edu ol { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; overflow-wrap: anywhere; }
+.example { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 10px 0 14px; max-width: 72ch; }
+.example p { margin: 0 0 6px; }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 16px; }
+.defs dt { font-weight: 620; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.edu .table-wrap { max-height: none; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+#tb-caps th:last-child, #tb-caps td:last-child { text-align: left; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .ent-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .seg button { padding: 5px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Tasas de interés activas del sistema financiero</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto cobran los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos del Perú por sus préstamos en soles, por tipo de crédito, producto y entidad, mes a mes.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-tipos" aria-controls="tab-tipos" aria-selected="true">Por tipo de crédito</button>
+    <button type="button" role="tab" id="tabbtn-entidades" aria-controls="tab-entidades" aria-selected="false" tabindex="-1">Entidades</button>
+    <button type="button" role="tab" id="tabbtn-metodologia" aria-controls="tab-metodologia" aria-selected="false" tabindex="-1">Cómo leer los datos</button>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtros">
+    <div class="f"><span class="lab" id="lab-tipo">Tipo de crédito</span><div class="seg" id="f-tipo" role="group" aria-labelledby="lab-tipo"></div></div>
+    <div class="f"><label for="f-prod">Producto</label><select class="btn" id="f-prod"></select></div>
+    <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+    <div class="f"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+  </div>
+
+  <!-- ===================== Por tipo de crédito ===================== -->
+  <div id="tab-tipos" role="tabpanel" aria-labelledby="tabbtn-tipos">
+    <div class="section-title">Resumen</div>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Subsistema del resumen">
+      <div class="f"><span class="lab" id="lab-scope">Subsistema</span><div class="seg" id="f-scope" role="group" aria-labelledby="lab-scope"></div></div>
+    </div>
+    <section class="kpis" id="kpis" aria-label="Tasas promedio del mes seleccionado"></section>
+    <p class="note" id="kpi-note"></p>
+
+    <div class="section-title">Comparación entre subsistemas</div>
+    <figure class="card" id="card-cmp">
+      <div class="card-head">
+        <div>
+          <h2 id="cmp-title">Tasa promedio por tipo de crédito y subsistema</h2>
+          <p id="cmp-desc"></p>
+        </div>
+        <button class="btn" data-table="cmp">Ver tabla</button>
+      </div>
+      <div class="legend" id="cmp-legend"></div>
+      <div class="chart" id="ch-cmp"></div>
+      <p class="note" id="cmp-note"></p>
+      <div class="table-wrap" id="tb-cmp" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-prod">
+      <div class="card-head">
+        <div>
+          <h2 id="prod-title">Productos</h2>
+          <p id="prod-desc"></p>
+        </div>
+        <button class="btn" data-table="prod">Ver tabla</button>
+      </div>
+      <div class="legend" id="prod-legend"></div>
+      <div class="chart" id="ch-prod"></div>
+      <p class="note" id="prod-note"></p>
+      <div class="table-wrap" id="tb-prod" hidden></div>
+    </figure>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-evo">
+      <div class="card-head">
+        <div>
+          <h2 id="evo-title">Tasa promedio por subsistema</h2>
+          <p id="evo-desc"></p>
+        </div>
+        <button class="btn" data-table="evo">Ver tabla</button>
+      </div>
+      <div class="legend" id="evo-legend"></div>
+      <div class="chart" id="ch-evo"></div>
+      <p class="note" id="evo-note"></p>
+      <div class="table-wrap" id="tb-evo" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Entidades ===================== -->
+  <div id="tab-entidades" role="tabpanel" aria-labelledby="tabbtn-entidades" hidden>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Subsistema">
+      <div class="f"><span class="lab" id="lab-sub">Subsistema</span><div class="seg" id="f-sub" role="group" aria-labelledby="lab-sub"></div></div>
+    </div>
+
+    <figure class="card" id="card-rank">
+      <div class="card-head">
+        <div>
+          <h2 id="rank-title">Tasa por entidad</h2>
+          <p id="rank-desc"></p>
+        </div>
+        <button class="btn" data-table="rank">Ver tabla</button>
+      </div>
+      <div class="legend" id="rank-legend"></div>
+      <div class="chart" id="ch-rank"></div>
+      <p class="note" id="rank-note"></p>
+      <div class="table-wrap" id="tb-rank" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-disp">
+      <div class="card-head">
+        <div>
+          <h2 id="disp-title">Cuánto difieren las entidades</h2>
+          <p id="disp-desc"></p>
+        </div>
+        <button class="btn" data-table="disp">Ver tabla</button>
+      </div>
+      <div class="legend" id="disp-legend"></div>
+      <div class="chart" id="ch-disp"></div>
+      <p class="note" id="disp-note"></p>
+      <div class="table-wrap" id="tb-disp" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-sc">
+      <div class="card-head">
+        <div>
+          <h2 id="sc-title">Tasa y mora por entidad</h2>
+          <p id="sc-desc"></p>
+        </div>
+        <div class="card-tools">
+          <span class="tool"><span class="note" id="lab-scx" style="margin:0">Eje horizontal</span><span class="seg" id="f-scx" role="group" aria-labelledby="lab-scx"></span></span>
+          <span class="tool"><span class="note" id="lab-scall" style="margin:0">Entidades</span><span class="seg" id="f-scall" role="group" aria-labelledby="lab-scall"></span></span>
+        </div>
+      </div>
+      <div class="legend" id="sc-legend"></div>
+      <div class="chart" id="ch-sc"></div>
+      <p class="note" id="sc-note"></p>
+    </figure>
+
+    <figure class="card" id="card-ent">
+      <div class="card-head">
+        <div>
+          <h2 id="ent-title">Detalle de la entidad</h2>
+          <p id="ent-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-ent" style="margin:0">Entidad</label>
+          <select class="btn" id="f-ent"></select>
+          <button class="btn" data-table="ent">Ver tabla</button>
+        </div>
+      </div>
+      <div class="ent-stats" id="ent-stats"></div>
+      <div class="legend" id="ent-legend"></div>
+      <div class="chart" id="ch-ent"></div>
+      <p class="note" id="ent-note"></p>
+      <div class="table-wrap" id="tb-ent" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-entp">
+      <div class="card-head">
+        <div>
+          <h2 id="entp-title">Productos de la entidad frente a su subsistema</h2>
+          <p id="entp-desc"></p>
+        </div>
+        <button class="btn" data-table="entp">Ver tabla</button>
+      </div>
+      <div class="legend" id="entp-legend"></div>
+      <div class="chart" id="ch-entp"></div>
+      <p class="note" id="entp-note"></p>
+      <div class="table-wrap" id="tb-entp" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Metodología ===================== -->
+  <div id="tab-metodologia" role="tabpanel" aria-labelledby="tabbtn-metodologia" hidden>
+    <div class="edu">
+      <section id="tasa">
+        <h2>Qué es una tasa de interés activa</h2>
+        <p>Es el precio de un préstamo: el porcentaje que cobra una entidad financiera, por año, sobre el dinero que presta. Se llama <b>activa</b> porque corresponde a los créditos, que la normativa de la SBS llama «productos activos»; las tasas <b>pasivas</b> son las que la entidad paga por los depósitos. El glosario del BCRP la define como «el porcentaje que cobran los bancos por las modalidades de financiamiento conocidas como sobregiros, descuentos y préstamos (a diversos plazos)».</p>
+        <h3>Tasa efectiva anual (TEA)</h3>
+        <p>El Reglamento de Gestión de Conducta de Mercado del Sistema Financiero de la SBS (artículo 11.2) dispone que las tasas de interés compensatorio «deben ser expresadas en forma efectiva anual», considerando «un año de trescientos sesenta (360) días». <b>Efectiva</b> quiere decir que ya incluye la capitalización: los intereses de cada periodo generan a su vez intereses (el glosario del BCRP dice que su valor «implica la capitalización de intereses»). Por eso una TEA no se divide entre 12 para obtener la tasa mensual. Con un año de 360 días y meses de 30 días, la tasa mensual equivalente es:</p>
+        <div class="formula">Tasa mensual equivalente = (1 + TEA)<sup>30/360</sup> − 1</div>
+        <div class="example" id="ex-tea"></div>
+        <h3>Tasa de costo efectivo anual (TCEA)</h3>
+        <p>La TEA mide solo el interés. La <b>TCEA</b> mide el costo total del crédito para el cliente. Según el mismo Reglamento (artículo 13.1), «se calcula igualando el valor actual de todas las cuotas con el monto que efectivamente haya sido recibido en préstamo», e incluye el principal, los intereses, las comisiones y los gastos que se trasladan al cliente, y los seguros en los créditos de consumo e hipotecarios para vivienda. No incluye los pagos a terceros que el cliente hace directamente ni los tributos. Para los créditos en cuotas, el Anexo N.° 1 del Reglamento da la fórmula:</p>
+        <div class="formula">TCEA = (1 + tasa de costo efectivo del periodo de cada cuota)<sup>número de cuotas en un año</sup> − 1</div>
+        <p>La tasa del periodo es la que iguala el valor actual de las cuotas con el monto recibido. Para las tarjetas de crédito y otros créditos revolventes, el Anexo N.° 1-A fija un caso estándar de comparación (un consumo de S/ 1,000 pagado en 12 meses). Si un crédito en cuotas no tuviera comisiones, gastos ni seguros, su TCEA sería prácticamente igual a su TEA (pueden diferir un poco por cómo se cuentan los días entre cuotas). Cada comisión, gasto o seguro que se suma a la cuota hace que la TCEA supere a la TEA. Las cifras de este tablero son tasas de interés anuales y <b>no deben leerse como TCEA</b> (ver «Qué publica la SBS»).</p>
+      </section>
+
+      <section id="promedio">
+        <h2>Qué publica la SBS</h2>
+        <p>La SBS publica, para cada subsistema, el cuadro «Tasas activas anuales de las operaciones en moneda nacional» por tipo de crédito. Tiene una columna por entidad y una última columna, «Promedio», para todo el subsistema. Según su nota, se elabora con «la información remitida […] a través del Reporte N° 6» y «las tasas de interés tienen carácter referencial».</p>
+        <h3>Operaciones nuevas, no saldos</h3>
+        <p>Las tasas son de los <b>créditos otorgados en el periodo</b>, no de toda la cartera: el título del cuadro habla de las operaciones «realizadas» en los últimos 30 días útiles o durante el mes. La SBS distingue las tasas «sobre saldos» (de los créditos vigentes, Reporte N.° 6-A) de las tasas «sobre flujos» (de las operaciones nuevas, Reporte N.° 6-D). En el formato vigente del Reporte N.° 6-D («Tasas de interés activas de operaciones diarias»), los bancos y las financieras deben «registrar sólo las nuevas operaciones realizadas el día anterior», y las renovaciones automáticas cuentan como nuevos desembolsos. No se incluyen las operaciones con tasa de 0%. Por eso la tasa de un mes refleja las condiciones de ese momento y no las de créditos antiguos, que pueden tener tasas muy distintas.</p>
+        <h3>Tasas efectivas anuales ponderadas por el monto</h3>
+        <p>En el Reporte N.° 6-D, cada entidad informa por producto la «tasa efectiva anual promedio»: el «promedio aritmético de las tasas de interés compensatorias ponderadas por los montos desembolsados» (nota 1/ del reporte). Así, un crédito grande pesa más que uno pequeño. La nota metodológica de la SBS de 2019 sobre las tasas de índole legal confirma que las tasas sobre flujos de los bancos y las financieras se ponderan «por los respectivos montos desembolsados», que las cajas municipales, las cajas rurales y las Edpyme (hoy empresas de créditos) reportan «las tasas de interés promedio de las operaciones realizadas durante el mes calendario», y que «todas las tasas de interés son reportadas en términos efectivos anuales». El mismo Reporte N.° 6-D pide la TCEA en una columna aparte (nota 3/: incluye «las comisiones y gastos que serán cobrados al cliente»). El cuadro publicado no dice cuál de las dos columnas usa; por su título («tasas activas anuales») y por la nota metodológica, aquí se lee como tasa de interés efectiva anual, no como TCEA.</p>
+        <div class="example" id="ex-mix"></div>
+        <h3>Ventana de 30 días útiles o mes calendario</h3>
+        <ul>
+          <li><b>Banca y financieras</b> reportan cada día. La SBS publica para ellas las tasas de las operaciones «realizadas en los últimos 30 días útiles» hasta una fecha. Treinta días útiles son unas seis semanas, así que la tasa de un mes incluye operaciones de las últimas semanas del mes anterior. Este tablero toma cada mes el cuadro al último día útil.</li>
+          <li><b>Cajas municipales, cajas rurales y empresas de créditos</b> reportan una vez al mes. El título de su cuadro dice operaciones «realizadas durante el mes»: el cuadro de un mes cubre solo ese mes calendario.</li>
+        </ul>
+        <h3>El promedio del subsistema</h3>
+        <p>La SBS no explica en el cuadro cómo calcula la columna «Promedio». En los datos, de <span data-v="avgN"></span> celdas con dos o más entidades, solo el <span data-v="avgSimple"></span> coincide con el promedio simple de las entidades y el <span data-v="avgIn"></span> queda entre la tasa más baja y la más alta. Eso es coherente con un promedio ponderado por montos, como el que la SBS usa en su tasa promedio del sistema financiero para créditos de consumo (nota metodológica de 2019), pero para este cuadro es una inferencia, no un método publicado. Como la SBS no publica en el cuadro los montos de cada entidad, <b>este tablero no calcula un promedio del sistema</b>: un promedio simple de los cinco subsistemas daría el mismo peso a las empresas de créditos que a la banca, y sería engañoso.</p>
+        <h3>Celdas sin tasa</h3>
+        <ul>
+          <li><b>«s.i.»</b>: según las notas de la SBS, «el registro "s.i." se refiere a que la entidad no ha reportado colocaciones en dicho periodo» (en otros meses la nota dice «operaciones» en lugar de «colocaciones»).</li>
+          <li><b>«-»</b>: la celda no tiene tasa. La SBS no define el símbolo en el cuadro; como las tasas salen de las operaciones del periodo, lo más probable es que la entidad no haya tenido operaciones de ese producto.</li>
+        </ul>
+      </section>
+
+      <section id="tipos">
+        <h2>Tipos de crédito y productos</h2>
+        <p>Las filas del cuadro siguen los tipos de crédito del Reglamento para la Evaluación y Clasificación del Deudor y la Exigencia de Provisiones (Res. SBS N.° 11356-2008), como indica la nota de la propia SBS. El Reglamento distingue ocho tipos; el cuadro de tasas junta en una sola fila los dos de consumo (revolvente y no revolvente). Los criterios de abajo rigen desde el 1 de octubre de 2024.</p>
+        <dl class="defs">
+          <dt>Corporativos</dt><dd>Créditos para actividades empresariales a personas jurídicas con ventas o ingresos anuales mayores a S/ 200 millones en los dos últimos periodos declarados a la autoridad tributaria (o que pertenecen a un grupo económico con una empresa así). También incluye, entre otros, los créditos soberanos y los otorgados a entidades del sector público y a empresas del sistema financiero.</dd>
+          <dt>Grandes empresas</dt><dd>Ventas o ingresos anuales mayores a S/ 20 millones en los dos últimos periodos, sin llegar a corporativo.</dd>
+          <dt>Medianas empresas</dt><dd>Personas jurídicas con ventas o ingresos mayores a S/ 5 millones en el último periodo declarado, sin llegar a gran empresa.</dd>
+          <dt>Pequeñas empresas</dt><dd>Créditos para actividades empresariales a personas naturales o jurídicas con ventas de hasta S/ 5 millones y una deuda total en el sistema financiero mayor a S/ 20 mil en alguno de los últimos seis meses, o un crédito nuevo mayor a ese monto. En las personas naturales, la deuda no incluye los hipotecarios para vivienda.</dd>
+          <dt>Microempresas</dt><dd>Los mismos créditos, pero con una deuda total en el sistema financiero de hasta S/ 20 mil en los últimos seis meses y un crédito nuevo de hasta S/ 20 mil.</dd>
+          <dt>Consumo</dt><dd>Créditos a personas naturales para pagar bienes, servicios o gastos no relacionados con una actividad empresarial. Son revolventes cuando el monto que se paga se puede volver a usar, como en las tarjetas de crédito, los sobregiros o los préstamos revolventes. Son no revolventes cuando no, como los préstamos para automóviles o de libre disponibilidad.</dd>
+          <dt>Hipotecarios para vivienda</dt><dd>Créditos a personas naturales para comprar, construir, refaccionar, remodelar, ampliar, mejorar o subdividir vivienda propia, con hipoteca inscrita.</dd>
+        </dl>
+        <p><b>Cambio de criterios en octubre de 2024.</b> La Resolución SBS N.° 2368-2023 (publicada en julio de 2023) cambió la forma de separar los créditos a empresas desde el 1 de octubre de 2024. Antes, las grandes empresas se definían por ventas de S/ 20 a 200 millones o por emitir deuda en el mercado de capitales, y las medianas, pequeñas y microempresas se separaban solo por su deuda en el sistema financiero (más de S/ 300 mil, de S/ 20 mil a S/ 300 mil y hasta S/ 20 mil). Desde octubre de 2024, las medianas se separan de las pequeñas y microempresas por sus ventas (más de S/ 5 millones), y la deuda solo separa a las pequeñas de las microempresas. Algunos créditos pasaron de un tipo a otro, así que las tasas de corporativos a microempresas no son del todo comparables antes y después (línea punteada «Nuevos tipos de crédito» en los gráficos).</p>
+        <h3>Productos</h3>
+        <p>Dentro de cada tipo, la SBS publica tasas por producto. En los créditos de corporativos a pequeñas empresas: <b>descuentos</b> y <b>préstamos</b> según su plazo (hasta 30 días, de 31 a 90, de 91 a 180, de 181 a 360 y a más de 360 días). En microempresas: tarjetas de crédito, descuentos, préstamos revolventes y préstamos a cuota fija según su plazo. En consumo: tarjetas de crédito, préstamos revolventes, préstamos no revolventes para automóviles, de libre disponibilidad hasta 360 días y a más de 360 días, y créditos pignoraticios. En hipotecarios hay un solo producto, los préstamos hipotecarios para vivienda, que coincide con el total del tipo.</p>
+        <dl class="defs">
+          <dt>Revolventes y no revolventes</dt><dd>En los créditos revolventes «se permite que los montos amortizados sean reutilizados por el deudor», como en una tarjeta o una línea de crédito; en los no revolventes, no (Reglamento de la Res. SBS N.° 11356-2008, numeral 2).</dd>
+          <dt>Créditos pignoraticios</dt><dd>«Modalidad de crédito de consumo que se concede al afectarse en garantía, con desposesión del bien, alhajas u otros objetos de oro o plata» (mismo Reglamento): el cliente deja una joya en garantía.</dd>
+          <dt>Tarjetas de crédito</dt><dd>En consumo, el Reporte N.° 6-D separa las tarjetas «abiertas» («convencionales para personas naturales») de las «cerradas» («de uso limitado a algún establecimiento comercial en particular»). El cuadro de la SBS publica una sola fila de tarjetas.</dd>
+        </dl>
+      </section>
+
+      <section id="diferencias">
+        <h2>Por qué difieren las tasas</h2>
+        <p>El BCRP descompone el costo de un crédito en cuatro partes: «i) el costo de fondeo o de financiamiento; ii) los gastos operativos generados por el proceso de selección de clientes, seguimiento y cobranza de los créditos; iii) el riesgo de impago, medido por las provisiones requeridas ante el posible impago de los créditos; y iv) un margen de ganancia» (Reporte de Estabilidad Financiera, mayo de 2022). Con esas piezas, el BCRP da estas razones de por qué las tasas son más altas en unos segmentos que en otros:</p>
+        <ul>
+          <li><b>Riesgo.</b> «Las tasas de interés son más altas en los segmentos de consumo y microempresas, dado que allí los potenciales clientes presentan poco historial crediticio y tienen un mayor perfil de riesgo de incumplimiento» (BCRP, Reporte de Estabilidad Financiera, noviembre de 2017).</li>
+          <li><b>Monto y costos fijos.</b> Evaluar, desembolsar y cobrar un crédito tiene costos que no dependen mucho de su tamaño. Por eso, según el BCRP, «la tasa de interés necesaria para cubrir dichos costos fijos será más alta cuando los créditos solicitados tengan un menor monto» (Reporte de Estabilidad Financiera, mayo de 2021).</li>
+          <li><b>Plazo corto y monto pequeño juntos.</b> Sobre los créditos de consumo de menos de una UIT, el BCRP señala que ese segmento «presenta las mayores tasas de interés por ser operaciones a plazos cortos, a clientes de mayor riesgo crediticio, las cuales incorporan costos fijos de evaluación y seguimiento del crédito» (nota informativa del 28 de abril de 2021). La explicación se refiere a ese segmento: en los créditos a empresas, los préstamos más cortos no tienen por qué tener tasas más altas.</li>
+          <li><b>Mezcla de clientes y productos.</b> Esto no es una explicación del BCRP sino una propiedad de cualquier promedio: un subsistema o una entidad que presta sobre todo montos pequeños a clientes nuevos puede tener un promedio más alto que otro que atiende a clientes con historial, aunque cobre lo mismo a clientes parecidos. El promedio publicado no permite separar esos efectos.</li>
+        </ul>
+        <p>Por eso una tasa más alta no significa por sí sola que una entidad sea más cara para el mismo cliente. Este tablero no estima cuánto pesa cada una de estas razones.</p>
+        <h3>Tasa y mora por entidad</h3>
+        <p>El gráfico de dispersión de la pestaña «Entidades» pone cada entidad en un punto: su tasa del producto elegido (eje vertical) y la mora de su cartera de ese tipo de crédito (eje horizontal; créditos atrasados ÷ créditos directos, cálculo propio con el Boletín Estadístico de la SBS). Con el botón «Tamaño», el eje horizontal pasa a ser el saldo de ese tipo de crédito. Debajo se informa la <b>correlación de rangos de Spearman</b>: se ordena a las entidades de menor a mayor tasa y de menor a mayor mora, y se mide si los dos órdenes coinciden. Va de −1 a 1: cerca de 1, las entidades con más mora suelen ser también las de tasa más alta; cerca de −1, lo contrario; cerca de 0, no hay un patrón ordenado. Se calcula con las entidades del gráfico (las que tienen al menos S/ 1 millón en ese tipo de crédito), solo si son 8 o más, y cada entidad cuenta igual sin importar su tamaño.</p>
+        <p>Es una medida <b>descriptiva</b>: muestra una asociación entre entidades en un mes, no que la mora cause tasas más altas ni al revés. Además, mezcla cosas distintas: la tasa es de las operaciones nuevas en soles, y la mora es de toda la cartera del tipo de crédito, en soles y en dólares, incluidos créditos otorgados hace años.</p>
+      </section>
+
+      <section id="tope">
+        <h2>La tasa máxima del BCRP</h2>
+        <p>La Ley N.° 31143, publicada el 18 de marzo de 2021, modificó el artículo 52 de la Ley Orgánica del BCRP: el Banco Central «tiene la facultad de fijar tasas de interés máximas y mínimas, en forma semestral». Las tasas activas máximas son «exclusivamente» para los créditos de consumo, los de consumo de bajo monto (hasta 2 UIT) y los créditos a pequeñas y microempresas. Según la ley, las tasas cobradas por encima de ese límite «serán consideradas tasas de interés de usura y tipificadas como un delito», con aplicación del artículo 214 del Código Penal; la SBS supervisa su cumplimiento y sanciona y denuncia a las entidades que lo excedan.</p>
+        <h3>Cómo se calcula</h3>
+        <p>La Circular N.° 0008-2021-BCRP fija la metodología: la tasa máxima en moneda nacional «es equivalente a 2 veces el promedio de las observaciones de fin de mes de las tasas de interés promedio del sistema financiero para créditos de consumo en moneda nacional publicadas por la Superintendencia de Banca, Seguros y AFP». En la práctica: se toma la tasa promedio de consumo de todo el sistema financiero que la SBS publica el último día útil de cada uno de seis meses, se promedian esas seis cifras y el resultado se multiplica por 2. Ese mismo tope rige para los créditos a pequeñas y microempresas, aunque se calcula solo con tasas de consumo. La circular fija dos periodos por año:</p>
+        <ul>
+          <li>con los datos de octubre a marzo, la tasa que rige de mayo a octubre;</li>
+          <li>con los datos de abril a setiembre, la que rige de noviembre a abril.</li>
+        </ul>
+        <p>El BCRP anuncia cada valor en una nota informativa antes de que empiece a regir y publica a diario la tasa vigente (también en BCRPData). En moneda extranjera hay otra tasa máxima, calculada igual con las tasas de consumo en dólares (por ejemplo, 99.84% de mayo a octubre de 2026); este tablero, que es solo en soles, no la muestra.</p>
+        <p>La tasa máxima rige para los créditos desembolsados desde su vigencia; las operaciones pactadas antes se rigen hasta su vencimiento por la norma anterior. Entró en forma escalonada: desde el 10 de mayo de 2021 para los bancos, desde el 1 de junio de 2021 para las cajas municipales y desde el 1 de julio de 2021 para las demás empresas del sistema financiero. En las tarjetas de crédito, la Circular N.° 0010-2021-BCRP precisó que se aplica desde los ciclos de facturación que empiezan el 1 de junio de 2021 (el 1 de julio de 2021 para las empresas del último grupo). En los demás créditos, la tasa de interés se determina por la libre competencia.</p>
+        <div class="table-wrap">
+          <table id="tb-caps"></table>
+        </div>
+        <h3>Promedio publicado y tasa máxima no son lo mismo</h3>
+        <ul>
+          <li>La tasa máxima es un límite para <b>cada crédito</b>. Las tasas de este tablero son <b>promedios</b> de muchas operaciones, de toda una entidad o de todo un subsistema. Un promedio lejos del tope no dice cuántos créditos se acercan a él, y un promedio cercano al tope no implica que algún crédito lo supere.</li>
+          <li>El tope es una tasa máxima de interés convencional compensatorio; ni la ley ni la circular mencionan la TCEA. La línea morada de los gráficos se compara con la tasa de interés promedio publicada, no con el costo total del crédito.</li>
+          <li>El promedio que usa el BCRP es el de los créditos de consumo de todo el sistema financiero publicado por la SBS. Este tablero no lo reproduce: muestra los promedios de cada subsistema.</li>
+          <li>La línea morada toma el valor vigente el último día de cada mes. La tasa de banca y financieras cubre los últimos 30 días útiles, así que en los meses de cambio (mayo y noviembre) mezcla operaciones de dos semestres. En mayo de 2021 también incluye operaciones anteriores al primer tope.</li>
+          <li>La circular aplica el tope a las carteras de créditos de consumo, consumo de bajo monto y créditos a pequeñas y microempresas, sin distinguir productos. Por eso la línea se dibuja en todos los productos de consumo, pequeñas empresas y microempresas, incluidas las tarjetas de crédito, y no en los demás tipos de crédito.</li>
+        </ul>
+      </section>
+
+      <section id="cobertura">
+        <h2>Cobertura de los datos</h2>
+        <div class="table-wrap">
+          <table id="tb-cov"></table>
+        </div>
+        <ul style="margin-top:12px">
+          <li><b>Inicio.</b> Las series empiezan en octubre de 2015 (cajas municipales, cajas rurales y empresas de créditos) y noviembre de 2015 (banca y financieras), los primeros meses que devolvió la consulta del cuadro en el sitio de la SBS.</li>
+          <li><b>Último mes.</b> La banca y las financieras se consultan en el último día útil de cada mes; las cajas y las empresas de créditos publican el mes cerrado con algo de rezago. Por eso el último mes con los cinco subsistemas es <span data-v="allHasta"></span>.</li>
+          <li><b>Fecha de corte.</b> En banca y financieras, el corte es el último día útil del mes. En algunos meses la consulta de ese día no devolvió datos y se tomó un día útil anterior (por ejemplo, el 28 de junio de 2017). La fecha exacta aparece en la tabla de la entidad.</li>
+          <li><b>Celdas sin tasa.</b> En todos los subsistemas, la mayoría de las celdas de las entidades son «-» (sin tasa): pocas entidades tienen operaciones en todos los productos cada mes. «s.i.» es poco frecuente: según la SBS, la entidad no reportó colocaciones u operaciones en el periodo.</li>
+          <li><b>Columnas repetidas.</b> En los meses en que una entidad figura con «s.i.», el archivo de la SBS trae dos columnas con su nombre, una con «-» y otra con «s.i.», ninguna con tasas. El tablero la cuenta una vez.</li>
+          <li><b>Productos.</b> Las 46 filas del cuadro (7 tipos de crédito y sus productos) tienen el mismo rótulo y el mismo orden en todos los meses de 2015 a 2026.</li>
+          <li><b>Nombres.</b> La SBS usa nombres cortos y los cambia: «Continental» pasa a «BBVA», «Financiero» a «Pichincha», «Comercio» a «Bancom», «Azteca» a «Alfin», «Uno» a «Oh!» y luego a «InFinance XP», «Crediscotia» a «Santander Cons. Bank», «Marcimex» a «Progreso», «MiCasita» a «Vívela», «CAT» a «Cencosud Scotia». Además, a veces imprime en meses antiguos el nombre posterior de la entidad: por ejemplo, «Raíz» en las cajas rurales de 2015 y 2016, antes de la fusión con la que la CRAC Chavín pasó a llamarse Raíz, y «CAT» en la banca hasta 2019, cuando la entidad era el Banco Cencosud. El tablero sigue a cada entidad con un identificador estable y muestra su último nombre.</li>
+          <li><b>Cambios de subsistema.</b> Compartamos, Santander Consumer y Efectiva pasaron de financieras a banca, y Banco Cencosud se convirtió en caja rural. Cada una aparece en cada subsistema solo en los meses en que perteneció a él.</li>
+          <li><b>Reactiva Perú y FAE-MYPE.</b> Según las notas de la SBS, en los cuadros de mayo a noviembre de 2020 (hasta octubre en las empresas de créditos) las tasas promedio incluyen los créditos con garantía del Gobierno Nacional del programa Reactiva y los del Fondo de Apoyo Empresarial a la MYPE.</li>
+          <li><b>Correcciones.</b> Las notas de la SBS indican que se modificó la información de Mibanco en setiembre y octubre de 2017 y de marzo a junio de 2020, porque la entidad corrigió lo que había reportado.</li>
+          <li><b>Valores extremos.</b> Hay tasas publicadas por encima de 150% anual, casi todas anteriores a la tasa máxima de 2021. Por ejemplo, Inversiones La Cruz, una empresa de créditos, figura con cerca de 434% en préstamos revolventes de consumo de diciembre de 2018 a mayo de 2021 (exactamente 433.91% en 18 de esos meses). Son los valores publicados; los gráficos por entidad cortan su escala en 150%.</li>
+        </ul>
+      </section>
+
+      <section id="cuidado">
+        <h2>Antes de comparar</h2>
+        <ul>
+          <li>La banca y las financieras publican la tasa de los últimos 30 días útiles al corte; las cajas y las empresas de créditos, la del mes. Comparar un subsistema con otro mezcla ventanas de distinta longitud.</li>
+          <li>La mora y el saldo de la dispersión son de toda la cartera del tipo de crédito, en soles y en dólares, a fin de mes. Las tasas son solo de las operaciones en soles del periodo.</li>
+          <li>Un promedio cambia cuando cambia la mezcla de operaciones, aunque ninguna entidad cambie sus precios. <span data-v="exEc"></span></li>
+          <li>En entidades pequeñas o en productos poco usados, la tasa de un mes puede venir de muy pocas operaciones y saltar mucho de un mes a otro.</li>
+          <li>Las tasas son en soles. Las de moneda extranjera son distintas y no están aquí.</li>
+          <li>La SBS advierte en sus cuadros que «las tasas de interés tienen carácter referencial». La tasa que se ofrece a un cliente depende de su perfil y de las condiciones del crédito.</li>
+          <li>Las cifras son las que publica la SBS. A veces corrige meses ya publicados; este tablero usa la última versión descargada.</li>
+        </ul>
+      </section>
+
+      <section id="fuentes">
+        <h2>Fuentes</h2>
+        <ul class="srcs">
+          <li>SBS, «Tasas activas anuales de las operaciones en moneda nacional» por tipo de crédito y empresa: banca múltiple, empresas financieras, cajas municipales, cajas rurales y empresas de créditos (título, notas al pie y columna «Promedio»). <a href="https://www.sbs.gob.pe/app/pp/EstadisticasSAEEPortal/Paginas/TIActivaTipoCreditoEmpresa.aspx?tip=B" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Manual de Contabilidad para las Empresas del Sistema Financiero, Reporte N.° 6-D «Tasas de interés activas de operaciones diarias» (formato vigente): operaciones nuevas, tasa efectiva anual ponderada por el monto desembolsado y TCEA en columna aparte. <a href="https://www.sbs.gob.pe/Portals/0/jer/REGUL_SISFIN_BFO/2020/Reporte_6-D.xls" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, «Metodología para el cálculo de las tasas de interés de índole legal» (2019): tasas sobre saldos y sobre flujos; las cajas y las Edpyme (hoy empresas de créditos) reportan el promedio de las operaciones del mes calendario; las tasas se reportan en términos efectivos anuales; tasa promedio del sistema para créditos de consumo ponderada por montos. <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2019/Setiembre/TI-0001-se2019.PDF" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Boletín Estadístico: créditos directos por tipo y situación (cuadros B-2334, B-3220, C-1228, C-2228 y C-4223), para la mora y el saldo por tipo de crédito. <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Reglamento de Gestión de Conducta de Mercado del Sistema Financiero (Res. SBS N.° 3274-2017, texto concordado): artículo 11 (tasas expresadas en forma efectiva anual, año de 360 días), artículo 13 y Anexos N.° 1 y 1-A (TCEA). <a href="https://intranet2.sbs.gob.pe/dv_int_cn/1731/v12.0/Adjuntos/3274-2017.R.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Reglamento para la Evaluación y Clasificación del Deudor y la Exigencia de Provisiones (Res. SBS N.° 11356-2008, texto concordado): tipos de crédito, créditos revolventes y pignoraticios. <a href="https://intranet2.sbs.gob.pe/dv_int_cn/1097/v12.0/Adjuntos/11356-2008.r.pdf" target="_blank" rel="noopener">sbs.gob.pe</a>; versión con los criterios anteriores a octubre de 2024: <a href="https://intranet2.sbs.gob.pe/dv_int_cn/1097/v10.0/Adjuntos/11356-2008.r.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Resolución N.° 2368-2023 (publicada el 19 de julio de 2023; nuevos criterios de los tipos de crédito, vigentes desde el 1 de octubre de 2024). <a href="https://busquedas.elperuano.pe/api/visor_html/2196261-1" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>Ley N.° 31143, Ley que protege de la usura a los consumidores de los servicios financieros (El Peruano, 18 de marzo de 2021), texto del Congreso: artículo 2 (artículo 52 de la Ley Orgánica del BCRP) y artículo 3 (artículos 221, 349 y 358 de la Ley General). <a href="https://leyes.congreso.gob.pe/Documentos/2016_2021/ADLP/Texto_Consolidado/31143-TXM.pdf" target="_blank" rel="noopener">congreso.gob.pe</a></li>
+          <li>BCRP, Circular N.° 0008-2021-BCRP (28 de abril de 2021): metodología de la tasa máxima, créditos desembolsados desde su vigencia (disposición final B) y cronograma escalonado (disposición transitoria A). <a href="https://www.bcrp.gob.pe/docs/Transparencia/Normas-Legales/Circulares/2021/circular-0008-2021-bcrp.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, Circular N.° 0010-2021-BCRP (7 de mayo de 2021): aplicación a las tarjetas de crédito y al interés moratorio. <a href="https://www.bcrp.gob.pe/docs/Transparencia/Normas-Legales/Circulares/2021/circular-0010-2021-bcrp.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, notas informativas semestrales con el valor de la tasa máxima (2021 a 2026). <a href="https://www.bcrp.gob.pe/normas-sobre-las-tasas-de-interes-que-fija-el-bcrp.html#tasas-de-interes" target="_blank" rel="noopener">bcrp.gob.pe</a> Valor vigente: <a href="https://www.bcrp.gob.pe/sistema-financiero/tasas-maximas-de-interes-compensatorio.html" target="_blank" rel="noopener">bcrp.gob.pe</a>. Serie diaria PD38590DD (moneda nacional) de BCRPData: <a href="https://estadisticas.bcrp.gob.pe/estadisticas/series/diarias/resultados/PD38590DD/html" target="_blank" rel="noopener">estadisticas.bcrp.gob.pe</a></li>
+          <li>BCRP, Reporte de Estabilidad Financiera, recuadros sobre las tasas de interés y la tasa máxima: noviembre de 2017, recuadro 2 (<a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Estabilidad-Financiera/2017/Noviembre/ref-noviembre-2017-recuadro-2.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a>); mayo de 2021, recuadro 2 (<a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Estabilidad-Financiera/2021/mayo/ref-mayo-2021-recuadro-2.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a>); mayo de 2022, recuadro 2 (<a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Estabilidad-Financiera/2022/mayo/ref-mayo-2022-recuadro-2.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a>).</li>
+          <li>BCRP, nota informativa del 28 de abril de 2021 («Directorio del BCRP acordó metodología para la determinación de tasas de interés máximas»). <a href="https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2021/nota-informativa-2021-04-28.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, Glosario de términos económicos: «tasa de interés activa» y «tasa de interés efectiva». <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Glosario/Glosario-BCRP.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('tasas-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('tasas-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const MES_L = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre'];
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = D.months, N = MONTHS.length, SC = D.scopes, CAP = D.cap;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 2) => v == null ? '—' : fx(v, d) + '%';
+const spp = (v, d = 2) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + ' pp';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mLong = m => MES_L[+m.slice(5, 7) - 1] + ' de ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const idxOf = m => MONTHS.indexOf(m);
+// Montos: los datos vienen en miles de soles.
+const money = v => v == null ? '—' : (v < 0 ? '−' : '') + (Math.abs(v) >= 1e6 ? 'S/ ' + f1.format(Math.abs(v) / 1e6) + ' mil mill.' : Math.abs(v) >= 1e3 ? 'S/ ' + f0.format(Math.abs(v) / 1e3) + ' mill.' : 'S/ ' + f1.format(Math.abs(v) / 1e3) + ' mill.');
+
+const SUBS = D.subs;
+const SUB_COLOR = {'banca-multiple': 'var(--s1)', 'empresas-financieras': 'var(--s2)', 'cajas-municipales': 'var(--s3)',
+  'cajas-rurales': 'var(--s4)', 'empresas-credito': 'var(--s5)'};
+const SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+const TYPES = D.types, TYPE_BY = Object.fromEntries(TYPES.map(t => [t.k, t]));
+const PRODS = D.prods, PROD_BY = Object.fromEntries(PRODS.map(p => [p.k, p]));
+const CAP_T = new Set(D.capTypes);
+const CAP0 = CAP.findIndex(v => v != null);
+const ALL_LAST = idxOf(D.allHasta), CREDIT_LAST = idxOf(D.creditTo);
+const EMP = new Set(['corporativo', 'grandes', 'medianas', 'pequenas', 'micro']);
+const MIN_K = 1000;      // miles de S/: en la dispersión no entran entidades con menos de S/ 1 millón en el tipo
+const CLIP = [0, 150];   // % anual: escala de los gráficos por entidad; el número muestra el valor completo
+const BREAKS = {reactiva: {i: idxOf('2020-05'), label: 'Reactiva Perú'}, tipos: {i: idxOf('2024-10'), label: 'Nuevos tipos de crédito'}};
+
+// ---------- Estado ----------
+const state = {tipo: 'consumo', prod: 'consumo|total', mi: ALL_LAST, range: '5a', scope: 'banca-multiple', sub: 'banca-multiple', ent: null, scx: 'mora', scAll: false};
+const RANGES = [
+  {id: '3a', label: '3 años', n: 36},
+  {id: '5a', label: '5 años', n: 60},
+  {id: 'todo', label: 'Desde ' + MONTHS[0].slice(0, 4), n: N},
+];
+
+// ---------- Datos ----------
+function cell(sc, f, key, i) {
+  const s = SC[sc];
+  if (!s || i < 0 || i >= N || !s[f]) return null;
+  const a = s[f][key];
+  if (!a) return null;
+  const j = i - s.a;
+  return j < 0 || j >= a.length ? null : a[j];
+}
+const rate = (sc, p, i) => { const v = cell(sc, 'R', p, i); return typeof v === 'number' ? v : null; };
+const isSI = (sc, p, i) => cell(sc, 'R', p, i) === 's';
+const saldo = (sc, t, i) => cell(sc, 'K', t, i);
+const moraOf = (sc, t, i) => cell(sc, 'M', t, i);
+const tipoOf = p => p.split('|')[0];
+// Tasa máxima vigente al cierre del mes; con subsistema, desde su fecha de entrada (cronograma escalonado de 2021).
+const capOf = (p, i, sub) => CAP_T.has(tipoOf(p)) && i >= 0 && i < N && !(sub && i < idxOf(D.capFrom[sub])) ? CAP[i] : null;
+const hasCap = p => CAP0 >= 0 && CAP_T.has(tipoOf(p));
+const isEnt = sc => sc.includes('/');
+const subOf = sc => isEnt(sc) ? SC[sc].s : sc;
+// Nombre del producto: «Consumo» o «Consumo · Tarjetas de crédito».
+const prodTitle = p => { const P = PROD_BY[p]; return P.lv ? TYPE_BY[P.t].l + ' · ' + P.l : P.l; };
+const prodLower = p => { const P = PROD_BY[p]; const t = TYPE_BY[P.t].l.toLowerCase(); return P.lv ? t + ' (' + P.l.charAt(0).toLowerCase() + P.l.slice(1) + ')' : t; };
+function subMsg(sub, i) {
+  const S = SUB_BY[sub];
+  if (i > idxOf(S.to)) return S.l + ': el último mes publicado es ' + mLabel(S.to) + '.';
+  if (i < idxOf(S.from)) return S.l + ': el cuadro empieza en ' + mLabel(S.from) + '.';
+  return null;
+}
+// Por qué no hay tasa: mes no publicado, la entidad no reportó («s.i.») o no hubo operaciones («-»).
+function whyNull(sc, p, i) {
+  const m = subMsg(subOf(sc), i);
+  if (m) return m.replace(/^[^:]+: /, '');
+  if (isSI(sc, p, i)) return 'no reportó (s.i.)';
+  if (isEnt(sc)) { const s = SC[sc]; const any = Object.values(s.R).some(a => { const j = i - s.a; return j >= 0 && j < a.length && a[j] != null; }); if (!any) return 'no figura en el cuadro'; }
+  return 'sin tasa («-»)';
+}
+// Ventana de la tasa: 30 días útiles al corte (banca y financieras) u operaciones del mes.
+function windowTxt(sub, i) {
+  if (SUB_BY[sub].f === '30d') {
+    const c = D.cut[sub] && D.cut[sub][i];
+    return c ? 'Operaciones de los últimos 30 días útiles al ' + dLabel(c) : 'Operaciones de los últimos 30 días útiles al cierre';
+  }
+  return 'Operaciones de ' + mLong(MONTHS[i]);
+}
+// Dispersión entre las entidades de un subsistema (cálculo propio, sin ponderar).
+function quant(v, f) { const h = (v.length - 1) * f, lo = Math.floor(h), hi = Math.min(lo + 1, v.length - 1); return v[lo] + (h - lo) * (v[hi] - v[lo]); }
+function spread(sub, p, i) {
+  const v = [];
+  for (const k of D.entities) { if (SC[k].s !== sub) continue; const x = rate(k, p, i); if (x != null) v.push(x); }
+  if (!v.length) return null;
+  v.sort((a, b) => a - b);
+  return {n: v.length, min: v[0], max: v[v.length - 1], p25: quant(v, .25), med: quant(v, .5), p75: quant(v, .75)};
+}
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+const pctTick = t => (t === 0 ? '0' : numTick(t)) + '%';
+
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text;
+}
+function visIdx() {
+  const r = RANGES.find(z => z.id === state.range);
+  const out = [];
+  for (let i = Math.max(0, N - r.n); i < N; i++) out.push(i);
+  return out;
+}
+// Quiebres de serie: línea vertical tenue con un rótulo corto arriba.
+function drawBreaks(svg, breaks, idx, x, top, bottom) {
+  let k = 0;
+  for (const b of breaks || []) {
+    if (b.i <= idx[0] || b.i > idx[idx.length - 1]) continue;
+    const xb = x(b.i) - 0.5 * (x(idx[1]) - x(idx[0]));
+    svgEl('line', {x1: xb, x2: xb, y1: top, y2: bottom, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '2 3'}, svg);
+    svgEl('text', {x: xb + 4, y: top + 10 + 13 * k++, class: 'lbl'}, svg).textContent = b.label;
+  }
+}
+// Hover y teclado compartidos por los gráficos de tiempo: mueve un índice de mes.
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide) {
+  const n = idx.length;
+  let cur = null;
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    show(at(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt);
+  });
+  hit.addEventListener('pointerleave', onHide);
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(at((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+const legendItem = (lg, cls, color, text) => { const s = htmlEl('span', null, lg); const i = htmlEl('i', {cls}, s); if (color) i.style.background = color; s.appendChild(document.createTextNode(text)); return i; };
+// Serie de la tasa máxima del BCRP (escalones morados punteados).
+const capSeries = (p, sub) => ({label: 'Tasa máxima del BCRP', short: 'Tasa máxima', color: 'var(--cap)', w: 1.5, dash: '5 4', step: true, isRef: true, get: i => capOf(p, i, sub)});
+const breaksOf = p => { const t = tipoOf(p), out = []; if (EMP.has(t)) out.push(BREAKS.reactiva, BREAKS.tipos); return out; };
+
+// ---------- Gráfico de líneas (cruz y tooltip compartidos; bandas opcionales) ----------
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, mLabel(MONTHS[i]), g.charts.flatMap(c => c.rows(i)));
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+let clipSeq = 0;
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const series = cfg.series, bands = cfg.bands || [], fmt = cfg.fmt || pct;
+  const idx = trimIdx(cfg.idx, i => series.some(s => !s.isRef && s.get(i) != null) || bands.some(b => b.lo(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return null; }
+  let lo = 0, hi = 0;
+  const seen = v => { if (v == null) return; if (v > hi) hi = v; if (v < lo) lo = v; };
+  for (const i of idx) { for (const s of series) seen(s.get(i)); for (const b of bands) { seen(b.lo(i)); seen(b.hi(i)); } }
+  const clipped = cfg.clip && (lo < cfg.clip[0] || hi > cfg.clip[1]);
+  if (cfg.clip) { lo = Math.max(lo, cfg.clip[0]); hi = Math.min(hi, cfg.clip[1]); }
+  const compact = !!cfg.compact, narrow = W < 600;
+  const showEnd = cfg.endLabels && !narrow;
+  const m = {l: compact ? 40 : 46, r: showEnd ? 150 : (compact ? 8 : 14), t: compact ? 8 : 12, b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(lo, hi * 1.04, compact ? 3 : 5);
+  const y = v => m.t + (dom.hi - Math.max(dom.lo, Math.min(dom.hi, v))) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, pctTick);
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  if (!compact) drawBreaks(svg, cfg.breaks, idx, x, m.t, m.t + ph);
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  // Bandas: se cortan en los meses sin dato.
+  for (const b of bands) {
+    let seg = [];
+    const flush = () => {
+      if (seg.length) {
+        let d = 'M' + seg.map(i => x(i).toFixed(1) + ',' + y(b.hi(i)).toFixed(1)).join('L');
+        d += 'L' + seg.slice().reverse().map(i => x(i).toFixed(1) + ',' + y(b.lo(i)).toFixed(1)).join('L') + 'Z';
+        if (seg.length === 1) { const xi = x(seg[0]); d = 'M' + (xi - 2) + ',' + y(b.hi(seg[0])) + 'L' + (xi + 2) + ',' + y(b.hi(seg[0])) + 'L' + (xi + 2) + ',' + y(b.lo(seg[0])) + 'L' + (xi - 2) + ',' + y(b.lo(seg[0])) + 'Z'; }
+        svgEl('path', {d, fill: b.color, 'fill-opacity': b.op || 0.18, stroke: 'none'}, svg);
+      }
+      seg = [];
+    };
+    for (const i of idx) { if (b.lo(i) != null && b.hi(i) != null) seg.push(i); else flush(); }
+    flush();
+  }
+  const pathOf = s => {
+    let d = '', pen = false, py = null;
+    for (const i of idx) {
+      const v = s.get(i);
+      if (v == null) { pen = false; continue; }
+      const xi = x(i), yi = y(v);
+      if (s.step && pen && yi !== py) d += 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + py.toFixed(1) + 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + yi.toFixed(1);
+      d += (pen ? 'L' : 'M') + xi.toFixed(1) + ',' + yi.toFixed(1);
+      pen = true; py = yi;
+    }
+    return d;
+  };
+  let clipId = null;
+  if (clipped) {
+    clipId = 'clip' + (++clipSeq);
+    svgEl('rect', {x: m.l - 4, y: m.t, width: pw + 8, height: ph}, svgEl('clipPath', {id: clipId}, svgEl('defs', {}, svg)));
+  }
+  for (const s of series) {
+    const a = {d: pathOf(s), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    if (clipId) a['clip-path'] = 'url(#' + clipId + ')';
+    svgEl('path', a, svg);
+    // Meses aislados (sin vecinos con dato): un punto, para que no desaparezcan.
+    if (!s.isRef) idx.forEach((i, j) => {
+      const v = s.get(i);
+      if (v == null) return;
+      const prev = j > 0 ? s.get(idx[j - 1]) : null, next = j < n - 1 ? s.get(idx[j + 1]) : null;
+      if (prev == null && next == null && v >= dom.lo && v <= dom.hi) svgEl('circle', {cx: x(i), cy: y(v), r: 2.5, fill: s.color}, svg);
+    });
+  }
+  if (showEnd) {
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      for (let j = n - 1; j >= 0; j--) { const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; }
+      return null;
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      if (e.v < dom.lo || e.v > dom.hi) continue;
+      if (!e.s.isRef) svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: Math.min(m.t + ph + 10, e.y) + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: e.s.isRef ? 'caplbl' : 'dval'}, t).textContent = fmt(e.v);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] && !s.isRef ? s.get(i) : null;
+        dots[j].setAttribute('visibility', v == null || v < dom.lo || v > dom.hi ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      if (cfg.rows) return cfg.rows(i);
+      const main = series.filter(s => !s.noTip && !s.isRef).map(s => ({v: s.get(i), label: s.label, color: s.color, why: s.why}))
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: r.v == null && r.why ? '—' : fmt(r.v), label: r.label + (r.v == null && r.why ? ': ' + r.why(i) : ''), color: r.color}));
+      const refs = series.filter(s => s.isRef && s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
+      return main.concat(refs);
+    },
+  };
+  group.charts.push(chart);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => group.show(i, evt, chart), group.hide);
+  return chart;
+}
+
+// ---------- Gráfico de puntos por fila (subsistemas, productos o entidad frente a su promedio) ----------
+function dotPlot(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = cfg.rows.filter(r => r.vals.some(v => v.v != null));
+  if (!rows.length) { emptyMsg(box, cfg.empty); return; }
+  const narrow = W < 600, rowH = 30, top = 24;
+  const labW = narrow ? 128 : (cfg.labW || 210), rightW = cfg.right ? (narrow ? 58 : (cfg.rightW || 120)) : 12;
+  const x0 = labW + 12, x1 = W - rightW - 8, H = top + rows.length * rowH + 8;
+  const all = rows.flatMap(r => r.vals.map(v => v.v).concat(r.cap != null ? [r.cap] : [])).filter(v => v != null);
+  const cl = cfg.clip || [0, Infinity], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
+  const dom = niceDomain(0, Math.max(...all.map(clamp)) * 1.02, narrow ? 3 : 6);
+  const x = v => x0 + (clamp(v) - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk), x2: x(tk), y1: top - 4, y2: H - 6, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk), y: top - 10, 'text-anchor': 'middle'}, g).textContent = pctTick(tk);
+  }
+  if (cfg.right && !narrow && cfg.rightHead) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = cfg.rightHead;
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row' + (r.sel ? ' sel' : ''), tabindex: 0, role: cfg.onRow ? 'button' : 'img',
+      'aria-label': r.label + ': ' + r.vals.filter(v => v.v != null).map(v => v.label + ' ' + cfg.fmt(v.v)).join(', ')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm' + (r.lv ? ' lv1' : '') + (r.bold ? ' b' : ''), x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = trunc(narrow && r.labelN ? r.labelN : r.label, narrow ? 19 : 32);
+    const vs = r.vals.filter(v => v.v != null);
+    if (vs.length > 1) {
+      const a = Math.min(...vs.map(v => v.v)), b = Math.max(...vs.map(v => v.v));
+      svgEl('line', {x1: x(a), x2: x(b), y1: yc, y2: yc, stroke: 'var(--axis)', 'stroke-width': 2}, gr);
+    }
+    if (r.cap != null) svgEl('line', {x1: x(r.cap), x2: x(r.cap), y1: yc - 9, y2: yc + 9, stroke: 'var(--cap)', 'stroke-width': 2, 'stroke-dasharray': '3 2'}, gr);
+    for (const v of vs) {
+      const out = v.v !== clamp(v.v);
+      if (v.hollow || out) svgEl('circle', {cx: x(v.v), cy: yc, r: v.r || 5, fill: 'var(--surface)', stroke: v.color, 'stroke-width': 2}, gr);
+      else svgEl('circle', {cx: x(v.v), cy: yc, r: v.r || 5.5, fill: v.color, stroke: 'var(--surface)', 'stroke-width': 1.5}, gr);
+    }
+    if (cfg.right) svgEl('text', {class: 'rv', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = cfg.right(r, narrow);
+    const show = evt => {
+      const rowsT = r.vals.filter(v => v.v != null || v.why).slice().sort((a, b) => (b.v ?? -1) - (a.v ?? -1))
+        .map(v => ({value: v.v == null ? '—' : cfg.fmt(v.v), label: v.label + (v.v == null && v.why ? ': ' + v.why : ''), color: v.color, sq: true}));
+      if (r.cap != null) rowsT.push({value: cfg.fmt(r.cap), label: 'Tasa máxima del BCRP', color: 'var(--cap)'});
+      if (r.extra) rowsT.push(...r.extra);
+      showTip(...anchorOf(evt, gr), r.tipTitle || r.label, rowsT);
+    };
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', hideTip);
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', hideTip);
+    if (cfg.onRow) {
+      gr.addEventListener('click', () => cfg.onRow(r));
+      gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cfg.onRow(r); } });
+    }
+  });
+  return rows.length;
+}
+
+// ---------- Resumen (KPIs) ----------
+function deltaSpan(parent, v, p, i) {
+  if (v == null || p == null) { htmlEl('span', {text: 'sin dato de hace 12 meses'}, parent); return; }
+  const d = v - p, r = Math.abs(d) < 0.005;
+  const s = htmlEl('span', {cls: r ? '' : d > 0 ? 'd-up' : 'd-down'}, parent);
+  s.textContent = r ? '= sin cambio' : (d > 0 ? '▲ ' : '▼ ') + Math.abs(d).toFixed(2) + ' pp';
+  parent.appendChild(document.createTextNode(' frente a ' + mShort(MONTHS[i - 12])));
+}
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.replaceChildren();
+  const sc = state.scope, i = state.mi, S = SUB_BY[sc], p = state.prod;
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: prodTitle(p) + ' · ' + S.l}, hero);
+  const v = rate(sc, p, i);
+  if (v == null) hero.classList.add('na');
+  const hv = htmlEl('div', {cls: 'val', text: pct(v)}, hero);
+  htmlEl('span', {cls: 'unit', text: mLabel(MONTHS[i])}, hv);
+  const s1 = htmlEl('div', {cls: 'sub'}, hero);
+  if (v == null) { const w = whyNull(sc, p, i); s1.textContent = w.startsWith('sin tasa') ? 'Sin tasa en el periodo («-»)' : 'Sin tasa: ' + w; }
+  else deltaSpan(s1, v, rate(sc, p, i - 12), i);
+  htmlEl('div', {cls: 'sub', text: 'Promedio publicado por la SBS. ' + windowTxt(sc, i) + '.'}, hero);
+  if (capOf(p, i, sc) != null) htmlEl('div', {cls: 'sub cap', text: 'Tasa máxima del BCRP vigente al cierre del mes: ' + pct(capOf(p, i, sc))}, hero);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  htmlEl('div', {cls: 'sub', text: 'Últimos 3 años'}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  for (const t of TYPES.filter(t => t.k !== PROD_BY[p].t || PROD_BY[p].lv)) {
+    if (box.children.length >= 7) break;
+    const k = t.k + '|total', x = rate(sc, k, i);
+    const d = htmlEl('div', {cls: 'tile' + (x == null ? ' na' : '')}, box);
+    htmlEl('div', {cls: 'lab', text: t.l}, d);
+    htmlEl('div', {cls: 'val', text: pct(x)}, d);
+    const s = htmlEl('div', {cls: 'sub'}, d);
+    if (x == null) s.textContent = whyNull(sc, k, i); else deltaSpan(s, x, rate(sc, k, i - 12), i);
+  }
+  const idx = [];
+  for (let k = Math.max(0, i - 35); k <= i; k++) idx.push(k);
+  const series = [{label: prodTitle(p), color: SUB_COLOR[sc], w: 2, get: k => rate(sc, p, k)}];
+  if (hasCap(p)) series.push(capSeries(p, sc));
+  lineChart(spark, {idx, H: 140, compact: true, aria: prodTitle(p) + ' en ' + S.l + ', últimos tres años', empty: subMsg(sc, i) || 'Sin datos en los últimos tres años.', series});
+  document.getElementById('kpi-note').textContent = (S.f === '30d'
+    ? 'La banca y las financieras publican la tasa de las operaciones de los últimos 30 días útiles; las cajas y las empresas de créditos, la de las operaciones del mes.'
+    : 'Las cajas y las empresas de créditos publican la tasa de las operaciones del mes; la banca y las financieras, la de los últimos 30 días útiles.') +
+    ' Las variaciones son en puntos porcentuales (pp).';
+}
+
+// ---------- Comparación por tipo y por producto ----------
+function subVals(p, i) {
+  return SUBS.map(s => ({k: s.k, v: rate(s.k, p, i), color: SUB_COLOR[s.k], label: s.l, why: rate(s.k, p, i) == null ? whyNull(s.k, p, i) : null}));
+}
+function subLegend(lg, withCap) {
+  lg.replaceChildren();
+  for (const s of SUBS) legendItem(lg, 'dot', SUB_COLOR[s.k], s.l);
+  if (withCap) legendItem(lg, 'vref cap', null, 'Tasa máxima del BCRP');
+}
+function renderCmp() {
+  const i = state.mi;
+  document.getElementById('cmp-title').textContent = 'Tasa promedio por tipo de crédito y subsistema · ' + mLabel(MONTHS[i]);
+  document.getElementById('cmp-desc').textContent = 'Cada punto es la tasa promedio que publica la SBS para un subsistema: de las operaciones de los últimos 30 días útiles en la banca y las financieras, y de las del mes en las cajas y las empresas de créditos. Haga clic en un tipo para elegirlo en los demás gráficos.';
+  subLegend(document.getElementById('cmp-legend'), CAP[i] != null);
+  const rows = TYPES.map(t => ({key: t.k, label: t.l, labelN: t.l.replace(' para vivienda', ''), bold: t.k === state.tipo, sel: t.k === state.tipo, vals: subVals(t.k + '|total', i), cap: capOf(t.k + '|total', i)}));
+  dotPlot(document.getElementById('ch-cmp'), {rows, fmt: v => pct(v), aria: 'Tasa promedio por tipo de crédito y subsistema en ' + mLabel(MONTHS[i]),
+    onRow: r => setTipo(r.key), empty: 'No hay tasas publicadas para este mes.'});
+  const miss = SUBS.filter(s => subMsg(s.k, i)).map(s => subMsg(s.k, i));
+  document.getElementById('cmp-note').textContent = (miss.length ? miss.join(' ') + ' ' : '') +
+    'Un subsistema sin punto en una fila no tiene tasa para ese tipo en el periodo («-» en el cuadro). No se calcula un promedio del sistema: haría falta el monto desembolsado de cada subsistema, que la SBS no publica en este cuadro.';
+}
+function renderProd() {
+  const i = state.mi, t = state.tipo, T = TYPE_BY[t];
+  const prods = PRODS.filter(p => p.t === t);
+  document.getElementById('prod-title').textContent = 'Productos de ' + T.l.toLowerCase() + ' por subsistema · ' + mLabel(MONTHS[i]);
+  document.getElementById('prod-desc').textContent = prods.length > 1
+    ? 'Tasa promedio de cada producto que publica la SBS dentro del tipo de crédito. La primera fila es el total del tipo. Haga clic en un producto para ver su evolución.'
+    : 'Los créditos hipotecarios tienen un solo producto en el cuadro de la SBS (préstamos hipotecarios para vivienda), igual al total del tipo.';
+  subLegend(document.getElementById('prod-legend'), capOf(t + '|total', i) != null);
+  const rows = prods.map(p => ({key: p.k, label: p.lv ? p.s : 'Total ' + T.l.toLowerCase(), lv: p.lv, bold: !p.lv, sel: p.k === state.prod, vals: subVals(p.k, i), cap: capOf(p.k, i), tipTitle: prodTitle(p.k)}));
+  const shown = dotPlot(document.getElementById('ch-prod'), {rows, fmt: v => pct(v), aria: 'Tasa promedio por producto de ' + T.l.toLowerCase() + ' y subsistema',
+    onRow: r => setProd(r.key), empty: 'No hay tasas publicadas para este tipo de crédito en este mes.', labW: 250});
+  const hidden = rows.length - (shown || 0);
+  document.getElementById('prod-note').textContent = (hidden > 0 ? hidden + (hidden === 1 ? ' producto no tiene' : ' productos no tienen') + ' tasa en ningún subsistema este mes y no ' + (hidden === 1 ? 'se muestra' : 'se muestran') + '. ' : '') +
+    'El total de un tipo no tiene por qué coincidir con el promedio simple de las filas de abajo. La SBS no explica cómo lo calcula; los datos son coherentes con un promedio ponderado por el monto desembolsado de cada producto (ver «Cómo leer los datos»).';
+}
+
+// ---------- Evolución por subsistema ----------
+function evoSeries(p) {
+  const out = SUBS.map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, get: i => rate(s.k, p, i), why: i => whyNull(s.k, p, i)}));
+  if (hasCap(p)) out.push(capSeries(p));
+  return out;
+}
+function renderEvo() {
+  const p = state.prod;
+  document.getElementById('evo-title').textContent = prodTitle(p) + ': tasa promedio por subsistema';
+  document.getElementById('evo-desc').textContent = 'Tasa anual promedio de las operaciones nuevas en soles, mes a mes, tal como la publica la SBS para cada subsistema.' +
+    (hasCap(p) ? ' La línea morada punteada es la tasa máxima que fija el BCRP desde ' + mLong(MONTHS[CAP0]) + '.' : '');
+  const series = evoSeries(p);
+  const lg = document.getElementById('evo-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.isRef ? 'ln capdash' : 'ln', s.isRef ? null : s.color, s.label);
+  lineChart(document.getElementById('ch-evo'), {idx: visIdx(), H: 340, endLabels: true, series, marker: state.mi, breaks: breaksOf(p),
+    aria: prodTitle(p) + ': tasa promedio por subsistema', empty: 'Ningún subsistema tiene tasa de este producto en el periodo.'});
+  const msgs = [];
+  if (EMP.has(tipoOf(p))) msgs.push('De mayo a noviembre de 2020 las tasas promedio incluyen los créditos con garantía del Gobierno de Reactiva Perú y del Fondo de Apoyo Empresarial a la MYPE, según las notas de la SBS. Desde octubre de 2024 cambiaron los criterios para clasificar los créditos a empresas (Res. SBS N.° 2368-2023).');
+  if (hasCap(p)) msgs.push('La tasa máxima rige para los créditos nuevos desde el 10 de mayo de 2021 en los bancos, el 1 de junio en las cajas municipales y el 1 de julio de 2021 en las demás empresas (en las tarjetas de crédito, desde los ciclos de facturación que empiezan el 1 de junio o el 1 de julio). Es un límite para cada crédito; las líneas de los subsistemas son promedios, y un promedio por debajo del tope no dice cuántos créditos se acercan a él.');
+  msgs.push('Un hueco en una línea es un periodo sin tasa publicada («-») para ese producto en el subsistema.');
+  document.getElementById('evo-note').textContent = msgs.join(' ');
+}
+
+// ---------- Ranking de entidades (mancuerna: hace 12 meses → mes elegido) ----------
+function entRows(sub, p, i) {
+  const t = tipoOf(p), out = [], none = [];
+  for (const k of D.entities) {
+    if (SC[k].s !== sub) continue;
+    const v = rate(k, p, i);
+    if (v == null) { const s = SC[k]; const j = i - s.a; if (j >= 0 && Object.values(s.R).some(a => j < a.length && a[j] != null)) none.push({k, n: s.n, si: isSI(k, p, i)}); continue; }
+    out.push({k, n: SC[k].n, v, p: rate(k, p, i - 12), K: saldo(k, t, Math.min(i, CREDIT_LAST)), M: moraOf(k, t, Math.min(i, CREDIT_LAST))});
+  }
+  return {rows: out, none};
+}
+function renderRank() {
+  const sub = state.sub, i = state.mi, p = state.prod, S = SUB_BY[sub], t = tipoOf(p);
+  const avg = rate(sub, p, i), cap = capOf(p, i, sub);
+  document.getElementById('rank-title').textContent = prodTitle(p) + ' · tasa por entidad · ' + S.l;
+  document.getElementById('rank-desc').textContent = 'Tasa promedio de cada entidad en ' + mLabel(MONTHS[i]) + ', de mayor a menor. El punto hueco es la de hace 12 meses. La línea gris es el promedio del subsistema que publica la SBS. Haga clic en una entidad para ver su detalle abajo.';
+  const lg = document.getElementById('rank-legend');
+  lg.replaceChildren();
+  legendItem(lg, 'dot', SUB_COLOR[sub], mLabel(MONTHS[i]));
+  if (i >= 12) legendItem(lg, 'dot hollow', null, mLabel(MONTHS[i - 12]));
+  legendItem(lg, 'vref', null, 'Promedio de ' + S.l.toLowerCase());
+  if (cap != null) legendItem(lg, 'vref cap', null, 'Tasa máxima del BCRP');
+  const box = document.getElementById('ch-rank');
+  box.replaceChildren();
+  const {rows, none} = rankData();
+  const note = document.getElementById('rank-note');
+  const noOps = none.filter(e => !e.si).map(e => e.n), noRep = none.filter(e => e.si).map(e => e.n);
+  const cut = rows.some(r => r.v > CLIP[1] || (r.p != null && r.p > CLIP[1]));
+  note.textContent = (noOps.length ? 'Sin tasa de este producto en el periodo («-»): ' + noOps.join(', ') + '. ' : '') +
+    (noRep.length ? 'No reportaron («s.i.»): ' + noRep.join(', ') + '. ' : '') +
+    (cut ? 'La escala se corta en ' + CLIP[1] + '%; el número muestra el valor completo. ' : '') +
+    (box.clientWidth < 600 ? 'La tabla («Ver tabla») muestra' : 'A la derecha,') + ' el saldo de créditos de la entidad en ' + TYPE_BY[t].l.toLowerCase() + (i > CREDIT_LAST ? ' (' + mLabel(D.creditTo) + ', último publicado)' : '') + ', en soles y dólares.';
+  if (!rows.length) { emptyMsg(box, subMsg(sub, i) || 'Ninguna entidad de ' + S.l.toLowerCase() + ' tiene tasa de este producto en el periodo.'); return; }
+  const W = box.clientWidth, narrow = W < 600;
+  const labW = narrow ? 112 : 200, valW = narrow ? 64 : 76, totW = narrow ? 0 : 118, rowH = 28, top = 24;
+  const x0 = labW + 8, x1 = W - valW - totW - 8, H = top + rows.length * rowH + 36;
+  const clamp = v => Math.max(CLIP[0], Math.min(CLIP[1], v));
+  const vals = rows.flatMap(r => [r.v, r.p]).filter(v => v != null).map(clamp).concat(avg != null ? [avg] : [], cap != null ? [cap] : []);
+  const dom = niceDomain(0, Math.max(...vals), narrow ? 3 : 5);
+  const x = v => x0 + (clamp(v) - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': prodTitle(p) + ': tasa por entidad en ' + S.l}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk), x2: x(tk), y1: top - 4, y2: H - 34, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk), y: top - 10, 'text-anchor': 'middle'}, g).textContent = pctTick(tk);
+  }
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Saldo del tipo';
+  if (avg != null) svgEl('line', {x1: x(avg), x2: x(avg), y1: top - 4, y2: H - 34, stroke: 'var(--ink2)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2'}, svg);
+  if (cap != null) svgEl('line', {x1: x(cap), x2: x(cap), y1: top - 4, y2: H - 34, stroke: 'var(--cap)', 'stroke-width': 1.5, 'stroke-dasharray': '4 3'}, svg);
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': r.n + ': ' + pct(r.v) + (r.p != null ? ', hace 12 meses ' + pct(r.p) : '')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = trunc(r.n, narrow ? 15 : 28);
+    if (r.p != null) {
+      svgEl('line', {x1: x(r.p), x2: x(r.v), y1: yc, y2: yc, stroke: 'var(--axis)', 'stroke-width': 2}, gr);
+      svgEl('circle', {cx: x(r.p), cy: yc, r: 4, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 2}, gr);
+    }
+    const out = r.v > CLIP[1];
+    svgEl('circle', {cx: x(r.v), cy: yc, r: 5.5, fill: out ? 'var(--surface)' : SUB_COLOR[sub], stroke: out ? SUB_COLOR[sub] : 'var(--surface)', 'stroke-width': 2}, gr);
+    svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = pct(r.v);
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = money(r.K);
+    const show = evt => {
+      const rowsT = [{value: pct(r.v), label: prodTitle(p) + ' en ' + mShort(MONTHS[i]), color: SUB_COLOR[sub], sq: true}];
+      if (r.p != null) rowsT.push({value: pct(r.p), label: 'hace 12 meses'});
+      if (avg != null) rowsT.push({value: spp(r.v - avg), label: 'frente al promedio de ' + S.s + ' (' + pct(avg) + ')'});
+      if (cap != null) rowsT.push({value: pct(cap), label: 'Tasa máxima del BCRP', color: 'var(--cap)'});
+      rowsT.push({value: money(r.K), label: 'Saldo de ' + TYPE_BY[t].l.toLowerCase()}, {value: pct(r.M), label: 'Mora de ' + TYPE_BY[t].l.toLowerCase()});
+      showTip(...anchorOf(evt, gr), r.n, rowsT);
+    };
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', hideTip);
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', hideTip);
+    gr.addEventListener('click', () => pickEnt(r.k));
+    gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(r.k); } });
+  });
+  const foot = [];
+  if (cap != null) foot.push({x: x(cap), t: 'Tasa máxima ' + pct(cap), cls: 'caplbl'});
+  if (avg != null) foot.push({x: x(avg), t: 'Promedio ' + pct(avg), cls: 'lbl'});
+  foot.forEach((f, k) => {
+    const end = f.x > x1 - 110;
+    svgEl('text', {x: f.x + (end ? -4 : 4), y: H - 21 + 13 * k, class: f.cls, 'text-anchor': end ? 'end' : 'start'}, svg).textContent = f.t;
+  });
+}
+function rankData() {
+  const d = entRows(state.sub, state.prod, state.mi);
+  d.rows.sort((a, b) => b.v - a.v);
+  return d;
+}
+function pickEnt(k) {
+  state.ent = k; hideTip(); renderRank(); renderScatter(); fillEntSelect(); renderEnt(); renderEntProd();
+  for (const key of ['ent', 'entp']) if (!document.getElementById('tb-' + key).hidden) fillTable(key);
+  document.getElementById('card-ent').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+}
+
+// ---------- Dispersión entre entidades en el tiempo ----------
+let spreadCache = {key: null, v: null};
+function spreadSeries(sub, p) {
+  const key = sub + '#' + p;
+  if (spreadCache.key !== key) { spreadCache = {key, v: MONTHS.map((_, i) => spread(sub, p, i))}; }
+  return spreadCache.v;
+}
+function renderDisp() {
+  const sub = state.sub, p = state.prod, S = SUB_BY[sub], i = state.mi;
+  const sp = spreadSeries(sub, p);
+  document.getElementById('disp-title').textContent = 'Cuánto difieren las entidades · ' + prodTitle(p) + ' · ' + S.l;
+  document.getElementById('disp-desc').textContent = 'La banda clara va de la entidad con la tasa más baja a la de la más alta; la oscura, del primer al tercer cuartil (la mitad central de las entidades). La línea gris es la mediana y la de color, el promedio que publica la SBS.';
+  const lg = document.getElementById('disp-legend');
+  lg.replaceChildren();
+  legendItem(lg, 'sq', SUB_COLOR[sub], 'Mínimo a máximo').style.opacity = 0.3;
+  legendItem(lg, 'sq', SUB_COLOR[sub], 'Primer a tercer cuartil').style.opacity = 0.6;
+  legendItem(lg, 'ln', 'var(--sys)', 'Mediana de las entidades');
+  legendItem(lg, 'ln thick', SUB_COLOR[sub], 'Promedio publicado');
+  if (hasCap(p)) legendItem(lg, 'ln capdash', null, 'Tasa máxima del BCRP');
+  const g = (f, min) => k => { const s = sp[k]; return s && s.n >= min ? s[f] : null; };
+  const series = [
+    {label: 'Mediana de las entidades', short: 'Mediana', color: 'var(--sys)', w: 1.5, get: g('med', 3)},
+    {label: 'Promedio publicado', short: 'Promedio', color: SUB_COLOR[sub], w: 2.5, get: k => rate(sub, p, k)},
+  ];
+  if (hasCap(p)) series.push(capSeries(p, sub));
+  lineChart(document.getElementById('ch-disp'), {idx: visIdx(), H: 320, endLabels: true, marker: i, clip: CLIP, breaks: breaksOf(p), series,
+    bands: [{lo: g('min', 2), hi: g('max', 2), color: SUB_COLOR[sub], op: 0.16}, {lo: g('p25', 4), hi: g('p75', 4), color: SUB_COLOR[sub], op: 0.32}],
+    rows: k => {
+      const s = sp[k], out = [];
+      if (!s) return [{value: '—', label: 'ninguna entidad con tasa'}].concat(rate(sub, p, k) != null ? [{value: pct(rate(sub, p, k)), label: 'Promedio publicado', color: SUB_COLOR[sub]}] : []);
+      out.push({value: String(s.n), label: s.n === 1 ? 'entidad con tasa' : 'entidades con tasa'});
+      out.push({value: pct(s.max), label: 'Máximo'});
+      if (s.n >= 4) out.push({value: pct(s.p75), label: 'Tercer cuartil'});
+      if (s.n >= 3) out.push({value: pct(s.med), label: 'Mediana', color: 'var(--sys)'});
+      if (s.n >= 4) out.push({value: pct(s.p25), label: 'Primer cuartil'});
+      out.push({value: pct(s.min), label: 'Mínimo'});
+      out.push({value: pct(rate(sub, p, k)), label: 'Promedio publicado', color: SUB_COLOR[sub]});
+      if (capOf(p, k, sub) != null) out.push({value: pct(capOf(p, k, sub)), label: 'Tasa máxima del BCRP', color: 'var(--cap)'});
+      return out;
+    },
+    aria: 'Dispersión de la tasa entre entidades de ' + S.l, empty: 'Ninguna entidad de ' + S.l.toLowerCase() + ' tiene tasa de este producto en el periodo.'});
+  const s = sp[i];
+  document.getElementById('disp-note').textContent = (s ? 'En ' + mLabel(MONTHS[i]) + ': ' + s.n + (s.n === 1 ? ' entidad' : ' entidades') + ' con tasa, de ' + pct(s.min) + ' a ' + pct(s.max) + (s.n >= 3 ? ', mediana ' + pct(s.med) : '') + '. ' : '') +
+    'Cálculo propio sobre las tasas publicadas por entidad, sin ponderar: cada entidad cuenta igual, sea grande o pequeña. Los cuartiles se muestran con 4 entidades o más y la mediana con 3 o más. La escala se corta en ' + CLIP[1] + '%.';
+}
+
+// ---------- Dispersión: tasa × mora o tamaño ----------
+const SCX = [
+  {id: 'mora', label: 'Mora', name: 'Mora del tipo de crédito'},
+  {id: 'size', label: 'Tamaño', name: 'Saldo del tipo de crédito'},
+];
+function spearman(a, b) {
+  const rk = v => { const o = v.map((x, i) => [x, i]).sort((p, q) => p[0] - q[0]), r = new Array(v.length); let i = 0; while (i < o.length) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; };
+  const ra = rk(a), rb = rk(b), n = a.length, ma = ra.reduce((s, x) => s + x, 0) / n, mb = rb.reduce((s, x) => s + x, 0) / n;
+  let num = 0, da = 0, db = 0;
+  for (let k = 0; k < n; k++) { num += (ra[k] - ma) * (rb[k] - mb); da += (ra[k] - ma) ** 2; db += (rb[k] - mb) ** 2; }
+  return da && db ? num / Math.sqrt(da * db) : null;
+}
+function renderScatter() {
+  const sub = state.sub, i = state.mi, p = state.prod, t = tipoOf(p), T = TYPE_BY[t], S = SUB_BY[sub], X = SCX.find(z => z.id === state.scx);
+  const ic = Math.min(i, CREDIT_LAST), all = state.scAll, cap = capOf(p, i, all ? null : sub);
+  document.getElementById('sc-title').textContent = prodTitle(p) + ': tasa y ' + (X.id === 'mora' ? 'mora' : 'tamaño') + ' por entidad · ' + (all ? 'los cinco subsistemas' : S.l);
+  document.getElementById('sc-desc').textContent = 'Cada círculo es una entidad en ' + mLabel(MONTHS[i]) + ': más arriba, tasa más alta; más a la derecha, ' +
+    (X.id === 'mora' ? 'más mora en ' + T.l.toLowerCase() + ' (créditos atrasados ÷ créditos directos de ese tipo)' : 'más saldo de créditos de ' + T.l.toLowerCase() + ' (escala logarítmica)') +
+    '. El tamaño del círculo es el saldo de ese tipo de crédito. Describe una asociación, no una causa. Haga clic en una entidad para ver su detalle.';
+  const lg = document.getElementById('sc-legend');
+  lg.replaceChildren();
+  if (all) for (const s of SUBS) legendItem(lg, 'dot', SUB_COLOR[s.k], s.l);
+  else { legendItem(lg, 'dot', SUB_COLOR[sub], S.l); legendItem(lg, 'vref', null, 'Promedio de ' + S.l.toLowerCase()); }
+  if (cap != null) legendItem(lg, 'ln capdash', null, 'Tasa máxima del BCRP');
+  legendItem(lg, 'dot hollow', null, 'Fuera de escala');
+  const box = document.getElementById('ch-sc');
+  box.replaceChildren();
+  let small = 0;
+  const pts = [];
+  for (const k of D.entities) {
+    if (!all && SC[k].s !== sub) continue;
+    const v = rate(k, p, i);
+    if (v == null) continue;
+    const K = saldo(k, t, ic), M = moraOf(k, t, ic);
+    if (!(K >= MIN_K)) { small++; continue; }
+    if (X.id === 'mora' && M == null) continue;
+    pts.push({k, n: SC[k].n, s: SC[k].s, v, K, M, x: X.id === 'mora' ? M : K});
+  }
+  const rho = pts.length >= 8 ? spearman(pts.map(q => q.v), pts.map(q => q.x)) : null;
+  document.getElementById('sc-note').textContent = (i > CREDIT_LAST ? 'La mora y el saldo de ' + mLabel(MONTHS[i]) + ' aún no se publican: se usan los de ' + mLabel(D.creditTo) + '. ' : '') +
+    (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 1 millón en ' + T.l.toLowerCase() + ' y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
+    'La mora y el saldo incluyen los créditos en soles y en dólares de todo el tipo; la tasa es solo de las operaciones en soles' + (PROD_BY[p].lv ? ' del producto elegido' : '') + '. La escala vertical se corta en ' + CLIP[1] + '%' + (X.id === 'mora' ? ' y la horizontal en 30%' : '') + '.' +
+    (rho != null ? ' Correlación de rangos de Spearman entre la tasa y ' + (X.id === 'mora' ? 'la mora' : 'el saldo') + ': ' + fx(rho, 2) + ' (' + pts.length + ' entidades; va de −1 a 1; cálculo propio y descriptivo, explicado en «Cómo leer los datos»).' + (all ? ' Con «Todos» se mezclan tasas de ventanas distintas: 30 días útiles en la banca y las financieras, el mes en las cajas y las empresas de créditos.' : '') : pts.length >= 2 ? ' Con menos de 8 entidades no se calcula la correlación.' : '');
+  if (pts.length < 2) { emptyMsg(box, subMsg(sub, i) || 'No hay suficientes entidades con tasa y saldo para este producto y mes.'); return; }
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 420;
+  const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const isLog = X.id === 'size';
+  const XCLIP = [0, 30];
+  const tx = v => isLog ? Math.log10(v) : Math.max(XCLIP[0], Math.min(XCLIP[1], v));
+  const cy = v => Math.max(CLIP[0], Math.min(CLIP[1], v));
+  const avg = all ? null : rate(sub, p, i), smora = all ? null : moraOf(sub, t, ic);
+  const xs = pts.map(q => tx(q.x)), ys = pts.map(q => cy(q.v)).concat(avg != null ? [avg] : [], cap != null ? [cap] : []);
+  const dx = isLog ? niceDomain(Math.floor(Math.min(...xs)), Math.ceil(Math.max(...xs)), narrow ? 3 : 6) : niceDomain(0, Math.max(...xs, smora != null ? smora : 0), narrow ? 4 : 6);
+  if (isLog) dx.ticks = dx.ticks.filter(q => Number.isInteger(q));
+  const dy = niceDomain(0, Math.max(...ys), 5);
+  const pad = 14;
+  const xr = q => m.l + pad + (q - dx.lo) / (dx.hi - dx.lo) * (pw - 2 * pad), x = v => xr(tx(v));
+  const yr = v => m.t + pad + (dy.hi - v) / (dy.hi - dy.lo) * (ph - pad), y = v => yr(cy(v));
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Tasa y ' + X.name.toLowerCase() + ' por entidad'}, box);
+  drawYGrid(svg, dy.ticks, yr, m.l, m.l + pw, pctTick);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  const logTick = q => { const v = 10 ** q; return v >= 1e6 ? 'S/ ' + f0.format(v / 1e6) + ' mil mill.' : v >= 1e3 ? 'S/ ' + f0.format(v / 1e3) + ' mill.' : 'S/ ' + f1.format(v / 1e3) + ' mill.'; };
+  for (const tk of dx.ticks) {
+    svgEl('line', {x1: xr(tk), x2: xr(tk), y1: m.t, y2: m.t + ph, stroke: tk === 0 && !isLog ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: xr(tk), y: m.t + ph + 16, 'text-anchor': 'middle'}, g).textContent = isLog ? logTick(tk) : pctTick(tk);
+  }
+  svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = (X.id === 'mora' ? 'Mora de ' : 'Saldo de ') + T.l.toLowerCase() + ' →';
+  svgEl('text', {x: 0, y: 10, class: 'lbl'}, svg).textContent = '↑ Tasa de ' + prodLower(p);
+  const placed = [];
+  if (cap != null) {
+    svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(cap), y2: y(cap), stroke: 'var(--cap)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'}, svg);
+    svgEl('text', {x: m.l + 4, y: y(cap) - 5, class: 'caplbl'}, svg).textContent = 'Tasa máxima ' + pct(cap);
+    placed.push([m.l, y(cap) - 16, 130, 14]);
+  }
+  if (avg != null) svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(avg), y2: y(avg), stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  if (smora != null && !isLog) svgEl('line', {x1: x(smora), x2: x(smora), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  const maxK = Math.max(...pts.map(q => q.K)), rad = v => 4 + (narrow ? 13 : 18) * Math.sqrt(v / maxK);
+  const sorted = pts.slice().sort((a, b) => b.K - a.K);
+  const labelled = new Set(sorted.slice(0, narrow ? 3 : 6).map(q => q.k).concat(state.ent ? [state.ent] : []));
+  for (const q of sorted) {
+    const out = (!isLog && q.x !== tx(q.x)) || q.v !== cy(q.v);
+    const col = SUB_COLOR[q.s];
+    const gp = svgEl('g', {class: 'pt' + (q.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': q.n + ': tasa ' + pct(q.v) + ', ' + (X.id === 'mora' ? 'mora ' + pct(q.M) : 'saldo ' + money(q.K))}, svg);
+    const attrs = {class: 'm', cx: x(q.x), cy: y(q.v), r: rad(q.K), fill: out ? 'var(--surface)' : col, 'fill-opacity': out ? 1 : 0.75};
+    if (out) attrs.style = 'stroke:' + col;
+    svgEl('circle', attrs, gp);
+    const show = evt => showTip(...anchorOf(evt, gp), q.n, [
+      {value: pct(q.v), label: 'Tasa de ' + prodLower(p), color: col, sq: true},
+      {value: pct(q.M), label: 'Mora de ' + T.l.toLowerCase()},
+      {value: money(q.K), label: 'Saldo de ' + T.l.toLowerCase()},
+      {value: SUB_BY[q.s].s, label: 'Subsistema'}]);
+    gp.addEventListener('pointermove', show);
+    gp.addEventListener('pointerleave', hideTip);
+    gp.addEventListener('focus', () => show(null));
+    gp.addEventListener('blur', hideTip);
+    gp.addEventListener('click', () => { if (q.s !== state.sub) { state.sub = q.s; syncSeg('f-sub', q.s); } pickEnt(q.k); });
+    gp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (q.s !== state.sub) { state.sub = q.s; syncSeg('f-sub', q.s); } pickEnt(q.k); } });
+  }
+  const order = sorted.filter(q => labelled.has(q.k)).sort((a, b) => (b.k === state.ent) - (a.k === state.ent));
+  for (const q of order) {
+    const px = x(q.x), py = y(q.v), r = rad(q.K);
+    const n = q.n.length > 18 ? q.n.slice(0, 17) + '…' : q.n, w = n.length * 6.4, h = 14;
+    const cands = [[px + r + 4, py - h / 2, 'start'], [px - r - 4 - w, py - h / 2, 'end'], [px - w / 2, py - r - h - 2, 'middle'], [px - w / 2, py + r + 2, 'middle']];
+    const ok = cands.find(([bx, by]) => bx >= m.l && bx + w <= m.l + pw && by >= m.t && by + h <= m.t + ph &&
+      !placed.some(o => bx < o[0] + o[2] && bx + w > o[0] && by < o[1] + o[3] && by + h > o[1]));
+    if (!ok) continue;
+    const [bx, by, anchor] = ok;
+    placed.push([bx, by, w, h]);
+    const tx2 = anchor === 'start' ? bx : anchor === 'end' ? bx + w : bx + w / 2;
+    svgEl('text', {class: 'ptl', x: tx2, y: by + 11, 'text-anchor': anchor}, svg).textContent = n;
+  }
+}
+
+// ---------- Detalle de una entidad ----------
+function entOptions() {
+  const sub = state.sub, i = state.mi;
+  const list = D.entities.filter(k => SC[k].s === sub).map(k => {
+    const has = TYPES.some(t => rate(k, t.k + '|total', i) != null);
+    const K = TYPES.reduce((a, t) => a + (saldo(k, t.k, Math.min(i, CREDIT_LAST)) || 0), 0);
+    return {k, n: SC[k].n, has, K};
+  });
+  return {active: list.filter(e => e.has).sort((a, b) => b.K - a.K), gone: list.filter(e => !e.has).sort((a, b) => a.n.localeCompare(b.n, 'es'))};
+}
+function spanOf(k) {
+  const s = SC[k];
+  let a = Infinity, b = -1;
+  for (const arr of Object.values(s.R)) arr.forEach((v, j) => { if (typeof v === 'number') { a = Math.min(a, j); b = Math.max(b, j); } });
+  return [MONTHS[s.a + a], MONTHS[s.a + b]];
+}
+function fillEntSelect() {
+  const sel = document.getElementById('f-ent');
+  const {active, gone} = entOptions();
+  if (!state.ent || SC[state.ent].s !== state.sub) state.ent = (active[0] || gone[0] || {}).k || null;
+  sel.replaceChildren();
+  if (active.length) {
+    const g1 = htmlEl('optgroup', {label: 'Con tasas en ' + mLabel(MONTHS[state.mi])}, sel);
+    active.forEach(e => htmlEl('option', {value: e.k, text: e.n}, g1));
+  }
+  if (gone.length) {
+    const g2 = htmlEl('optgroup', {label: 'Sin tasas en ese mes'}, sel);
+    gone.forEach(e => { const [a, b] = spanOf(e.k); htmlEl('option', {value: e.k, text: e.n + ' (' + (idxOf(b) < state.mi ? 'hasta ' + mShort(b) : 'desde ' + mShort(a)) + ')'}, g2); });
+  }
+  if (state.ent) sel.value = state.ent;
+}
+function entMora(k, i) {
+  let num = 0, den = 0;
+  for (const t of TYPES) { const K = saldo(k, t.k, i), M = moraOf(k, t.k, i); if (K && M != null) { num += K * M; den += K; } }
+  return den ? num / den : null;
+}
+function renderEnt() {
+  const k = state.ent, box = document.getElementById('ch-ent'), stats = document.getElementById('ent-stats');
+  box.replaceChildren(); stats.replaceChildren();
+  if (!k) return;
+  const E = SC[k], sub = E.s, i = state.mi, p = state.prod, S = SUB_BY[sub], ic = Math.min(i, CREDIT_LAST);
+  document.getElementById('ent-title').textContent = E.n;
+  document.getElementById('ent-desc').textContent = 'Tasa promedio de cada tipo de crédito en ' + mLabel(MONTHS[i]) + ' y su diferencia con el promedio de ' + S.l.toLowerCase() + '. Abajo, la evolución de ' + prodLower(p) + '.';
+  for (const t of TYPES) {
+    const key = t.k + '|total', v = rate(k, key, i), a = rate(sub, key, i);
+    const d = htmlEl('div', null, stats);
+    htmlEl('div', {cls: 'lab', text: t.l}, d);
+    htmlEl('div', {cls: 'val', text: pct(v)}, d);
+    htmlEl('div', {cls: 'sub', text: v == null ? whyNull(k, key, i) : a != null ? spp(v - a) + ' frente al promedio (' + pct(a) + ')' : 'sin promedio del subsistema'}, d);
+  }
+  const K = TYPES.reduce((a, t) => a + (saldo(k, t.k, ic) || 0), 0);
+  const d = htmlEl('div', null, stats);
+  htmlEl('div', {cls: 'lab', text: 'Saldo de créditos directos'}, d);
+  htmlEl('div', {cls: 'val', text: K ? money(K) : '—'}, d);
+  htmlEl('div', {cls: 'sub', text: K ? 'mora ' + pct(entMora(k, ic)) + (i > CREDIT_LAST ? ' (' + mShort(D.creditTo) + ')' : '') : ''}, d);
+  const series = [
+    {label: E.n, short: 'Entidad', color: 'var(--c-ent)', w: 2.5, get: j => rate(k, p, j), why: j => whyNull(k, p, j)},
+    {label: 'Promedio de ' + S.l.toLowerCase(), short: S.s, color: 'var(--sys)', w: 2, dash: '5 4', get: j => rate(sub, p, j)},
+  ];
+  if (hasCap(p)) series.push(capSeries(p, sub));
+  const lg = document.getElementById('ent-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.isRef ? 'ln capdash' : s.dash ? 'ln dash' : 'ln', s.isRef || s.dash ? null : s.color, s.label);
+  lineChart(box, {idx: visIdx(), H: 300, endLabels: true, series, marker: i, clip: CLIP, breaks: breaksOf(p), aria: prodTitle(p) + ': ' + E.n + ' frente a su subsistema',
+    empty: 'La entidad no tiene tasa de ' + prodLower(p) + ' en el periodo.'});
+  const msgs = [];
+  if (E.o) msgs.push('Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses.');
+  msgs.push('La escala se corta en ' + CLIP[1] + '%.');
+  document.getElementById('ent-note').textContent = msgs.join(' ');
+}
+function renderEntProd() {
+  const k = state.ent, box = document.getElementById('ch-entp');
+  box.replaceChildren();
+  if (!k) return;
+  const E = SC[k], sub = E.s, i = state.mi, S = SUB_BY[sub];
+  document.getElementById('entp-title').textContent = 'Productos de ' + E.n + ' frente a ' + S.l.toLowerCase() + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('entp-desc').textContent = 'Cada fila es un producto con tasa de la entidad en el mes. El punto relleno es la entidad; el hueco, el promedio de su subsistema. A la derecha, la diferencia en puntos porcentuales.';
+  const lg = document.getElementById('entp-legend');
+  lg.replaceChildren();
+  legendItem(lg, 'dot', 'var(--c-ent)', E.n);
+  legendItem(lg, 'dot hollow', null, 'Promedio de ' + S.l.toLowerCase()).style.boxShadow = 'inset 0 0 0 2px var(--sys)';
+  if (capOf('consumo|total', i, sub) != null) legendItem(lg, 'vref cap', null, 'Tasa máxima del BCRP');
+  const rows = PRODS.filter(P => rate(k, P.k, i) != null).map(P => {
+    const v = rate(k, P.k, i), a = rate(sub, P.k, i);
+    return {key: P.k, label: P.lv ? P.s : TYPE_BY[P.t].l, labelN: P.lv ? null : TYPE_BY[P.t].s, lv: P.lv, bold: !P.lv, sel: P.k === state.prod, cap: capOf(P.k, i, sub), tipTitle: prodTitle(P.k), diff: a == null ? null : v - a,
+      vals: [{v: a, color: 'var(--sys)', hollow: true, label: 'Promedio de ' + S.s}, {v, color: 'var(--c-ent)', label: E.n, r: 5}],
+      extra: rate(k, P.k, i - 12) != null ? [{value: pct(rate(k, P.k, i - 12)), label: E.n + ' hace 12 meses'}] : []};
+  });
+  const shown = dotPlot(box, {rows, fmt: v => pct(v), aria: 'Tasas de ' + E.n + ' por producto frente al promedio de su subsistema', clip: CLIP, labW: 250,
+    right: (r, narrow) => r.diff == null ? '—' : spp(r.diff, narrow ? 1 : 2), rightHead: 'Diferencia', rightW: 92,
+    onRow: r => setProd(r.key), empty: 'La entidad no tiene tasas en ' + mLabel(MONTHS[i]) + ': ' + whyNull(k, state.prod, i) + '.'});
+  document.getElementById('entp-note').textContent = (shown ? 'Haga clic en un producto para verlo en los demás gráficos. ' : '') + 'Una diferencia positiva significa que la entidad cobró más que el promedio de su subsistema en ese producto. La escala se corta en ' + CLIP[1] + '%.';
+}
+
+// ---------- Tablas ----------
+// Subsistemas que todavía no publican el mes elegido: su último mes publicado, marcado (nunca un hueco).
+const pubIdx = (sk, i) => { for (let j = i; j >= 0; j--) if (TYPES.some(t => rate(sk, t.k + '|total', j) != null)) return j; return i; };
+const rateCell = (sk, p, i) => {
+  const j = i > ALL_LAST ? pubIdx(sk, i) : i, v = rate(sk, p, j);
+  if (j === i || v == null) return pct(v);
+  return {v: pct(v) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag',
+    title: 'Último dato publicado, de ' + mLabel(MONTHS[j]) + '. La SBS todavía no publica ' + mLabel(MONTHS[i]) + ' para este subsistema.'};
+};
+let rankSort = {col: 1, dir: -1};
+const TABLES = {
+  cmp() {
+    const i = state.mi;
+    return [['Tipo de crédito'].concat(SUBS.map(s => s.l), ['Tasa máxima del BCRP']),
+      TYPES.map(t => [t.l].concat(SUBS.map(s => rateCell(s.k, t.k + '|total', i)), [pct(capOf(t.k + '|total', i))]))];
+  },
+  prod() {
+    const i = state.mi;
+    return [['Producto'].concat(SUBS.map(s => s.l)),
+      PRODS.filter(P => P.t === state.tipo).map(P => [{v: P.lv ? P.l : 'Total ' + TYPE_BY[P.t].l.toLowerCase(), cls: P.lv ? 'lv1' : ''}].concat(SUBS.map(s => rateCell(s.k, P.k, i))))];
+  },
+  evo() {
+    const p = state.prod, idx = visIdx().slice().reverse(), cap = hasCap(p);
+    return [['Mes'].concat(SUBS.map(s => s.l), cap ? ['Tasa máxima del BCRP'] : []),
+      idx.map(i => [mLabel(MONTHS[i])].concat(SUBS.map(s => pct(rate(s.k, p, i))), cap ? [pct(capOf(p, i))] : []))
+        .filter(r => r.slice(1, 1 + SUBS.length).some(c => c !== '—'))];
+  },
+  disp() {
+    const sub = state.sub, p = state.prod, sp = spreadSeries(sub, p), idx = visIdx().slice().reverse(), cap = hasCap(p);
+    return [['Mes', 'Entidades con tasa', 'Mínimo', 'Primer cuartil', 'Mediana', 'Tercer cuartil', 'Máximo', 'Promedio publicado'].concat(cap ? ['Tasa máxima del BCRP'] : []),
+      idx.map(i => { const s = sp[i]; if (!s && rate(sub, p, i) == null) return null;
+        return [mLabel(MONTHS[i]), s ? String(s.n) : '0', pct(s && s.min), pct(s && s.n >= 4 ? s.p25 : null), pct(s && s.n >= 3 ? s.med : null), pct(s && s.n >= 4 ? s.p75 : null), pct(s && s.max), pct(rate(sub, p, i))].concat(cap ? [pct(capOf(p, i, sub))] : []); }).filter(Boolean)];
+  },
+  ent() {
+    const k = state.ent;
+    if (!k) return [['Mes'], []];
+    const sub = SC[k].s, p = state.prod, idx = visIdx().slice().reverse(), cap = hasCap(p), c30 = SUB_BY[sub].f === '30d';
+    return [['Mes', SC[k].n, 'Promedio de ' + SUB_BY[sub].s, 'Diferencia'].concat(cap ? ['Tasa máxima del BCRP'] : [], c30 ? ['Fecha de corte'] : []),
+      idx.map(i => { const v = rate(k, p, i), a = rate(sub, p, i); if (v == null && !isSI(k, p, i) && a == null) return null;
+        return [mLabel(MONTHS[i]), v == null ? (isSI(k, p, i) ? 's.i.' : '—') : pct(v), pct(a), v != null && a != null ? spp(v - a) : '—'].concat(cap ? [pct(capOf(p, i, sub))] : [], c30 ? [D.cut[sub][i] ? dLabel(D.cut[sub][i]) : '—'] : []); }).filter(Boolean)];
+  },
+  entp() {
+    const k = state.ent;
+    if (!k) return [['Producto'], []];
+    const sub = SC[k].s, i = state.mi;
+    return [['Producto', SC[k].n, 'Promedio de ' + SUB_BY[sub].s, 'Diferencia', SC[k].n + ' hace 12 meses'],
+      PRODS.filter(P => rate(k, P.k, i) != null || rate(sub, P.k, i) != null).map(P => { const v = rate(k, P.k, i), a = rate(sub, P.k, i);
+        return [{v: P.lv ? P.l : TYPE_BY[P.t].l, cls: P.lv ? 'lv1' : ''}, v == null ? (isSI(k, P.k, i) ? 's.i.' : '—') : pct(v), pct(a), v != null && a != null ? spp(v - a) : '—', pct(rate(k, P.k, i - 12))]; })];
+  },
+};
+// Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
+// muestra el último valor publicado de la columna, con su mes (nunca un hueco).
+const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));
+const cellText = c => c && typeof c === 'object' ? c.v : c;
+function lagFill(head, rows) {
+  if (head[0] !== 'Mes' || ALL_LAST >= N - 1) return rows;
+  return rows.map(r => {
+    const i = LABEL_IDX.get(r[0]);
+    if (!(i > ALL_LAST)) return r;
+    return r.map((c, j) => {
+      if (j === 0 || cellText(c) !== '—') return c;
+      let src = null;
+      for (const q of rows) {
+        const k = LABEL_IDX.get(q[0]);
+        if (k < i && cellText(q[j]) !== '—' && (!src || k > src.k)) src = {k, q};
+      }
+      if (!src) return c;
+      return {v: cellText(src.q[j]) + ' (' + src.q[0] + ')', cls: 'lag', title: 'Último dato publicado, de ' + src.q[0] + '. ' +
+        (/sistema/i.test(head[j]) ? 'El sistema se calcula solo con los meses en que publicaron los cinco subsistemas.'
+          : 'La SBS todavía no publica ' + r[0] + ' para esta columna.')};
+    });
+  });
+}
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const p = {text: c.v, cls: c.cls || ''};
+  if (c.title) p.title = c.title;
+  return htmlEl('td', p, row);
+}
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  if (key === 'rank') return fillRankTable(wrap);
+  const [head, rows0] = TABLES[key](), rows = lagFill(head, rows0);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+function fillRankTable(wrap) {
+  const {rows} = rankData(), sub = state.sub, i = state.mi, p = state.prod, t = TYPE_BY[tipoOf(p)].l.toLowerCase(), avg = rate(sub, p, i);
+  const cols = [
+    {l: 'Entidad', get: r => r.n, fmt: v => v},
+    {l: 'Tasa', get: r => r.v, fmt: v => pct(v)},
+    {l: 'Hace 12 meses', get: r => r.p, fmt: v => pct(v)},
+    {l: 'Diferencia con el promedio', get: r => avg == null ? null : r.v - avg, fmt: v => spp(v)},
+    {l: 'Saldo de ' + t, get: r => r.K, fmt: money},
+    {l: 'Mora de ' + t, get: r => r.M, fmt: v => pct(v)},
+  ];
+  const c = cols[rankSort.col];
+  rows.sort((a, b) => {
+    const va = c.get(a), vb = c.get(b);
+    if (va == null) return 1; if (vb == null) return -1;
+    return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * rankSort.dir;
+  });
+  const tb0 = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, tb0)), tb = htmlEl('tbody', null, tb0);
+  cols.forEach((col, j) => {
+    const th = htmlEl('th', {scope: 'col'}, tr);
+    if (j === rankSort.col) th.setAttribute('aria-sort', rankSort.dir > 0 ? 'ascending' : 'descending');
+    const b = htmlEl('button', {type: 'button', text: col.l + (j === rankSort.col ? (rankSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
+    b.addEventListener('click', () => {
+      rankSort = {col: j, dir: j === rankSort.col ? -rankSort.dir : (j === 0 ? 1 : -1)};
+      fillTable('rank');
+      wrap.querySelectorAll('th button')[j].focus();
+    });
+  });
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); cols.forEach(col => htmlEl('td', {text: col.fmt(col.get(r))}, row)); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+function refreshTables() {
+  for (const k of Object.keys(TABLES).concat(['rank'])) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+}
+
+// ---------- Filtros ----------
+function segment(id, items, get0, set, onlyOwn) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get0() === it.id)}, box);
+    b.dataset.k = it.id;
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      if (onlyOwn) onlyOwn(); else renderVisible();
+    });
+  }
+}
+const syncSeg = (id, k) => document.querySelectorAll('#' + id + ' button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === String(k))));
+function fillProd() {
+  const sel = document.getElementById('f-prod');
+  sel.replaceChildren();
+  for (const P of PRODS.filter(P => P.t === state.tipo)) htmlEl('option', {value: P.k, text: P.lv ? P.l : 'Total ' + TYPE_BY[P.t].l.toLowerCase()}, sel);
+  sel.value = state.prod;
+  sel.disabled = sel.options.length < 2;
+}
+function setTipo(t) { state.tipo = t; state.prod = t + '|total'; syncSeg('f-tipo', t); fillProd(); renderVisible(); }
+function setProd(p) { state.tipo = tipoOf(p); state.prod = p; syncSeg('f-tipo', state.tipo); fillProd(); renderVisible(); }
+segment('f-tipo', TYPES.map(t => ({id: t.k, label: t.s, title: t.l})), () => state.tipo, v => { state.tipo = v; state.prod = v + '|total'; fillProd(); });
+segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+segment('f-scope', SUBS.map(s => ({id: s.k, label: s.s, title: s.l})), () => state.scope, v => { state.scope = v; });
+segment('f-sub', SUBS.map(s => ({id: s.k, label: s.s, title: s.l})), () => state.sub, v => { state.sub = v; state.ent = null; });
+segment('f-scx', SCX.map(z => ({id: z.id, label: z.label, title: z.name})), () => state.scx, v => { state.scx = v; }, () => { hideTip(); renderScatter(); });
+segment('f-scall', [{id: 'sub', label: 'Subsistema'}, {id: 'all', label: 'Todos'}], () => state.scAll ? 'all' : 'sub', v => { state.scAll = v === 'all'; }, () => { hideTip(); renderScatter(); });
+fillProd();
+document.getElementById('f-prod').addEventListener('change', e => setProd(e.target.value));
+(function fillMonths() {
+  const sel = document.getElementById('f-mes');
+  for (let i = N - 1; i >= 0; i--) htmlEl('option', {value: String(i), text: mLabel(MONTHS[i]) + (i > ALL_LAST ? ' (solo banca y financieras)' : '')}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+})();
+document.getElementById('f-ent').addEventListener('change', e => { state.ent = e.target.value; renderRank(); renderScatter(); renderEnt(); renderEntProd(); for (const key of ['ent', 'entp']) if (!document.getElementById('tb-' + key).hidden) fillTable(key); });
+
+// ---------- Pestañas ----------
+const TABS = ['tipos', 'entidades', 'metodologia'];
+let tab = 'tipos';
+function renderVisible() {
+  hideTip();
+  if (tab === 'tipos') { renderKpis(); renderCmp(); renderProd(); renderEvo(); }
+  else if (tab === 'entidades') { fillEntSelect(); renderRank(); renderDisp(); renderScatter(); renderEnt(); renderEntProd(); }
+  refreshTables();
+}
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'metodologia';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+// ---------- Textos de metodología y pie ----------
+const money2 = v => 'S/ ' + v.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+(function methodology() {
+  const X = D.examples, mx = mLabel(X.mes);
+  const T = X.tea, ex = document.getElementById('ex-tea');
+  [
+    '<b>Ejemplo con datos de ' + mx + '.</b> La tasa promedio de los créditos de consumo de la banca múltiple fue ' + pct(T.tea) + ' anual. La tasa mensual equivalente es (1 + ' + fx(T.tea / 100, 4) + ')<sup>30/360</sup> − 1 = ' + pct(T.tem) + ', no ' + pct(T.simple) + ' (' + fx(T.tea) + ' ÷ 12).',
+    'Un préstamo de S/ 1,000 a pagar en 12 cuotas mensuales iguales con esa tasa, sin comisiones, gastos ni seguros, tendría una cuota de ' + money2(T.cuota) + ' (cuota = préstamo × i ÷ (1 − (1 + i)<sup>−12</sup>), con i = ' + pct(T.tem) + '). En total se pagarían ' + money2(T.total) + ': ' + money2(T.interes) + ' de intereses.',
+    'Los intereses son menos que ' + money2(T.bullet) + ' (' + pct(T.tea) + ' de S/ 1,000) porque con cada cuota se devuelve parte del préstamo y los intereses se cobran sobre una deuda cada vez menor. Esos ' + money2(T.bullet) + ' serían los intereses si se pagara todo en una sola cuota al final del año. Es una ilustración de la fórmula, no la oferta de una entidad.',
+  ].forEach(h => { const p = htmlEl('p', null, ex); p.innerHTML = h; });
+  // Tasa máxima por semestre.
+  const caps = document.getElementById('tb-caps');
+  const tr = htmlEl('tr', null, htmlEl('thead', null, caps)), tb = htmlEl('tbody', null, caps);
+  ['Vigencia', 'Tasa máxima en soles (% anual)', 'Fuente (fecha que figura en la nota)'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  const addMonths = (s, k) => { const d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1 + k, 1)); return d.toISOString().slice(0, 10); };
+  const dayBefore = s => { const d = new Date(s + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0, 10); };
+  D.caps.forEach((c, j) => {
+    const next = j + 1 < D.caps.length ? D.caps[j + 1].desde : addMonths(c.desde.slice(0, 8) + '01', 6);
+    const row = htmlEl('tr', null, tb);
+    htmlEl('td', {text: dLabel(c.desde) + ' a ' + dLabel(dayBefore(next)) + (j === 0 ? ' (bancos; cajas municipales desde el 1 jun y demás empresas desde el 1 jul)' : '') + (c.desde > D.generado ? ' (anunciada, aún no rige)' : '')}, row);
+    htmlEl('td', {text: fx(c.mn, 2) + '%'}, row);
+    htmlEl('td', {text: 'BCRP, ' + c.src.charAt(0).toLowerCase() + c.src.slice(1).replace(/(\d\d)-(\d\d)-(\d{4})/, (_, d, m, y) => +d + ' ' + MES[+m - 1] + ' ' + y), cls: 'lft'}, row);
+  });
+  // Cobertura por subsistema.
+  const cov = document.getElementById('tb-cov');
+  const tr2 = htmlEl('tr', null, htmlEl('thead', null, cov)), tb2 = htmlEl('tbody', null, cov);
+  ['Subsistema', 'Periodo de la tasa', 'Desde', 'Hasta', 'Meses', 'Entidades listadas', 'Con tasa en el último mes', 'Celdas con tasa', 'Celdas «-»', 'Celdas «s.i.»'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr2));
+  for (const c of D.cov) {
+    const row = htmlEl('tr', null, tb2);
+    [SUB_BY[c.k].l, SUB_BY[c.k].f === '30d' ? '30 días útiles' : 'Mes', mLabel(c.from), mLabel(c.to), String(c.meses), String(c.ent), String(c.entLast), pct(c.conTasa, 1), pct(c.guion, 1), pct(c.si, 1)]
+      .forEach(v => htmlEl('td', {text: v}, row));
+  }
+  const M = X.mix, pl = k => { const P = PROD_BY['micro|' + k]; return P.l.charAt(0).toLowerCase() + P.l.slice(1); };
+  const exm = document.getElementById('ex-mix');
+  [
+    '<b>Ejemplo con datos de ' + mx + '.</b> En la banca múltiple, la tasa promedio de los créditos a microempresas fue ' + pct(M.total) + '. Sus ' + M.n + ' productos con tasa iban de ' + pct(M.min) + ' (' + pl(M.minK) + ') a ' + pct(M.max) + ' (' + pl(M.maxK) + '), y el promedio simple de esos ' + M.n + ' números sería ' + pct(M.simple) + '.',
+    (Math.abs(M.total - M.simple) >= 0.01
+      ? 'El total no coincide con ese promedio simple. Es lo esperable si la SBS pondera cada producto por su monto desembolsado, de modo que los productos con más monto pesan más; la SBS no lo explica en el cuadro, así que es una inferencia.'
+      : 'Ese mes el total coincide con el promedio simple, pero en general no tiene por qué coincidir: si la SBS pondera por monto desembolsado, como parece, los productos con más monto pesan más.') +
+    ' Como la SBS no publica los montos, el peso de cada producto no se puede reconstruir con este cuadro.',
+  ].forEach(h => { const p = htmlEl('p', null, exm); p.innerHTML = h; });
+  const ec = X.ec, ac = X.avgCheck;
+  const V = {
+    avgN: f0.format(ac.n), avgSimple: pct(ac.simple, 1), avgIn: pct(ac.inRange, 1),
+    allHasta: mLabel(D.allHasta),
+    exEc: ec ? 'Por ejemplo, el promedio de consumo de las empresas de créditos pasó de ' + pct(ec.antes) + ' en agosto de 2024 a ' + pct(ec.despues) + ' en setiembre, cuando dejó de figurar en el cuadro ' + ec.ent.filter(e => e[2] == null).map(e => e[0] + ' (' + pct(e[1]) + ' en consumo en agosto)').join(' y ') + ', mientras las demás mantenían tasas parecidas (' + ec.ent.filter(e => e[2] != null).map(e => e[0] + ': ' + pct(e[1]) + ' en agosto y ' + pct(e[2]) + ' en setiembre').join('; ') + '). Las tasas de las entidades que siguieron variaron como mucho ' + fx(Math.max(...ec.ent.filter(e => e[2] != null).map(e => Math.abs(e[2] - e[1])))) + ' pp; el resto del cambio viene de la composición del promedio (qué entidades entran y cuánto pesa cada una).' : '',
+  };
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = V[e.dataset.v] || '—'; });
+})();
+document.getElementById('lede').textContent =
+  'Cuánto cobran los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos del Perú por sus préstamos en soles, por tipo de crédito, producto y entidad. Tasas anuales promedio de los créditos nuevos, publicadas por la SBS, de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + '.';
+[
+  'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), «Tasas activas anuales de las operaciones en moneda nacional» por tipo de crédito y empresa (banca múltiple, empresas financieras, cajas municipales, cajas rurales y empresas de créditos). Mora y saldo por tipo de crédito: Boletín Estadístico de la SBS, cuadros B-2334, B-3220, C-1228, C-2228 y C-4223. Tasa máxima: Banco Central de Reserva del Perú (BCRP), Circular N.° 0008-2021-BCRP y notas informativas semestrales.',
+  'Las tasas por entidad y el promedio de cada subsistema son los que publica la SBS. Son cálculos propios la dispersión entre entidades (mínimo, cuartiles, mediana y máximo, sin ponderar), la mora (créditos atrasados ÷ créditos directos), el saldo por tipo de crédito de cada subsistema (suma de entidades), la correlación de rangos y los ejemplos numéricos de «Cómo leer los datos». No se calcula un promedio del sistema.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, document.getElementById('foot')));
+
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'tipos', false);
+// Redibuja solo cuando cambia el ancho (el alto cambia con cada redibujo).
+let rt, lastW = 0;
+new ResizeObserver(es => {
+  const w = Math.round(es[0].contentRect.width);
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+}).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

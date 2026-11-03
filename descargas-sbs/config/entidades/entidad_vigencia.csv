@@ -1,0 +1,144 @@
+id_entidad,subsistema,nombre,desde,hasta
+acceso-crediticio,empresas-credito,EDPYME Acceso Crediticio,,202208
+acceso-crediticio,empresas-credito,Acceso Crediticio,202209,202307
+alfin-banco,banca-multiple,Banco Azteca,200801,202110
+alfin-banco,banca-multiple,Alfin Banco,202111,
+alternativa,empresas-credito,EDPYME Alternativa,,202302
+alternativa,empresas-credito,Alternativa,202303,
+amerika-financiera,empresas-financieras,Amérika Financiera,201006,202210
+banbif,banca-multiple,BanBif,,
+banco-btg-pactual-peru,banca-multiple,Banco BTG Pactual Perú,202609,
+banco-de-lima-sudameris,banca-multiple,Banco de Lima Sudameris,,
+banco-latino,banca-multiple,Banco Latino,,200104
+banco-nuevo-mundo,banca-multiple,Banco Nuevo Mundo,,200012
+banco-santander-central-hispano-peru,banca-multiple,Banco Santander Central Hispano Perú,,200303
+banco-standard-chartered,banca-multiple,Banco Standard Chartered,,200508
+banco-sudamericano,banca-multiple,Banco Sudamericano,,200605
+bancom,banca-multiple,Banco de Comercio,,202307
+bancom,banca-multiple,BanCom,202308,
+banex,banca-multiple,Banex,,199911
+bank-of-china-peru,banca-multiple,Bank of China,202004,
+bankboston-peru,banca-multiple,BankBoston Perú,,200501
+bbva-consumer-finance,empresas-credito,BBVA Auto Edpyme,201401,201403
+bbva-consumer-finance,empresas-credito,BBVA Consumer Finance Edpyme,201404,202201
+bbva-peru,banca-multiple,BBVA Continental,,201904
+bbva-peru,banca-multiple,BBVA Perú,201905,
+bci-peru,banca-multiple,Banco BCI Perú,202207,
+bcp,banca-multiple,BCP,,
+caja-cajamarca,cajas-rurales,Caja Cajamarca,,201608
+caja-credinka,cajas-rurales,Caja Rural de Ahorro y Crédito de Quillabamba,,200401
+caja-credinka,cajas-rurales,Caja Credinka,200402,
+caja-los-libertadores-de-ayacucho,cajas-rurales,Caja Los Libertadores de Ayacucho,,201509
+caja-pisco,cajas-municipales,Caja Pisco,,201405
+caja-profinanzas,cajas-rurales,Caja Profinanzas,,201212
+caja-rural-del-sur,cajas-rurales,Caja Rural Del Sur,,200808
+caja-rural-majes,cajas-rurales,Caja Rural Majes,,
+caja-rural-mantaro,cajas-rurales,Caja Rural Mantaro,,
+caja-rural-san-martin,cajas-rurales,Caja Rural San Martín,,200803
+caja-rural-selva-peruana,cajas-rurales,Caja Rural Selva Peruana,,
+caja-rural-tumbay,cajas-rurales,Caja Rural Tumbay,,
+caja-rural-ucayali,cajas-rurales,Caja Rural Ucayali,,
+caja-rural-vrae,cajas-rurales,Caja Rural VRAE,,
+caja-selva-central,cajas-rurales,Caja Selva Central,,199909
+caja-senor-de-luren,cajas-rurales,Caja Señor de Luren,,201506
+caja-sipan,cajas-rurales,Caja Rural de Ahorro y Crédito Cruz de Chalpón S.A.,,200602
+caja-sipan,cajas-rurales,Caja Sipán,200603,202109
+citibank-peru,banca-multiple,Citibank,,
+cmac-arequipa,cajas-municipales,CMAC Arequipa,,
+cmac-cusco,cajas-municipales,CMAC Cusco,,
+cmac-del-santa,cajas-municipales,CMAC Del Santa,,
+cmac-huancayo,cajas-municipales,CMAC Huancayo,,
+cmac-ica,cajas-municipales,CMAC Ica,,
+cmac-maynas,cajas-municipales,CMAC Maynas,,
+cmac-paita,cajas-municipales,CMAC Paita,,
+cmac-piura,cajas-municipales,CMAC Piura,,
+cmac-sullana,cajas-municipales,CMAC Sullana,,202406
+cmac-tacna,cajas-municipales,CMAC Tacna,,
+cmac-trujillo,cajas-municipales,CMAC Trujillo,,
+cmcp-lima,cajas-municipales,CMCP Lima,,
+compartamos,edpyme,EDPYME Crear Arequipa,,200907
+compartamos,empresas-financieras,Financiera Crear,200908,201303
+compartamos,empresas-financieras,Compartamos Financiera,201304,202412
+compartamos,banca-multiple,Compartamos Banco,202501,
+confianza-original,edpyme,Edpyme Confianza,,200910
+confianza-original,empresas-financieras,Financiera Confianza,200911,201304
+confianza,cajas-rurales,Caja Rural de Ahorro y Crédito Nor Perú S.A.,,200807
+confianza,cajas-rurales,Caja Rural de Ahorro y Crédito Nuestra Gente S.A.A.,200808,201304
+confianza,empresas-financieras,Financiera Confianza,201305,
+crac-cencosud-scotia,banca-multiple,Banco Cencosud,201206,201903
+crac-cencosud-scotia,cajas-rurales,Caja Rural de Ahorro y Crédito CAT Perú S.A.,201904,202005
+crac-cencosud-scotia,cajas-rurales,CRAC Cencosud Scotia,202006,
+crac-del-centro,cajas-rurales,CRAC Del Centro,201409,202603
+crac-incasur,cajas-rurales,CRAC Incasur,201110,
+crac-los-andes,cajas-rurales,Caja Rural de Ahorro y Crédito Los Aymaras S.A.,199711,199902
+crac-los-andes,cajas-rurales,CRAC Los Andes,199903,
+crac-prymera,cajas-rurales,CRAC Prymera,199802,
+crac-raiz,cajas-rurales,Caja Rural de Ahorro y Crédito Chavín S.A.A.,,201604
+crac-raiz,cajas-rurales,CRAC Raíz,201605,202307
+credinka,edpyme,Edpyme Nueva Visión,,201309
+credinka,empresas-financieras,Financiera Nueva Visión,201310,201507
+credinka,empresas-financieras,Financiera Credinka,201508,202408
+credivision,empresas-credito,EDPYME Credivisión,200006,202209
+deutsche-bank-peru,banca-multiple,Deutsche Bank Perú,,201607
+edpyme-crear-tacna,edpyme,Edpyme Crear Tacna,,
+edpyme-credijet-del-peru,edpyme,Edpyme Credijet del Perú,200806,201605
+edpyme-credijet-del-peru,otro,Edpyme Credijet del Perú,201606,
+edpyme-gmg-servicios-peru,edpyme,Edpyme GMG Servicios Perú,201406,202105
+edpyme-progreso,edpyme,Edpyme Pronegocios,200206,201111
+edpyme-progreso,edpyme,Edpyme Marcimex,201112,201902
+edpyme-progreso,otro,Edpyme Progreso,201903,202108
+edpyme-raiz,edpyme,Edpyme Raíz,,201605
+edyficar,edpyme,EDPYME Edyficar,,200906
+edyficar,empresas-financieras,Financiera Edyficar,200907,201511
+efectiva,edpyme,EDPYME Efectiva,,200912
+efectiva,empresas-financieras,Financiera Efectiva,201001,202605
+efectiva,banca-multiple,Banco Efectiva,202606,
+factoring-total,otro,Factoring Total,,202201
+falabella-peru,empresas-financieras,Financiera CMR,,200701
+falabella-peru,banca-multiple,Banco Falabella,200702,
+financiera-andina,empresas-financieras,Financiera Andina,,
+financiera-daewoo,empresas-financieras,Financiera Daewoo,,
+financiera-del-sur-finsur,empresas-financieras,Financiera del Sur (Finsur),,200409
+fincoper,empresas-financieras,Fincoper,,
+gnb-peru,banca-multiple,HSBC Bank Perú,200601,201309
+gnb-peru,banca-multiple,Banco GNB,201310,
+icbc-peru,banca-multiple,Banco ICBC,201311,
+infinance-xp,empresas-financieras,Financiera Uno,,201604
+infinance-xp,empresas-financieras,Financiera Oh!,201605,202601
+infinance-xp,empresas-financieras,InFinance XP,202602,
+interbank,banca-multiple,Interbank,,
+inversiones-la-cruz,empresas-credito,EDPYME Inversiones La Cruz,201203,202303
+inversiones-la-cruz,empresas-credito,Inversiones La Cruz,202304,202408
+mibanco,banca-multiple,Mibanco,,
+mitsui-auto-finance,empresas-financieras,Mitsui Auto Finance,201012,
+nbk-bank,banca-multiple,NBK Bank,,200112
+peruinvest,empresas-financieras,Peruinvest,,
+pichincha,banca-multiple,Banco Financiero del Perú,,201807
+pichincha,banca-multiple,Banco Pichincha,201808,
+prex-peru-empresa-de-creditos,empresas-credito,Prex Perú Empresa de Créditos,202606,
+proempresa,edpyme,EDPYME ProEmpresa,,201207
+proempresa,empresas-financieras,Financiera Proempresa,201208,
+qapaq,empresas-financieras,Financiera Universal,200912,201401
+qapaq,empresas-financieras,Financiera Qapaq,201402,
+ripley-peru,empresas-financieras,Financiera Cordillera,,200712
+ripley-peru,banca-multiple,Banco Ripley,200801,
+santander-consumer,banca-multiple,Banco del Trabajo,,200806
+santander-consumer,empresas-financieras,CrediScotia Financiera,200807,202502
+santander-consumer,empresas-financieras,Financiera Santander Consumer,202503,202505
+santander-consumer,banca-multiple,Santander Consumer Bank,202506,
+santander-consumo,empresas-credito,EDPYME Santander Consumo Perú,201511,202209
+santander-consumo,empresas-credito,Santander Consumo,202210,
+santander-peru,banca-multiple,Banco Santander Perú,200708,
+scotiabank-peru,banca-multiple,Banco Wiese Sudameris,,200604
+scotiabank-peru,banca-multiple,Scotiabank Perú,200605,
+serbanco,banca-multiple,Serbanco,,200009
+solidaridad,edpyme,Solidaridad,,201706
+solucion-financiera-de-credito-del-peru,empresas-financieras,Solución Financiera de Crédito del Perú,,200403
+surgir,empresas-financieras,Financiera Surgir,202404,
+tfc,empresas-financieras,Financiera TFC,,201912
+total-servicios-financieros,otro,Leasing Total,,202102
+total-servicios-financieros,empresas-credito,EDPYME Servicios Financieros Total,202103,202303
+total-servicios-financieros,empresas-credito,TOTAL Servicios Financieros,202304,
+vivela,empresas-credito,EDPYME Micasita,,202303
+vivela,empresas-credito,Vívela,202304,
+volvo-finance,empresas-credito,Volvo Finance,202208,

@@ -1,0 +1,17 @@
+# Procesamiento
+pandas>=2.0
+numpy
+pyarrow
+scipy
+statsmodels
+
+# Lectura de fuentes
+requests
+openpyxl
+xlrd
+pymupdf
+holidays
+
+# Necesario para descargar las tasas activas de la SBS (formulario web protegido contra bots).
+# Tras instalarlo, una sola vez: `python -m playwright install chromium`
+playwright

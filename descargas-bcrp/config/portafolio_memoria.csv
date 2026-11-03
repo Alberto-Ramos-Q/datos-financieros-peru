@@ -1,0 +1,11 @@
+dimension,orden,categoria,valor,unidad,corte,fuente,ubicacion,url
+moneda,1,Dólares de EE. UU.,83,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 47 (exposición efectiva de la posición de cambio), p. 82",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+moneda,2,Otras monedas,9,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 47, p. 82",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+moneda,3,Oro,8,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 47, p. 82",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+calificacion,1,AAA,14,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46 (portafolio de inversiones), p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+calificacion,2,AA+ a AA−,73,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+calificacion,3,A+ a A−,13,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+plazo,1,Hasta 3 meses,32,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+plazo,2,De 3 a 12 meses,13,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+plazo,3,Más de 1 año,55,%,2025-12,Memoria BCRP 2025,"Cap. 2, Cuadro 46, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf
+duracion,1,Duración promedio del portafolio,1.42,años,2025-12,Memoria BCRP 2025,"Cap. 2, §2.10, p. 81",https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2025/memoria-bcrp-2025-2.pdf

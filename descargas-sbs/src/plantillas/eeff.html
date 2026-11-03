@@ -1,0 +1,2141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estados financieros del sistema financiero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas, tablas
+   abiertas), con la paleta de la SBS: azul #001E6B y gris #B2B4B5. Composiciones: rampa ordinal del gris
+   SBS al azul SBS (q1–q6, validada en claro y en oscuro) en el orden del cuadro. Series: la entidad o el
+   ámbito en azul, su subsistema en azul medio, el sistema en gris punteado. Cascadas: lo que suma en azul
+   medio, lo que resta en gris, los subtotales en azul SBS; el signo va siempre escrito. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --q1: #b2b4b5; --q2: #8e99b4; --q3: #6a7ca6; --q4: #475d96; --q5: #243f82; --q6: #001e6b;
+  --c-ent: #001e6b; --c-sub: #6a7ca6; --c-sys: #868a93;
+  --w-add: #6a7ca6; --w-sub: #b2b4b5; --w-tot: #001e6b;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --q1: #4a5573; --q2: #4f68a8; --q3: #6e89cc; --q4: #93aae0; --q5: #b9c8ee; --q6: #dce3f5;
+  --c-ent: #c6d2f3; --c-sub: #6e89cc; --c-sys: #8a8f9c;
+  --w-add: #6e89cc; --w-sub: #545a6c; --w-tot: #c6d2f3;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.banner { background: var(--warn-bg); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 14px; margin: 0 0 16px; font-size: 14px; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 34px; font-family: var(--font-head); }
+.tile .sub { color: var(--ink2); font-size: 13px; font-variant-numeric: tabular-nums; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .foot { margin-top: auto; padding-top: 10px; color: var(--muted); font-size: 12.5px; }
+.d-flat { color: var(--ink); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; min-width: 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 780px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.grid2 > .card { margin-top: 12px; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--c-sys) 0 5px, transparent 5px 8px) !important; }
+.dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--muted) 0 3px, transparent 3px 5px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; max-width: 90ch; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 28px 8px; text-align: center; margin: 0; }
+.callout { color: var(--ink2); font-size: 14px; margin: 12px 0 0; max-width: 780px; }
+.callout b { color: var(--ink); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: 100%; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+#f-scope { max-width: min(420px, 100%); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.scope-note { color: var(--ink2); font-size: 13.5px; margin: 10px 2px 0; }
+.scope-note b { color: var(--ink); }
+
+.table-wrap { max-height: 460px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+.table-wrap.tall { max-height: none; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+tr.sec td { background: var(--wash); color: var(--ink2); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+tr.tot td { font-weight: 600; border-top: 1px solid var(--axis); }
+tr.subt td { font-weight: 600; }
+tr.pick { cursor: pointer; }
+tr.pick:hover td { background: var(--wash); }
+tr.sel td { background: var(--wash); }
+tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+td.name { white-space: normal; min-width: 210px; }
+td.why { color: var(--muted); font-size: 12px; white-space: normal; min-width: 92px; }
+tr.ref td:not(.name) { color: var(--muted); }
+.nmw { display: flex; align-items: center; gap: 4px; }
+.tg { font: inherit; width: 20px; height: 20px; flex: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; border-radius: 4px; padding: 0; line-height: 20px; }
+.tg:hover { background: var(--wash); color: var(--ink); }
+.tg.none { visibility: hidden; }
+.qa { font: inherit; font-size: 11.5px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 50%; width: 18px; height: 18px; padding: 0; line-height: 16px; cursor: pointer; flex: none; margin-left: 4px; }
+.qa:hover { color: var(--ink); border-color: var(--ink2); }
+.vig { color: var(--muted); font-size: 11.5px; margin-left: 6px; white-space: nowrap; }
+td.na { color: var(--muted); }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.nm.b { font-weight: 600; }
+.rv { font-size: 12px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.bar-seg, .wf-row { cursor: default; outline: none; }
+.bar-seg:hover rect, .bar-seg:focus-visible rect { stroke: var(--ink); stroke-width: 1.5; }
+.wf-row .bg { fill: transparent; }
+.wf-row:hover .bg, .wf-row:focus-visible .bg { fill: var(--wash); }
+
+.stack-legend { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto auto; gap: 4px 12px; align-items: baseline; margin: 10px 0 0; font-size: 13px; max-width: 640px; }
+.stack-legend div { display: contents; }
+.stack-legend .dot { transform: translateY(1px); }
+.stack-legend .t { color: var(--ink2); min-width: 0; }
+.stack-legend .v { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.stack-legend .m { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.14); min-width: 160px; max-width: 340px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, .tg:focus-visible, .qa:focus-visible, .theme button:focus-visible, .route a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.route { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 10px; counter-reset: st; }
+.route a { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.route a:hover { background: var(--wash); }
+.route .n { font-size: 12px; color: var(--muted); font-weight: 600; }
+.route .q { font-size: 13.5px; color: var(--ink); margin-top: 2px; }
+.route .w { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 21px; margin-bottom: 10px; }
+.edu h3 { font-size: 16px; margin: 20px 0 6px; font-weight: 600; }
+.edu p, .edu li { max-width: 74ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul, .edu ol { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 74ch; }
+.example { border-left: 3px solid var(--axis); padding: 4px 0 4px 14px; margin: 10px 0 12px; max-width: 74ch; color: var(--ink2); }
+.example b { color: var(--ink); }
+.defs { display: grid; grid-template-columns: minmax(130px, 170px) 1fr; gap: 8px 18px; margin: 10px 0 4px; }
+.defs dt { font-weight: 600; font-size: 13.5px; color: var(--ink2); }
+.defs dd { margin: 0; max-width: 74ch; }
+.edu .table-wrap { max-height: none; }
+.edu td, .edu th { white-space: normal; text-align: left; vertical-align: top; }
+.edu a, footer a, .ficha a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+.step { border-top: 1px solid var(--grid); padding-top: 14px; margin-top: 16px; }
+.step:first-of-type { border-top: 0; padding-top: 0; }
+
+.gl-tools { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 4px 0 12px; }
+.gl-tools input { font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; width: min(360px, 100%); }
+.gl-tools input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.gl-count { color: var(--muted); font-size: 13px; }
+.ficha { border-top: 1px solid var(--grid); padding: 14px 0 6px; scroll-margin-top: 16px; }
+.ficha.l2 { margin-left: 18px; }
+.ficha.l3 { margin-left: 36px; }
+.ficha.hl { background: var(--wash); border-radius: 8px; padding-left: 10px; padding-right: 10px; }
+.ficha h3 { font-family: var(--font-head); font-size: 16px; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.chip { font-family: var(--font-ui); font-size: 11.5px; font-weight: 600; color: var(--ink2); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; letter-spacing: .02em; }
+.ficha .path { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .grid2 { grid-template-columns: 1fr; }
+  .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+  .ficha.l2, .ficha.l3 { margin-left: 8px; }
+  td.name { min-width: 160px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px; }
+  .tile.hero .val { font-size: 32px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .route { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Balance y estado de resultados del sistema financiero</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">De qué está hecho el balance de los bancos, financieras, cajas y empresas de créditos del Perú, con qué se financian y cómo se forma su utilidad, mes a mes.</p>
+  <p class="banner" id="banner" hidden></p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-resumen" aria-controls="tab-resumen" aria-selected="true">Resumen</button>
+    <button type="button" role="tab" id="tabbtn-balance" aria-controls="tab-balance" aria-selected="false" tabindex="-1">Balance</button>
+    <button type="button" role="tab" id="tabbtn-resultados" aria-controls="tab-resultados" aria-selected="false" tabindex="-1">Estado de resultados</button>
+    <button type="button" role="tab" id="tabbtn-comparar" aria-controls="tab-comparar" aria-selected="false" tabindex="-1">Comparar</button>
+    <button type="button" role="tab" id="tabbtn-cuentas" aria-controls="tab-cuentas" aria-selected="false" tabindex="-1">Cuentas</button>
+    <button type="button" role="tab" id="tabbtn-guia" aria-controls="tab-guia" aria-selected="false" tabindex="-1">Cómo leer y cambios</button>
+  </div>
+
+  <div id="filterbox">
+    <div class="filters" id="filters" role="group" aria-label="Filtros">
+      <div class="f"><label for="f-scope">Entidad o agregado</label><select class="btn" id="f-scope"></select></div>
+      <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+      <div class="f" id="f-range-box"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+    </div>
+    <p class="scope-note" id="scope-note"></p>
+  </div>
+  <p class="empty" id="loading">Cargando datos…</p>
+
+  <!-- ===================== Resumen ===================== -->
+  <div id="tab-resumen" role="tabpanel" aria-labelledby="tabbtn-resumen" hidden>
+    <section class="kpis" id="kpis" aria-label="Cifras de estructura del mes seleccionado"></section>
+
+    <figure class="card" id="card-bal">
+      <div class="card-head">
+        <div>
+          <h2 id="bal-title">Composición del balance</h2>
+          <p id="bal-desc">De cada 100 soles de activo, cuántos son créditos, inversiones o liquidez (arriba), y de dónde salió ese dinero: depositantes, otros acreedores o los accionistas (abajo). Las dos barras suman lo mismo: el activo es igual al pasivo más el patrimonio.</p>
+        </div>
+        <div class="card-tools"><button class="btn" type="button" data-go="balance">Ver el detalle</button></div>
+      </div>
+      <div class="chart" id="ch-bal"></div>
+      <div id="bal-legend"></div>
+    </figure>
+
+    <figure class="card" id="card-wf">
+      <div class="card-head">
+        <div>
+          <h2 id="wf-title">Cómo se forma la utilidad</h2>
+          <p id="wf-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" type="button" data-go="resultados">Ver el detalle</button></div>
+      </div>
+      <div class="chart" id="ch-wf"></div>
+      <p class="note" id="wf-note"></p>
+    </figure>
+
+    <section class="card" aria-labelledby="route-title">
+      <h2 id="route-title">Una ruta para leer estos estados</h2>
+      <p class="note" style="margin-top:4px">Ocho preguntas, de lo general al detalle. Cada una lleva a la vista que la responde; la explicación completa está en «Cómo leer y cambios».</p>
+      <div class="route" id="route"></div>
+    </section>
+  </div>
+
+  <!-- ===================== Balance ===================== -->
+  <div id="tab-balance" role="tabpanel" aria-labelledby="tabbtn-balance" hidden>
+    <figure class="card" id="card-tree">
+      <div class="card-head">
+        <div>
+          <h2 id="tree-title">Balance general</h2>
+          <p id="tree-desc"></p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="f-bview" role="group" aria-label="Vista de la tabla"></div>
+          <button class="btn" type="button" id="tree-open">Abrir todo</button>
+          <button class="btn" type="button" id="tree-close">Cerrar todo</button>
+        </div>
+      </div>
+      <div class="table-wrap tall" id="tb-tree"></div>
+      <p class="note" id="tree-note"></p>
+    </figure>
+
+    <figure class="card" id="card-grow">
+      <div class="card-head">
+        <div>
+          <h2 id="grow-title">¿Qué explica el crecimiento?</h2>
+          <p id="grow-desc"></p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="f-gside" role="group" aria-label="Lado del balance"></div>
+          <button class="btn" type="button" data-table="grow">Ver tabla</button>
+        </div>
+      </div>
+      <div class="chart" id="ch-grow"></div>
+      <h3 style="margin-top:18px" id="growy-title">Por año, de diciembre a diciembre</h3>
+      <div class="legend" id="grow-legend"></div>
+      <div class="chart" id="ch-growy"></div>
+      <p class="note" id="grow-note"></p>
+      <div class="table-wrap" id="tb-grow" hidden></div>
+    </figure>
+
+    <div class="grid2">
+      <figure class="card" id="card-acc">
+        <div class="card-head"><div><h2 id="acc-title"></h2><p id="acc-desc"></p></div>
+          <div class="card-tools"><button class="btn" type="button" data-table="acc">Ver tabla</button></div></div>
+        <div class="legend" id="acc-legend"></div>
+        <div class="chart" id="ch-acc"></div>
+        <div class="table-wrap" id="tb-acc" hidden></div>
+      </figure>
+      <figure class="card" id="card-share">
+        <div class="card-head"><div><h2 id="share-title"></h2><p id="share-desc"></p></div>
+          <div class="card-tools"><button class="btn" type="button" data-table="share">Ver tabla</button></div></div>
+        <div class="legend" id="share-legend"></div>
+        <div class="chart" id="ch-share"></div>
+        <div class="table-wrap" id="tb-share" hidden></div>
+      </figure>
+    </div>
+
+    <figure class="card" id="card-kids">
+      <div class="card-head"><div><h2 id="kids-title"></h2><p id="kids-desc"></p></div></div>
+      <div class="chart" id="ch-kids"></div>
+      <p class="note" id="kids-note"></p>
+    </figure>
+
+    <figure class="card" id="card-cred">
+      <div class="card-head">
+        <div>
+          <h2>De créditos brutos a créditos netos</h2>
+          <p id="cred-desc">El balance muestra los créditos netos: lo prestado (vigentes, refinanciados y reestructurados, y atrasados) menos las provisiones por riesgo de no cobro y menos los intereses y comisiones no devengados, es decir, los que ya están en el saldo o se cobraron por adelantado pero que la entidad todavía no reconoce como ganados.</p>
+        </div>
+      </div>
+      <div class="chart" id="ch-cred"></div>
+      <p class="note" id="cred-note"></p>
+    </figure>
+
+    <figure class="card" id="card-fx">
+      <div class="card-head">
+        <div>
+          <h2>Moneda extranjera</h2>
+          <p>Qué parte del activo, de los créditos y de los depósitos está en dólares u otras monedas (valuada en soles al tipo de cambio de cada mes), y cuánto más activo que pasivo en moneda extranjera tiene la entidad, en relación con su patrimonio.</p>
+        </div>
+        <div class="card-tools"><button class="btn" type="button" data-table="fx">Ver tabla</button></div>
+      </div>
+      <div class="grid2" style="gap:18px">
+        <div style="min-width:0"><h3 style="margin-top:12px">Dolarización</h3><div class="legend" id="fx-legend"></div><div class="chart" id="ch-fx"></div></div>
+        <div style="min-width:0"><h3 style="margin-top:12px">Activo menos pasivo en moneda extranjera, % del patrimonio</h3><div class="legend" id="gap-legend"></div><div class="chart" id="ch-gap"></div></div>
+      </div>
+      <p class="note" id="fx-note"></p>
+      <div class="table-wrap" id="tb-fx" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Estado de resultados ===================== -->
+  <div id="tab-resultados" role="tabpanel" aria-labelledby="tabbtn-resultados" hidden>
+    <figure class="card" id="card-egp">
+      <div class="card-head">
+        <div>
+          <h2 id="egp-title">Estado de resultados</h2>
+          <p id="egp-desc"></p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="f-base" role="group" aria-label="Cómo expresar las cifras"></div>
+          <button class="btn" type="button" id="egp-open">Abrir todo</button>
+          <button class="btn" type="button" id="egp-close">Cerrar todo</button>
+        </div>
+      </div>
+      <div class="table-wrap tall" id="tb-egp"></div>
+      <p class="note" id="egp-note"></p>
+    </figure>
+
+    <figure class="card" id="card-line">
+      <div class="card-head"><div><h2 id="line-title"></h2><p id="line-desc"></p></div>
+        <div class="card-tools"><button class="btn" type="button" data-table="line">Ver tabla</button></div></div>
+      <div class="legend" id="line-legend"></div>
+      <div class="chart" id="ch-line"></div>
+      <p class="note" id="line-note"></p>
+      <div class="table-wrap" id="tb-line" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-qual">
+      <div class="card-head">
+        <div>
+          <h2>¿Qué parte de la utilidad se repite cada año?</h2>
+          <p>Separa lo que viene del negocio de prestar, captar y cobrar comisiones, después de gastos administrativos, provisiones para créditos y depreciación (núcleo), de lo que depende del mercado o de hechos puntuales (diferencia de cambio, valorización de inversiones, derivados, resultados de subsidiarias y otros financieros, venta de cartera, otros ingresos y gastos). Flujos de 12 meses en % del activo promedio. «Núcleo recurrente» y «partidas volátiles» son una agrupación analítica de este tablero, no categorías contables de la SBS.</p>
+        </div>
+        <div class="card-tools"><button class="btn" type="button" data-table="qual">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="qual-legend"></div>
+      <div class="chart" id="ch-qual"></div>
+      <p class="note" id="qual-note"></p>
+      <div class="table-wrap" id="tb-qual" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-yld">
+      <div class="card-head">
+        <div>
+          <h2 id="yld-title">Cuánto rinde cada activo y cuánto cuesta cada fuente de fondeo</h2>
+          <p>Rendimiento o costo implícito de cada partida: sus ingresos o gastos financieros de los últimos 12 meses sobre el promedio de sus 12 saldos de fin de mes, en moneda nacional, en moneda extranjera y en total. Son promedios de toda la cartera y de todo el fondeo, no tasas de operaciones nuevas. Elija una fila para ver su historia.</p>
+        </div>
+        <div class="card-tools"><button class="btn" type="button" data-table="yld">Ver tabla</button></div>
+      </div>
+      <div class="table-wrap tall" id="tb-yldm"></div>
+      <h3 style="margin-top:18px" id="yld-ch-title"></h3>
+      <div class="legend" id="yld-legend"></div>
+      <div class="chart" id="ch-yld"></div>
+      <p class="note" id="yld-note"></p>
+      <div class="table-wrap" id="tb-yld" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Comparar ===================== -->
+  <div id="tab-comparar" role="tabpanel" aria-labelledby="tabbtn-comparar" hidden>
+    <figure class="card" id="card-cmpA">
+      <div class="card-head"><div><h2>¿De qué está hecho el activo?</h2><p id="cmpA-desc"></p></div></div>
+      <div class="legend" id="cmpA-legend"></div>
+      <div class="chart" id="ch-cmpA"></div>
+    </figure>
+    <figure class="card" id="card-cmpP">
+      <div class="card-head"><div><h2>¿Con qué se financia?</h2><p id="cmpP-desc"></p></div></div>
+      <div class="legend" id="cmpP-legend"></div>
+      <div class="chart" id="ch-cmpP"></div>
+    </figure>
+    <figure class="card" id="card-cmpR">
+      <div class="card-head"><div><h2>Estado de resultados por cada S/ 100 de activo promedio</h2><p id="cmpR-desc"></p></div></div>
+      <div class="table-wrap tall" id="tb-cmpR"></div>
+      <p class="note" id="cmpR-note"></p>
+    </figure>
+  </div>
+
+  <!-- ===================== Cuentas ===================== -->
+  <div id="tab-cuentas" role="tabpanel" aria-labelledby="tabbtn-cuentas" hidden>
+    <div class="edu">
+      <section id="gl-intro-box">
+        <h2>Las cuentas del balance y del estado de resultados</h2>
+        <div id="gl-intro"></div>
+      </section>
+      <section id="gl-conceptos-box">
+        <h2>Conceptos que conviene tener claros</h2>
+        <div id="gl-conceptos"></div>
+      </section>
+      <section>
+        <h2>Cuenta por cuenta</h2>
+        <p>En el orden del cuadro de la SBS. Las cuentas principales (rubros) van primero y debajo, con sangría, sus subcuentas y su detalle.</p>
+        <div class="gl-tools">
+          <input type="search" id="gl-q" placeholder="Buscar una cuenta (p. ej. canje, CTS, provisiones)" aria-label="Buscar una cuenta">
+          <div class="seg" id="gl-f" role="group" aria-label="Estado financiero"></div>
+          <span class="gl-count" id="gl-count"></span>
+        </div>
+        <div id="gl-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ===================== Cómo leer y cambios ===================== -->
+  <div id="tab-guia" role="tabpanel" aria-labelledby="tabbtn-guia" hidden>
+    <div class="edu">
+      <section id="g-reglas">
+        <h2>Cómo leer estos estados</h2>
+        <p>El balance general (estado de situación financiera) es una foto a fin de mes: lo que la entidad tiene (activo) y de dónde salió el dinero para tenerlo (pasivo, lo que debe; patrimonio, lo que pusieron o dejaron los dueños). El estado de resultados (estado de ganancias y pérdidas) es una película: lo que ganó y gastó entre enero y ese mes. En una entidad financiera el dinero es a la vez la materia prima y el producto: capta depósitos o se endeuda para prestar, y gana por la diferencia entre lo que cobra y lo que paga.</p>
+        <h3>Tres reglas antes de empezar</h3>
+        <ol>
+          <li><b>Lea porcentajes antes que montos.</b> Un banco grande y una caja rural pequeña no se comparan en soles sino en «de cada 100 soles de activo, cuántos son créditos». Es el análisis vertical o de tamaño común: cada partida como porcentaje del total [1].</li>
+          <li><b>Mire la tendencia.</b> La dirección de un indicador importa tanto como su nivel [1]. Compare cada mes con el mismo mes del año anterior (análisis horizontal).</li>
+          <li><b>Compare con el grupo correcto.</b> Una caja municipal se compara con las cajas municipales y con su propia historia, no con la banca [1].</li>
+        </ol>
+        <h3>Dos cálculos que usa todo el tablero</h3>
+        <dl class="defs">
+          <dt>Flujo de 12 meses</dt>
+          <dd>El estado de resultados del Boletín es acumulado de enero al mes: el de marzo suma tres meses y el de diciembre, doce. Para tener siempre un año completo se usa el flujo de 12 meses, la misma regla de las notas de los cuadros de indicadores de la SBS:
+            <div class="formula">Flujo 12 meses (t) = acumulado (t) + acumulado de diciembre del año anterior − acumulado del mismo mes del año anterior</div>
+            En diciembre es igual al acumulado del año. Como los datos empiezan en julio de 2010, la serie continua de flujos de 12 meses empieza en julio de 2011; antes solo existe el de diciembre de 2010, que es el acumulado de ese año.</dd>
+          <dt>Activo promedio</dt>
+          <dd>Promedio de los 12 saldos de fin de mes del activo total, del mes y de los 11 anteriores. Es el denominador de las cifras «en % del activo promedio»: el resultado se genera durante todo el año, con el activo de todo el año [2, 3]. Es la misma regla del tablero de rentabilidad de esta serie.</dd>
+        </dl>
+        <h3>Cinco modelos de negocio</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Subsistema</th><th>Cómo se financia</th><th>Qué cambia en la lectura</th></tr></thead>
+          <tbody>
+            <tr><td>Banca múltiple</td><td>Depósitos del público, adeudos y emisión de valores</td><td>Compare la mezcla de depósitos, adeudos y valores (paso 3) y revise los contingentes (paso 8)</td></tr>
+            <tr><td>Empresas financieras</td><td>Pueden captar depósitos del público</td><td>Mire el costo del fondeo y el gasto de operación de créditos pequeños o de consumo (paso 5)</td></tr>
+            <tr><td>Cajas municipales</td><td>Depósitos de ahorro, a plazo y CTS</td><td>Mire la mezcla ahorro / plazo / CTS dentro de las obligaciones con el público (paso 3)</td></tr>
+            <tr><td>Cajas rurales</td><td>Depósitos del público</td><td>Entidades pequeñas: los porcentajes saltan de un mes a otro; prefiera flujos de 12 meses y promedios</td></tr>
+            <tr><td>Empresas de créditos</td><td><b>No captan depósitos del público</b>: patrimonio, adeudos y valores [10]</td><td>No pagan primas al Fondo de Seguro de Depósitos y sus obligaciones con el público son mínimas (otras obligaciones, no depósitos). Hasta 2022 se llamaban EDPYME [10]</td></tr>
+          </tbody>
+        </table></div>
+        <p class="note">En entidades que prestan montos pequeños el gasto de operación por cada sol prestado es naturalmente más alto; eso solo no prueba ineficiencia [3].</p>
+      </section>
+
+      <section id="g-ruta">
+        <h2>La ruta de lectura, paso a paso</h2>
+        <div id="g-steps"></div>
+      </section>
+
+      <section id="g-errores">
+        <h2>Errores típicos de lectura</h2>
+        <ol>
+          <li><b>Comparar acumulados de meses distintos.</b> La «caída» de la utilidad en enero no es una pérdida: el acumulado vuelve a empezar. Compare flujos de 12 meses, o el acumulado contra el mismo mes del año anterior.</li>
+          <li><b>Dividir un flujo parcial entre un saldo.</b> Ingresos acumulados a abril entre créditos de abril no es un rendimiento anual. Use el flujo de 12 meses y saldos promedio [3].</li>
+          <li><b>Sumar créditos brutos y netos, o tratar las provisiones como activo.</b> Los créditos netos ya restan las provisiones y los intereses no devengados. Para el peso en el activo use los netos; para la mezcla de productos, los saldos antes de provisiones (en el cuadro, la apertura por producto solo existe para los créditos vigentes). Préstamos brutos y provisiones se leen por separado [2].</li>
+          <li><b>Leer la diferencia de cambio sola.</b> Lo que importa es el resultado neto de cambio, junto con los derivados que pueden cubrirlo. Por lo mismo, el «margen financiero bruto» del Boletín no es solo margen de intereses: incluye diferencia de cambio, derivados y valorización de inversiones.</li>
+          <li><b>Leer el crecimiento sin el tipo de cambio.</b> Si el sol se deprecia, los saldos en dólares suben en soles sin que se haya prestado ni captado más. Compare el crecimiento en soles corrientes con el crecimiento a tipo de cambio constante (tabla del balance y «¿Qué explica el crecimiento?»).</li>
+          <li><b>Sumar los contingentes al activo.</b> Son compromisos fuera del balance; el monto de los derivados es un valor de referencia (nocional) que puede no reflejar el riesgo real [1].</li>
+          <li><b>Comparar modelos de negocio distintos.</b> Sin depósitos del público, la relación créditos / depósitos de una empresa de créditos no existe [10]. En entidades muy pequeñas un solo hecho mueve mucho los porcentajes.</li>
+          <li><b>Ignorar los cambios de norma y de perímetro.</b> En enero de 2013 cambió el Manual de Contabilidad (ver abajo). Fusiones, conversiones y cambios de subsistema (por ejemplo, una financiera que pasa a banco) mueven los agregados sin que haya crecimiento.</li>
+        </ol>
+      </section>
+
+      <section id="g-cambios">
+        <h2>Cambios a lo largo del tiempo</h2>
+        <ul id="ch-resumen"></ul>
+        <div class="table-wrap" id="tb-normas"></div>
+        <h3>Cortes que se ven en los datos</h3>
+        <ul id="ch-datos"></ul>
+      </section>
+
+      <section id="g-metodo">
+        <h2>Cómo se calcula</h2>
+        <ul>
+          <li><b>Fuente.</b> Balance general y estado de ganancias y pérdidas por empresa del Boletín Estadístico de la SBS, mensual, de <span data-v="desde"></span> a <span data-v="hasta"></span>, en miles de soles, con apertura en moneda nacional y extranjera (la moneda extranjera viene valuada en soles).</li>
+          <li><b>Agregados.</b> Cada subsistema es la suma de sus empresas presentes ese mes; coincide con la columna total del cuadro de la SBS en todos los meses, salvo las cajas municipales de enero a abril de 2014 en el balance (ver «Cortes»). El sistema suma todas las empresas, no los subsistemas: una empresa que cambia de subsistema a mitad de año no se cuenta dos veces. Cuando el negocio de una empresa pasa a otra de otro subsistema (por ejemplo, el de Edyficar a Mibanco en marzo de 2015) o una empresa cambia de subsistema (por ejemplo, Compartamos, de financiera a banco en enero de 2025), el total de los dos subsistemas salta sin que haya crecimiento: ver «Cambios a lo largo del tiempo».</li>
+          <li><b>Banco de Crédito del Perú, Interbank y Scotiabank.</b> Sin sus sucursales en el exterior: es la columna que suma el total del cuadro. Las columnas «con sucursales en el exterior» (del BCP en toda la serie, de Interbank de 2015 a 2020 y de Scotiabank en 2015 y 2016) se dejan fuera.</li>
+          <li><b>Empresas que cambian de subsistema.</b> Cada una tiene una sola serie con toda su historia, para que sus flujos de 12 meses no se corten con el traspaso; el selector la lista en cada subsistema en que estuvo.</li>
+          <li><b>Flujos de 12 meses de los agregados.</b> Una empresa que sale del agregado durante el año conserva su último acumulado hasta diciembre, para que lo que ganó de enero a su salida no se pierda del flujo. Con esta regla el resultado neto de 12 meses coincide con el del tablero de rentabilidad de esta serie, salvo diferencias de redondeo de S/ 1 mil. Una empresa que llega a un subsistema a mitad de año trae su acumulado desde enero: en el año del traspaso, el flujo de 12 meses del subsistema de llegada incluye lo que ganó antes de llegar, que también queda en el de salida (por ejemplo, Efectiva, de financiera a banco en junio de 2026). El sistema no tiene ese doble conteo.</li>
+          <li><b>Controles.</b> En todos los meses y empresas, salvo diferencias de redondeo, cada cuenta es la suma de sus subcuentas, moneda nacional más extranjera es el total, el activo es igual al pasivo más el patrimonio y la cascada del estado de resultados cuadra de los ingresos financieros al resultado neto.</li>
+          <li><b>Líneas que una empresa no reporta.</b> Dentro de su vigencia son cero (por ejemplo, comercio exterior en las cajas). Fuera de su vigencia la línea no existe: la tabla la omite o la marca «no existe».</li>
+          <li><b>Filas que se omiten.</b> La caja municipal de Pisco de enero a abril de 2014 (el cuadro repite sus cifras del 31 de diciembre de 2013) y la caja rural Del Centro desde mayo de 2026 (aparece con activo cero).</li>
+          <li><b>Tipo de cambio constante.</b> El Boletín presenta la moneda extranjera en soles, al tipo de cambio contable de fin de mes que la SBS informa al pie de sus cuadros (por ejemplo, S/ 3.362 por dólar en agosto de 2026); entre 2010 y 2026 difiere en menos de S/ 0.02 del tipo de cambio interbancario de fin de mes del BCRP. A tipo de cambio constante, una cuenta del mes vale moneda nacional + moneda extranjera × tipo de cambio de hace 12 meses / tipo de cambio del mes. Supone que toda la moneda extranjera está en dólares.</li>
+          <li><b>Contribución al crecimiento.</b> Para cada rubro, (saldo del mes a tipo de cambio constante − saldo de hace 12 meses) / total de hace 12 meses, en puntos porcentuales; el efecto del tipo de cambio es la suma, en todos los rubros, de la moneda extranjera del mes × (1 − tipo de cambio de hace 12 meses / tipo de cambio del mes) / total de hace 12 meses. Rubros + efecto = crecimiento en soles corrientes. Las cifras de entrada están redondeadas a miles de soles: el total del gráfico es la suma de los rubros y puede diferir del total del cuadro en unos pocos miles.</li>
+          <li><b>Rendimientos y costos implícitos.</b> Flujo de 12 meses de los ingresos o gastos financieros de la partida / promedio de los 12 saldos de fin de mes de sus cuentas (del mes y de los 11 anteriores), en moneda nacional (total − extranjera), extranjera y total. Pares: ingresos por disponible / disponible; por fondos interbancarios / fondos interbancarios del activo; por inversiones / inversiones netas menos inversiones en subsidiarias; por créditos directos / créditos vigentes, refinanciados y reestructurados y atrasados; y gastos por obligaciones con el público, depósitos del sistema financiero, fondos interbancarios, adeudos y valores en circulación / el saldo de cada uno. Una cifra no se muestra cuando falta un año de datos, cuando el saldo promedio es nulo o casi nulo (menos de S/ 0.1 millones) o, en los fondos interbancarios, cuando sale negativa o mayor a 25 %; la celda dice el motivo.</li>
+          <li><b>Activo en moneda extranjera menos pasivo en moneda extranjera.</b> Es, en concepto, lo que el reglamento de la SBS llama «posición de cambio del balance», aquí con las cifras del cuadro. No es la posición global en moneda extranjera que la SBS limita: esa suma la posición neta en derivados y se compara con el patrimonio efectivo, no con el contable [9].</li>
+        </ul>
+      </section>
+
+      <section id="g-fuentes">
+        <h2>Fuentes</h2>
+        <ol class="srcs" id="srcs">
+          <li>Van Greuning, H. y Brajovic Bratanovic, S. (2020). <i>Analyzing Banking Risk</i>, 4.ª ed. Banco Mundial: análisis de tamaño común y de tendencias (pp. 79-83), activos que no rinden y partidas fuera de balance (pp. 96-104), estructura del ingreso en % del activo y calidad de las utilidades (pp. 111-120), riesgo cambiario (pp. 261-264). <a href="https://openknowledge.worldbank.org/entities/publication/6d3b0320-de35-5f51-b2cd-113c5a359b2b/full" target="_blank" rel="noopener">openknowledge.worldbank.org</a></li>
+          <li>FMI (2019). <i>Financial Soundness Indicators Compilation Guide</i>: rentabilidad sobre activo promedio, préstamos en moneda extranjera, préstamos brutos y provisiones por separado. <a href="https://www.imf.org/-/media/files/data/2019/2019-fsi-guide.pdf" target="_blank" rel="noopener">imf.org</a></li>
+          <li>CGAP (2003). <i>Microfinance Consensus Guidelines: Definitions of Selected Financial Terms, Ratios, and Adjustments for Microfinance</i>: anualizar y promediar (pp. 10-11), rendimiento de la cartera bruta y costo de los fondos (pp. 12 y 14), gasto operativo y tamaño del préstamo (pp. 16-17). <a href="https://cgap.org/sites/default/files/researches/documents/CGAP-Consensus-Guidelines-Definitions-of-Selected-Financial-Terms-Ratios-and-Adjustments-for-Microfinance-Sep-2003.pdf" target="_blank" rel="noopener">cgap.org</a></li>
+          <li>FFIEC, <i>Uniform Bank Performance Report, User's Guide</i>, Summary Ratios: ingresos, gastos y provisiones en % anualizado del activo promedio. <a href="https://www.cdr.ffiec.gov/CDRDownload/CDR/UserGuide/v186/FFIEC%20UBPR%20User%20Guide%20Summary%20Ratios--Page%201_2026-08-20.PDF" target="_blank" rel="noopener">ffiec.gov</a></li>
+          <li>FFIEC (1996). <i>Uniform Financial Institutions Rating System</i>, Federal Register 61(245): calidad y fuentes de las utilidades; diversificación y estabilidad del fondeo. <a href="https://www.govinfo.gov/content/pkg/FR-1996-12-19/html/96-32174.htm" target="_blank" rel="noopener">govinfo.gov</a></li>
+          <li>Fitch Ratings, <i>Form NRSRO, Exhibit 2</i>: métricas centrales de bancos (préstamos / depósitos de clientes) y de financieras que no captan depósitos. <a href="https://www.sec.gov/Archives/edgar/data/1652282/000110465926036549/tm269846d1_ex99-e2.pdf" target="_blank" rel="noopener">sec.gov</a></li>
+          <li>FMI (2017). <i>Global Financial Stability Report</i>, abril, figura 1.23: ingresos y costos de los bancos en % del activo. <a href="https://www.imf.org/-/media/files/publications/gfsr/2017/april/chapter-1/figure1-23-v2.pdf" target="_blank" rel="noopener">imf.org</a></li>
+          <li>SBS, Resolución N.° 3155-2020: intereses devengados no cobrados de créditos reprogramados. <a href="https://busquedas.elperuano.pe/api/visor_html/1913128-1" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>SBS, Resolución N.° 4906-2017, Reglamento para la Gestión del Riesgo de Mercado, art. 2: «posición de cambio del balance» (activos menos pasivos en moneda extranjera) y «posición global» (esa posición más la posición contable neta en derivados) <a href="https://vlex.com.pe/vid/699619421" target="_blank" rel="noopener">vlex.com.pe</a>; y Resolución N.° 00066-2023, que sustituye su art. 34: posiciones globales de sobreventa y de sobrecompra de hasta 10 % del patrimonio efectivo, que deben cumplirse diariamente. <a href="https://busquedas.elperuano.pe/api/visor_html/2141805-1" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>Decreto Legislativo N.° 1531 (2022), modifica la Ley N.° 26702: empresas de créditos (art. 282, numeral 6). <a href="https://busquedas.elperuano.pe/api/visor_html/2049959-1" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>SBS, Boletín Estadístico del sistema financiero: balance general y estado de ganancias y pérdidas por empresa, cuadros B-2201 (banca múltiple), B-3101 (empresas financieras), C-1101 (cajas municipales), C-2101 (cajas rurales) y C-4103 (empresas de créditos). <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+        </ol>
+        <div id="srcs-normas"></div>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D_GZ = /*__DATA__*/null;
+const T = /*__TEXTOS__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('eeff-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('eeff-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+// Payload: JSON → gzip → base64 (lo arma el generador). Devuelve el objeto de datos.
+async function loadData(b64) {
+  const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const stream = new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return JSON.parse(await new Response(stream).text());
+}
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 && +Math.abs(v).toFixed(d) !== 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 1) => v == null ? '—' : fx(v, d) + '%';
+// Con signo; lo que redondea a cero va sin signo («0.0 pp», no «−0.0 pp»).
+const sgnd = (v, d) => { const r = +Math.abs(v).toFixed(d); return r === 0 ? '' : v > 0 ? '+' : '−'; };
+const spp = (v, d = 1) => v == null ? '—' : sgnd(v, d) + Math.abs(v).toFixed(d) + ' pp';
+const spct = (v, d = 1) => v == null ? '—' : sgnd(v, d) + Math.abs(v).toFixed(d) + '%';
+const sgn = v => v > 0 ? '+' : v < 0 ? '−' : '';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+// Montos: los datos vienen en miles de soles.
+const money = v => v == null ? '—' : (v < 0 ? '−' : '') + (Math.abs(v) >= 1e6 ? 'S/ ' + f1.format(Math.abs(v) / 1e6) + ' mil mill.' : 'S/ ' + f0.format(Math.abs(v) / 1e3) + ' mill.');
+const smoney = v => v == null ? '—' : (v > 0 ? '+' : '') + money(v);
+const mill = v => v == null ? '—' : (v < 0 && Math.round(Math.abs(v) / 1e3) !== 0 ? '−' : '') + f0.format(Math.abs(v) / 1e3);
+const smill = v => v == null ? '—' : sgnd(v / 1e3, 0) + f0.format(Math.abs(v) / 1e3);
+
+let D, MONTHS, N, NODES, NI, KIDS, SUBS, SUB_BY, J2013, J2011;
+let TA, TP, TPP, PAT, CONT, RN, IF_, MFB, CN;
+const state = {tab: 'resumen', scope: 'sistema', mi: 0, range: '10a', acct: null, bview: 'comp', open: new Set(), base: 'ap', line: null, eopen: new Set(), gq: '', gf: 'all', gside: 'A', yrow: 'cred'};
+const RANGES = [
+  {id: '3a', label: '3 años', n: 36},
+  {id: '5a', label: '5 años', n: 60},
+  {id: '10a', label: '10 años', n: 120},
+  {id: 'todo', label: 'Desde 2010', n: Infinity},
+];
+
+// ---------- Datos ----------
+const isEnt = k => k.includes('/');
+const scObj = k => isEnt(k) ? D.ents[k.split('/')[1]] : D.scopes[k];
+const cache = new Map();
+function memo(key, tag, fn) { const k = key + '|' + tag; if (!cache.has(k)) cache.set(k, fn()); return cache.get(k); }
+// Serie completa del nodo i (largo N; null fuera del rango). V[i] null = «cero en todo el rango»: vale 0 en los
+// meses en que el ámbito tiene ese estado (total activo para el balance, resultado neto para el EGP) y la
+// línea está vigente; null en el resto.
+function S(key, i) {
+  return memo(key, 's' + i, () => {
+    const sc = scObj(key), nd = NODES[i], out = new Array(N).fill(null);
+    const pres = sc.V[nd.e === 'R' ? RN : TA], v = sc.V[i];
+    const from = nd.from || '0000-00', to = nd.to || '9999-99';
+    for (let j = 0; j < pres.length; j++) {
+      const m = MONTHS[sc.a + j];
+      if (pres[j] === null || m < from || m > to) continue;
+      out[sc.a + j] = v ? v[j] : 0;
+    }
+    return out;
+  });
+}
+// Moneda extranjera del nodo i (solo nodos de D.fx; si no, null). Misma regla de ceros.
+function X(key, i) {
+  return memo(key, 'x' + i, () => {
+    const jx = D.fx.indexOf(i);
+    if (jx < 0) return null;
+    const sc = scObj(key), base = S(key, i), x = sc.X[jx];
+    return base.map((b, j) => b === null ? null : (x ? (x[j - sc.a] ?? null) : 0));
+  });
+}
+// Flujo de 12 meses: acumulado + diciembre anterior − mismo mes del año anterior; en diciembre, el acumulado.
+// En los agregados se suma antes el arrastre de las empresas que salen (D).
+// Venta de cartera: antes de tener línea propia (2015-08/09) vale 0 en los meses con estado de resultados, para
+// que su flujo de 12 meses exista desde el primer mes; hasta entonces ese resultado iba en otros ingresos y gastos,
+// así que la suma de ambos sigue siendo el flujo correcto.
+const ZERO_BEFORE = new Set(['resultado_venta_cartera']);
+function flowOf(acc) {
+  return acc.map((v, j) => {
+    if (v === null) return null;
+    const m = +MONTHS[j].slice(5, 7);
+    if (m === 12) return v;
+    const dec = acc[j - m], prev = acc[j - 12];
+    return dec == null || prev == null ? null : v + dec - prev;
+  });
+}
+function F(key, i) {
+  return memo(key, 'f' + i, () => {
+    const sc = scObj(key), acc = S(key, i).slice();
+    if (ZERO_BEFORE.has(NODES[i].k)) { const rn = S(key, RN); for (let j = 0; j < N; j++) if (acc[j] === null && rn[j] !== null && MONTHS[j] < NODES[i].from) acc[j] = 0; }
+    for (const [j, dv] of (sc.D && sc.D[i]) || []) if (acc[sc.a + j] !== null) acc[sc.a + j] += dv;
+    return flowOf(acc);
+  });
+}
+// Flujo de 12 meses de la parte en moneda extranjera de una línea del estado de resultados (solo las de D.fx),
+// con el arrastre de las salidas de los agregados (DX), igual que F.
+function FX12(key, i) {
+  return memo(key, 'fxf' + i, () => {
+    const xs = X(key, i);
+    if (!xs) return null;
+    const sc = scObj(key), acc = xs.slice();
+    for (const [j, dv] of (sc.DX && sc.DX[i]) || []) if (acc[sc.a + j] !== null) acc[sc.a + j] += dv;
+    return flowOf(acc);
+  });
+}
+// Promedio de los 12 saldos de fin de mes (t−11 … t); null si falta alguno.
+function avg12(s) {
+  return s.map((_, j) => {
+    if (j < 11) return null;
+    let sum = 0;
+    for (let k = j - 11; k <= j; k++) { if (s[k] === null) return null; sum += s[k]; }
+    return sum / 12;
+  });
+}
+const AP = key => memo(key, 'ap', () => avg12(S(key, TA)));
+const at = (arr, j) => arr && j != null && j >= 0 && j < N ? arr[j] : null;
+const sumS = (key, ks, j, fn = S) => { let t = 0; for (const k of ks) { const v = at(fn(key, NI[k]), j); if (v == null) return null; t += v; } return t; };
+const sumF = (key, ks, j) => sumS(key, ks, j, F);
+const ratio = (a, b) => a == null || !b ? null : 100 * a / b;
+const vig = (i, j) => { const nd = NODES[i], m = MONTHS[j]; return !(nd.from && m < nd.from) && !(nd.to && m > nd.to); };
+// Tipo de cambio constante. La moneda extranjera del Boletín ya viene en soles, al tipo de cambio contable de
+// fin de cada mes (D.tc, de la nota de los cuadros). Valuada al tipo de cambio del mes jp, la cuenta i del mes j
+// vale MN + ME × TC(jp) / TC(j) = saldo − ME × (1 − TC(jp) / TC(j)).
+const fxLoss = (j, jp) => 1 - D.tc[jp] / D.tc[j];
+function atFx(key, i, j, jp) { const v = at(S(key, i), j); if (v == null) return null; return v - (at(X(key, i), j) || 0) * fxLoss(j, jp); }
+const tcLabel = j => 'S/ ' + D.tc[j].toFixed(3) + ' por dólar en ' + mLabel(MONTHS[j]);
+function topOf(i) { while (NODES[i].p >= 0 && NODES[NODES[i].p].e === 'R') i = NODES[i].p; return i; }
+const dsign = i => NODES[topOf(i)].sg;
+
+// Valor del estado de resultados según la base: flujo de 12 meses, % del activo promedio, % de los ingresos
+// financieros (ambos de 12 meses) o acumulado del año publicado.
+function egpVal(key, i, j, base = state.base) {
+  if (base === 'acc') return at(S(key, i), j);
+  const f = at(F(key, i), j);
+  if (f == null) return null;
+  if (base === 'f12') return f;
+  if (base === 'ap') { const a = at(AP(key), j); return a ? 100 * f / a : null; }
+  const g = at(F(key, IF_), j);
+  return g ? 100 * f / g : null;
+}
+const apOf = (key, j, v) => { const a = at(AP(key), j); return v == null || !a ? null : 100 * v / a; };
+
+// Ámbitos.
+function entSubAt(key, j) { const e = scObj(key); for (const [s, a, b] of e.m) if (j >= a && j <= b) return s; return null; }
+function nameOf(key, j) {
+  if (key === 'sistema') return 'Sistema financiero';
+  if (!isEnt(key)) return SUB_BY[key].l;
+  const e = scObj(key), s = (j != null && entSubAt(key, j)) || key.split('/')[0];
+  return e.n[s] || e.n[key.split('/')[0]] || Object.values(e.n)[0];
+}
+// Mes que se muestra: el elegido o, si la entidad ya no reporta, su último mes con datos.
+function effIdx(key) { const s = S(key, TA); for (let j = state.mi; j >= 0; j--) if (s[j] != null) return j; return null; }
+function firstIdx(key) { const s = S(key, TA); return s.findIndex(v => v != null); }
+function lastIdx(key) { const s = S(key, TA); for (let j = N - 1; j >= 0; j--) if (s[j] != null) return j; return null; }
+// Comparadores del ámbito en el mes j: su subsistema (en ese mes) y el sistema.
+function peersOf(key, j) {
+  if (key === 'sistema') return [];
+  if (!isEnt(key)) return ['sistema'];
+  const s = entSubAt(key, j);
+  return (s ? [s] : []).concat(['sistema']);
+}
+const COLOR_OF = (key, k) => k === 0 ? 'var(--c-ent)' : key === 'sistema' ? 'var(--c-sys)' : 'var(--c-sub)';
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) { if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]); }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const $ = id => document.getElementById(id);
+function niceStep(span, count) { const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag; return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag; }
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count), a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+function axisOf(u, absMax) {
+  if (u === 'pct') return {div: 1, unit: null, tick: t => (t === 0 ? '0' : numTick(t)) + '%'};
+  const big = absMax >= 1e6;
+  return {div: big ? 1e6 : 1e3, unit: big ? 'Miles de millones de S/' : 'Millones de S/', tick: t => Math.abs(t) >= 1000 ? f0.format(t) : numTick(t)};
+}
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) { if (evt && evt.clientX != null) return [evt.clientX, evt.clientY]; const b = node.getBoundingClientRect(); return [b.left + b.width / 2, b.top]; }
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12, maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0).map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) { const g = svgEl('g', {class: 'axis'}, svg); for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text; }
+function visIdx() { const r = RANGES.find(z => z.id === state.range), out = []; for (let i = Math.max(0, N - r.n); i < N; i++) out.push(i); return out; }
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide) {
+  const n = idx.length;
+  let cur = null;
+  const atI = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(atI(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt); });
+  hit.addEventListener('pointerleave', onHide);
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(atI((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+function legendItem(lg, cls, color, text) { const s = htmlEl('span', null, lg); const i = htmlEl('i', {cls}, s); if (color) i.style.background = color; s.appendChild(document.createTextNode(text)); return i; }
+function lineLegend(id, series, marker) {
+  const lg = $(id);
+  lg.replaceChildren();
+  if (series.length > 1) for (const s of series) { const i = legendItem(lg, 'ln' + (s.dash ? ' dash' : ''), s.dash ? null : s.color, s.label); if (s.dash) i.style.borderTopColor = s.color; }
+  if (marker) { const s = htmlEl('span', null, lg); htmlEl('i', {cls: 'vref'}, s); s.appendChild(document.createTextNode('Cambio del Manual de Contabilidad (ene 2013)')); }
+}
+
+// ---------- Gráfico de líneas (cruz y tooltip) ----------
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const series = cfg.series, fmt = cfg.fmt || pct;
+  const idx = trimIdx(cfg.idx, i => series.some(s => s.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  let lo = 0, hi = 0;
+  for (const i of idx) for (const s of series) { const v = s.get(i); if (v == null) continue; if (v > hi) hi = v; if (v < lo) lo = v; }
+  const ax = axisOf(cfg.u, Math.max(-lo, hi)), narrow = W < 600, showEnd = cfg.endLabels && !narrow;
+  const m = {l: 50, r: showEnd ? 150 : 14, t: 12 + (ax.unit ? 14 : 0), b: 26};
+  const H = cfg.H || 280, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(lo / ax.div * 1.04, hi / ax.div * 1.04, 5);
+  const yv = t => m.t + (dom.hi - t) / (dom.hi - dom.lo) * ph;
+  const y = v => yv(v / ax.div);
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, yv, m.l, m.l + pw, ax.tick);
+  if (ax.unit) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  if (cfg.marker != null && cfg.marker > idx[0] && cfg.marker < idx[n - 1]) svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  for (const s of series) {
+    let d = '', pen = false;
+    for (const i of idx) { const v = s.get(i); if (v == null) { pen = false; continue; } d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1); pen = true; }
+    const a = {d, fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    svgEl('path', a, svg);
+  }
+  if (showEnd) {
+    const ends = series.map(s => { for (let j = n - 1; j >= 0; j--) { const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; } return null; }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      e.y = Math.max(m.t, Math.min(m.t + ph + 10, e.y));
+      svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = fmt(e.v);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0, 'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = x(i);
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    series.forEach((s, j) => { const v = s.get(i); dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible'); if (v != null) { dots[j].setAttribute('cx', xi); dots[j].setAttribute('cy', y(v)); } });
+    const rows = series.map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); });
+}
+
+// ---------- Áreas apiladas al 100 % ----------
+function areaChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const layers = cfg.layers;
+  const tot = i => layers.reduce((a, l) => a + Math.max(0, l.get(i) || 0), 0);
+  const has = i => layers.some(l => l.get(i) != null) && tot(i) > 0;
+  const idx = trimIdx(cfg.idx, has), n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  const narrow = W < 600, m = {l: 46, r: narrow ? 14 : 170, t: 14, b: 26}, H = cfg.H || 320, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const y = v => m.t + (100 - v) / 100 * ph, x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, [0, 25, 50, 75, 100], y, m.l, m.l + pw, t => t + '%');
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  const share = (l, i) => { const t = tot(i); return t > 0 ? 100 * Math.max(0, l.get(i) || 0) / t : 0; };
+  const segs = [];
+  let cur = [];
+  for (const i of idx) { if (has(i)) cur.push(i); else if (cur.length) { segs.push(cur); cur = []; } }
+  if (cur.length) segs.push(cur);
+  for (const seg of segs) {
+    const cum = seg.map(() => 0);
+    for (const l of layers) {
+      const lo = cum.slice(), up = seg.map((i, j) => (cum[j] += share(l, i)));
+      if (up.every((v, j) => v === lo[j])) continue;
+      let d = 'M' + seg.map((i, j) => x(i).toFixed(1) + ',' + y(up[j]).toFixed(1)).join('L');
+      d += 'L' + seg.map((i, j) => [i, j]).reverse().map(([i, j]) => x(i).toFixed(1) + ',' + y(lo[j]).toFixed(1)).join('L') + 'Z';
+      svgEl('path', {d, fill: l.color, stroke: 'var(--surface)', 'stroke-width': 1.5, 'stroke-linejoin': 'round'}, svg);
+    }
+  }
+  if (cfg.marker != null && cfg.marker > idx[0] && cfg.marker < idx[n - 1]) svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--ink)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  if (!narrow) {
+    const i = idx[n - 1], ends = [];
+    let c = 0;
+    for (const l of layers) { const v = share(l, i), a = c; c += v; if (v && y(a) - y(c) >= 12) ends.push({y: (y(a) + y(c)) / 2, v: pct(v, 1), t: l.short || l.label}); }
+    ends.sort((a, b) => a.y - b.y);
+    for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+    for (const e of ends) { const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg); svgEl('tspan', {class: 'dval'}, t).textContent = e.v; svgEl('tspan', {}, t).textContent = ' ' + e.t; }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0, 'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = x(i);
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    if (!has(i)) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: 'Sin dato'}]); return; }
+    const rows = layers.slice().reverse().filter(l => l.get(i)).map(l => ({value: pct(share(l, i), 1), label: l.label + ' · ' + money(l.get(i)), color: l.color, sq: true}));
+    rows.unshift({value: money(tot(i)), label: cfg.totalName || 'Total'});
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+}
+
+// ---------- Barras horizontales apiladas al 100 % (una fila por ámbito) ----------
+function barStack(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = cfg.rows, layers = cfg.layers, narrow = W < 600;
+  if (!rows.some(r => r.vals)) { emptyMsg(box, cfg.empty); return; }
+  const above = narrow || cfg.labTop, barH = cfg.barH || 20, top = 22;
+  const labW = above ? 0 : (cfg.labW || 170), rowH = above ? barH + 30 : (cfg.rowH || 34);
+  const x0 = above ? 0 : labW + 10, x1 = W - 4, H = top + rows.length * rowH + 4;
+  const x = v => x0 + v / 100 * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of [0, 25, 50, 75, 100]) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top - 4, y2: H - 4, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(t), y: top - 9, 'text-anchor': t === 0 ? 'start' : t === 100 ? 'end' : 'middle'}, g).textContent = t + '%';
+  }
+  rows.forEach((r, k) => {
+    const yc = above ? top + k * rowH + 22 + barH / 2 : top + k * rowH + rowH / 2;
+    const nm = svgEl('text', {class: 'nm' + (r.bold ? ' b' : ''), x: above ? 0 : labW, y: above ? yc - barH / 2 - 6 : yc + 4, 'text-anchor': above ? 'start' : 'end'}, svg);
+    nm.textContent = r.label;
+    if (!r.vals) { svgEl('text', {class: 'lbl', x: x0 + 4, y: yc + 4}, svg).textContent = r.na || 'sin dato'; return; }
+    const T0 = r.vals.reduce((a, v) => a + Math.max(0, v || 0), 0);
+    let c = 0;
+    r.vals.forEach((v, j) => {
+      const s = T0 > 0 ? 100 * Math.max(0, v || 0) / T0 : 0;
+      if (!s) return;
+      const gs = svgEl('g', {class: 'bar-seg', tabindex: 0, role: 'img', 'aria-label': r.label + ', ' + layers[j].label + ': ' + pct(s, 1)}, svg);
+      const xa = x(c), xb = x(c + s);
+      svgEl('rect', {x: xa, y: yc - barH / 2, width: Math.max(0.5, xb - xa - (xb - xa > 3 ? 2 : 0)), height: barH, rx: 2, fill: layers[j].color}, gs);
+      if (cfg.inLabels && xb - xa > 44) {
+        // Tonos fuertes de la rampa (q3–q6) con texto del color de la superficie; los suaves, con tinta.
+        const qn = +((layers[j].color.match(/q(\d)/) || [])[1] || 0);
+        const t = svgEl('text', {x: xa + 6, y: yc + 4, class: 'rv'}, gs);
+        t.style.fill = qn >= 3 ? 'var(--surface)' : 'var(--ink)';
+        t.textContent = f1.format(s) + '%';
+      }
+      c += s;
+      const show = evt => showTip(...anchorOf(evt, gs), r.label, [{value: pct(s, 1), label: layers[j].label + ' · ' + money(v), color: layers[j].color, sq: true}, {value: money(T0), label: cfg.totalName || 'Total'}]);
+      gs.addEventListener('pointermove', show);
+      gs.addEventListener('pointerleave', hideTip);
+      gs.addEventListener('focus', () => show(null));
+      gs.addEventListener('blur', hideTip);
+    });
+  });
+}
+
+// ---------- Cascada horizontal (una fila por paso) ----------
+// steps: [{label, short?, d (suma o resta) | tot (subtotal)}]; fmt: formato de los valores.
+function waterfall(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600, labW = narrow ? 128 : 230, rowH = 26, barH = 16, valW = cfg.valW || 66, top = 6;
+  let run = 0;
+  const rows = cfg.steps.map(s => {
+    if (s.tot != null) { run = s.tot; return {...s, a: 0, b: s.tot, kind: 'tot'}; }
+    const a = run; run += s.d; return {...s, a, b: run, kind: s.d >= 0 ? 'add' : 'sub'};
+  });
+  let lo = 0, hi = 0;
+  for (const r of rows) { lo = Math.min(lo, r.a, r.b); hi = Math.max(hi, r.a, r.b); }
+  if (hi === lo) hi = lo + 1;
+  const x0 = labW + 8, pw = W - x0 - valW - 8, H = top + rows.length * rowH + 6;
+  const x = v => x0 + (v - lo) / (hi - lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  svgEl('line', {x1: x(0), x2: x(0), y1: top, y2: H - 4, stroke: 'var(--axis)', 'stroke-width': 1}, svg);
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'wf-row', tabindex: 0, role: 'img', 'aria-label': r.label + ': ' + cfg.fmt(r.kind === 'tot' ? r.b : r.d, r.kind !== 'tot')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH}, gr);
+    svgEl('text', {class: 'nm' + (r.kind === 'tot' ? ' b' : ''), x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = narrow && r.short ? r.short : r.label;
+    const xa = x(Math.min(r.a, r.b)), xb = x(Math.max(r.a, r.b));
+    svgEl('rect', {x: xa, y: yc - barH / 2, width: Math.max(1.5, xb - xa), height: barH, rx: 2, fill: r.kind === 'tot' ? 'var(--w-tot)' : r.kind === 'add' ? 'var(--w-add)' : 'var(--w-sub)'}, gr);
+    if (k < rows.length - 1) svgEl('line', {x1: x(r.b), x2: x(r.b), y1: yc + barH / 2, y2: yc + rowH - barH / 2, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '2 2'}, svg);
+    svgEl('text', {class: 'rv', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = cfg.fmt(r.kind === 'tot' ? r.b : r.d, r.kind !== 'tot');
+    if (cfg.tip) {
+      const show = evt => showTip(...anchorOf(evt, gr), r.label, cfg.tip(r));
+      gr.addEventListener('pointermove', show); gr.addEventListener('pointerleave', hideTip);
+      gr.addEventListener('focus', () => show(null)); gr.addEventListener('blur', hideTip);
+    }
+  });
+}
+
+// Tabla de una serie de tiempo (para «Ver tabla»): meses visibles, del más reciente al más antiguo.
+function seriesTable(wrap, idx, series, fmt) {
+  wrap.replaceChildren();
+  const t = htmlEl('table', null, wrap), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  htmlEl('th', {text: 'Mes'}, hr);
+  series.forEach(s => htmlEl('th', {text: s.label}, hr));
+  const tb = htmlEl('tbody', null, t);
+  for (const i of idx.slice().reverse()) {
+    if (!series.some(s => s.get(i) != null)) continue;
+    const tr = htmlEl('tr', null, tb);
+    htmlEl('td', {text: mLabel(MONTHS[i])}, tr);
+    series.forEach(s => htmlEl('td', {text: fmt(s.get(i))}, tr));
+  }
+}
+const TABLES = {};
+function registerTable(key, fill) { TABLES[key] = fill; const w = $('tb-' + key); if (w && !w.hidden) fill(w); }
+document.querySelectorAll('[data-table]').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.table, w = $('tb-' + k);
+  w.hidden = !w.hidden;
+  b.textContent = w.hidden ? 'Ver tabla' : 'Ocultar tabla';
+  if (!w.hidden && TABLES[k]) TABLES[k](w);
+}));
+
+// ---------- Agrupaciones del resumen y de la comparación ----------
+// Rubros del activo y del pasivo y patrimonio: vienen en el JSON (D.groups), los mismos con los que el
+// generador comprueba que la contribución al crecimiento cuadra.
+let ACT_GROUPS, PK_GROUPS;
+const ACT_COL = ['var(--q6)', 'var(--q5)', 'var(--q4)', 'var(--q3)', 'var(--q2)'];
+const PK_COL = ['var(--q6)', 'var(--q5)', 'var(--q4)', 'var(--q3)', 'var(--q2)', 'var(--q1)'];
+// Suma de un grupo: las líneas fuera de su vigencia no cuentan (p. ej. provisiones del pasivo antes de 2013).
+const groupVal = (key, g, j) => { let t = 0, any = false; for (const k of g.ks) { const v = at(S(key, NI[k]), j); if (v != null) { t += v; any = true; } } return any ? t : null; };
+
+// ---------- Estado de resultados: líneas de la cascada ----------
+const EGP_STEPS = [
+  {k: 'ingresos_financieros', short: 'Ingresos fin.'},
+  {k: 'gastos_financieros', short: 'Gastos fin.'},
+  {k: 'margen_financiero_bruto', short: 'Margen bruto'},
+  {k: 'provisiones_creditos_directos', short: 'Provisiones', l: 'Provisiones para créditos directos'},
+  {k: 'margen_financiero_neto', short: 'Margen neto'},
+  {svc: true, l: 'Servicios financieros (ingresos − gastos)', short: 'Servicios (neto)'},
+  {k: 'resultado_venta_cartera', short: 'Venta de cartera', l: 'Venta de cartera'},
+  {k: 'margen_operacional', short: 'Margen operac.'},
+  {k: 'gastos_administrativos', short: 'Gastos admin.'},
+  {k: 'margen_operacional_neto', short: 'Margen op. neto'},
+  {k: 'provisiones_depreciacion_amortizacion', short: 'Prov., dep. y amort.'},
+  {k: 'otros_ingresos_gastos', short: 'Otros ingresos y g.'},
+  {k: 'resultado_antes_impuesto_renta', short: 'Antes de impuesto', l: 'Resultado antes de impuesto'},
+  {k: 'participacion_trabajadores', short: 'Participación', l: 'Participación de trabajadores'},
+  {k: 'impuesto_renta', short: 'Impuesto'},
+  {k: 'resultado_neto_ejercicio', short: 'Resultado neto', l: 'Resultado neto'},
+];
+const stripSub = l => l.replace(/ \(subtotal\)$/, '');
+// Pasos de la cascada en la base dada (valores con signo; null si falta el flujo).
+function egpSteps(key, j, base) {
+  const out = [];
+  for (const st of EGP_STEPS) {
+    if (st.svc) {
+      const a = egpVal(key, NI.ingresos_servicios_financieros, j, base), b = egpVal(key, NI.gastos_servicios_financieros, j, base);
+      if (a == null || b == null) return null;
+      out.push({label: st.l, short: st.short, d: a - b});
+      continue;
+    }
+    const i = NI[st.k];
+    if (!vig(i, j)) continue;
+    const v = egpVal(key, i, j, base);
+    if (v == null) return null;
+    const nd = NODES[i], label = st.l || stripSub(nd.l);
+    if (nd.sub) out.push({label, short: st.short, tot: v, i});
+    else if (st.k === 'resultado_venta_cartera' && !v) continue;
+    else if (st.k === 'participacion_trabajadores' && !v) continue;
+    else out.push({label, short: st.short, d: nd.sg * v, i});
+  }
+  return out;
+}
+
+// ---------- Selectores ----------
+function segment(id, items, get0, set, after) {
+  const box = $(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get0() === it.id)}, box);
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      (after || renderVisible)();
+    });
+  }
+}
+function fillScopeSelect() {
+  const sel = $('f-scope');
+  const g0 = htmlEl('optgroup', {label: 'Agregados'}, sel);
+  htmlEl('option', {value: 'sistema', text: 'Sistema financiero'}, g0);
+  for (const s of SUBS) htmlEl('option', {value: s.k, text: s.l}, g0);
+  for (const s of SUBS) {
+    const g = htmlEl('optgroup', {label: s.l}, sel);
+    D.entities.filter(k => k.split('/')[0] === s.k)
+      .map(k => ({k, n: D.ents[k.split('/')[1]].n[s.k] || k}))
+      .sort((a, b) => a.n.localeCompare(b.n, 'es'))
+      .forEach(o => htmlEl('option', {value: o.k, text: o.n}, g));
+  }
+  sel.value = state.scope;
+  sel.addEventListener('change', () => { state.scope = sel.value; renderVisible(); });
+}
+function fillMonthSelect() {
+  const sel = $('f-mes');
+  for (let j = N - 1; j >= 0; j--) htmlEl('option', {value: String(j), text: mLabel(MONTHS[j])}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+}
+function renderScopeNote() {
+  const key = state.scope, box = $('scope-note');
+  box.replaceChildren();
+  const j = effIdx(key);
+  if (!isEnt(key)) {
+    box.append('Cifras de ' + nameOf(key) + ' en ' + mLabel(MONTHS[state.mi]) + '. Montos en soles corrientes.');
+    return;
+  }
+  const e = scObj(key), a = firstIdx(key), z = lastIdx(key);
+  const b = htmlEl('b', {text: nameOf(key, j ?? z)}, box);
+  const parts = e.m.map(([s, x, y]) => SUB_BY[s].l + ' (' + mLabel(MONTHS[x]) + ' – ' + mLabel(MONTHS[y]) + (e.n[s] && e.n[s] !== b.textContent ? ', como ' + e.n[s] : '') + ')');
+  box.append('. Datos de ' + mLabel(MONTHS[a]) + ' a ' + mLabel(MONTHS[z]) + (e.m.length > 1 ? '; estuvo en ' + parts.join(' y en ') + '. Su serie no se corta con el cambio de subsistema' : '') + '.');
+  if (j == null) box.append(' No hay datos de la entidad en ' + mLabel(MONTHS[state.mi]) + ': elija un mes desde ' + mLabel(MONTHS[a]) + '.');
+  else if (j !== state.mi) box.append(' No reporta en ' + mLabel(MONTHS[state.mi]) + ': se muestra su último mes, ' + mLabel(MONTHS[j]) + '.');
+}
+
+// ---------- Resumen ----------
+function f12Msg(key, j) {
+  if (j < J2011) return 'Los flujos de 12 meses y el activo promedio empiezan en ' + mLabel(MONTHS[J2011]) + ': hacen falta 12 meses de historia y los datos empiezan en ' + mLabel(MONTHS[0]) + ' (antes solo existe el flujo de 12 meses de diciembre de 2010, que es el acumulado del año, sin activo promedio). Para meses anteriores, use «Acumulado del año» en la pestaña Estado de resultados.';
+  return isEnt(key) ? 'La entidad no tiene 12 meses seguidos de datos hasta ' + mLabel(MONTHS[j]) + ', así que no hay flujo de 12 meses ni activo promedio.' : 'Sin flujo de 12 meses en este mes.';
+}
+function renderKpis() {
+  const box = $('kpis'), key = state.scope, j = effIdx(key);
+  box.replaceChildren();
+  if (j == null) { emptyMsg(box, 'Sin datos en este mes.'); return; }
+  const ml = mLabel(MONTHS[j]), jp = j - 12;
+  const ta = at(S(key, TA), j), tap = at(S(key, TA), jp);
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: 'Activo total, ' + ml}, hero);
+  htmlEl('div', {cls: 'val', text: money(ta)}, hero);
+  if (tap) {
+    htmlEl('div', {cls: 'sub', text: spct(100 * (ta / tap - 1)) + ' frente a ' + mLabel(MONTHS[jp]) + ' en soles corrientes'}, hero);
+    htmlEl('div', {cls: 'sub', text: spct(100 * (atFx(key, TA, j, jp) / tap - 1)) + ' a tipo de cambio constante', title: 'La parte en moneda extranjera valuada al tipo de cambio de ' + mLabel(MONTHS[jp]) + ' (' + tcLabel(jp) + '; ' + tcLabel(j) + ')'}, hero);
+  }
+  htmlEl('div', {cls: 'sub', text: 'Pasivo ' + money(at(S(key, TP), j)) + ' · Patrimonio ' + money(at(S(key, PAT), j))}, hero);
+  const ct = at(S(key, CONT), j);
+  htmlEl('div', {cls: 'foot', text: 'Fuera del balance: contingentes por ' + money(ct) + ' (' + pct(ratio(ct, ta)) + ' del activo), que no se suman al activo.'}, hero);
+  const tiles = [
+    {lab: 'Créditos netos / activo', f: jj => ratio(at(S(key, CN), jj), at(S(key, TA), jj))},
+    {lab: 'Obligaciones con el público / pasivo', f: jj => ratio(at(S(key, NI.obligaciones_publico), jj), at(S(key, TP), jj)), na: 'No captan depósitos del público'},
+    {lab: 'Patrimonio / activo', f: jj => ratio(at(S(key, PAT), jj), at(S(key, TA), jj))},
+    {lab: 'Activo en moneda extranjera', f: jj => ratio(at(X(key, TA), jj), at(S(key, TA), jj)), extra: jj => 'Pasivo en moneda extranjera: ' + pct(ratio(at(X(key, TP), jj), at(S(key, TP), jj)))},
+    {lab: 'Margen financiero bruto / activo promedio', f: jj => egpVal(key, MFB, jj, 'ap'), flow: true},
+    {lab: 'Resultado neto / activo promedio', f: jj => egpVal(key, RN, jj, 'ap'), flow: true, d: 2},
+  ];
+  for (const t of tiles) {
+    const el = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab + (t.flow ? ' (12 meses)' : '')}, el);
+    const v = t.f(j), vp = jp >= 0 ? t.f(jp) : null;
+    if (v == null) {
+      htmlEl('div', {cls: 'val', text: '—'}, el);
+      htmlEl('div', {cls: 'sub', text: t.flow ? (j < J2011 ? 'Disponible desde ' + mLabel(MONTHS[J2011]) : 'Sin 12 meses seguidos de datos') : 'Sin dato'}, el);
+      continue;
+    }
+    const ecScope = key === 'empresas-credito' || (isEnt(key) && entSubAt(key, j) === 'empresas-credito');
+    if (t.na && (ecScope || !at(S(key, NI.obligaciones_publico), j))) { htmlEl('div', {cls: 'val', text: pct(v, 1)}, el); htmlEl('div', {cls: 'sub', text: 'Las empresas de créditos no captan depósitos del público.'}, el); continue; }
+    htmlEl('div', {cls: 'val', text: pct(v, t.d || 1)}, el);
+    if (vp != null) { const s = htmlEl('div', {cls: 'sub'}, el); htmlEl('span', {cls: 'd-flat', text: spp(v - vp, t.d || 1)}, s); s.append(' frente a ' + mLabel(MONTHS[jp]) + ' (' + pct(vp, t.d || 1) + ')'); }
+    if (t.extra) htmlEl('div', {cls: 'sub', text: t.extra(j)}, el);
+  }
+}
+function renderBalBars() {
+  const key = state.scope, j = effIdx(key), box = $('ch-bal'), lg = $('bal-legend');
+  lg.replaceChildren();
+  if (j == null) { box.replaceChildren(); emptyMsg(box, 'Sin datos en este mes.'); return; }
+  $('bal-title').textContent = 'Composición del balance, ' + mLabel(MONTHS[j]);
+  const ta = at(S(key, TA), j);
+  const rows = [
+    {label: 'Activo', vals: ACT_GROUPS.map(g => groupVal(key, g, j)), groups: ACT_GROUPS, cols: ACT_COL},
+    {label: 'Pasivo y patrimonio', vals: PK_GROUPS.map(g => groupVal(key, g, j)), groups: PK_GROUPS, cols: PK_COL},
+  ];
+  box.replaceChildren();
+  const W = box.clientWidth, narrow = W < 600;
+  rows.forEach((r, k) => {
+    const wrap = htmlEl('div', {cls: 'chart'}, box);
+    wrap.style.marginTop = k ? '14px' : '8px';
+    barStack(wrap, {rows: [{label: r.label + ' · ' + money(ta), vals: r.vals}], layers: r.groups.map((g, i) => ({label: g.l, color: r.cols[i]})), aria: r.label + ' por rubro', labTop: true, barH: 28, inLabels: !narrow, totalName: r.label});
+    const L = htmlEl('div', {cls: 'stack-legend'}, wrap);
+    r.groups.forEach((g, i) => {
+      const v = r.vals[i];
+      if (v == null) return;
+      const d = htmlEl('div', null, L);
+      htmlEl('i', {cls: 'dot'}, d).style.background = r.cols[i];
+      htmlEl('span', {cls: 't', text: g.l}, d);
+      htmlEl('span', {cls: 'v', text: pct(ratio(v, ta))}, d);
+      htmlEl('span', {cls: 'm', text: money(v)}, d);
+    });
+  });
+}
+function renderWf() {
+  const key = state.scope, j = effIdx(key), box = $('ch-wf');
+  box.replaceChildren();
+  $('wf-note').textContent = '';
+  if (j == null) { emptyMsg(box, 'Sin datos en este mes.'); return; }
+  $('wf-title').textContent = 'Cómo se forma la utilidad, 12 meses a ' + mLabel(MONTHS[j]);
+  $('wf-desc').textContent = 'Por cada S/ 100 de activo promedio: cuánto ingresa por operaciones financieras (sobre todo intereses), cuánto cuestan el fondeo y las pérdidas financieras, cuánto se reserva por créditos que podrían no cobrarse, cuánto dejan los servicios, cuánto cuesta operar y cuánto queda. Lo que suma va en azul, lo que resta en gris y los subtotales, en negrita, con el tono más marcado.';
+  const steps = egpSteps(key, j, 'ap');
+  if (!steps) { emptyMsg(box, f12Msg(key, j)); return; }
+  const f12 = egpSteps(key, j, 'f12');
+  waterfall(box, {steps, fmt: (v, signed) => (signed ? sgnd(v, 2) : (v < 0 ? '−' : '')) + Math.abs(v).toFixed(2) + '%', aria: 'Cascada del estado de resultados en % del activo promedio',
+    tip: r => { const s = f12.find(x => x.label === r.label); return [{value: (r.kind === 'tot' ? '' : sgnd(r.d, 2)) + Math.abs(r.kind === 'tot' ? r.b : r.d).toFixed(2) + '%', label: 'del activo promedio'}, {value: s ? (s.tot != null ? money(s.tot) : smoney(s.d)) : '—', label: 'flujo de 12 meses'}]; }});
+  $('wf-note').textContent = 'Activo promedio de 12 meses: ' + money(at(AP(key), j)) + ' Los gastos financieros incluyen la diferencia de cambio, los derivados y la valorización de inversiones cuando son pérdida; los ingresos financieros, cuando son ganancia (vea «¿Qué parte de la utilidad se repite cada año?» en la pestaña Estado de resultados).';
+}
+const ROUTE = [
+  {q: '¿De qué está hecho el activo y qué lo hace crecer?', w: 'Balance: composición y crecimiento', tab: 'balance'},
+  {q: '¿Qué presta y cómo pasa de bruto a neto?', w: 'Balance: créditos', tab: 'balance'},
+  {q: '¿Con qué dinero se financia?', w: 'Balance y Comparar', tab: 'comparar'},
+  {q: '¿En qué moneda presta y se endeuda?', w: 'Balance: moneda extranjera', tab: 'balance'},
+  {q: '¿Cuánto rinde lo que presta y cuánto cuesta el fondeo?', w: 'Estado de resultados: rendimientos y costos', tab: 'resultados'},
+  {q: '¿Quién se queda con cada sol del margen?', w: 'Estado de resultados: cascada', tab: 'resultados'},
+  {q: '¿Qué parte de la utilidad se repite?', w: 'Estado de resultados: calidad', tab: 'resultados'},
+  {q: '¿Qué compromisos tiene fuera del balance?', w: 'Balance: contingentes', tab: 'balance'},
+];
+function renderRoute() {
+  const box = $('route');
+  box.replaceChildren();
+  ROUTE.forEach((r, k) => {
+    const a = htmlEl('a', {href: '#' + r.tab}, box);
+    htmlEl('div', {cls: 'n', text: 'Paso ' + (k + 1)}, a);
+    htmlEl('div', {cls: 'q', text: r.q}, a);
+    htmlEl('div', {cls: 'w', text: r.w}, a);
+    a.addEventListener('click', e => { e.preventDefault(); showTab(r.tab, true); scrollTo(0, 0); });
+  });
+}
+
+// ---------- Balance ----------
+// Orden de la tabla: secciones con sus rubros y el total al final.
+function balSections() {
+  const kidsOf = p => KIDS[p];
+  return [
+    {title: 'Activo', rows: kidsOf(TA), total: TA, den: TA},
+    {title: 'Pasivo', rows: kidsOf(TP), total: TP, den: TPP},
+    {title: 'Patrimonio', rows: kidsOf(PAT), total: PAT, den: TPP},
+    {title: null, rows: [], total: TPP, den: TPP},
+    {title: 'Fuera del balance (no se suma al activo)', rows: kidsOf(CONT), total: CONT, den: TA},
+  ];
+}
+function glossBtn(td, i) {
+  if (!GL_BY[NODES[i].k]) return;
+  const b = htmlEl('button', {type: 'button', cls: 'qa', text: '?', title: '¿Qué es esta cuenta?', 'aria-label': '¿Qué es ' + NODES[i].l + '?'}, td);
+  b.addEventListener('click', e => { e.stopPropagation(); openFicha(NODES[i].k); });
+}
+function nameCell(tr, i, depth, open, onToggle, noToggle) {
+  const td = htmlEl('td', {cls: 'name'}, tr), w = htmlEl('div', {cls: 'nmw'}, td);
+  w.style.paddingLeft = (depth * 18) + 'px';
+  const has = KIDS[i].length > 0 && !noToggle;
+  const tg = htmlEl('button', {type: 'button', cls: 'tg' + (has ? '' : ' none'), text: open ? '▾' : '▸', 'aria-label': (open ? 'Cerrar ' : 'Abrir ') + NODES[i].l, 'aria-expanded': String(!!open)}, w);
+  if (has) tg.addEventListener('click', e => { e.stopPropagation(); onToggle(); }); else tg.tabIndex = -1;
+  const nm = htmlEl('span', {text: stripSub(NODES[i].l)}, w);
+  if (NODES[i].l0 && state.mi < J2013) nm.title = 'Hasta 2012: ' + NODES[i].l0;
+  const nd = NODES[i];
+  if (nd.from || nd.to) htmlEl('span', {cls: 'vig', text: nd.from ? 'desde ' + mLabel(nd.from) : 'hasta ' + mLabel(nd.to)}, w);
+  glossBtn(w, i);
+  return td;
+}
+function renderTree() {
+  const key = state.scope, j = effIdx(key), wrap = $('tb-tree');
+  wrap.replaceChildren();
+  $('tree-note').textContent = '';
+  if (j == null) { emptyMsg(wrap, 'Sin datos en este mes.'); return; }
+  const jp = j - 12, mon = state.bview === 'mon';
+  $('tree-title').textContent = 'Balance general, ' + mLabel(MONTHS[j]);
+  $('tree-desc').textContent = mon
+    ? 'Cada cuenta en moneda nacional y en moneda extranjera (valuada en soles), y qué parte está en moneda extranjera.'
+    : 'Saldo a fin de mes, peso en el total (análisis vertical) y variación frente al mismo mes del año anterior (análisis horizontal). Abra un rubro para ver sus subcuentas; elija una fila para ver su historia abajo.';
+  const t = htmlEl('table', null, wrap), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  const cols = mon ? ['Cuenta', 'Moneda nacional (mill. S/)', 'Moneda extranjera (mill. S/)', '% en moneda extranjera', 'Hace 12 meses', 'Variación']
+    : ['Cuenta', 'Saldo (mill. S/)', '% del total', 'Hace 12 meses', 'Variación del peso', 'Variación anual', 'A tipo de cambio constante', 'Variación (mill. S/)'];
+  cols.forEach(c => htmlEl('th', {text: c}, hr));
+  const tb = htmlEl('tbody', null, t);
+  const pick = i => { state.acct = i; renderTree(); renderAcct(); };
+  const row = (i, depth, den, cls) => {
+    const v = at(S(key, i), j);
+    if (v == null) return false;
+    const vp = at(S(key, i), jp);
+    if (!v && !vp && cls !== 'tot') return false;
+    if (mon && X(key, i) == null) return false;
+    const tr = htmlEl('tr', {cls: 'pick' + (cls ? ' ' + cls : '') + (state.acct === i ? ' sel' : ''), tabindex: 0}, tb);
+    const open = state.open.has(i);
+    nameCell(tr, i, depth, open, () => { open ? state.open.delete(i) : state.open.add(i); renderTree(); }, cls === 'tot');
+    if (mon) {
+      const me = at(X(key, i), j), mn = v - me, mep = at(X(key, i), jp);
+      const s = ratio(me, v), sp = vp ? ratio(mep, vp) : null;
+      [mill(mn), mill(me), pct(s), pct(sp), sp == null || s == null ? '—' : spp(s - sp)].forEach(x => htmlEl('td', {text: x, cls: x === '—' ? 'na' : ''}, tr));
+    } else {
+      const d = at(S(key, den), j), dp = at(S(key, den), jp);
+      const s = ratio(v, d), sp = vp != null && dp ? ratio(vp, dp) : null;
+      const cells = [mill(v), pct(s), pct(sp), sp == null ? '—' : spp(s - sp), vp ? spct(100 * (v / vp - 1)) : '—', vp ? spct(100 * (atFx(key, i, j, jp) / vp - 1)) : '—', vp == null ? '—' : smill(v - vp)];
+      cells.forEach(x => htmlEl('td', {text: x, cls: x === '—' ? 'na' : ''}, tr));
+    }
+    tr.addEventListener('click', () => pick(i));
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(i); } });
+    return open;
+  };
+  const walk = (i, depth, den) => { if (row(i, depth, den) && KIDS[i].length) for (const k of KIDS[i]) walk(k, depth + 1, den); };
+  for (const sec of balSections()) {
+    if (sec.title) { const tr = htmlEl('tr', {cls: 'sec'}, tb); htmlEl('td', {text: sec.title, colspan: cols.length}, tr); }
+    for (const i of sec.rows) walk(i, 0, sec.den);
+    row(sec.total, 0, sec.den, 'tot');
+  }
+  const notes = [];
+  notes.push(mon ? 'Moneda nacional = total − moneda extranjera. La moneda extranjera está valuada en soles al tipo de cambio de fin de mes: si el sol se deprecia, su peso sube aunque no cambien los saldos en dólares.'
+    : '«% del total»: del activo en el activo y en los contingentes; del total pasivo y patrimonio (igual al activo) en el pasivo y el patrimonio. Las provisiones y los intereses no devengados restan: van con signo negativo. «Variación anual» compara los saldos en soles corrientes. «A tipo de cambio constante» vuelve a valuar la parte en moneda extranjera del mes al tipo de cambio de hace 12 meses (' + (jp >= 0 ? tcLabel(jp) + ', frente a ' + tcLabel(j) : tcLabel(j)) + '), para separar lo que creció el negocio de lo que solo refleja el precio del dólar. «Hace 12 meses» y «Variación del peso» son porcentajes del total.');
+  if (j >= J2013 && j < J2013 + 12) notes.push('Las cuentas que nacen con el Manual de Contabilidad de enero de 2013 no tienen comparación anual hasta enero de 2014, y las que cambiaron de contenido (por ejemplo, los intereses no devengados de los créditos) muestran variaciones que no son de negocio.');
+  if (j < J2013) notes.push('Hasta diciembre de 2012 rige el Manual de Contabilidad anterior: algunas cuentas tienen otro rótulo (pase el cursor sobre el nombre) u otra apertura.');
+  const blk = blockNote(key, j);
+  if (blk) notes.push(blk);
+  $('tree-note').textContent = notes.join(' ');
+}
+// ---------- ¿Qué explica el crecimiento? ----------
+// Contribución de cada rubro al crecimiento anual del activo (o del pasivo y patrimonio), en puntos porcentuales,
+// a tipo de cambio constante: (saldo_t − ME_t × (1 − TC_{t−12}/TC_t) − saldo_{t−12}) / total_{t−12}; y un efecto
+// del tipo de cambio común: Σ ME_t × (1 − TC_{t−12}/TC_t) / total_{t−12}. Rubros + efecto = crecimiento en soles
+// corrientes. El total es la suma de los rubros (igual al total del cuadro salvo redondeo de miles de soles).
+function growth(key, side, j, jp) {
+  if (jp < 0 || at(S(key, TA), j) == null || at(S(key, TA), jp) == null) return null;
+  const gs = side === 'A' ? ACT_GROUPS : PK_GROUPS, f = fxLoss(j, jp);
+  const parts = gs.map(g => {
+    let v = 0, vp = 0, x = 0;
+    for (const k of g.ks) { const i = NI[k]; v += at(S(key, i), j) || 0; vp += at(S(key, i), jp) || 0; x += at(X(key, i), j) || 0; }
+    return {v, vp, x};
+  });
+  const base = parts.reduce((a, p) => a + p.vp, 0);
+  if (!base) return null;
+  const c = parts.map(p => 100 * (p.v - p.x * f - p.vp) / base);
+  const fxe = 100 * parts.reduce((a, p) => a + p.x * f, 0) / base;
+  const cons = c.reduce((a, v) => a + v, 0);
+  return {c, fxe, cons, cur: cons + fxe, base, now: parts.reduce((a, p) => a + p.v, 0)};
+}
+function hatchDef(svg, id) {
+  const defs = svgEl('defs', null, svg);
+  const p = svgEl('pattern', {id, width: 6, height: 6, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)'}, defs);
+  svgEl('rect', {width: 6, height: 6, fill: 'var(--surface)'}, p);
+  svgEl('line', {x1: 0, y1: 0, x2: 0, y2: 6, stroke: 'var(--ink2)', 'stroke-width': 2.2}, p);
+  return 'url(#' + id + ')';
+}
+// Barras horizontales desde cero (positivas a la derecha, negativas a la izquierda), una fila por rubro.
+function contribBars(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600, labW = narrow ? 118 : 250, rowH = 27, barH = 15, valW = 70, top = 20;
+  const rows = cfg.rows;
+  let lo = 0, hi = 0;
+  for (const r of rows) { lo = Math.min(lo, r.v); hi = Math.max(hi, r.v); }
+  if (hi === lo) hi = lo + 1;
+  const pad = (hi - lo) * 0.03;
+  lo = lo < 0 ? lo - pad : 0; hi = hi > 0 ? hi + pad : 0;
+  const nSep = rows.filter(r => r.sep).length;
+  const x0 = labW + 10, pw = Math.max(40, W - x0 - valW - 6), H = top + rows.length * rowH + nSep * 8 + 4;
+  const x = v => x0 + (v - lo) / (hi - lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const hatch = hatchDef(svg, cfg.id + '-hatch');
+  svgEl('text', {class: 'lbl', x: narrow ? 0 : x0, y: 12}, svg).textContent = (narrow ? 'pp del ' : 'Puntos porcentuales del ') + cfg.totalName + ' de hace 12 meses';
+  let yb = top;
+  const zeroTop = top;
+  rows.forEach(r => {
+    if (r.sep) { svgEl('line', {x1: 0, x2: W, y1: yb + 4, y2: yb + 4, stroke: 'var(--axis)', 'stroke-width': 1}, svg); yb += 8; }
+    const yc = yb + rowH / 2;
+    const gr = svgEl('g', {class: 'wf-row', tabindex: 0, role: 'img', 'aria-label': r.label + ': ' + spp(r.v, 2)}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yb, width: W, height: rowH}, gr);
+    const nm = svgEl('text', {class: 'nm' + (r.bold ? ' b' : ''), x: labW, y: yc + 4, 'text-anchor': 'end'}, gr);
+    nm.textContent = narrow && r.short ? r.short : r.label;
+    // Rótulo largo: el mediano y, si tampoco cabe, el corto.
+    if (r.mid && nm.getComputedTextLength() > labW - 4) nm.textContent = r.mid;
+    if (r.short && nm.getComputedTextLength() > labW - 4) nm.textContent = r.short;
+    const xa = x(Math.min(0, r.v)), xb = x(Math.max(0, r.v));
+    svgEl('rect', {x: xa, y: yc - barH / 2, width: Math.max(1.5, xb - xa), height: barH, rx: 2, fill: r.hatch ? hatch : r.color, stroke: r.hatch ? 'var(--ink2)' : 'none', 'stroke-width': r.hatch ? 0.8 : 0}, gr);
+    svgEl('text', {class: 'rv' + (r.bold ? ' b' : ''), x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = spp(r.v, 2);
+    if (r.tip) {
+      const show = evt => showTip(...anchorOf(evt, gr), r.label, r.tip);
+      gr.addEventListener('pointermove', show); gr.addEventListener('pointerleave', hideTip);
+      gr.addEventListener('focus', () => show(null)); gr.addEventListener('blur', hideTip);
+    }
+    yb += rowH;
+  });
+  svgEl('line', {x1: x(0), x2: x(0), y1: zeroTop, y2: H - 2, stroke: 'var(--muted)', 'stroke-width': 1}, svg);
+}
+// Barras apiladas por año (positivas hacia arriba, negativas hacia abajo) con una marca del total.
+function stackYears(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const cats = cfg.cats, layers = cfg.layers;
+  if (!cats.length) { emptyMsg(box, cfg.empty); return; }
+  const narrow = W < 600, m = {l: 44, r: 8, t: 14, b: 30}, H = cfg.H || 260;
+  let lo = 0, hi = 0;
+  for (const c of cats) {
+    let p = 0, n = 0;
+    c.vals.forEach(v => { if (v > 0) p += v; else n += v; });
+    hi = Math.max(hi, p, c.tot); lo = Math.min(lo, n, c.tot);
+  }
+  const dom = niceDomain(lo * 1.05, hi * 1.05, 5);
+  const pw = W - m.l - m.r, ph = H - m.t - m.b, step = pw / cats.length, bw = Math.min(46, step * 0.62);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const hatch = hatchDef(svg, cfg.id + '-hatch');
+  drawYGrid(svg, dom.ticks, y, m.l, W - m.r, v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(dom.step < 1 ? 1 : 0));
+  svgEl('line', {x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), stroke: 'var(--muted)', 'stroke-width': 1}, svg);
+  cats.forEach((c, k) => {
+    const xc = m.l + step * (k + 0.5);
+    const g = svgEl('g', {class: 'bar-seg', tabindex: 0, role: 'img', 'aria-label': c.label + ': ' + spp(c.tot, 1)}, svg);
+    svgEl('rect', {x: xc - step / 2, y: m.t, width: step, height: ph, fill: 'transparent'}, g);
+    let p = 0, n = 0;
+    c.vals.forEach((v, i) => {
+      if (!v) return;
+      const a = v > 0 ? p : n, b = a + v;
+      if (v > 0) p = b; else n = b;
+      const L = layers[i];
+      svgEl('rect', {x: xc - bw / 2, y: y(Math.max(a, b)), width: bw, height: Math.max(0.5, Math.abs(y(a) - y(b)) - (Math.abs(y(a) - y(b)) > 3 ? 1 : 0)), fill: L.hatch ? hatch : L.color, stroke: L.hatch ? 'var(--ink2)' : 'none', 'stroke-width': L.hatch ? 0.6 : 0}, g);
+    });
+    svgEl('line', {x1: xc - bw / 2 - 4, x2: xc + bw / 2 + 4, y1: y(c.tot), y2: y(c.tot), stroke: 'var(--ink)', 'stroke-width': 2.4}, g);
+    // En pantallas angostas, un rótulo sí y uno no (siempre el último).
+    if (!narrow || cats.length <= 7 || (cats.length - 1 - k) % 2 === 0) svgEl('text', {class: 'lbl', x: xc, y: H - 10, 'text-anchor': 'middle'}, svg).textContent = narrow ? c.short : c.label;
+    const show = evt => showTip(...anchorOf(evt, g), c.title, layers.map((L, i) => ({value: spp(c.vals[i], 2), label: L.label, color: L.hatch ? 'var(--ink2)' : L.color, sq: true})).concat([{value: spp(c.cons, 2), label: 'Crecimiento a tipo de cambio constante'}, {value: spp(c.tot, 2), label: 'Crecimiento en soles corrientes'}]));
+    g.addEventListener('pointermove', show); g.addEventListener('pointerleave', hideTip);
+    g.addEventListener('focus', () => show(null)); g.addEventListener('blur', hideTip);
+  });
+}
+function renderGrow() {
+  const key = state.scope, j = effIdx(key), side = state.gside;
+  const box = $('ch-grow'), boxY = $('ch-growy'), lg = $('grow-legend');
+  box.replaceChildren(); boxY.replaceChildren(); lg.replaceChildren(); $('grow-note').textContent = '';
+  const gs = side === 'A' ? ACT_GROUPS : PK_GROUPS, cols = side === 'A' ? ACT_COL : PK_COL;
+  const totalName = side === 'A' ? 'activo' : 'pasivo y patrimonio';
+  $('grow-desc').textContent = 'Cuántos puntos porcentuales del crecimiento anual del ' + totalName + ' aporta cada rubro, a tipo de cambio constante, y cuántos se deben solo a la variación del tipo de cambio sobre la parte en moneda extranjera. Los rubros más el efecto del tipo de cambio suman el crecimiento en soles corrientes.';
+  if (j == null) { emptyMsg(box, 'Sin datos en este mes.'); return; }
+  const jp = j - 12, g = growth(key, side, j, jp);
+  $('grow-title').textContent = '¿Qué explica el crecimiento? ' + (side === 'A' ? 'Activo' : 'Pasivo y patrimonio') + ', ' + mLabel(MONTHS[j]) + ' frente a ' + (jp >= 0 ? mLabel(MONTHS[jp]) : 'un año antes');
+  if (!g) emptyMsg(box, isEnt(key) ? 'La entidad no tiene dato de hace 12 meses: no hay crecimiento anual que descomponer.' : 'Sin dato de hace 12 meses (los datos empiezan en ' + mLabel(MONTHS[0]) + ').');
+  else {
+    const rows = gs.map((gr, i) => ({label: gr.l, mid: gr.m, short: gr.short, v: g.c[i], color: cols[i], tip: [{value: spp(g.c[i], 2), label: 'a tipo de cambio constante'}, {value: money(gr.ks.reduce((a, k) => a + (at(S(key, NI[k]), j) || 0), 0)), label: 'saldo en ' + mLabel(MONTHS[j])}]}));
+    rows.push({label: 'Efecto del tipo de cambio', short: 'Tipo de cambio', v: g.fxe, hatch: true, tip: [{value: spp(g.fxe, 2), label: 'de ' + tcLabel(jp) + ' a ' + tcLabel(j)}]});
+    rows.push({label: 'Crecimiento a tipo de cambio constante', short: 'A TC constante', v: g.cons, color: 'var(--q4)', bold: true, sep: true});
+    rows.push({label: 'Crecimiento en soles corrientes', short: 'En soles corrientes', v: g.cur, color: 'var(--w-tot)', bold: true});
+    contribBars(box, {rows, id: 'grow', totalName, aria: 'Contribución de cada rubro al crecimiento anual del ' + totalName});
+  }
+  // Historia: de diciembre a diciembre, más el mes elegido si no es diciembre.
+  const vis = new Set(visIdx()), cats = [];
+  for (let k = 12; k < N; k++) {
+    const isDec = MONTHS[k].endsWith('-12');
+    if (!((isDec && k <= j) || k === j) || !vis.has(k)) continue;
+    const r = growth(key, side, k, k - 12);
+    if (!r) continue;
+    const y = MONTHS[k].slice(0, 4);
+    cats.push({end: MONTHS[k], label: isDec ? y : '12 m a ' + mLabel(MONTHS[k]), short: isDec ? "'" + y.slice(2) : MES[+MONTHS[k].slice(5, 7) - 1] + "'" + y.slice(2), title: isDec ? 'Diciembre ' + (+y - 1) + ' a diciembre ' + y : mLabel(MONTHS[k - 12]) + ' a ' + mLabel(MONTHS[k]), vals: r.c.concat([r.fxe]), tot: r.cur, cons: r.cons});
+  }
+  const layers = gs.map((gr, i) => ({label: gr.l, color: cols[i]})).concat([{label: 'Efecto del tipo de cambio', hatch: true}]);
+  gs.forEach((gr, i) => { const it = legendItem(lg, 'dot', cols[i], gr.short); });
+  const hi = legendItem(lg, 'dot', null, 'Efecto del tipo de cambio'); hi.style.background = 'repeating-linear-gradient(45deg, var(--ink2) 0 1.5px, transparent 1.5px 4px)'; hi.style.border = '1px solid var(--ink2)';
+  const ti = legendItem(lg, 'ln', 'var(--ink)', 'Crecimiento en soles corrientes'); ti.style.height = '3px';
+  stackYears(boxY, {cats, layers, id: 'growy', aria: 'Contribución al crecimiento anual del ' + totalName + ' por año', empty: 'Sin años completos en el rango elegido.'});
+  registerTable('grow', w => {
+    w.replaceChildren();
+    const t = htmlEl('table', null, w), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+    ['Periodo'].concat(gs.map(x => x.short), ['Efecto del tipo de cambio', 'A tipo de cambio constante', 'En soles corrientes']).forEach(c => htmlEl('th', {text: c}, hr));
+    const tb = htmlEl('tbody', null, t);
+    cats.slice().reverse().forEach(c => { const tr = htmlEl('tr', null, tb); htmlEl('td', {text: c.title}, tr); c.vals.concat([c.cons, c.tot]).forEach(v => htmlEl('td', {text: spp(v, 2)}, tr)); });
+  });
+  const notes = ['Una contribución es el cambio del rubro en el año dividido entre el ' + totalName + ' total de hace 12 meses: si el ' + totalName + ' creció 10 % y ' + (side === 'A' ? 'los créditos' : 'las obligaciones con el público') + ' aportan 6 puntos, más de la mitad del crecimiento vino de ' + (side === 'A' ? 'los créditos.' : 'esas obligaciones.') + ' La parte en moneda extranjera de cada rubro se valúa al tipo de cambio de hace 12 meses; lo que falta para llegar al crecimiento en soles corrientes es el efecto del tipo de cambio: positivo si el sol se depreció, negativo si se apreció. El tipo de cambio es el contable que la SBS informa en sus cuadros para cada fin de mes.'];
+  if (!isEnt(key)) notes.push('En los subsistemas, una empresa que entra o sale del grupo cuenta como crecimiento o caída (por ejemplo, Compartamos y Santander Consumer pasaron de financieras a banca en 2025; ver «Cambios a lo largo del tiempo»).');
+  if (j >= J2013 && j < J2013 + 12) notes.push('En 2012-2013 algunas cuentas cambiaron de contenido con el Manual de Contabilidad de enero de 2013; los rubros de este gráfico casi no se ven afectados.');
+  const J2016 = MONTHS.indexOf('2016-01');
+  if (side === 'P' && ((j >= J2016 && j < J2016 + 12) || cats.some(c => { const k = MONTHS.indexOf(c.end); return k >= J2016 && k < J2016 + 12; }))) notes.push('Desde enero de 2016 las operaciones de reporte con el BCRP aparecen en cuentas por pagar y ya no en adeudos: la Res. SBS 6231-2015 eliminó del Manual de Contabilidad las subcuentas de pactos de recompra de los adeudos con el BCRP y creó las cuentas por pagar por operaciones de reporte. Por eso, en los bancos que tenían esas operaciones (y en la banca y el sistema), en 2016 los adeudos caen y los otros pasivos suben sin que cambie el fondeo; en financieras, cajas y empresas de créditos el cambio casi no se ve.');
+  $('grow-note').textContent = notes.join(' ');
+}
+
+// Bloques patrimoniales que una caja municipal reporta temporalmente en «otros activos» y «otros pasivos».
+const BLOCKS = [
+  {e: 'cmac-arequipa', from: '2015-06', to: '2018-12', t: 'Caja Arequipa reporta en «otros activos» y «otros pasivos» el bloque patrimonial de la Caja Rural Señor de Luren (Res. SBS 3501-2015), hasta su migración al 31 de diciembre de 2018.'},
+  {e: 'cmac-arequipa', from: '2024-09', to: null, t: 'Caja Arequipa reporta temporalmente en «otros activos» y «otros pasivos» el bloque patrimonial de Financiera Credinka (Res. SBS 3370-2024).'},
+  {e: 'cmac-piura', from: '2024-07', to: null, t: 'Caja Piura reporta en «otros activos» y «otros pasivos» el bloque patrimonial de la Caja Sullana (Res. SBS 2494-2024).'},
+];
+function blockNote(key, j) {
+  const m = MONTHS[j], id = isEnt(key) ? key.split('/')[1] : null;
+  if (!(id || key === 'cajas-municipales' || key === 'sistema')) return null;
+  const hit = BLOCKS.filter(b => m >= b.from && (!b.to || m <= b.to) && (!id || b.e === id));
+  return hit.length ? hit.map(b => b.t).join(' ') + ' Por eso el peso de esos rubros no refleja el negocio de la caja en esos meses.' : null;
+}
+function childLayers(key, p) {
+  if (p === TA) return ACT_GROUPS.map((g, k) => ({label: g.l, short: g.short, color: ACT_COL[k], get: i => groupVal(key, g, i)}));
+  if (p === TPP || p === TP) return (p === TPP ? PK_GROUPS : PK_GROUPS.slice(0, 5)).map((g, k) => ({label: g.l, short: g.short, color: PK_COL[k], get: i => groupVal(key, g, i)}));
+  const kids = KIDS[p].filter(k => S(key, k).some(v => v > 0));
+  if (kids.length < 2) return null;
+  const last = lastIdx(key);
+  let main = kids;
+  if (kids.length > 5) {
+    main = kids.slice().sort((a, b) => (at(S(key, b), last) || 0) - (at(S(key, a), last) || 0)).slice(0, 5).sort((a, b) => a - b);
+  }
+  const rest = kids.filter(k => !main.includes(k));
+  const ramp = ['var(--q6)', 'var(--q5)', 'var(--q4)', 'var(--q3)', 'var(--q2)'].slice(0, main.length);
+  const L = main.map((k, n) => ({label: stripSub(NODES[k].l), short: stripSub(NODES[k].l).slice(0, 22), color: ramp[n], get: i => { const v = at(S(key, k), i); return v == null ? null : Math.max(0, v); }}));
+  if (rest.length) L.push({label: 'Resto: ' + rest.map(k => NODES[k].l).join(', '), short: 'Resto', color: 'var(--q1)', get: i => { let t = null; for (const k of rest) { const v = at(S(key, k), i); if (v != null) t = (t || 0) + Math.max(0, v); } return t; }});
+  return L;
+}
+function renderAcct() {
+  const key = state.scope, i = state.acct ?? TA, nd = NODES[i], idx = visIdx(), name = stripSub(nd.l);
+  const isA = nd.e === 'A' || i === TA || nd.e === 'C';
+  const den = isA ? TA : TPP, denName = isA ? 'del activo' : 'del total pasivo y patrimonio';
+  const marker = idx[0] < J2013 ? J2013 : null;
+  $('acc-title').textContent = name;
+  $('acc-desc').textContent = 'Saldo a fin de mes de ' + nameOf(key, effIdx(key)) + '.';
+  const s1 = [{label: nameOf(key, effIdx(key)), color: 'var(--c-ent)', get: j => at(S(key, i), j)}];
+  if (X(key, i)) s1.push({label: 'de la cual, en moneda extranjera', color: 'var(--c-sub)', dash: '5 3', get: j => at(X(key, i), j)});
+  lineLegend('acc-legend', s1, marker);
+  lineChart($('ch-acc'), {idx, series: s1, u: 'money', fmt: money, marker, aria: 'Saldo de ' + name, H: 260});
+  registerTable('acc', w => seriesTable(w, idx, s1, money));
+  const keys = [key].concat(peersOf(key, effIdx(key) ?? N - 1));
+  const cmpTxt = keys.length > 1 ? 'Comparado con ' + keys.slice(1).map(k => nameOf(k)).join(' y con el ') + '. ' : '';
+  // Para los totales el peso es siempre 100 %: se muestra el crecimiento anual.
+  const growth = i === TA || i === TPP;
+  $('share-title').textContent = growth ? name + ', variación anual' : name + ', % ' + denName;
+  $('share-desc').textContent = growth ? cmpTxt + 'Saldo frente al mismo mes del año anterior, en soles corrientes: incluye el efecto del tipo de cambio sobre los saldos en moneda extranjera.'
+    : cmpTxt + (keys.length > 1 ? 'Los porcentajes sí se pueden comparar entre entidades de distinto tamaño.' : 'Peso de la cuenta en el total, mes a mes.');
+  const s2 = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25,
+    get: growth ? j => { const a = at(S(k, i), j), b = at(S(k, i), j - 12); return a == null || !b ? null : 100 * (a / b - 1); } : j => ratio(at(S(k, i), j), at(S(k, den), j))}));
+  lineLegend('share-legend', s2, marker);
+  lineChart($('ch-share'), {idx, series: s2, u: 'pct', fmt: v => pct(v, 1), marker, aria: name + ' en % ' + denName, H: 260});
+  registerTable('share', w => seriesTable(w, idx, s2, v => pct(v, 2)));
+  // Composición de la cuenta en el tiempo.
+  const parent = i === TPP ? TPP : KIDS[i].length ? i : (nd.p >= 0 ? nd.p : TA);
+  const pnm = parent === TA ? 'el activo' : parent === TPP ? 'el pasivo y patrimonio' : stripSub(NODES[parent].l).toLowerCase();
+  const layers = childLayers(key, parent === TP ? TPP : parent);
+  $('kids-title').textContent = parent === TA ? 'Composición del activo en el tiempo' : parent === TPP || parent === TP ? 'Composición del pasivo y patrimonio en el tiempo' : 'Composición de ' + pnm + ' en el tiempo';
+  $('kids-desc').textContent = 'Peso de cada parte en el total, mes a mes' + (parent !== i ? ' (la cuenta elegida no tiene apertura: se muestra la de su rubro)' : '') + '.';
+  const box = $('ch-kids');
+  if (!layers) { box.replaceChildren(); emptyMsg(box, 'Esta cuenta no tiene apertura en el cuadro.'); $('kids-note').textContent = ''; }
+  else {
+    areaChart(box, {idx, layers, marker, aria: 'Composición de ' + pnm, totalName: 'Total de las partes'});
+    const neg = KIDS[parent].some(k => S(key, k).some(v => v < 0));
+    $('kids-note').textContent = neg ? 'Las partes con signo negativo (provisiones, intereses no devengados) no se dibujan: el 100 % es la suma de las partes positivas.' : '';
+  }
+}
+function renderCred() {
+  const key = state.scope, j = effIdx(key), box = $('ch-cred');
+  box.replaceChildren();
+  $('cred-note').textContent = '';
+  if (j == null) { emptyMsg(box, 'Sin datos en este mes.'); return; }
+  const g = k => at(S(key, NI[k]), j) || 0;
+  const vig_ = g('creditos_vigentes'), ref = g('creditos_refinanciados_reestructurados'), atr = g('creditos_atrasados');
+  const bruto = vig_ + ref + atr, prov = g('creditos_provisiones'), nod = g('creditos_intereses_no_devengados');
+  if (!bruto) { emptyMsg(box, 'Sin créditos en este mes.'); return; }
+  waterfall(box, {steps: [
+    {label: 'Vigentes', d: vig_}, {label: 'Refinanciados y reestructurados', short: 'Refinanciados', d: ref}, {label: 'Atrasados (vencidos y en cobranza judicial)', short: 'Atrasados', d: atr},
+    {label: 'Créditos brutos (directos)', short: 'Brutos', tot: bruto},
+    {label: 'Provisiones', d: prov}, {label: 'Intereses y comisiones no devengados', short: 'No devengados', d: nod},
+    {label: 'Créditos netos (en el balance)', short: 'Netos', tot: at(S(key, CN), j)},
+  ], fmt: (v, signed) => signed ? smoney(v) : money(v), valW: 128, aria: 'De créditos brutos a netos',
+  tip: r => [{value: r.kind === 'tot' ? money(r.b) : smoney(r.d), label: mLabel(MONTHS[j])}, {value: pct(ratio(Math.abs(r.kind === 'tot' ? r.b : r.d), bruto)), label: 'de los créditos brutos'}]});
+  const rc = at(S(key, NI.rendimientos_por_cobrar_creditos), j);
+  $('cred-note').textContent = 'En ' + mLabel(MONTHS[j]) + ', las provisiones equivalen al ' + pct(ratio(-prov, bruto)) + ' de los créditos brutos y los intereses no devengados, al ' + pct(ratio(-nod, bruto)) +
+    '. Aparte, en otro rubro del activo, los intereses ya ganados y aún no cobrados de los créditos (rendimientos por cobrar) suman ' + money(rc) + ' (' + pct(ratio(rc, bruto)) + ' de los brutos). La morosidad y la cobertura por tipo de crédito están en el tablero de colocaciones y mora.';
+}
+function renderFx() {
+  const key = state.scope, idx = visIdx();
+  const brutoX = j => sumS(key, ['creditos_vigentes', 'creditos_refinanciados_reestructurados', 'creditos_atrasados'], j, X);
+  const bruto = j => sumS(key, ['creditos_vigentes', 'creditos_refinanciados_reestructurados', 'creditos_atrasados'], j);
+  const series = [
+    {label: 'Activo', color: 'var(--c-ent)', get: j => ratio(at(X(key, TA), j), at(S(key, TA), j))},
+    {label: 'Créditos brutos', color: 'var(--c-sub)', dash: '5 3', get: j => ratio(brutoX(j), bruto(j))},
+    {label: 'Obligaciones con el público', color: 'var(--c-sys)', dash: '2 3', get: j => { const d = at(S(key, NI.obligaciones_publico), j); return d ? ratio(at(X(key, NI.obligaciones_publico), j), d) : null; }},
+  ].filter(s => idx.some(j => s.get(j) != null));
+  const lg = $('fx-legend'); lg.replaceChildren();
+  for (const s of series) { const i = legendItem(lg, 'ln' + (s.dash ? ' dash' : ''), s.dash ? null : s.color, s.label); if (s.dash) { i.style.borderTopColor = s.color; i.style.borderTopStyle = s.dash === '2 3' ? 'dotted' : 'dashed'; } }
+  lineChart($('ch-fx'), {idx, series, u: 'pct', fmt: v => pct(v, 1), aria: 'Dolarización', H: 240});
+  const gap = [{label: 'Activo ME − pasivo ME, % del patrimonio', color: 'var(--c-ent)', get: j => { const a = at(X(key, TA), j), p = at(X(key, TP), j), k = at(S(key, PAT), j); return a == null || p == null || !k ? null : 100 * (a - p) / k; }}];
+  $('gap-legend').replaceChildren();
+  lineChart($('ch-gap'), {idx, series: gap, u: 'pct', fmt: v => pct(v, 1), aria: 'Activo menos pasivo en moneda extranjera en % del patrimonio', H: 240});
+  registerTable('fx', w => seriesTable(w, idx, series.concat(gap), v => pct(v, 1)));
+  $('fx-note').textContent = 'Si la diferencia es positiva, la entidad tiene más activos que pasivos en moneda extranjera y, sin contar derivados, gana en soles cuando sube el dólar; si es negativa, pierde [1]. No es la posición global en moneda extranjera que la SBS limita, que suma la posición neta en derivados y se compara con el patrimonio efectivo [9]. Tampoco muestra si los deudores en dólares ganan en dólares.';
+}
+
+// ---------- Estado de resultados ----------
+const BASES = [
+  {id: 'ap', label: '% del activo promedio', title: 'Flujo de 12 meses / activo promedio de 12 meses'},
+  {id: 'if', label: '% de los ingresos financieros', title: 'Flujo de 12 meses / ingresos financieros de 12 meses'},
+  {id: 'f12', label: '12 meses, S/', title: 'Flujo de 12 meses en soles'},
+  {id: 'acc', label: 'Acumulado del año, S/', title: 'Acumulado de enero al mes, como lo publica la SBS'},
+];
+const baseFmt = (base, v, signed) => base === 'ap' || base === 'if' ? (signed ? sgnd(v, 2) + Math.abs(v).toFixed(2) + '%' : pct(v, 2)) : (signed ? smill(v) : mill(v));
+function renderEgp() {
+  const key = state.scope, j = effIdx(key), wrap = $('tb-egp'), base = state.base;
+  wrap.replaceChildren();
+  $('egp-note').textContent = '';
+  if (j == null) { emptyMsg(wrap, 'Sin datos en este mes.'); return; }
+  const jp = j - 12, bl = BASES.find(b => b.id === base);
+  $('egp-title').textContent = 'Estado de resultados, ' + (base === 'acc' ? 'enero a ' + mLabel(MONTHS[j]) : '12 meses a ' + mLabel(MONTHS[j]));
+  $('egp-desc').textContent = {ap: 'Cada línea como porcentaje del activo promedio: por cada S/ 100 de activo, cuánto entra y cuánto sale. Se puede comparar entre entidades de distinto tamaño.',
+    if: 'Cada línea como porcentaje de los ingresos financieros: de cada S/ 100 que ingresan por intereses y otras operaciones financieras, a dónde va cada sol.',
+    f12: 'Flujos de los últimos 12 meses en millones de soles: un año completo que termina en el mes elegido.',
+    acc: 'Acumulado de enero al mes, en millones de soles, como lo publica la SBS. Solo se compara con el mismo mes de otro año.'}[base];
+  if (base !== 'acc' && egpVal(key, RN, j, base) == null) { emptyMsg(wrap, f12Msg(key, j)); return; }
+  const t = htmlEl('table', null, wrap), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  const pctBase = base === 'ap' || base === 'if';
+  const unit = pctBase ? '' : ' (mill. S/)';
+  ['Línea', mLabel(MONTHS[j]) + unit, (jp >= 0 ? mLabel(MONTHS[jp]) : 'Hace 12 meses') + unit, pctBase ? 'Variación (pp)' : 'Variación anual'].forEach(c => htmlEl('th', {text: c}, hr));
+  const tb = htmlEl('tbody', null, t);
+  const pick = i => { state.line = i; renderEgp(); renderLine(); };
+  const row = (i, depth) => {
+    if (!vig(i, j) && !(jp >= 0 && vig(i, jp))) return false;
+    const sg = dsign(i), v0 = egpVal(key, i, j, base), vp0 = jp >= 0 ? egpVal(key, i, jp, base) : null;
+    if (!v0 && !vp0 && !NODES[i].sub && depth > 0) return false;
+    if ((NODES[i].k === 'resultado_venta_cartera' || NODES[i].k === 'participacion_trabajadores') && !v0 && !vp0) return false;
+    const v = v0 == null ? null : (NODES[i].sub ? v0 : sg * v0), vp = vp0 == null ? null : (NODES[i].sub ? vp0 : sg * vp0);
+    const tr = htmlEl('tr', {cls: 'pick' + (NODES[i].sub ? ' subt' : '') + (state.line === i ? ' sel' : ''), tabindex: 0}, tb);
+    const open = state.eopen.has(i);
+    nameCell(tr, i, depth, open, () => { open ? state.eopen.delete(i) : state.eopen.add(i); renderEgp(); });
+    const signed = !NODES[i].sub;
+    const var_ = v == null || vp == null ? '—' : pctBase ? spp(v - vp, 2) : (vp ? spct(100 * (v / vp - 1)) + (Math.sign(v) !== Math.sign(vp) ? ' *' : '') : '—');
+    [v == null ? (vig(i, j) ? '—' : 'no existe') : baseFmt(base, v, signed), vp == null ? (jp >= 0 && !vig(i, jp) ? 'no existe' : '—') : baseFmt(base, vp, signed), var_].forEach(x => htmlEl('td', {text: x, cls: x === '—' || x === 'no existe' ? 'na' : ''}, tr));
+    tr.addEventListener('click', () => pick(i));
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(i); } });
+    return open;
+  };
+  const walk = (i, depth) => { if (row(i, depth) && KIDS[i].length) for (const k of KIDS[i]) walk(k, depth + 1); };
+  NODES.forEach((nd, i) => { if (nd.e === 'R' && nd.p < 0) walk(i, 0); });
+  const notes = ['Los gastos, las provisiones y el impuesto llevan signo negativo porque restan; los subtotales van en negrita. Elija una fila para ver su historia abajo.'];
+  if (!pctBase) notes.push('Una variación con * cambia de signo (de ganancia a pérdida o al revés): el porcentaje no tiene lectura directa.');
+  notes.push('La diferencia de cambio, los derivados y la valorización de inversiones están dentro de los ingresos o de los gastos financieros (según sean ganancia o pérdida), así que el margen financiero bruto del Boletín no es solo margen de intereses.');
+  if (j < J2013 + 12) notes.push('Hasta diciembre de 2012 rige el Manual de Contabilidad anterior y algunas líneas tienen otro nombre o apertura. La participación de los trabajadores tiene su propia línea en 2010; desde 2011 va dentro de los gastos de personal (en la banca, la línea todavía trae S/ 10 millones en enero de 2011), así que el gasto de personal de 2010 no es comparable con el de los años siguientes.');
+  $('egp-note').textContent = notes.join(' ');
+}
+function renderLine() {
+  const key = state.scope, i = state.line ?? RN, nd = NODES[i], idx = visIdx(), base = state.base, name = stripSub(nd.l);
+  const pctBase = base === 'ap' || base === 'if', sg = nd.sub ? 1 : dsign(i);
+  const marker = idx[0] < J2013 ? J2013 : null;
+  $('line-title').textContent = name + ' · ' + BASES.find(b => b.id === base).label;
+  const keys = pctBase ? [key].concat(peersOf(key, effIdx(key) ?? N - 1)) : [key];
+  $('line-desc').textContent = base === 'acc' ? 'El acumulado vuelve a empezar cada enero: por eso la serie tiene forma de serrucho. Para comparar meses distintos use las otras bases.'
+    : pctBase && keys.length > 1 ? 'Comparado con ' + keys.slice(1).map(k => nameOf(k)).join(' y con el ') + '.' : 'Flujo de 12 meses de ' + nameOf(key, effIdx(key)) + '.';
+  const series = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25, get: j => { const v = egpVal(k, i, j, base); return v == null ? null : sg * v; }}));
+  lineLegend('line-legend', series, marker);
+  const fmt = pctBase ? v => pct(v, 2) : money;
+  lineChart($('ch-line'), {idx, series, u: pctBase ? 'pct' : 'money', fmt, marker, aria: name, H: 280});
+  registerTable('line', w => seriesTable(w, idx, series, fmt));
+  $('line-note').textContent = !nd.sub && sg < 0 ? 'Se dibuja con signo negativo porque resta en la cascada.' : '';
+}
+// Núcleo recurrente, partidas volátiles y otras provisiones (en flujo de 12 meses).
+const INT_IN = ['ingresos_financieros_disponible', 'ingresos_financieros_fondos_interbancarios', 'ingresos_financieros_inversiones', 'ingresos_financieros_creditos_directos'];
+const INT_OUT = ['gastos_financieros_obligaciones_publico', 'gastos_financieros_depositos_sistema_financiero', 'gastos_financieros_fondos_interbancarios', 'gastos_financieros_adeudos',
+  'gastos_financieros_obligaciones_circulacion_no_subordinadas', 'gastos_financieros_obligaciones_circulacion_subordinadas'];
+function sumFv(key, ks, j) { let t = 0; for (const k of ks) { const i = NI[k]; if (!vig(i, j)) continue; const v = at(F(key, i), j); if (v == null) return null; t += v; } return t; }
+function quality(key, j) {
+  const ii = sumFv(key, INT_IN, j), io = sumFv(key, INT_OUT, j), fsd = sumFv(key, ['gastos_financieros_primas_fondo_seguro_depositos'], j);
+  const isf = sumFv(key, ['ingresos_servicios_financieros'], j), gsf = sumFv(key, ['gastos_servicios_financieros'], j), ga = sumFv(key, ['gastos_administrativos'], j);
+  const prov = sumFv(key, ['provisiones_creditos_directos'], j), da = sumFv(key, ['provisiones_depreciacion_amortizacion_depreciacion', 'provisiones_depreciacion_amortizacion_amortizacion'], j);
+  const pda = sumFv(key, ['provisiones_depreciacion_amortizacion'], j), rai = sumFv(key, ['resultado_antes_impuesto_renta'], j);
+  const IF = sumFv(key, ['ingresos_financieros'], j), GF = sumFv(key, ['gastos_financieros'], j), oig = sumFv(key, ['otros_ingresos_gastos'], j), vc = sumFv(key, ['resultado_venta_cartera'], j);
+  if ([ii, io, fsd, isf, gsf, ga, prov, da, pda, rai, IF, GF, oig, vc].some(v => v == null)) return null;
+  const mi = ii - io - fsd;
+  const core = mi + isf - gsf - ga - prov - da;
+  const vol = (IF - ii) - (GF - io - fsd) + oig + vc;   // resto de ingresos y gastos financieros + otros + venta de cartera
+  const oth = pda - da;
+  return {mi, core, vol, oth, rai, fx: sumFv(key, ['ingresos_financieros_diferencia_cambio'], j) - sumFv(key, ['gastos_financieros_diferencia_cambio'], j)};
+}
+function renderQual() {
+  const key = state.scope, idx = visIdx(), marker = idx[0] < J2013 ? J2013 : null;
+  const q = j => quality(key, j);
+  const ap = (j, f) => { const r = q(j); return r ? apOf(key, j, f(r)) : null; };
+  const series = [
+    {label: 'Núcleo recurrente', short: 'Núcleo', color: 'var(--c-ent)', w: 2.25, get: j => ap(j, r => r.core)},
+    {label: 'Partidas volátiles', short: 'Volátiles', color: 'var(--c-sub)', dash: '5 3', get: j => ap(j, r => r.vol)},
+    {label: 'Otras provisiones (resta)', short: 'Otras provisiones', color: 'var(--c-sys)', dash: '2 3', get: j => ap(j, r => -r.oth)},
+    {label: 'Resultado antes de impuesto', short: 'Antes de impuesto', color: 'var(--ink2)', w: 1.25, get: j => ap(j, r => r.rai)},
+  ];
+  lineLegend('qual-legend', series, marker);
+  lineChart($('ch-qual'), {idx, series, u: 'pct', fmt: v => pct(v, 2), marker, endLabels: true, aria: 'Núcleo recurrente y partidas volátiles en % del activo promedio', H: 300});
+  registerTable('qual', w => seriesTable(w, idx, series, v => pct(v, 2)));
+  const j = effIdx(key), r = j != null ? q(j) : null;
+  $('qual-note').textContent = r ? 'En ' + mLabel(MONTHS[j]) + ' (12 meses): núcleo ' + pct(apOf(key, j, r.core), 2) + ' y volátiles ' + pct(apOf(key, j, r.vol), 2) + ' del activo promedio; de lo volátil, el resultado neto por diferencia de cambio es ' + pct(apOf(key, j, r.fx), 2) +
+    '. Núcleo = margen por intereses (ingresos por disponible, interbancarios, inversiones y créditos menos gastos por depósitos, interbancarios, adeudos y valores, y primas al Fondo de Seguro de Depósitos) + servicios financieros netos − gastos administrativos − provisiones para créditos directos − depreciación y amortización. Volátiles = el resto de los ingresos y gastos financieros (diferencia de cambio, valorización de inversiones, derivados, subsidiarias, reajuste por indexación hasta 2012 y otros) + otros ingresos y gastos + venta de cartera. Otras provisiones = provisiones, depreciación y amortización sin la depreciación ni la amortización (créditos indirectos, deterioro de inversiones, cuentas por cobrar, bienes realizables y otras). Núcleo + volátiles − otras provisiones = resultado antes de impuesto. Hasta 2012 la recuperación de créditos castigados iba en otros ingresos y gastos (volátiles); desde 2013 resta de las provisiones para créditos (núcleo). Es una agrupación analítica, no una categoría contable de la SBS: si una partida fue de verdad única solo lo dicen las notas de los estados financieros auditados.' : f12Msg(key, j ?? state.mi);
+}
+// ---------- Rendimientos y costos implícitos por partida y por moneda ----------
+// Cada fila: flujo de 12 meses de sus líneas del estado de resultados / promedio de los 12 saldos de fin de mes de
+// sus cuentas del balance (t−11 … t), en moneda nacional, extranjera y total. MN = total − ME en flujos y saldos.
+const YIELDS = [
+  {sec: 'Activos'},
+  {id: 'disp', l: 'Disponible', f: ['ingresos_financieros_disponible'], b: ['disponible']},
+  {id: 'iba', l: 'Fondos interbancarios', f: ['ingresos_financieros_fondos_interbancarios'], b: ['fondos_interbancarios_activo'], ib: true},
+  {id: 'inv', l: 'Inversiones, sin subsidiarias', f: ['ingresos_financieros_inversiones'], b: ['inversiones_netas'], bm: ['inversiones_subsidiarias']},
+  {id: 'cred', l: 'Créditos directos', f: ['ingresos_financieros_creditos_directos'], b: ['creditos_vigentes', 'creditos_refinanciados_reestructurados', 'creditos_atrasados']},
+  {id: 'act', l: 'Activos que rinden intereses', sum: ['disp', 'iba', 'inv', 'cred'], tot: true},
+  {sec: 'Pasivos'},
+  {id: 'pub', l: 'Obligaciones con el público', f: ['gastos_financieros_obligaciones_publico'], b: ['obligaciones_publico'], pub: true},
+  {id: 'dsf', l: 'Depósitos del sistema financiero', f: ['gastos_financieros_depositos_sistema_financiero'], b: ['depositos_sistema_financiero']},
+  {id: 'ibp', l: 'Fondos interbancarios', f: ['gastos_financieros_fondos_interbancarios'], b: ['fondos_interbancarios_pasivo'], ib: true},
+  {id: 'ade', l: 'Adeudos y obligaciones financieras', f: ['gastos_financieros_adeudos'], b: ['adeudos']},
+  {id: 'val', l: 'Valores en circulación', f: ['gastos_financieros_obligaciones_circulacion_no_subordinadas', 'gastos_financieros_obligaciones_circulacion_subordinadas'], b: ['obligaciones_circulacion_no_subordinadas', 'obligaciones_circulacion_subordinadas']},
+  {id: 'pas', l: 'Pasivos con costo', sum: ['pub', 'dsf', 'ibp', 'ade', 'val'], tot: true},
+  {sec: 'Diferencia'},
+  {id: 'spr', l: 'Rendimiento de los activos que rinden intereses − costo de los pasivos con costo', short: 'Rendimiento − costo', spread: ['act', 'pas']},
+  {sec: 'Aparte'},
+  {id: 'fsd', l: 'Prima del Fondo de Seguro de Depósitos, en % de las obligaciones con el público', short: 'Prima del Fondo de Seguro de Depósitos', f: ['gastos_financieros_primas_fondo_seguro_depositos'], b: ['obligaciones_publico'], pub: true},
+];
+const YBY = Object.fromEntries(YIELDS.filter(r => r.id).map(r => [r.id, r]));
+const CUR = ['mn', 'me', 'tot'];
+// Flujo de 12 meses y saldo promedio de una fila simple, por moneda: {f: {mn, me, tot}, b: {mn, me, tot}} (arrays de N).
+function yParts(key, r) {
+  return memo(key, 'yp' + r.id, () => {
+    const fl = c => { const out = new Array(N).fill(null); for (let j = 0; j < N; j++) { let t = 0; for (const k of r.f) { const i = NI[k]; if (!vig(i, j)) continue; const v = at(c === 'me' ? FX12(key, i) : F(key, i), j); if (v == null) { t = null; break; } t += v; } out[j] = t; } return out; };
+    const bal = c => { const raw = S(key, TA).map((p, j) => { if (p == null) return null; let t = 0; for (const k of r.b.concat(r.bm || [])) { const i = NI[k], sg = (r.bm || []).includes(k) ? -1 : 1; t += sg * ((c === 'me' ? at(X(key, i), j) : at(S(key, i), j)) || 0); } return t; }); return avg12(raw); };
+    const fT = fl('tot'), fX = fl('me'), bT = bal('tot'), bX = bal('me');
+    return {f: {tot: fT, me: fX, mn: fT.map((v, j) => v == null || fX[j] == null ? null : v - fX[j])}, b: {tot: bT, me: bX, mn: bT.map((v, j) => v == null || bX[j] == null ? null : v - bX[j])}};
+  });
+}
+function ecAt(key, j) { return key === 'empresas-credito' || (isEnt(key) && entSubAt(key, j) === 'empresas-credito'); }
+// Valor de una fila en el mes j y la moneda c: {v} o {why} (motivo cuando no hay cifra).
+function yCell(key, r, j, c) {
+  if (j == null || j < 0) return {why: 'sin dato'};
+  if (r.spread) { const a = yCell(key, YBY[r.spread[0]], j, c), b = yCell(key, YBY[r.spread[1]], j, c); return a.v != null && b.v != null ? {v: a.v - b.v} : {why: a.why || b.why}; }
+  let F12 = 0, B = 0, any = false;
+  const rows = r.sum ? r.sum.map(id => YBY[id]) : [r];
+  for (const s of rows) {
+    const p = yParts(key, s), fv = at(p.f[c], j), bv = at(p.b[c], j);
+    if (fv == null || bv == null) { if (r.sum) continue; return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : 'sin 12 meses de datos'}; }
+    F12 += fv; B += bv; any = true;
+  }
+  if (!any) return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : 'sin 12 meses de datos'};
+  if (r.pub && ecAt(key, j) && !r.sum) return {why: 'no capta depósitos'};
+  if (Math.abs(B) < 100) return {why: B === 0 ? 'sin saldo' : 'saldo casi nulo'};
+  const v = 100 * F12 / B;
+  if (r.ib && (v > 25 || v < 0)) return {why: 'no significativo'};
+  return {v};
+}
+function renderYld() {
+  const key = state.scope, j = effIdx(key), wrap = $('tb-yldm');
+  wrap.replaceChildren();
+  if (j == null) { emptyMsg(wrap, 'Sin datos en este mes.'); return; }
+  const jp = j - 12;
+  $('yld-title').textContent = 'Cuánto rinde cada activo y cuánto cuesta cada fuente de fondeo, 12 meses a ' + mLabel(MONTHS[j]);
+  const t = htmlEl('table', null, wrap), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  ['Partida', 'Moneda nacional', 'Moneda extranjera', 'Total', 'Total hace 12 meses', 'Variación', 'Saldo promedio (mill. S/)'].forEach(c => htmlEl('th', {text: c}, hr));
+  const tb = htmlEl('tbody', null, t);
+  const pick = id => { state.yrow = id; renderYld(); };
+  for (const r of YIELDS) {
+    if (r.sec) { const tr = htmlEl('tr', {cls: 'sec'}, tb); htmlEl('td', {text: r.sec, colspan: 7}, tr); continue; }
+    const tr = htmlEl('tr', {cls: 'pick' + (r.tot || r.spread ? ' subt' : '') + (r.ib ? ' ref' : '') + (state.yrow === r.id ? ' sel' : ''), tabindex: 0}, tb);
+    const nm = htmlEl('td', {cls: 'name'}, tr);
+    htmlEl('span', {text: r.l + (r.ib ? ' (referencial)' : '')}, nm);
+    const cells = CUR.map(c => yCell(key, r, j, c));
+    const prev = yCell(key, r, jp, 'tot');
+    cells.forEach(cc => htmlEl('td', cc.v != null ? {text: pct(cc.v, 2)} : {text: cc.why, cls: 'why'}, tr));
+    htmlEl('td', prev.v != null ? {text: pct(prev.v, 2)} : {text: jp < 0 ? 'sin dato' : prev.why, cls: 'why'}, tr);
+    htmlEl('td', cells[2].v != null && prev.v != null ? {text: spp(cells[2].v - prev.v, 2)} : {text: '—', cls: 'na'}, tr);
+    let bal = null;
+    if (!r.spread) { bal = 0; for (const s of (r.sum ? r.sum.map(id => YBY[id]) : [r])) { const b = at(yParts(key, s).b.tot, j); if (b == null) { bal = null; break; } bal += b; } }
+    htmlEl('td', {text: r.spread ? 'no aplica' : r.id === 'fsd' ? 'el de obligaciones con el público' : mill(bal), cls: bal == null && !r.spread && r.id !== 'fsd' ? 'na' : ''}, tr);
+    tr.addEventListener('click', () => pick(r.id));
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(r.id); } });
+  }
+  // Historia de la fila elegida: total, moneda nacional y moneda extranjera.
+  const r = YBY[state.yrow] || YBY.cred, idx = visIdx(), marker = idx[0] < J2013 ? J2013 : null;
+  $('yld-ch-title').textContent = (r.short || r.l) + (r.spread ? ', en puntos porcentuales' : ', % anual implícito');
+  const series = [
+    {label: 'Total', color: 'var(--c-ent)', w: 2.25, get: k => yCell(key, r, k, 'tot').v ?? null},
+    {label: 'Moneda nacional', short: 'MN', color: 'var(--c-sub)', dash: '5 3', get: k => yCell(key, r, k, 'mn').v ?? null},
+    {label: 'Moneda extranjera', short: 'ME', color: 'var(--c-sys)', dash: '2 3', get: k => yCell(key, r, k, 'me').v ?? null},
+  ];
+  lineLegend('yld-legend', series, marker);
+  lineChart($('ch-yld'), {idx, series, u: 'pct', fmt: v => pct(v, 1), marker, endLabels: true, aria: 'Rendimiento o costo implícito de ' + r.l + ' por moneda', H: 260, empty: 'Sin datos para esta partida en el rango elegido.'});
+  registerTable('yld', w => seriesTable(w, idx, series, v => pct(v, 2)));
+  const notes = ['Rendimiento o costo implícito = ingresos o gastos financieros de los últimos 12 meses de la partida / promedio de sus 12 saldos de fin de mes. Son promedios de toda la cartera y de todo el fondeo; las tasas de los créditos nuevos están en el tablero de tasas activas.',
+    'Créditos directos: vigentes, refinanciados y reestructurados y atrasados, antes de provisiones. Sus ingresos incluyen comisiones que se registran como ingreso de créditos; los intereses de los créditos atrasados, refinanciados y reestructurados solo entran cuando se cobran, así que el cociente sale algo por debajo de lo que rinde la cartera al día. Desde enero de 2013, según la nota de los cuadros de la SBS, los saldos de créditos vigentes, refinanciados, reestructurados, vencidos y en cobranza judicial se presentan netos de los ingresos no devengados por arrendamiento financiero y lease-back, lo que mueve un poco el saldo.',
+    'Inversiones: sin las inversiones en subsidiarias ni sus resultados, y sin las ganancias o pérdidas por valorización, que no son rendimiento corriente (van en «partidas volátiles»).',
+    'Fondos interbancarios: préstamos entre entidades a muy corto plazo, sobre todo de un día. El saldo a fin de mes no representa el saldo de todo el mes, así que su cociente es solo referencial; donde sale negativo o mayor a 25 % se marca «no significativo».',
+    'En moneda extranjera los ingresos, los gastos y los saldos están en soles al tipo de cambio de cada mes: una variación fuerte del dólar dentro del año mueve un poco el cociente. «Activos que rinden intereses» y «pasivos con costo» son agrupaciones de este tablero; su diferencia no es el margen financiero, que además depende de cuánto activo se financia con patrimonio y con pasivos sin costo.',
+    'Desde enero de 2016 las operaciones de reporte con el BCRP están en cuentas por pagar (hasta diciembre de 2015 estaban en adeudos) y el Boletín registra su costo en los gastos por servicios financieros: ni su saldo ni su costo entran en esta tabla, ni en «adeudos» ni en «pasivos con costo».',
+    'La prima del Fondo de Seguro de Depósitos se muestra aparte, como orden de magnitud: el Fondo la calcula sobre el promedio trimestral de los depósitos cubiertos por el seguro (hasta el monto máximo de cobertura), que son solo una parte de las obligaciones con el público, con una tasa que según la Ley General depende de la clasificación de riesgo de la entidad.'];
+  if (ecAt(key, j)) notes.push('Las empresas de créditos no captan depósitos del público: sus obligaciones con el público son mínimas y no tienen costo comparable.');
+  $('yld-note').textContent = notes.join(' ');
+}
+
+// ---------- Comparar ----------
+function cmpKeys(j) {
+  const key = state.scope, out = [];
+  if (isEnt(key)) out.push(key);
+  out.push('sistema');
+  SUBS.forEach(s => out.push(s.k));
+  return out;
+}
+function renderCmp() {
+  const key = state.scope, j = effIdx(key);
+  const mlab = j == null ? '' : mLabel(MONTHS[j]);
+  for (const [id, groups, cols] of [['cmpA', ACT_GROUPS, ACT_COL], ['cmpP', PK_GROUPS, PK_COL]]) {
+    const box = $('ch-' + id), lg = $(id + '-legend');
+    lg.replaceChildren();
+    groups.forEach((g, k) => { const s = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot'}, s).style.background = cols[k]; s.append(g.l); });
+    if (j == null) { box.replaceChildren(); emptyMsg(box, 'Sin datos en este mes.'); continue; }
+    const mySub = isEnt(key) ? entSubAt(key, j) : key;
+    const rows = cmpKeys(j).map(k => ({label: isEnt(k) ? nameOf(k, j) : k === 'sistema' ? 'Sistema financiero' : SUB_BY[k].l, bold: k === key || (isEnt(key) && k === mySub), vals: at(S(k, TA), j) == null ? null : groups.map(g => groupVal(k, g, j))}));
+    barStack(box, {rows, layers: groups.map((g, k) => ({label: g.l, color: cols[k]})), aria: 'Comparación de la estructura', labW: 210, inLabels: true, totalName: id === 'cmpA' ? 'Activo total' : 'Pasivo y patrimonio'});
+    $(id + '-desc').textContent = (id === 'cmpA' ? 'Peso de cada rubro en el activo' : 'Peso de cada fuente en el pasivo y patrimonio') + ', ' + mlab + '. En negrita, la selección' + (isEnt(key) ? ' y su subsistema' : '') + '.';
+  }
+  // Estado de resultados en % del activo promedio.
+  const wrap = $('tb-cmpR');
+  wrap.replaceChildren();
+  $('cmpR-note').textContent = '';
+  if (j == null) { emptyMsg(wrap, 'Sin datos en este mes.'); return; }
+  $('cmpR-desc').textContent = 'Flujos de 12 meses a ' + mlab + ' en % del activo promedio de 12 meses. Lo que resta va con signo negativo.';
+  if (j < J2011) { emptyMsg(wrap, f12Msg(key, j)); return; }
+  const keys = cmpKeys(j), t = htmlEl('table', null, wrap), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  htmlEl('th', {text: 'Línea'}, hr);
+  keys.forEach(k => htmlEl('th', {text: isEnt(k) ? nameOf(k, j) : k === 'sistema' ? 'Sistema' : SUB_BY[k].s, title: isEnt(k) ? '' : nameOf(k)}, hr));
+  const tb = htmlEl('tbody', null, t);
+  const all = keys.map(k => egpSteps(k, j, 'ap'));
+  const labels = [];
+  all.forEach(st => (st || []).forEach(s => { if (!labels.some(l => l.label === s.label)) labels.push({label: s.label, tot: s.tot != null}); }));
+  const order = EGP_STEPS.map(s => s.l || (s.k && stripSub(NODES[NI[s.k]].l)));
+  labels.sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label));
+  for (const L of labels) {
+    const tr = htmlEl('tr', {cls: L.tot ? 'subt' : ''}, tb);
+    htmlEl('td', {text: L.label}, tr);
+    all.forEach(st => { const s = st && st.find(x => x.label === L.label); const v = s ? (s.tot != null ? s.tot : s.d) : (st ? 0 : null); htmlEl('td', {text: v == null ? '—' : (L.tot ? pct(v, 2) : sgnd(v, 2) + Math.abs(v).toFixed(2) + '%'), cls: v == null ? 'na' : ''}, tr); });
+  }
+  const miss = keys.filter((k, n) => !all[n]);
+  $('cmpR-note').textContent = (miss.length ? 'Sin flujo de 12 meses: ' + miss.map(k => nameOf(k, j)).join(', ') + '. ' : '') + 'Las empresas de créditos no pagan primas al Fondo de Seguro de Depósitos y casi no tienen gastos por obligaciones con el público. Los niveles de ROE, ROA, eficiencia y costo del riesgo están en el tablero de rentabilidad.';
+}
+
+// ---------- Cuentas (glosario) ----------
+let GL_BY = {};
+const asText = v => v == null ? '' : Array.isArray(v) ? v.join('; ') : typeof v === 'object' ? Object.entries(v).map(([a, b]) => a + ': ' + b).join('; ') : String(v);
+function para(box, txt) { String(txt).split(/\n\s*\n/).forEach(p => { if (p.trim()) htmlEl('p', {text: p.trim()}, box); }); }
+function linkOrText(box, txt) {
+  const s = asText(txt);
+  const re = /(https?:\/\/[^\s);,]+)/g;
+  let last = 0, m;
+  while ((m = re.exec(s))) {
+    if (m.index > last) box.append(s.slice(last, m.index));
+    const a = htmlEl('a', {href: m[1], target: '_blank', rel: 'noopener', text: (() => { try { return new URL(m[1]).hostname.replace(/^www\./, ''); } catch (e) { return m[1]; } })()}, box);
+    last = m.index + m[0].length;
+  }
+  if (last < s.length) box.append(s.slice(last));
+}
+const FIELDS = [['que_es', 'Qué es'], ['como_se_calcula', 'Cómo se calcula'], ['incluye', 'Qué incluye'], ['como_leerla', 'Cómo leerla'], ['ojo', 'Ojo'], ['periodos', 'Dónde y desde cuándo'], ['fuente', 'Fuente']];
+// Título de la ficha: el rótulo del árbol si la cuenta está en él; si no, el rótulo del cuadro (que la SBS
+// escribe en mayúsculas) en tipo oración.
+const sentence = t => t && t === t.toUpperCase() ? t.charAt(0) + t.slice(1).toLowerCase() : t;
+const fichaTitle = c => NI[c.var] != null ? stripSub(NODES[NI[c.var]].l) : sentence(c.rotulo || c.titulo || c.nombre || c.concepto || c.var);
+function fichaEl(c, box, idp) {
+  const lvl = +c.nivel || 1;
+  const el = htmlEl('div', {cls: 'ficha l' + Math.min(3, lvl), id: idp + c.var}, box);
+  const h = htmlEl('h3', null, el);
+  h.append(fichaTitle(c));
+  if (c.estado) htmlEl('span', {cls: 'chip', text: c.estado === 'EGP' ? 'Estado de resultados' : 'Balance'}, h);
+  if (idp === 'c-') htmlEl('span', {cls: 'chip', text: lvl === 1 ? 'Cuenta principal' : lvl === 2 ? 'Subcuenta' : 'Detalle'}, h);
+  if (c.padre && GL_PARENT_NAME(c.padre)) htmlEl('p', {cls: 'path', text: 'Parte de: ' + GL_PARENT_NAME(c.padre)}, el);
+  const dl = htmlEl('dl', {cls: 'defs'}, el);
+  for (const [f, lab] of FIELDS) {
+    let v = c[f];
+    if (f === 'periodos' && (c.periodos || c.subsistemas)) v = [asText(c.periodos), asText(c.subsistemas)].filter(Boolean).join('. ');
+    if (!asText(v)) continue;
+    htmlEl('dt', {text: lab}, dl);
+    const dd = htmlEl('dd', null, dl);
+    if (f === 'fuente') linkOrText(dd, v); else dd.textContent = asText(v);
+  }
+  return el;
+}
+const GL_PARENT_NAME = k => { const i = NI[k]; if (i != null) return stripSub(NODES[i].l); const c = GL_BY[k]; return c ? c.rotulo : null; };
+function buildGlossary() {
+  const G = (T && T.glosario) || {intro: [], conceptos: [], cuentas: []};
+  GL_BY = Object.fromEntries((G.cuentas || []).map(c => [c.var, c]));
+  const intro = $('gl-intro'); intro.replaceChildren();
+  (G.intro || []).forEach(p => para(intro, p));
+  const cb = $('gl-conceptos'); cb.replaceChildren();
+  (G.conceptos || []).forEach((c, k) => fichaEl({...c, var: c.var || c.id || ('c' + k), nivel: 1, estado: null, padre: null, rotulo: c.rotulo || c.titulo || c.nombre || c.concepto}, cb, 'k-'));
+  $('gl-conceptos-box').hidden = !(G.conceptos || []).length;
+  segment('gl-f', [{id: 'all', label: 'Todas'}, {id: 'BG', label: 'Balance'}, {id: 'EGP', label: 'Estado de resultados'}], () => state.gf, v => { state.gf = v; }, renderGlList);
+  $('gl-q').addEventListener('input', e => { state.gq = e.target.value; renderGlList(); });
+}
+function glOrder() {
+  // Orden del cuadro: balance (activo, pasivo, patrimonio, contingentes) y luego el estado de resultados, cada
+  // padre antes de sus hijos; las fichas sin nodo (cuentas solo hasta 2012) al final de su estado.
+  const cs = ((T && T.glosario && T.glosario.cuentas) || []).slice();
+  const pos = {}, out = [];
+  const visit = i => { pos[NODES[i].k] = out.length; out.push(i); KIDS[i].forEach(visit); };
+  balSections().forEach(s => { s.rows.forEach(visit); if (!(NODES[s.total].k in pos)) { pos[NODES[s.total].k] = out.length; out.push(s.total); } });
+  NODES.forEach((nd, i) => { if (nd.e === 'R' && nd.p < 0) visit(i); });
+  return cs.sort((a, b) => ((pos[a.var] ?? 1e4 + (a.estado === 'EGP' ? 500 : 0)) - (pos[b.var] ?? 1e4 + (b.estado === 'EGP' ? 500 : 0))));
+}
+const norm = s => asText(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+function renderGlList() {
+  const box = $('gl-list'), q = norm(state.gq.trim());
+  box.replaceChildren();
+  let n = 0;
+  for (const c of glOrder()) {
+    if (state.gf !== 'all' && c.estado !== state.gf) continue;
+    if (q && !norm([fichaTitle(c), c.rotulo, c.que_es, c.incluye, c.como_leerla, c.ojo].join(' ')).includes(q)) continue;
+    fichaEl(c, box, 'c-');
+    n++;
+  }
+  $('gl-count').textContent = n + ' cuenta' + (n === 1 ? '' : 's');
+  if (!n) emptyMsg(box, 'Ninguna cuenta coincide con la búsqueda.');
+}
+function openFicha(k) {
+  state.gq = ''; state.gf = 'all';
+  $('gl-q').value = '';
+  $('gl-f').querySelectorAll('button').forEach((b, n) => b.setAttribute('aria-pressed', String(n === 0)));
+  showTab('cuentas', true);
+  renderGlList();
+  const el = $('c-' + k);
+  if (!el) return;
+  document.querySelectorAll('.ficha.hl').forEach(x => x.classList.remove('hl'));
+  el.classList.add('hl');
+  el.scrollIntoView({block: 'start'});
+}
+
+// ---------- Cómo leer y cambios ----------
+const STEPS = [
+  {t: '¿De qué está hecho el activo y qué lo hace crecer?', p: 'De cada 100 soles que la entidad tiene, cuántos presta, cuántos guarda como liquidez y cuántos están inmovilizados; y qué rubros explican que el activo crezca.',
+    c: ['Peso de cada rubro: rubro / activo total × 100 (tabla «Balance general» y «Composición del activo en el tiempo»).',
+      'Contribución de cada rubro al crecimiento anual del activo, en puntos porcentuales: cambio del rubro en 12 meses / activo total de hace 12 meses × 100. Las contribuciones suman el crecimiento del activo (tarjeta «¿Qué explica el crecimiento?»).',
+      'Crecimiento a tipo de cambio constante: la parte en moneda extranjera del mes se valúa al tipo de cambio de hace 12 meses. La diferencia con el crecimiento en soles corrientes es el efecto del tipo de cambio, que no es negocio nuevo.',
+      'Una lectura útil separa lo que rinde intereses (fondos interbancarios, inversiones salvo las inversiones en subsidiarias, créditos vigentes y refinanciados), la liquidez de bajo rendimiento (disponible) y lo que no rinde intereses (créditos atrasados, inversiones en subsidiarias, cuentas y rendimientos por cobrar, bienes realizables, inmuebles y otros activos) [1]. Este tablero no calcula esa agrupación: se arma sumando las cuentas de la tabla. Es una agrupación analítica, no la definición de la SBS de activo productivo.'],
+    a: 'Que crezca lo que no rinde, sobre todo los bienes realizables (bienes recibidos en pago de deudas) y los otros activos. Un margen que cae suele explicarse en parte por más activos que no rinden [1]. También, un crecimiento que en soles parece fuerte pero que a tipo de cambio constante es bajo: parte de ese crecimiento es solo la subida del dólar.',
+    n: 'Si la liquidez es suficiente (tablero de liquidez y fondeo) o si los créditos son de buena calidad (tablero de colocaciones y mora). No hay un porcentaje «correcto» de créditos sobre activo: depende del modelo de negocio.', tab: 'balance'},
+  {t: '¿Qué presta y cómo pasa de bruto a neto?', p: 'En qué productos presta y cuánto descuenta del saldo prestado para llegar a la cifra del balance.',
+    c: ['Créditos brutos (directos) = vigentes + refinanciados y reestructurados + atrasados.', 'Créditos netos = créditos brutos + provisiones + intereses no devengados (las dos últimas vienen con signo negativo).', 'Mezcla de productos: vigentes de cada modalidad / total vigentes × 100 (abra «Créditos netos» y luego «Vigentes» en la tabla).'],
+    a: 'Un cambio brusco de mezcla hacia productos de mayor riesgo, o rendimientos por cobrar que crecen más rápido que los créditos: pueden ser intereses registrados como ingreso que todavía no se cobran [1]. En 2020 los rendimientos por cobrar de los créditos del sistema subieron con las reprogramaciones (de S/ 2.8 mil millones en febrero a S/ 4.7 mil millones en mayo) y luego bajaron. Además, en diciembre de 2020 la SBS ordenó extornar (revertir) los intereses devengados no cobrados que se capitalizaron al reprogramar créditos y registrarlos como ingresos diferidos [8]. Por eso en 2020-2021 esas cuentas no se leen solo como negocio.',
+    n: '«Modalidad» es el producto (tarjeta, préstamo, hipotecario), no el tipo de cliente. La morosidad por segmento está en el tablero de colocaciones y mora.', tab: 'balance'},
+  {t: '¿Con qué dinero se financia y cuánto pone el dueño?', p: 'De cada 100 soles de activo, cuántos vienen de depositantes, de otros bancos o del mercado, y cuántos de los accionistas.',
+    c: ['Peso de cada fuente: fuente / (pasivo + patrimonio) × 100; ese total es igual al activo.', 'Créditos brutos / obligaciones con el público: la relación préstamos / depósitos es una métrica central de fondeo [6].', 'Apalancamiento contable: activo / patrimonio.'],
+    a: 'Más dependencia de fuentes de corto plazo o volátiles, poca diversificación y depósitos que caen [5]. En el patrimonio, que una parte grande sean ajustes o resultados no capitalizados, que pueden revertirse o repartirse.',
+    n: 'Plazos, concentración de depositantes y ratios de liquidez regulatorios (tablero de liquidez y fondeo). El patrimonio contable no es el patrimonio efectivo ni el ratio de capital (tablero de solvencia). En las empresas de créditos la relación préstamos / depósitos no existe.', tab: 'comparar'},
+  {t: '¿En qué moneda presta y en qué moneda se endeuda?', p: 'Si la entidad está calzada en dólares o si una subida o bajada del tipo de cambio la afecta.',
+    c: ['Dolarización: activo, créditos brutos y obligaciones con el público en moneda extranjera / su total × 100.', 'Activo en moneda extranjera − pasivo en moneda extranjera, en % del patrimonio. Si es positivo, gana cuando sube el dólar; si es negativo, pierde [1].'],
+    a: 'Una diferencia grande y creciente frente al patrimonio. Como referencia, la SBS limita las posiciones globales de sobreventa y de sobrecompra a 10 % del patrimonio efectivo cada una [9]; los supervisores suelen fijar límites entre 10 % y 15 % del capital [1].',
+    n: 'Si la entidad cumple el límite de la SBS: la posición global suma a esta diferencia la posición neta en derivados, se compara con el patrimonio efectivo y debe cumplirse a diario [9]. Tampoco se ve si los deudores en dólares ganan en dólares.', tab: 'balance'},
+  {t: '¿Cuánto rinde lo que presta y cuánto le cuesta el dinero?', p: 'De dónde sale el margen: de prestar caro, de financiarse barato o de otras fuentes.',
+    c: ['Rendimiento implícito de cada activo = sus ingresos financieros de 12 meses / promedio de sus 12 saldos de fin de mes: disponible, fondos interbancarios, inversiones (sin las inversiones en subsidiarias) y créditos directos (vigentes, refinanciados y reestructurados y atrasados, antes de provisiones; para la cartera, el denominador es la cartera bruta promedio, como en [3]) [1].', 'Costo implícito de cada fuente = sus gastos financieros de 12 meses / promedio de sus 12 saldos: obligaciones con el público, depósitos del sistema financiero, fondos interbancarios, adeudos y valores en circulación [1, 3]. Las operaciones de reporte con el BCRP, en cuentas por pagar desde 2016, no entran. Las primas al Fondo de Seguro de Depósitos se muestran aparte.', 'Cada uno en moneda nacional, en moneda extranjera y en total (tabla «Cuánto rinde cada activo y cuánto cuesta cada fuente de fondeo»): así se ve si el margen sale de los soles o de los dólares.', 'Para comparar entidades de distinto tamaño, cada línea del estado de resultados también se expresa en % del activo promedio [1, 4].'],
+    a: 'Un margen que se estrecha mientras crece el activo que no rinde, o un margen que sube sin cambios en el entorno: puede indicar que la entidad asume más riesgo [1].',
+    n: 'Es un promedio de toda la cartera, no la tasa de los créditos nuevos (tablero de tasas activas). No hay un margen «sano» universal: compare con el subsistema. Los fondos interbancarios son préstamos a muy corto plazo, sobre todo de un día: su saldo de fin de mes no representa el del mes y su cociente es solo referencial. En moneda extranjera, una variación fuerte del dólar dentro del año mueve un poco el cociente.', tab: 'resultados'},
+  {t: 'Del margen a la utilidad: ¿quién se queda con cada sol?', p: 'Por cada 100 soles de activo promedio, cuánto queda de margen y cuánto se va en provisiones, en gastos de operación y en impuestos.',
+    c: ['La cascada del Boletín: ingresos financieros − gastos financieros = margen financiero bruto; − provisiones para créditos directos = margen financiero neto; + ingresos − gastos por servicios financieros (+ venta de cartera desde setiembre de 2015) = margen operacional; − gastos administrativos = margen operacional neto; − provisiones, depreciación y amortización + otros ingresos y gastos = resultado antes de impuesto; (hasta 2012, − participación de trabajadores) − impuesto a la renta = resultado neto. Cada línea, en % del activo promedio [1, 7].', 'Resultado neto / activo promedio = ROA. ROE = ROA × activo promedio / patrimonio promedio: así se ve si un ROE alto viene de ganar más por cada sol de activo o de operar con poco patrimonio.'],
+    a: 'Provisiones que se comen una parte creciente del margen bruto, gastos administrativos que crecen más que el margen, o un resultado que solo es positivo gracias a partidas volátiles (paso 7).',
+    n: 'El nivel y la evolución de ROE, ROA, eficiencia y costo del riesgo están en el tablero de rentabilidad. Comparar gastos administrativos / activo entre una caja y un banco sin considerar el tamaño de los préstamos lleva a conclusiones falsas [3].', tab: 'resultados'},
+  {t: '¿Qué parte de la utilidad se repite cada año?', p: 'Si la utilidad viene del negocio de prestar y cobrar comisiones o de ganancias que pueden no repetirse.',
+    c: ['Margen por intereses = ingresos financieros por disponible, fondos interbancarios, inversiones y créditos directos − gastos financieros por obligaciones con el público, depósitos del sistema financiero, fondos interbancarios, adeudos y valores en circulación − primas al Fondo de Seguro de Depósitos.', 'Núcleo recurrente = margen por intereses + servicios financieros netos − gastos administrativos − provisiones para créditos directos − depreciación y amortización.', 'Partidas volátiles = el resto de los ingresos y gastos financieros, en neto (diferencia de cambio, valorización de inversiones, derivados, subsidiarias, reajuste por indexación hasta 2012 y otros) + otros ingresos y gastos + venta de cartera.', 'Otras provisiones = provisiones para créditos indirectos, deterioro de inversiones, cuentas por cobrar, bienes realizables y otras (la parte de «provisiones, depreciación y amortización» que no es depreciación ni amortización).', 'Núcleo + volátiles − otras provisiones = resultado antes de impuesto.', '«Núcleo recurrente» y «partidas volátiles» son una agrupación analítica de este tablero, no categorías contables de la SBS.'],
+    a: 'Utilidad que depende de la diferencia de cambio, de valorizaciones o de ventas de cartera; un núcleo negativo cubierto por partidas volátiles. Los supervisores advierten contra la dependencia de ganancias extraordinarias o no recurrentes [5].',
+    n: 'Si una partida fue de verdad única: eso exige las notas de los estados financieros auditados. La diferencia de cambio mezcla la compraventa de dólares a clientes, más estable, con la revalorización de la posición, más volátil, y estos datos no las separan.', tab: 'resultados'},
+  {t: '¿Qué compromisos tiene fuera del balance?', p: 'Qué riesgos asumió la entidad que todavía no aparecen como activo.',
+    c: ['Contingentes / activo × 100 y la mezcla de cada tipo (avales y cartas fianza, líneas no utilizadas, derivados, otras) en la última sección de la tabla del balance.', 'Avales y cartas fianza / patrimonio.'],
+    a: 'Avales y cartas fianza que crecen rápido frente al patrimonio: no son activos ni pasivos, pero exponen a la entidad a riesgos y exigen capital [1].',
+    n: 'Los contingentes no se suman al activo. El monto de los derivados es nocional y puede no reflejar el riesgo real; las líneas no utilizadas pueden no usarse nunca [1]. El capital que exigen está en el tablero de solvencia.', tab: 'balance'},
+];
+function renderGuide() {
+  const box = $('g-steps');
+  box.replaceChildren();
+  STEPS.forEach((s, k) => {
+    const el = htmlEl('div', {cls: 'step', id: 'paso-' + (k + 1)}, box);
+    htmlEl('h3', {text: 'Paso ' + (k + 1) + '. ' + s.t}, el);
+    htmlEl('p', {text: s.p}, el);
+    const dl = htmlEl('dl', {cls: 'defs'}, el);
+    htmlEl('dt', {text: 'Cómo se calcula'}, dl);
+    const ul = htmlEl('ul', null, htmlEl('dd', null, dl));
+    s.c.forEach(c => htmlEl('li', {text: c}, ul));
+    htmlEl('dt', {text: 'Señal de alerta'}, dl); htmlEl('dd', {text: s.a}, dl);
+    htmlEl('dt', {text: 'Lo que no se puede concluir'}, dl); htmlEl('dd', {text: s.n}, dl);
+    const go = htmlEl('p', null, el);
+    const b = htmlEl('button', {type: 'button', cls: 'btn', text: 'Ir a la vista'}, go);
+    b.addEventListener('click', () => { showTab(s.tab, true); scrollTo(0, 0); });
+  });
+  // Cambios normativos (texto auditado aparte).
+  const C = (T && T.cambios) || {resumen: [], normas: []};
+  const ul = $('ch-resumen'); ul.replaceChildren();
+  (C.resumen || []).forEach(r => {
+    const li = htmlEl('li', null, ul);
+    if (typeof r === 'string') { li.textContent = r; return; }
+    if (r.t) htmlEl('b', {text: r.t}, li);
+    if (r.x) li.append((r.t && !/^[,.;:]/.test(r.x) ? ' ' : '') + r.x);
+    if (r.items && r.items.length) { const u = htmlEl('ul', null, li); r.items.forEach(t => htmlEl('li', {text: t}, u)); }
+    if (r.post) htmlEl('p', {text: r.post, style: 'margin:6px 0 0'}, li);
+  });
+  const tw = $('tb-normas'); tw.replaceChildren();
+  if ((C.normas || []).length) {
+    const t = htmlEl('table', null, tw), hr = htmlEl('tr', null, htmlEl('thead', null, t));
+    ['Vigente desde', 'Norma', 'Qué cambió', 'Efecto en las series', 'Fuente'].forEach(c => htmlEl('th', {text: c}, hr));
+    const tb = htmlEl('tbody', null, t);
+    C.normas.forEach(r => {
+      const tr = htmlEl('tr', null, tb);
+      const fv = asText(r.fecha_vigencia);
+      htmlEl('td', {text: /^\d{4}-\d{2}$/.test(fv) ? mLabel(fv) : /^\d{4}-\d{2}-\d{2}$/.test(fv) ? dLabel(fv) : fv}, tr);
+      htmlEl('td', {text: asText(r.norma)}, tr);
+      htmlEl('td', {text: asText(r.cambio)}, tr);
+      htmlEl('td', {text: asText(r.efecto)}, tr);
+      linkOrText(htmlEl('td', null, tr), r.fuente_url);
+    });
+  }
+  // Cortes visibles en los datos (calculados aquí, del sistema).
+  const dl = $('ch-datos'); dl.replaceChildren();
+  const s = 'sistema', a = J2013 - 1, b = J2013;
+  const v = (k, j) => at(S(s, NI[k]), j);
+  if (a >= 0) {
+    htmlEl('li', {text: 'Enero de 2013, Manual de Contabilidad modificado: en el sistema, los intereses y comisiones no devengados de los créditos pasan de ' + money(v('creditos_intereses_no_devengados', a)) + ' en diciembre de 2012 a ' + money(v('creditos_intereses_no_devengados', b)) +
+      ' en enero de 2013, y los créditos vigentes de arrendamiento financiero, de ' + money(v('creditos_vigentes_arrendamiento_financiero', a)) + ' a ' + money(v('creditos_vigentes_arrendamiento_financiero', b)) + ', porque desde ese mes los créditos se presentan netos de los ingresos no devengados por arrendamiento financiero y lease-back; los créditos netos casi no cambian (' + money(v('creditos_netos', a)) + ' y ' + money(v('creditos_netos', b)) +
+      '). Las provisiones del pasivo pasan de solo créditos contingentes a créditos indirectos y otras, y «capital adicional y ajustes al patrimonio» se separa en dos líneas. Por eso las líneas de detalle no se comparan entre 2012 y 2013, y los flujos de 12 meses de 2013 mezclan meses de los dos manuales.'}, dl);
+  }
+  htmlEl('li', {text: 'Setiembre de 2015: el resultado por venta de cartera pasa a tener línea propia, dentro del margen operacional (en las cajas municipales la línea aparece en agosto, en cero). Por eso esa línea y «otros ingresos y gastos» no se comparan antes y después de ese mes.'}, dl);
+  htmlEl('li', {text: 'Cada enero el resultado del ejercicio del patrimonio vuelve a empezar (solo trae el resultado de enero) y el del año anterior pasa a resultados acumulados, hasta que la junta de accionistas lo capitaliza, lo reparte o lo lleva a reservas.'}, dl);
+  htmlEl('li', {text: 'Enero a abril de 2014: el total de las cajas municipales del cuadro de balance incluye a la caja de Pisco con cifras del 31 de diciembre de 2013 (el del estado de resultados no). Aquí se omiten, así que el subsistema queda algo por debajo del total publicado en esos meses.'}, dl);
+  htmlEl('li', {text: 'Bloques patrimoniales recibidos por una caja municipal y reportados temporalmente en «otros activos» y «otros pasivos»: Caja Arequipa, con el de la Caja Rural Señor de Luren (de 2015 a 2018) y el de Financiera Credinka (desde setiembre de 2024), y Caja Piura, con el de la Caja Sullana (desde julio de 2024). En esos meses el peso de «otros activos» de esas cajas, y de las cajas municipales, no refleja su negocio.'}, dl);
+  htmlEl('li', {text: 'Algunas líneas solo existen en algunos subsistemas o desde cierto año: cuentas corrientes y comercio exterior (banca, y financieras desde 2013), tarjetas de crédito (banca y financieras; cajas rurales desde 2019 y municipales desde 2022), valores en circulación y obligaciones subordinadas (en las cajas y empresas de créditos, desde que emiten). Las empresas de créditos no tienen depósitos a la vista, de ahorro ni a plazo, ni depósitos del sistema financiero; sus obligaciones con el público son pequeñas (sobre todo otras obligaciones a la vista).'}, dl);
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = {desde: mLabel(MONTHS[0]), hasta: mLabel(D.hasta)}[e.dataset.v] || ''; });
+}
+
+// ---------- Pestañas ----------
+const TABS = ['resumen', 'balance', 'resultados', 'comparar', 'cuentas', 'guia'];
+function renderVisible() {
+  hideTip();
+  if (!D) return;
+  renderScopeNote();
+  if (state.tab === 'resumen') { renderKpis(); renderBalBars(); renderWf(); }
+  else if (state.tab === 'balance') { renderTree(); renderGrow(); renderAcct(); renderCred(); renderFx(); }
+  else if (state.tab === 'resultados') { renderEgp(); renderLine(); renderQual(); renderYld(); }
+  else if (state.tab === 'comparar') renderCmp();
+}
+function showTab(id, fromUser) {
+  state.tab = id;
+  for (const t of TABS) {
+    $('tab-' + t).hidden = t !== id || !D;
+    const b = $('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  $('filterbox').hidden = id === 'cuentas' || id === 'guia' || !D;
+  $('f-range-box').hidden = id === 'resumen' || id === 'comparar';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = $('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    $('tabbtn-' + next).focus();
+  });
+});
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { showTab(b.dataset.go, true); scrollTo(0, 0); }));
+addEventListener('hashchange', () => { const h = location.hash.slice(1); if (TABS.includes(h) && h !== state.tab) showTab(h, false); });
+
+// ---------- Arranque ----------
+(async function start() {
+  try { D = await loadData(D_GZ); } catch (e) { $('loading').textContent = 'No se pudieron cargar los datos en este navegador (hace falta Chrome, Edge o Firefox recientes, o Safari 16.4 o posterior).'; return; }
+  MONTHS = D.months; N = MONTHS.length; NODES = D.nodes; SUBS = D.subs;
+  SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+  NI = Object.fromEntries(NODES.map((n, i) => [n.k, i]));
+  KIDS = NODES.map(() => []);
+  NODES.forEach((n, i) => { if (n.p >= 0) KIDS[n.p].push(i); });
+  [TA, TP, TPP, PAT, CONT, RN, IF_, MFB, CN] = ['total_activo', 'total_pasivo', 'total_pasivo_patrimonio', 'patrimonio', 'contingentes', 'resultado_neto_ejercicio', 'ingresos_financieros', 'margen_financiero_bruto', 'creditos_netos'].map(k => NI[k]);
+  // El total pasivo y patrimonio no es «hijo» de nadie: la tabla lo pone después del patrimonio.
+  KIDS[TPP] = [];
+  J2013 = MONTHS.indexOf('2013-01'); J2011 = MONTHS.indexOf('2011-07');
+  ACT_GROUPS = D.groups.A; PK_GROUPS = D.groups.P;
+  state.mi = N - 1; state.acct = TA; state.line = RN;
+  $('loading').hidden = true;
+  const prov = T && T.provisional ? [].concat(T.provisional === true ? ['Cuentas', 'Cómo leer y cambios'] : T.provisional) : [];
+  if (prov.length) { const b = $('banner'); b.hidden = false; b.textContent = 'Versión de trabajo: ' + (prov.length > 1 ? 'los textos de las pestañas ' : 'el texto de la pestaña ') + prov.map(x => '«' + x + '»').join(' y ') + (prov.length > 1 ? ' son provisionales y todavía no pasan' : ' es provisional y todavía no pasa') + ' la revisión contra fuentes primarias.'; }
+  fillScopeSelect(); fillMonthSelect();
+  segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+  segment('f-bview', [{id: 'comp', label: 'Composición'}, {id: 'mon', label: 'Por moneda'}], () => state.bview, v => { state.bview = v; });
+  segment('f-base', BASES.map(b => ({id: b.id, label: b.label, title: b.title})), () => state.base, v => { state.base = v; });
+  segment('f-gside', [{id: 'A', label: 'Activo'}, {id: 'P', label: 'Pasivo y patrimonio'}], () => state.gside, v => { state.gside = v; }, () => { hideTip(); renderGrow(); });
+  $('tree-open').addEventListener('click', () => { NODES.forEach((n, i) => { if (KIDS[i].length && n.e !== 'R') state.open.add(i); }); renderTree(); });
+  $('tree-close').addEventListener('click', () => { state.open.clear(); renderTree(); });
+  $('egp-open').addEventListener('click', () => { NODES.forEach((n, i) => { if (KIDS[i].length && n.e === 'R') state.eopen.add(i); }); renderEgp(); });
+  $('egp-close').addEventListener('click', () => { state.eopen.clear(); renderEgp(); });
+  buildGlossary(); renderGlList(); renderGuide(); renderRoute();
+  $('lede').textContent = 'De qué está hecho el balance de los bancos, financieras, cajas y empresas de créditos del Perú, con qué se financian y cómo se forma su utilidad. Datos mensuales de la SBS de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + ', por empresa, subsistema y sistema.';
+  [
+    'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), Boletín Estadístico: balance general y estado de ganancias y pérdidas por empresa, cuadros B-2201 (banca múltiple), B-3101 (empresas financieras), C-1101 (cajas municipales), C-2101 (cajas rurales) y C-4103 (empresas de créditos). Normas y documentos citados: ver «Cómo leer y cambios».',
+    'Los agregados del sistema y de los subsistemas, los flujos de 12 meses, el activo promedio, los porcentajes, las variaciones, las cifras a tipo de cambio constante, los rendimientos y costos implícitos y las agrupaciones del resumen, de la comparación, del crecimiento y de la calidad de la utilidad son cálculos propios a partir de esos cuadros. Montos en soles corrientes salvo donde se dice «a tipo de cambio constante».',
+    'Actualizado el ' + dLabel(D.generado) + '.',
+  ].forEach(t => htmlEl('p', {text: t}, $('foot')));
+  const startTab = location.hash.slice(1);
+  showTab(TABS.includes(startTab) ? startTab : 'resumen', false);
+  let rt, lastW = 0;
+  new ResizeObserver(es => {
+    const w = Math.round(es[0].contentRect.width);
+    if (w === lastW) return;
+    lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+  }).observe(document.querySelector('main'));
+})();
+</script>
+</body>
+</html>

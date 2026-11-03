@@ -1,0 +1,101 @@
+id_entidad,nombre_actual,razon_social,subsistema_actual,estado,ruc,notas
+alfin-banco,Alfin Banco,Alfin Banco S.A.,banca-multiple,activa,20517476405,Antes Banco Azteca del Perú (fecha del cambio por confirmar).
+banbif,BanBif,Banco Interamericano de Finanzas S.A.,banca-multiple,activa,20101036813,"En 2001 se propuso transferirle un bloque del Banco Nuevo Mundo (no confirmado que se concretara). RUC verificado el 2026-11-02 en un documento oficial del banco: https://banbif.com.pe/Portals/0/PDF/Pago_impuestos/01BanBif_Convenio_Pagos_de_Tributos_y_Detracciones_v2015.05.pdf"
+banco-btg-pactual-peru,Banco BTG Pactual Perú,,banca-multiple,activa,,Funcionamiento autorizado 2026-09-25 (Res. SBS 02364-2026); a oct-2026 aún sin fecha anunciada de inicio de operaciones.
+banco-de-lima-sudameris,Banco de Lima Sudameris,,banca-multiple,absorbida,,"Fusionado con Banco Wiese Ltdo. en 1999 para formar Banco Wiese Sudameris (hoy Scotiabank Perú); mes no confirmado, sin fila de evento."
+banco-latino,Banco Latino,,banca-multiple,liquidada,,Bloque patrimonial absorbido por Interbank (2001); remanente en liquidación.
+banco-nuevo-mundo,Banco Nuevo Mundo,,banca-multiple,liquidada,,Intervenido 2000-12; liquidación 2001-10.
+banco-santander-central-hispano-peru,Banco Santander Central Hispano Perú,,banca-multiple,absorbida,,Absorbido por BCP (2003-03). No confundir con el actual Banco Santander Perú (2007).
+banco-standard-chartered,Banco Standard Chartered,,banca-multiple,liquidada,,"Liquidación iniciada 2005-08 (Res. SBS 1307-2005), concluida 2024-06."
+banco-sudamericano,Banco Sudamericano,,banca-multiple,absorbida,,Absorbido por Banco Wiese Sudameris/Scotiabank Perú (2006-05).
+bancom,BanCom,Banco de Comercio S.A.,banca-multiple,activa,20509507199,En los cuadros figura como BANCOM desde 2023-08; los EEFF siguen usando «Banco de Comercio».
+banex,Banex,,banca-multiple,liquidada,,Disolución y liquidación 1999-11.
+bank-of-china-peru,Bank of China,Bank of China (Perú) S.A.,banca-multiple,activa,,Algunos cuadros lo rotulaban «B. China Perú» hasta 2024-06.
+bankboston-peru,BankBoston Perú,,banca-multiple,liquidada,,Cartera comprada por BCP (2005-01/02). Estado 'liquidada' asumido: no se confirmó la resolución de disolución/cancelación.
+bbva-peru,BBVA Perú,Banco BBVA Perú S.A.,banca-multiple,activa,20100130204,"Marca BBVA desde 2019-06-10. RUC verificado el 2026-11-02 en un documento oficial del banco: https://accionistaseinversores.bbva.com/wp-content/uploads/2020/09/BBVAPeruInformeBancaResponsable2019_esp.pdf"
+bci-peru,Banco BCI Perú,Banco BCI Perú S.A.,banca-multiple,activa,,Inició operaciones el 2022-07-15.
+bcp,BCP,Banco de Crédito del Perú S.A.,banca-multiple,activa,20100047218,Algunos cuadros incluyen sus sucursales en el exterior («con sucursales en el exterior»).
+citibank-peru,Citibank,Citibank del Perú S.A.,banca-multiple,activa,20100116635,"Vendió su banca minorista y comercial a Scotiabank Perú (cierre 2015-05-01); mantiene banca corporativa/institucional. Sin eventos societarios 2025-2026 hallados. RUC verificado el 2026-11-02 en un documento oficial del banco: https://www.citibank.com/icg/sa/latam/peru/institutional-info/assets/docs/memoria_anual2024.pdf"
+compartamos,Compartamos Banco,Compartamos Banco S.A.,banca-multiple,activa,20369155360,Financiera convertida en banco en 2025-01.
+deutsche-bank-peru,Deutsche Bank Perú,,banca-multiple,liquidada,,Liquidación 2016-07 a 2017-08. Fecha de ingreso (~2007-2008) no confirmada.
+efectiva,Banco Efectiva,Banco Efectiva S.A.,banca-multiple,activa,,Financiera convertida en banco en 2026-05.
+falabella-peru,Banco Falabella,Banco Falabella Perú S.A.,banca-multiple,activa,20330401991,"Ex Financiera CMR (desde 1996); banco desde 2007. RUC verificado el 2026-11-02 en un documento oficial del banco: https://www.bancofalabella.pe/seguro-salud-protegida"
+gnb-peru,Banco GNB,Banco GNB Perú S.A.,banca-multiple,activa,20513074370,"Ex HSBC Bank Perú (ingreso ~2006). Comprado por Banco GNB Sudameris (Grupo Gilinski) en 2013. Sin venta 2025-2026 hallada. RUC verificado el 2026-11-02 en un documento oficial del banco: https://web.archive.org/web/20251114092037/https://www.bancognb.com.pe/web/files/peru/banca_empresa/E000032-V3-092023-Contrato-Marco-Prestamos.pdf"
+icbc-peru,Banco ICBC,ICBC Perú Bank S.A.,banca-multiple,activa,20546892175,"Funcionamiento autorizado 2013-11-08. RUC verificado el 2026-11-02 en un documento oficial del banco: https://v.icbc.com.cn/userfiles/resources/icbc/haiwai/peru/download/2025/memoria_2025.pdf"
+interbank,Interbank,Banco Internacional del Perú S.A.A.,banca-multiple,activa,20100053455,Algunos cuadros incluyen sus sucursales en el exterior.
+mibanco,Mibanco,"Mibanco, Banco de la Microempresa S.A.",banca-multiple,activa,20382036655,"Inicio de operaciones 1998 (pre-2000, no tabulado). Absorbió el negocio de Financiera Edyficar por escisión (Res. SBS 1332-2015, efectiva mar-2015); Mibanco es la persona jurídica sobreviviente. RUC verificado el 2026-11-02 en un documento oficial del banco: https://www.mibanco.com.pe/"
+nbk-bank,NBK Bank,,banca-multiple,liquidada,,Intervenido 2000-12; bloque a Banco Financiero (hoy Banco Pichincha) 2001-12; liquidación concluida 2014-10.
+pichincha,Banco Pichincha,Banco Pichincha S.A.,banca-multiple,activa,20100105862,"Constituido 21/11/1986. Recibió bloque de NBK Bank (2001). Renombrado 2018-08. En 2025-2026 sale de microfinanzas (Banca Emprendedora); SBS autorizó compra de hasta 100% de Diners Club Perú (set-2026); lanzó Pibank (set-2026). No se halló venta/fusión del banco. RUC verificado el 2026-11-02 en un documento oficial del banco: https://pichincha.pe/sites/default/files/2025-02/Contrato%20Marco%20de%20Productos%20Pasivos%20y%20Servicios%20Transaccionales.pdf"
+ripley-peru,Banco Ripley,Banco Ripley Perú S.A.,banca-multiple,activa,20259702411,Ex Financiera Cordillera (1999); banco desde 2008. RUC verificado en bancoripley.com.pe.
+santander-consumer,Santander Consumer Bank,Santander Consumer Bank S.A.,banca-multiple,activa,20255993225,Antes CrediScotia Financiera; cambió de nombre (2025-03) y luego se convirtió en banco (2025-05).
+santander-peru,Banco Santander Perú,Banco Santander Perú S.A.,banca-multiple,activa,20516711559,No confundir con santander-consumer (banco) ni santander-consumo (empresa de créditos).
+scotiabank-peru,Scotiabank Perú,Scotiabank Perú S.A.A.,banca-multiple,activa,20100043140,"Ex Banco Wiese Sudameris (Banco Wiese Ltdo. + Banco de Lima Sudameris, 1999). Absorbió Banco Sudamericano (2006). Compró banca minorista y comercial de Citibank Perú (cierre 2015-05-01, cesión de activos, no fusión). Vendió CrediScotia a Santander (2025-02). Compró 51% de Banco Cencosud (2019-03). Sin venta/fusión propia hallada 2025-2026. RUC verificado el 2026-11-02 en un documento oficial del banco: https://cdn.aglty.io/scotiabank-peru/PDFs/personas/tarjetas-de-credito/S_2199.pdf"
+serbanco,Serbanco,,banca-multiple,liquidada,,Disolución y liquidación 2000-09.
+caja-pisco,Caja Pisco,,cajas-municipales,liquidada,,Autorizada por la SBS en 1992; disuelta 2014-05-21; liquidación concluida en 2017 y persona jurídica extinguida.
+cmac-arequipa,CMAC Arequipa,Caja Municipal de Ahorro y Crédito de Arequipa S.A.,cajas-municipales,activa,20100209641,Adjudicataria del bloque patrimonial de Financiera Credinka (2024-09).
+cmac-cusco,CMAC Cusco,Caja Municipal de Ahorro y Crédito Cusco S.A.,cajas-municipales,activa,,La razón social aparece como 'del Cusco' (MEF 2017) y 'Cusco S.A.' (SBS/avisos recientes); fecha del cambio de denominación no confirmada. Sin fusiones/absorciones halladas.
+cmac-del-santa,CMAC Del Santa,Caja Municipal de Ahorro y Crédito del Santa S.A.,cajas-municipales,activa,,Sede Chimbote. Pérdidas 2024; acogida al Programa de Fortalecimiento Patrimonial (DU 013-2023). No se halló régimen especial ni intervención (pista no confirmada).
+cmac-huancayo,CMAC Huancayo,Caja Municipal de Ahorro y Crédito de Huancayo S.A.,cajas-municipales,activa,,Postuló al concurso por el bloque de Caja Sullana (2024) pero ganó Caja Piura. No se halló vínculo con CRAC Raíz (intervenida 2023-08 y liquidada; depósitos pagados vía FSD).
+cmac-ica,CMAC Ica,Caja Municipal de Ahorro y Crédito de Ica S.A.,cajas-municipales,activa,20104888934,Fundada en 1987. Sin eventos corporativos hallados 2000-2026.
+cmac-maynas,CMAC Maynas,Caja Municipal de Ahorro y Crédito de Maynas S.A.,cajas-municipales,activa,20103845328,Arrastró pérdidas 2023-2024; fortalecimiento patrimonial. Sin intervención ni fusión hallada. RUC según ruc.pe (verificar en SUNAT).
+cmac-paita,CMAC Paita,Caja Municipal de Ahorro y Crédito de Paita S.A.,cajas-municipales,activa,20102361939,"No se halló régimen especial, intervención ni fusión (pista no confirmada). RUC según ruc.pe (verificar en SUNAT)."
+cmac-piura,CMAC Piura,Caja Municipal de Ahorro y Crédito de Piura S.A.C.,cajas-municipales,activa,,Adjudicataria del bloque patrimonial de CMAC Sullana (2024-07).
+cmac-sullana,CMAC Sullana,Caja Municipal de Ahorro y Crédito de Sullana S.A.,cajas-municipales,liquidada,,Disolución e inicio de liquidación 2024-07-12; su último cuadro (2024-06) corresponde a mayo 2024.
+cmac-tacna,CMAC Tacna,Caja Municipal de Ahorro y Crédito de Tacna S.A.,cajas-municipales,activa,,Según columna de opinión (Expreso) se acogió al apoyo patrimonial del DU 013-2023; no se halló intervención ni fusión.
+cmac-trujillo,CMAC Trujillo,Caja Municipal de Ahorro y Crédito de Trujillo S.A.,cajas-municipales,activa,,Sin eventos corporativos hallados 2000-2026.
+cmcp-lima,CMCP Lima,Caja Municipal de Crédito Popular de Lima,cajas-municipales,activa,,Creada por Ley 10769 (~1947); es CMCP (no CMAC) pero la SBS la agrupa con las cajas municipales. Nombre comercial 'Caja Metropolitana' (fecha de adopción no hallada). Proyecta convertirse en banco municipal desde 2026; a 2026-10 no se halló autorización SBS. Sin intervención hallada.
+caja-cajamarca,Caja Cajamarca,,cajas-rurales,absorbida,,Absorbida por Financiera Credinka el 01.08.2016.
+caja-credinka,Caja Credinka,,cajas-rurales,absorbida,,"Cusco; ex CRAC Quillabamba. En 2015 segrega su negocio por escisión a Financiera Nueva Visión, que se renombra Financiera Credinka (ver esa fila); el remanente se fusiona en NCF Servicios Compartidos S.A."
+caja-los-libertadores-de-ayacucho,Caja Los Libertadores de Ayacucho,,cajas-rurales,absorbida,,"Ayacucho, fundada en 1993. Absorbida por Financiera TFC (2015). 'Caja Libertadores de Ayacucho' y 'CRAC Los Libertadores' son la misma entidad."
+caja-profinanzas,Caja Profinanzas,,cajas-rurales,absorbida,,Absorbida por Financiera Universal (hoy Financiera Qapaq) en dic-2012.
+caja-rural-del-sur,Caja Rural Del Sur,,cajas-rurales,absorbida,,Arequipa. Absorbida por CRAC Nor Perú (Nuestra Gente) en 2008. No es antecesora de Incasur.
+caja-rural-majes,Caja Rural Majes,,cajas-rurales,liquidada,,Liquidación iniciada en 1999; transferida al Poder Judicial (Res. SBS 585-2000 del 31.08.2000). Mes de salida no confirmado; sin fila de evento.
+caja-rural-mantaro,Caja Rural Mantaro,,cajas-rurales,liquidada,,Figura en liquidaciones concluidas de la SBS; fechas no verificadas (probablemente década de 1990); sin fila de evento.
+caja-rural-san-martin,Caja Rural San Martín,,cajas-rurales,absorbida,,Tarapoto. Absorbida por CMAC Piura en mar-2008 (guía SBS).
+caja-rural-selva-peruana,Caja Rural Selva Peruana,,cajas-rurales,liquidada,,Figura en liquidaciones concluidas de la SBS; fechas no verificadas; sin fila de evento.
+caja-rural-tumbay,Caja Rural Tumbay,,cajas-rurales,liquidada,,Figura en liquidaciones concluidas de la SBS; fechas no verificadas; sin fila de evento.
+caja-rural-ucayali,Caja Rural Ucayali,,cajas-rurales,liquidada,,Figura en liquidaciones concluidas de la SBS; fechas no verificadas; sin fila de evento.
+caja-rural-vrae,Caja Rural VRAE,,cajas-rurales,liquidada,,Figura en liquidaciones concluidas de la SBS; fechas no verificadas; sin fila de evento.
+caja-selva-central,Caja Selva Central,,cajas-rurales,liquidada,,Liquidación 1999-2006. No es antecesora de Caja Del Centro.
+caja-senor-de-luren,Caja Señor de Luren,,cajas-rurales,liquidada,,Ica. Intervenida jun-2015; depósitos y créditos transferidos a CMAC Arequipa; sigue en liquidación.
+caja-sipan,Caja Sipán,,cajas-rurales,liquidada,,Chiclayo. Cruz de Chalpón y Sipán son la misma entidad (cambio de nombre 2006). Disolución voluntaria 2021; extinción 19.05.2025.
+crac-cencosud-scotia,CRAC Cencosud Scotia,Caja Rural de Ahorro y Crédito Cencosud Scotia Perú S.A.,cajas-rurales,activa,,Antes Banco Cencosud (banco) → CRAC CAT Perú (2019) → Cencosud Scotia (2020). El 2.º bloque de los EEFF la rotuló «CRAC CAT» hasta 2023-04. La SBS la escribe a veces «Censosud».
+crac-del-centro,CRAC Del Centro,Caja Rural de Ahorro y Crédito del Centro S.A.,cajas-rurales,liquidada,,Intervenida 2026-04-14; disolución y liquidación 2026-04-15. Sigue en los cuadros después de esa fecha.
+crac-incasur,CRAC Incasur,Caja Rural de Ahorro y Crédito Incasur S.A.,cajas-rurales,activa,,Arequipa; vinculada al Grupo Inca. Entidad nueva (opera desde nov-2011); no proviene de Caja Rural Del Sur.
+crac-los-andes,CRAC Los Andes,Caja Rural de Ahorro y Crédito Los Andes S.A.,cajas-rurales,activa,20322445564,Puno. Absorbió Edpyme Solidaridad (2017). En feb-2025 firmó la compra del 94.054% de Empresa de Créditos Alternativa (sujeta a SBS; cierre o fusión no confirmados a oct-2026). No confundir con Caja Los Andes de Chile.
+crac-prymera,CRAC Prymera,Caja Rural de Ahorro y Crédito Prymera S.A.,cajas-rurales,activa,,Huaral/Lima; Grupo Wong (Corporación E.W.) desde 2000. Nombre original 'Productos y Mercados Agrícolas de Huaral' (sigla PRYMERA); fecha del cambio a 'Prymera' no confirmada.
+crac-raiz,CRAC Raíz,Caja Rural de Ahorro y Crédito Raíz S.A.A.,cajas-rurales,liquidada,,Intervenida 2023-08-10; disolución y liquidación 2023-08-11.
+edpyme-crear-tacna,Edpyme Crear Tacna,,edpyme,absorbida,,Absorbida por CRAC Nor Perú en 2008 (Res. SBS 3855-2008).
+edpyme-gmg-servicios-peru,Edpyme GMG Servicios Perú,,edpyme,liquidada,,Disolución voluntaria en may-2021; extinción inscrita. Vínculo con Grupo Monge (Costa Rica) no verificado.
+edpyme-raiz,Edpyme Raíz,,edpyme,absorbida,,Absorbida por CRAC Chavín en may-2016 (que pasó a llamarse CRAC Raíz).
+solidaridad,Solidaridad,Edpyme Solidaridad y Desarrollo Empresarial S.A.C.,edpyme,absorbida,,"Absorbida por CRAC Los Andes (2017-06). Su columna sigue en los cuadros de empresas de créditos, en ceros."
+acceso-crediticio,Acceso Crediticio,Empresa de Créditos Acceso Crediticio S.A.,empresas-credito,revocada,,Antes EDPYME; autorización revocada 2023-09-01.
+alternativa,Alternativa,Empresa de Créditos Alternativa S.A.,empresas-credito,activa,,Antes EDPYME Alternativa.
+bbva-consumer-finance,BBVA Consumer Finance,EDPYME BBVA Consumer Finance S.A.,empresas-credito,disuelta,,Disolución voluntaria y liquidación autorizada 2022-02-09.
+credivision,Credivisión,EDPYME Credivisión S.A.,empresas-credito,salio_supervision,,Modificó su estatuto para dejar de ser supervisada (2022-10).
+inversiones-la-cruz,Inversiones La Cruz,Empresa de Créditos Inversiones La Cruz S.A.,empresas-credito,revocada,,Antes EDPYME; autorización revocada a su solicitud 2024-09-13.
+prex-peru-empresa-de-creditos,Prex Perú Empresa de Créditos,,empresas-credito,activa,,Fintech uruguaya; funcionamiento autorizado en jun-2026 (Res. SBS 1561-2026). Puede no aparecer aún en las estadísticas SBS.
+santander-consumo,Santander Consumo,Empresa de Créditos Santander Consumo Perú S.A.,empresas-credito,activa,,Antes EDPYME Santander Consumo Perú. No confundir con santander-consumer (banco).
+total-servicios-financieros,TOTAL Servicios Financieros,TOTAL Servicios Financieros Empresa de Créditos S.A.,empresas-credito,activa,,Antes EDPYME Servicios Financieros Total; absorbió a Factoring Total S.A.
+vivela,Vívela,Empresa de Créditos Vívela S.A.,empresas-credito,activa,,Antes EDPYME Micasita (cambio de denominación 2023-03-31).
+volvo-finance,Volvo Finance,Volvo Financial Services Empresa de Créditos S.A.,empresas-credito,activa,,Antes Volvo Leasing Perú S.A. (no supervisada como empresa de créditos); convertida en 2022-08.
+amerika-financiera,Amérika Financiera,Amérika Financiera S.A.,empresas-financieras,disuelta,,Disolución voluntaria autorizada 2022-11-18.
+confianza-original,Financiera Confianza (original),Financiera Confianza S.A.,empresas-financieras,absorbida,,"Ex EDPYME Confianza; financiera desde nov-2009. Absorbida en 2013-05 por CRAC Nuestra Gente, que tomó el nombre Financiera Confianza S.A.A. (id `confianza`). Mismo nombre impreso en los cuadros que la entidad actual: el alias se separa por periodo (hasta 2013-04). Id creado el 2026-10-28 al extender el boletín a 2010-07."
+confianza,Financiera Confianza,Financiera Confianza S.A.A.,empresas-financieras,activa,,"Fundación Microfinanzas BBVA. Edpyme Confianza -> Financiera Confianza S.A. (nov-2009). En may-2013, legalmente CRAC Nuestra Gente absorbió a Financiera Confianza S.A. y se convirtió en Financiera Confianza S.A.A. (la serie continúa como Financiera Confianza). Hasta 2013-04 este id es la CRAC Nuestra Gente; la financiera original de 2009-2013 es `confianza-original` (separada el 2026-10-28). Mayor financiera por créditos a abr-2026."
+credinka,Financiera Credinka,Financiera Credinka S.A.,empresas-financieras,liquidada,,Intervenida y en liquidación desde 2024-09; bloque patrimonial adjudicado a CMAC Arequipa.
+edyficar,Financiera Edyficar,Financiera Edyficar S.A.,empresas-financieras,absorbida,,Su negocio pasó a Mibanco por escisión (Res. SBS 1332-2015); el remanente siguió reportando como financiera hasta 2015-11. Su nombre sigue en cabeceras sin datos.
+financiera-andina,Financiera Andina,,empresas-financieras,liquidada,,"Figura en liquidaciones concluidas SBS (forzosa, cierre anterior a 2010). Fechas no ubicadas."
+financiera-daewoo,Financiera Daewoo,,empresas-financieras,liquidada,,"Figura en liquidaciones concluidas SBS (proceso forzoso, cierre anterior a 2010). Fechas no ubicadas."
+financiera-del-sur-finsur,Financiera del Sur (Finsur),,empresas-financieras,absorbida,,Integrada con el antiguo Banco de Comercio en 2004 (dirección de la fusión no confirmada).
+fincoper,Fincoper,,empresas-financieras,liquidada,,"Figura en liquidaciones concluidas SBS (forzosa, cierre anterior a 2010). Fechas no ubicadas."
+infinance-xp,InFinance XP,InFinance XP S.A.,empresas-financieras,activa,,Financiera Uno → Financiera Oh! (2016-05) → InFinance XP (2026-02).
+mitsui-auto-finance,Mitsui Auto Finance,Mitsui Auto Finance Perú S.A.,empresas-financieras,activa,,Algunos cuadros la llaman «Mitsui Financiera».
+peruinvest,Peruinvest,,empresas-financieras,liquidada,,"Figura en liquidaciones concluidas SBS (forzosa, cierre anterior a 2010). Fechas no ubicadas."
+proempresa,Financiera Proempresa,Financiera Proempresa S.A.,empresas-financieras,activa,,EDPYME desde 1997; financiera desde 01-08-2012. Activa a 2026.
+qapaq,Financiera Qapaq,Financiera Qapaq S.A.,empresas-financieras,activa,,Antes Financiera Universal (cambio de denominación 2014-02). Su nombre antiguo sigue en cabeceras sin datos.
+solucion-financiera-de-credito-del-peru,Solución Financiera de Crédito del Perú,,empresas-financieras,absorbida,,Credicorp/BCP; fusionada en BCP mar-2004 (remanente: Solución EAH).
+surgir,Financiera Surgir,Financiera Surgir S.A.,empresas-financieras,activa,,Inició operaciones el 2024-04-15.
+tfc,Financiera TFC,Financiera TFC S.A.,empresas-financieras,liquidada,,Intervenida 2019-12 y en liquidación. Su nombre sigue en cabeceras sin datos.
+edpyme-credijet-del-peru,Edpyme Credijet del Perú,,otro,convertida,,Vinculada a Jet Perú. Convertida en emisora de dinero electrónico (EEDE) en jun-2016; situación actual de la EEDE no verificada.
+edpyme-progreso,Edpyme Progreso,,otro,convertida,,Misma persona jurídica: Pronegocios (2002) -> Marcimex (dic-2011) -> Progreso (mar-2019) -> salió de la supervisión en ago-2021 como 'Progreso Empresa de Créditos S.A.' (no supervisada).
+factoring-total,Factoring Total,,otro,absorbida,,"Empresa de factoring supervisada, absorbida por Servicios Financieros TOTAL EDPYME (vigencia 01-01-2022)."

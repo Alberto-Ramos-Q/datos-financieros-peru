@@ -1,0 +1,220 @@
+patron,id_entidad,nota
+bcp,bcp,
+bancocreditoperu,bcp,
+bancodecredito,bcp,
+creditodelperu,bcp,
+bbva,bbva-peru,
+bancocontinental,bbva-peru,
+bbvaconsumer,bbva-consumer-finance,
+interbank,interbank,
+scotiabank,scotiabank-peru,
+banbif,banbif,
+bancointeramericano,banbif,
+pichincha,pichincha,
+bancofinanciero,pichincha,
+bancocomercio,bancom,
+bancodecomercio,bancom,
+bancom,bancom,
+bancobci,bci-peru,
+bcobci,bci-peru,
+bci,bci-peru,
+citibank,citibank-peru,
+citi,citibank-peru,
+gnb,gnb-peru,
+hsbc,gnb-peru,
+icbc,icbc-peru,
+bankofchina,bank-of-china-peru,
+peboc,bank-of-china-peru,
+publicoboc,bank-of-china-peru,
+bocjun,bank-of-china-peru,
+bocperu,bank-of-china-peru,
+bancofalabella,falabella-peru,
+falabella,falabella-peru,
+publicobf,falabella-peru,
+ripley,ripley-peru,
+banripley,ripley-peru,
+mibanco,mibanco,
+compartamos,compartamos,
+financieracrear,compartamos,
+alfin,alfin-banco,
+azteca,alfin-banco,
+efectiva,efectiva,
+santanderconsumerbank,santander-consumer,
+crediscotia,santander-consumer,
+santanderconsumer,santander-consumo,EC (Apoyo: «Santander Consumer» sin «Bank»)
+santanderconsumo,santander-consumo,
+ecsantander,santander-consumo,
+publicoecsc,santander-consumo,
+bancosantander,santander-peru,
+santanderperu,santander-peru,
+santanderfinsurgir,surgir,Santander Financiamientos (hoy Surgir); PCR usa «SANTANDER-FIN» para el banco
+surgir,surgir,
+btg,banco-btg-pactual-peru,
+cmacarequipa,cmac-arequipa,
+cmacareq,cmac-arequipa,
+cajaarequipa,cmac-arequipa,
+cmaccusco,cmac-cusco,
+cajacusco,cmac-cusco,
+cmacdelsanta,cmac-del-santa,
+cmacsanta,cmac-del-santa,
+cajasanta,cmac-del-santa,
+cajadelsanta,cmac-del-santa,
+cmachuancayo,cmac-huancayo,
+cmachcyo,cmac-huancayo,
+cajahuancayo,cmac-huancayo,
+cmacica,cmac-ica,
+cajaica,cmac-ica,
+cmacmaynas,cmac-maynas,
+cajamaynas,cmac-maynas,
+cmacpaita,cmac-paita,
+cajapaita,cmac-paita,
+cmacpiura,cmac-piura,
+cajapiura,cmac-piura,
+cmacsullana,cmac-sullana,
+cajasullana,cmac-sullana,
+cmactacna,cmac-tacna,
+cajatacna,cmac-tacna,
+cmactrujillo,cmac-trujillo,
+cajatrujillo,cmac-trujillo,
+cmcplima,cmcp-lima,
+cmcp,cmcp-lima,
+cajametropolitana,cmcp-lima,
+cencosud,crac-cencosud-scotia,
+cajacat,crac-cencosud-scotia,
+incasur,crac-incasur,
+losandes,crac-los-andes,
+prymera,crac-prymera,
+raiz,crac-raiz,
+chavin,crac-raiz,
+edpymeraiz,edpyme-raiz,
+cajacentro,crac-del-centro,
+craccentro,crac-del-centro,
+delcentro,crac-del-centro,
+sipan,caja-sipan,
+luren,caja-senor-de-luren,
+libertadores,caja-los-libertadores-de-ayacucho,
+cajamarca,caja-cajamarca,
+credinka,credinka,
+nuevavision,credinka,
+confianza,confianza,
+proempresa,proempresa,
+qapaq,qapaq,
+financierauniversal,qapaq,
+infinance,infinance-xp,
+financieraoh,infinance-xp,
+finoh,infinance-xp,
+financierauno,infinance-xp,
+mitsui,mitsui-auto-finance,
+maf,mitsui-auto-finance,
+edyficar,edyficar,
+amerika,amerika-financiera,
+tfc,tfc,
+acceso,acceso-crediticio,
+alternativa,alternativa,
+credivision,credivision,
+lacruz,inversiones-la-cruz,
+vivela,vivela,
+micasita,vivela,
+totalservicios,total-servicios-financieros,
+petsf,total-servicios-financieros,
+volvo,volvo-finance,
+prex,prex-peru-empresa-de-creditos,
+seguros,,seguros
+vida,,seguros
+interseguro,,seguros
+cardif,,seguros
+bnpparibas,,seguros
+crecer,,seguros
+chubb,,seguros
+liberty,,seguros
+mapfre,,seguros
+rimac,,seguros
+pacifico,,seguros
+protecta,,seguros
+qualitas,,seguros
+insur,,seguros
+cesce,,seguros
+avla,,seguros
+augustar,,seguros
+ohio,,seguros
+positiva,,seguros
+secrex,,seguros
+coop,,cooperativas
+fogapi,,fondo de garantía
+cofide,,estatal
+corporacionfinancieradedesarrollo,,estatal
+agrobanco,,estatal
+mivivienda,,estatal
+fmv,,estatal
+banconacion,,estatal
+bancodelanacion,,estatal
+nacional,,estatal (Banco de la Nación en PCR) o seguros
+bcosantander,santander-peru,
+bcocomercio,bancom,
+bcofinanciero,pichincha,
+bcocredito,bcp,
+nacin,,estatal (Banco de la Nación con tilde mal codificada)
+rmacjun,,seguros (Rímac con tilde mal codificada)
+rmacdic,,seguros (Rímac con tilde mal codificada)
+pacfico,,seguros (Pacífico con tilde mal codificada)
+corporacinfinanciera,,estatal (COFIDE con tilde mal codificada)
+coosan,,cooperativas
+bcocontinental,bbva-peru,
+continental,bbva-peru,Apoyo: «Continental Jun-15»
+sipn,caja-sipan,Sipán con tilde mal codificada
+deutsche,deutsche-bank-peru,
+finuno,infinance-xp,
+nvavision,credinka,Financiera Nueva Visión
+cmacarq,cmac-arequipa,
+craccat,crac-cencosud-scotia,
+catperu,crac-cencosud-scotia,
+bancocredito,bcp,
+bankchina,bank-of-china-peru,
+edpymesantander,santander-consumo,Edpyme Santander Consumo
+bcointeramericano,banbif,
+arequipa,cmac-arequipa,Apoyo: «Arequipa dic-14»
+santajun,cmac-del-santa,Apoyo: «Santa_ Jun-15»
+santadic,cmac-del-santa,
+cajametrop,cmcp-lima,
+cracraz,crac-raiz,Raíz con tilde mal codificada
+bcomercio,bancom,
+bfinanciero,pichincha,
+libercaja,caja-los-libertadores-de-ayacucho,
+eilc,inversiones-la-cruz,PCR: Edpyme Inversiones La Cruz
+bfp,pichincha,PCR: Banco Financiero del Perú
+bpp,pichincha,PCR: Banco Pichincha
+santander,santander-peru,PCR: Banco Santander Perú (los nombres más largos ganan)
+paita,cmac-paita,
+maynas,cmac-maynas,
+credink,credinka,
+bcocio,bancom,PCR: Banco de Comercio
+pebco20,bancom,PCR: «PE-BCO-AAAAMM» con sufijo de Banco de Comercio
+pubbco20,bancom,
+finbco20,bancom,
+fincml,cmcp-lima,PCR: Caja Metropolitana de Lima
+precml,cmcp-lima,
+cmaccus,cmac-cusco,
+bconacion,,estatal
+nacion,,estatal
+pps,,seguros (Pacífico Peruano Suiza)
+segsura,,seguros
+rigel,,seguros
+abaco,,cooperativas
+pehdi,,seguros
+hdi20,,seguros
+coface,,seguros
+laposigen,,seguros
+lpg,,seguros (La Positiva Generales)
+lpv,,seguros (La Positiva Vida)
+aceseguros,,seguros
+ace1214,,seguros
+acejun,,seguros
+acedic,,seguros
+huancayo,cmac-huancayo,
+qulitas,,seguros (Quálitas con tilde mal codificada)
+qua769,,seguros (Quálitas con tilde combinada)
+magallanes,,seguros
+paci769,,seguros (Pacífico con tilde combinada)
+ri769,,seguros (Rímac con tilde combinada)
+financierasantanderconsumer,santander-consumer,ex Crediscotia
+ohionational,,seguros

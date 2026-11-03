@@ -1,0 +1,204 @@
+{
+ "resumen": [
+  {
+   "t": "Los cuadros del Boletín no son los estados oficiales de cada empresa.",
+   "x": "La SBS agrupa las cuentas de forma distinta al Estado de Situación Financiera (Forma A) y al Estado de Resultados (Forma B-1) del Manual de Contabilidad, para que las series se puedan comparar en el tiempo. Por eso los rubros del Boletín no siempre coinciden uno a uno con los de los estados que publica cada empresa."
+  },
+  {
+   "t": "El gran corte es enero de 2013.",
+   "x": "Desde la información de ese mes rige la Res. SBS 7036-2012, que reescribió el Manual de Contabilidad para acercarlo a las normas internacionales de información financiera (NIIF). En el Boletín:",
+   "items": [
+    "desaparecieron las cuentas de orden;",
+    "el patrimonio separó «capital adicional» y «ajustes al patrimonio»;",
+    "las provisiones del pasivo se agruparon de otra forma;",
+    "los créditos pasaron a presentarse netos de los ingresos no devengados por arrendamiento financiero y lease-back."
+   ],
+   "post": "En esas líneas, las comparaciones y tasas de crecimiento que cruzan diciembre de 2012 no son confiables. Los totales de activo, pasivo y patrimonio no muestran un salto visible."
+  },
+  {
+   "t": "En 2010 el gasto de personal no incluye la participación de los trabajadores en las utilidades.",
+   "x": "Desde 2011 sí la incluye (Res. SBS 2740-2011). En la banca esa participación fue de S/ 381 millones en 2010, frente a S/ 2,822 millones de gasto de personal, así que el gasto de personal de 2010 se ve más bajo. La utilidad neta sí es comparable."
+  },
+  {
+   "t": "Desde enero de 2013 las recuperaciones de créditos castigados ya no aparecen en «otros ingresos y gastos».",
+   "x": "En el formato oficial del estado de resultados vigente desde 2013, esas recuperaciones se restan de las provisiones para créditos. El Boletín no lo explica, pero su línea «otros ingresos y gastos» de la banca bajó de S/ 460 millones en 2012 a S/ 132 millones en 2013, una caída parecida a lo que se recuperaba en 2012 (S/ 345 millones)."
+  },
+  {
+   "t": "Desde septiembre de 2015 el resultado por venta de cartera tiene línea propia",
+   "x": ", por encima del margen operacional. En las cajas municipales la línea aparece en agosto, en cero.",
+   "items": [
+    "No encontramos una norma que explique el cambio.",
+    "Los datos indican que antes ese resultado estaba dentro de «otros ingresos y gastos», que cae ese mes en un monto parecido.",
+    "Desde septiembre de 2015 el margen operacional incluye ese resultado. La utilidad neta no cambia."
+   ]
+  },
+  {
+   "t": "El estado de resultados es acumulado desde enero de cada año.",
+   "x": "Para ver un mes suelto hay que restar el mes anterior, salvo en enero. En septiembre de 2015 esa resta da un salto falso: la venta de cartera concentra todo lo acumulado de enero a septiembre y «otros ingresos y gastos» sale negativo."
+  },
+  {
+   "t": "En enero de 2021 parte del crédito con tarjeta pasó a «préstamos».",
+   "x": "Desde ese mes, los financiamientos no revolventes para titulares de tarjetas, independientes de la línea, se registran como préstamos (Res. SBS 5570-2019 y modificatorias). La caída de 25 % de «tarjetas de crédito» en la banca ese mes no debe leerse como una caída del uso de tarjetas. La reclasificación no altera el total de créditos, pero la apertura por modalidad no es comparable antes y después."
+  },
+  {
+   "t": "En 2020-2021 la morosidad hay que leerla con cuidado.",
+   "x": "",
+   "items": [
+    "Por la pandemia se permitió reprogramar créditos que estaban al día, o con hasta 15 días de atraso, sin que pasaran a vencidos.",
+    "Además, los créditos de Reactiva Perú se financiaron con operaciones de reporte del BCRP, que se registran en «cuentas por pagar». Así elevaron temporalmente créditos y pasivos: en la banca ese rubro pasó de S/ 24.6 mil millones en febrero a S/ 65.0 mil millones en diciembre de 2020."
+   ]
+  },
+  {
+   "t": "Los totales por tipo de entidad cambian cuando una empresa cambia de grupo.",
+   "x": "Un salto en un subsistema puede deberse solo a eso. Algunos ejemplos:",
+   "items": [
+    "Edyficar, cuyo negocio pasó a Mibanco (marzo de 2015);",
+    "Banco Cencosud, que pasó a caja rural (marzo de 2019);",
+    "Compartamos (enero de 2025) y Santander Consumer (junio de 2025), que pasaron de financiera a banco."
+   ],
+   "post": "Las EDPYME pasaron a ser «empresas de créditos» con el D. Leg. 1531, de marzo de 2022."
+  },
+  {
+   "t": "Durante algunos periodos parte de los activos de una caja aparece como «otros activos».",
+   "x": "Cuando una caja municipal recibe el bloque patrimonial de otra entidad, lo reporta temporalmente en «otros activos» y «otros pasivos» hasta migrarlo a sus sistemas. Pasó con:",
+   "items": [
+    "Caja Arequipa: bloque de la Caja Rural Señor de Luren, de 2015 a 2018, y de Financiera Credinka, desde septiembre de 2024;",
+    "Caja Piura: bloque de la Caja Sullana, desde julio de 2024."
+   ]
+  },
+  {
+   "t": "Comparaciones más seguras.",
+   "x": "El total de activo, pasivo y patrimonio y la utilidad neta, dentro de cada tramo (2010-2012 y desde 2013) y para una misma entidad. En los totales por tipo de entidad hay que descontar antes los cambios de grupo. Las estructuras porcentuales también se comparan bien entre meses de un mismo año."
+  },
+  {
+   "t": "Viene otro corte en 2027.",
+   "x": "",
+   "items": [
+    "La Res. SBS 2663-2025 armoniza el Manual de Contabilidad con las NIIF 9, 13 y 15 desde la información de enero de 2027. Cambiará la clasificación y valoración de las inversiones y los criterios de deterioro de los instrumentos financieros.",
+    "La Res. SBS 1889-2026 postergó a agosto de 2027 una parte: las cuentas de depósitos del público y algunos reportes.",
+    "Hasta agosto de 2026, último dato del Boletín, estos cambios no se aplican."
+   ]
+  }
+ ],
+ "normas": [
+  {
+   "fecha_vigencia": "2011-01",
+   "norma": "Res. SBS N.° 2740-2011",
+   "cambio": "Desde el ejercicio 2011 la participación de los trabajadores en las utilidades se registra como gasto de personal, sin generar activo ni pasivo diferido. Pide reclasificar 2010 para fines comparativos.",
+   "efecto": "La línea «participación de trabajadores» vale 0 desde 2011-02 en la banca (en ene-2011 aún S/ 10 millones) y desde 2011-01 en los demás subsistemas; desaparece en 2013-01. El Boletín no reexpresó 2010: el gasto de personal de 2010 no es comparable con el de 2011 en adelante. El resultado neto sí.",
+   "fuente_url": "https://vlex.com.pe/vid/resolucion-n-2740-2011-973771658"
+  },
+  {
+   "fecha_vigencia": "2013-01",
+   "norma": "Res. SBS N.° 7036-2012",
+   "cambio": "Sustituye los Capítulos I «Disposiciones Generales» y II «Estados Financieros» del Manual de Contabilidad y modifica los Capítulos III y IV para acercarlo a las NIIF (Anexo 2, vigente desde enero de 2013; el Anexo 1, con cambios menores, desde setiembre de 2012). Crea las Formas A «Estado de Situación Financiera», B-1 y B-2.",
+   "efecto": "Corte de 2012-12 a 2013-01: desaparecen las cuentas de orden; el patrimonio separa capital adicional y ajustes al patrimonio; las provisiones del pasivo se reagrupan; los créditos se presentan netos de los ingresos no devengados por arrendamiento financiero y lease-back; «otros ingresos y gastos» pierde su apertura; aparece «inversiones en commodities» (banca y financieras).",
+   "fuente_url": "http://spij.minjus.gob.pe/Graficos/Peru/2012/Setiembre/26/R-SBS-7036-2012.pdf"
+  },
+  {
+   "fecha_vigencia": "2015-03",
+   "norma": "Res. SBS N.° 1332-2015",
+   "cambio": "Escisión por absorción entre Financiera Edyficar y Mibanco: el negocio de Edyficar pasa a Mibanco.",
+   "efecto": "Las financieras pasan de S/ 15.2 a 9.7 mil millones de activo en el mes; sube la banca. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro B-3101, marzo de 2015 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2015-06",
+   "norma": "Res. SBS N.° 3501-2015",
+   "cambio": "Caja Arequipa, adjudicataria del bloque patrimonial de la Caja Rural Señor de Luren.",
+   "efecto": "El bloque se reporta en «otros activos» y «otros pasivos» de Caja Arequipa hasta su migración, que culminó al 31-12-2018. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro C-1101 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "No verificada",
+   "norma": "Res. SBS N.° 6231-2015",
+   "cambio": "Sustituye las Formas A y B-1 y crea cuentas para operaciones de reporte, entre ellas 2504.11 «Cuentas por pagar por operaciones de reporte», con la subcuenta 2504.11.01 «Operaciones con el Banco Central de Reserva del Perú», que suma en el rubro «cuentas por pagar».",
+   "efecto": "Sin cambio de rótulos en el Boletín. Explica por qué las operaciones de reporte con el BCRP que financiaron Reactiva Perú en 2020 aparecen dentro de «cuentas por pagar».",
+   "fuente_url": "https://www.normaslegalesonline.pe/imagenes//22/10/2015/1445542758445_R_6231-2015-SBS.PDF"
+  },
+  {
+   "fecha_vigencia": "2015-12-15",
+   "norma": "Ley N.° 30381 (Circular N.° 047-2015-BCRP)",
+   "cambio": "La unidad monetaria pasa a llamarse «Sol»; es solo un cambio de denominación.",
+   "efecto": "Solo cambia el rótulo de los cuadros («miles de nuevos soles» → «miles de soles»), en fechas distintas según el cuadro. No cambia valores.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/1325488-1"
+  },
+  {
+   "fecha_vigencia": "2020-12",
+   "norma": "Res. SBS N.° 3155-2020",
+   "cambio": "Los créditos reprogramados de deudores con clasificación Normal de consumo, microempresa y pequeña empresa pasan a la categoría Con Problemas Potenciales, con provisiones (un mínimo al 31-12-2020 y la totalidad al 31-12-2021). Los intereses devengados no cobrados que se capitalizaron al reprogramar se revierten de ingresos y se registran como ingreso diferido; se exigen provisiones sobre los intereses devengados de los reprogramados que no pagaron una cuota completa en seis meses y se prohíbe generar utilidades con la reversión de esas provisiones. Rige al día siguiente de su publicación; el cambio al Manual, desde la información de diciembre de 2020.",
+   "efecto": "Sin efecto visible en los agregados del Boletín en diciembre de 2020: en la banca, el gasto mensual en provisiones fue de S/ 1,111 millones, frente a S/ 1,168 millones en noviembre.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/1913128-1"
+  },
+  {
+   "fecha_vigencia": "2021-01-01",
+   "norma": "Res. SBS N.° 5570-2019 (vigencia fijada por las Res. SBS N.° 1278-2020 y 1536-2020)",
+   "cambio": "Los financiamientos no revolventes para titulares de tarjetas de crédito, independientes de la línea, dejan de registrarse como tarjeta de crédito y se registran como préstamos.",
+   "efecto": "En 2021-01 «tarjetas de crédito» cae 24.7 % en la banca. La reclasificación no altera el total de créditos, pero el saldo reclasificado no es identificable en los agregados y la apertura por modalidad no es comparable antes y después.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/1867392-1"
+  },
+  {
+   "fecha_vigencia": "2022-03",
+   "norma": "Decreto Legislativo N.° 1531",
+   "cambio": "Crea la empresa de créditos; toda referencia a la EDPYME se entiende referida a la empresa de créditos. La Res. SBS N.° 01158-2022 dio plazo hasta el 30-04-2023 para la adecuación.",
+   "efecto": "Cambia el nombre del subsistema (cuadro C-4103). Su tamaño varía por conversiones de otras empresas.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/2049959-1"
+  },
+  {
+   "fecha_vigencia": "2024-07",
+   "norma": "Res. SBS N.° 2494-2024",
+   "cambio": "Caja Piura, adjudicataria del bloque patrimonial de la Caja Sullana.",
+   "efecto": "El bloque se reporta en «otros activos» y «otros pasivos» de Caja Piura desde julio de 2024. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro C-1101, julio de 2024 a agosto de 2026 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2024-07",
+   "norma": "Res. SBS N.° 2497-2024",
+   "cambio": "Disolución de la Caja Sullana.",
+   "efecto": "Sale del subsistema de cajas municipales. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro C-1101 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2024-09",
+   "norma": "Res. SBS N.° 02597-2024",
+   "cambio": "Precisa el registro contable de las operaciones de factoring y descuento. Rige desde la información de setiembre de 2024 (una parte, desde julio de 2024).",
+   "efecto": "Posible reclasificación entre «factoring» y «descuentos» en 2024-09 (banca: factoring −S/ 1,121 millones, descuentos +S/ 415 millones). No está confirmada: los montos no cuadran.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/2309346-1"
+  },
+  {
+   "fecha_vigencia": "2024-09",
+   "norma": "Res. SBS N.° 3370-2024",
+   "cambio": "Caja Arequipa, adjudicataria del bloque patrimonial de Financiera Credinka.",
+   "efecto": "El bloque se reporta temporalmente en «otros activos» y «otros pasivos» de Caja Arequipa. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro C-1101 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2025-01",
+   "norma": "Res. SBS N.° 00348-2025",
+   "cambio": "Conversión de Compartamos Financiera en banco.",
+   "efecto": "Pasa de las financieras a la banca. Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro B-3101, enero de 2025 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2025-06",
+   "norma": "Res. SBS N.° 1885-2025",
+   "cambio": "Conversión de Financiera Santander Consumer en banco.",
+   "efecto": "Pasa de las financieras a la banca. Es la antigua Crediscotia Financiera, que figura como Financiera Santander Consumer desde marzo de 2025 (el cambio de nombre no mueve las cifras). Es un cambio de perímetro, no contable.",
+   "fuente_url": "Nota al pie del cuadro B-3101, junio de 2025 del Boletín Estadístico de la SBS: https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1"
+  },
+  {
+   "fecha_vigencia": "2027-01",
+   "norma": "Res. SBS N.° 2663-2025",
+   "cambio": "Armoniza el Manual de Contabilidad con las NIIF 9, 13 y 15 y sustituye sus Capítulos I y II, desde la información de enero de 2027. Cambia la clasificación y valoración de las inversiones y los criterios de deterioro de los instrumentos financieros.",
+   "efecto": "Fuera de la serie (los datos llegan a agosto de 2026). Producirá un nuevo corte en 2027.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/2423620-1"
+  },
+  {
+   "fecha_vigencia": "2027-08",
+   "norma": "Res. SBS N.° 1889-2026",
+   "cambio": "Posterga a la información de agosto de 2027 los cambios de las cuentas de obligaciones con el público (2101, 2102, 2103, 2107 y 2108) y al 01-08-2027 parte del Capítulo V.",
+   "efecto": "Fuera de la serie.",
+   "fuente_url": "https://busquedas.elperuano.pe/api/visor_html/2536434-1"
+  }
+ ]
+}

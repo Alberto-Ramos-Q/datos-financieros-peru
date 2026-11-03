@@ -1,0 +1,1446 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inflación en el Perú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que la serie de tableros de la SBS, con su paleta: azul #001E6B y gris #B2B4B5.
+   Series con nombre en el orden fijo de la paleta categórica validada: inflación total y Perú en azul SBS
+   (s1), sin alimentos y energía y el país elegido en azul medio (s2), expectativas y promedio nacional en
+   verde azulado (s3), tasa de referencia en morado (s4). Una sola serie destacada va en azul SBS y su
+   referencia (inflación total) en gris discontinuo (sys); los demás países en gris claro (other).
+   Rango meta: franja azul clara (paso 2 de la secuencial con opacidad).
+   Mapa de calor: divergente azul (por debajo) · gris (1-3%) · morado (por encima), sin rojos. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a;
+  --sys: #868a93; --other: #c9ccd2; --up: #001e6b;
+  --band: rgba(201,211,237,.6);
+  --d0: #001e6b; --d1: #476399; --d2: #95a6c6; --d3: #ebedf1; --d4: #b8abce; --d5: #876baa; --d6: #5a2a85;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4;
+  --sys: #8a8f9c; --other: #3a4160; --up: #9fb2e6;
+  --band: rgba(41,54,98,.75);
+  --d0: #b9c8ee; --d1: #8692b6; --d2: #566081; --d3: #2a3150; --d4: #5e5a82; --d5: #9686b7; --d6: #d2b4f0;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 36px 0 12px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 30px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+.tile .spark svg { display: block; width: 100%; overflow: visible; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin-top: 12px; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.bandsw { width: 16px; height: 10px; border-radius: 2px; display: inline-block; background: var(--band); box-shadow: inset 0 0 0 1px var(--border); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.panel-title { margin: 14px 0 2px; font-size: 13px; color: var(--ink2); font-weight: 600; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 28px 0 0; }
+.filters .lab { font-size: 13px; color: var(--ink2); margin-right: 4px; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+
+.table-wrap { max-height: 420px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dlbl strong, .dval { font-weight: 600; fill: var(--ink); }
+.hlbl { font-size: 12px; fill: var(--ink2); }
+.hlbl.l0 { font-weight: 600; fill: var(--ink); }
+.hlbl.l1 { font-weight: 600; fill: var(--ink); }
+.hgrp { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; fill: var(--muted); font-weight: 600; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.col-hit { fill: transparent; }
+.col-hit:hover, .col-hit:focus-visible { fill: var(--wash); outline: none; }
+svg.heat { outline: none; }
+svg.heat:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+#tip .r.em strong, #tip .r.em .l { color: var(--ink); font-weight: 600; }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; }
+
+/* Leyenda del mapa de calor */
+.scale { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0 4px; font-size: 12px; color: var(--ink2); }
+.scale > span { display: inline-flex; flex-direction: column; gap: 3px; width: 76px; }
+.scale i { display: block; height: 12px; border-radius: 3px; }
+.scale .mid i { box-shadow: inset 0 0 0 1px var(--border); }
+
+/* Paneles pequeños */
+.smgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px 16px; margin-top: 12px; }
+.sm { border-top: 1px solid var(--grid); padding-top: 10px; min-width: 0; }
+.sm h3 { font-size: 13.5px; }
+.sm .v { font-size: 13px; color: var(--ink2); margin: 2px 0 0; }
+.sm .v b { color: var(--ink); font-weight: 600; font-size: 15px; }
+.sm .d { font-size: 12px; color: var(--muted); margin: 2px 0 4px; min-height: 2.9em; }
+
+.callout { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 12px; }
+.callout .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.callout p { margin: 6px 0 0; color: var(--ink2); max-width: 80ch; }
+.callout b { color: var(--ink); }
+
+/* Pestañas */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 24px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, .theme button:focus-visible, .toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña educativa */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; text-wrap: balance; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 20px 0 6px; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 4px; }
+.toc a { font-size: 13px; color: var(--ink2); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+.toc a:hover { color: var(--ink); background: var(--wash); }
+.n { font-weight: 600; font-variant-numeric: tabular-nums; }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 6px; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.box { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.box h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; }
+.box p:last-child { margin-bottom: 0; }
+.inds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0 6px; }
+.ind { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.ind .lab { font-size: 13px; color: var(--ink2); }
+.ind .val { font-size: 28px; font-weight: 600; margin: 4px 0 2px; }
+.ind .val small { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.ind .ref { font-size: 13px; color: var(--ink2); }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 9px; margin-top: 8px; border: 1px solid var(--border); color: var(--ink2); }
+.chip.good { color: var(--up); }
+.chip svg { width: 12px; height: 12px; }
+.edu .table-wrap { max-height: none; max-width: 560px; }
+.lit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.lit .box p { color: var(--ink2); font-size: 14px; }
+.refs { margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--muted); }
+.refs li { margin: 3px 0; }
+.refs i { color: var(--ink2); }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .two, .lit, .inds { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+  .sm .d { min-height: 0; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 24px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .scale > span { width: auto; flex: 1 1 0; min-width: 0; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Economía peruana · Series del BCRP</p>
+      <h1>Inflación en el Perú</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto suben los precios, frente a la meta del BCRP, qué rubros lo explican, cómo responde la política monetaria y cómo se compara el Perú con la región.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-tablero" aria-controls="tab-tablero" aria-selected="true">Tablero</button>
+    <button type="button" role="tab" id="tabbtn-aprende" aria-controls="tab-aprende" aria-selected="false" tabindex="-1">Aprende sobre la inflación</button>
+  </div>
+
+  <div id="tab-tablero" role="tabpanel" aria-labelledby="tabbtn-tablero">
+  <section class="kpis" id="kpis" aria-label="Indicadores del último mes"></section>
+
+  <div class="filters" role="group" aria-label="Periodo de los gráficos">
+    <span class="lab">Periodo de los gráficos</span>
+    <div class="seg" id="range"></div>
+  </div>
+
+  <div class="section-title">Inflación y meta</div>
+  <figure class="card" style="margin:0" id="card-inf">
+    <div class="card-head">
+      <div>
+        <h2>Inflación total y sin alimentos y energía frente a la meta</h2>
+        <p>Variación de los precios en los últimos 12 meses, en %. La franja azul es el rango meta del BCRP en cada momento: hoy 2%, con tolerancia de 1% a 3%. La inflación sin alimentos y energía deja fuera los alimentos (incluidas las comidas fuera del hogar), los combustibles y la electricidad, cuyos precios suelen ser los más volátiles. Es la medida de tendencia que destaca el BCRP.</p>
+      </div>
+      <button class="btn" data-table="inf">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="ln" style="background:var(--s1)"></i>Inflación total</span>
+      <span><i class="ln" style="background:var(--s2)"></i>Sin alimentos y energía</span>
+      <span><i class="bandsw"></i>Rango meta del BCRP</span>
+    </div>
+    <div class="chart" id="ch-inf"></div>
+    <div class="table-wrap" id="tb-inf" hidden></div>
+    <p class="note" id="note-inf"></p>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-des" hidden>
+    <div class="card-head">
+      <div>
+        <h2>Tendencia reciente: variación de 3 meses anualizada</h2>
+        <p>Compara el precio promedio de los últimos tres meses con el de los tres meses anteriores, sin el efecto de las estaciones, y lo expresa como ritmo anual. Reacciona antes que la variación de 12 meses, pero es más ruidosa y tarda un par de meses en reflejar del todo un salto puntual.</p>
+      </div>
+      <button class="btn" data-table="des">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="ln" style="background:var(--s1)"></i>Inflación total</span>
+      <span><i class="ln" style="background:var(--s2)"></i>Sin alimentos y energía</span>
+      <span><i class="bandsw"></i>Rango meta del BCRP</span>
+    </div>
+    <div class="chart" id="ch-des"></div>
+    <div class="table-wrap" id="tb-des" hidden></div>
+    <p class="note" id="note-des"></p>
+  </figure>
+
+  <div class="section-title">Política monetaria</div>
+  <figure class="card" style="margin:0" id="card-pol">
+    <div class="card-head">
+      <div>
+        <h2>Tasa de referencia, expectativas e inflación</h2>
+        <p>El BCRP sube su tasa de referencia cuando la inflación proyectada o las expectativas se ubican por encima de la meta, y la baja cuando están por debajo o cuando la economía necesita impulso y la inflación lo permite. Los dos paneles comparten el eje del tiempo; al pasar el cursor por uno se leen ambos.</p>
+      </div>
+      <button class="btn" data-table="pol">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="ln" style="background:var(--s4)"></i>Tasa de referencia del BCRP</span>
+      <span><i class="ln" style="background:var(--s3)"></i>Expectativa de inflación a 12 meses</span>
+      <span><i class="ln" style="background:var(--s1)"></i>Inflación total (12 meses)</span>
+      <span><i class="bandsw"></i>Rango meta</span>
+    </div>
+    <div class="panel-title">Tasas e inflación, en %</div>
+    <div class="chart" id="ch-pol"></div>
+    <div class="panel-title">Tasa real ex ante: tasa de referencia menos expectativa de inflación, en %</div>
+    <div class="chart" id="ch-real"></div>
+    <div class="table-wrap" id="tb-pol" hidden></div>
+    <p class="note" id="note-pol"></p>
+  </figure>
+
+  <div class="section-title">¿Qué explica la inflación?</div>
+  <div class="callout" id="shock" hidden></div>
+
+  <figure class="card" style="margin:12px 0 0" id="card-heat" hidden>
+    <div class="card-head">
+      <div>
+        <h2>Inflación de 12 meses por rubro</h2>
+        <p>Cada celda es la variación de precios de un rubro en los 12 meses que terminan en ese mes. Gris: dentro del rango meta (1% a 3%); morado: por encima; azul: por debajo. Los rubros en negrita son totales de los que aparecen debajo con sangría; no hay que sumarlos con ellos.</p>
+      </div>
+      <button class="btn" data-table="heat">Ver tabla</button>
+    </div>
+    <div class="scale" id="heat-scale" aria-label="Escala de colores"></div>
+    <div class="chart" id="ch-heat"></div>
+    <div class="table-wrap" id="tb-heat" hidden></div>
+    <p class="note">Este tablero no incorpora las ponderaciones de cada rubro (el BCRP las publica en su Reporte de Inflación), así que no calcula cuánto aporta cada uno a la inflación total; aquí solo se comparan sus variaciones. La variación de 12 meses de los rubros se calcula encadenando sus variaciones mensuales.</p>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-sm" hidden>
+    <div class="card-head">
+      <div>
+        <h2>Otras formas de mirar la inflación</h2>
+        <p>Variación de 12 meses de distintos cortes de la canasta (y, al final, de los precios al por mayor), en %, todos en la misma escala. La línea gris de fondo es la inflación total y la franja, el rango meta.</p>
+      </div>
+      <button class="btn" data-table="sm">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="ln" style="background:var(--s1)"></i>Medida del panel</span>
+      <span><i class="ln dash"></i>Inflación total</span>
+      <span><i class="bandsw"></i>Rango meta</span>
+    </div>
+    <div class="smgrid" id="smgrid"></div>
+    <div class="table-wrap" id="tb-sm" hidden></div>
+    <p class="note" id="note-sm"></p>
+  </figure>
+
+  <div class="section-title" id="sec-ctx">Perú en contexto</div>
+  <figure class="card" style="margin:0" id="card-nac" hidden>
+    <div class="card-head">
+      <div>
+        <h2>Lima Metropolitana y el promedio nacional</h2>
+        <p>La meta del BCRP se mide con el índice de precios de Lima Metropolitana. El INEI publica también un índice nacional que cubre 26 ciudades principales del país, disponible desde 2012. Variación de 12 meses, en %.</p>
+      </div>
+      <button class="btn" data-table="nac">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="ln" style="background:var(--s1)"></i>Lima Metropolitana</span>
+      <span><i class="ln" style="background:var(--s3)"></i>Nacional</span>
+      <span><i class="bandsw"></i>Rango meta</span>
+    </div>
+    <div class="chart" id="ch-nac"></div>
+    <div class="table-wrap" id="tb-nac" hidden></div>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-bars" hidden>
+    <div class="card-head">
+      <div>
+        <h2 id="bars-title">Inflación de 12 meses en la región, último dato</h2>
+        <p>En %. La marca con topes es el rango meta de cada país (o su meta puntual). Los países sin marca no tienen meta de inflación.</p>
+      </div>
+      <button class="btn" data-table="bars">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--s1)"></i>Perú</span>
+      <span><i class="sw" style="background:var(--other)"></i>Otros países</span>
+      <span><svg width="22" height="12" aria-hidden="true"><path d="M2 2v8M2 6h18M20 2v8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Rango meta</span>
+    </div>
+    <div class="chart" id="ch-bars"></div>
+    <div class="table-wrap" id="tb-bars" hidden></div>
+    <p class="note" id="note-bars"></p>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-reg" hidden>
+    <div class="card-head">
+      <div>
+        <h2>Evolución en la región</h2>
+        <p>Variación de 12 meses, en %. El Perú resaltado; elija otro país para compararlo.</p>
+      </div>
+      <div class="card-tools">
+        <label for="reg-pick" style="font-size:13px;color:var(--ink2)">Resaltar</label>
+        <select class="btn" id="reg-pick"></select>
+        <button class="btn" data-table="reg">Ver tabla</button>
+      </div>
+    </div>
+    <div class="legend" id="reg-legend"></div>
+    <div class="chart" id="ch-reg"></div>
+    <div class="table-wrap" id="tb-reg" hidden></div>
+    <p class="note" id="note-reg"></p>
+  </figure>
+  </div>
+
+  <div id="tab-aprende" role="tabpanel" aria-labelledby="tabbtn-aprende" hidden>
+    <nav class="toc" aria-label="Contenido">
+      <a href="#que-es">Qué es</a>
+      <a href="#como-se-mide">Cómo se mide</a>
+      <a href="#tendencia">Medidas de tendencia</a>
+      <a href="#meta">La meta</a>
+      <a href="#politica">Cómo responde el BCRP</a>
+      <a href="#literatura">Qué dice la literatura</a>
+      <a href="#glosario">Glosario</a>
+      <a href="#fuentes">Fuentes</a>
+    </nav>
+
+    <div class="edu">
+      <section id="que-es">
+        <div class="kicker">1 · Conceptos</div>
+        <h2>¿Qué es la inflación?</h2>
+        <p>Es el aumento sostenido y generalizado de los precios. Que suba un producto no es inflación; que suban casi todos, mes tras mes, sí. Con inflación, el mismo dinero alcanza para comprar menos cosas.</p>
+        <p>Se mide con el <b>índice de precios al consumidor (IPC)</b>, que elabora el INEI. El IPC de Lima Metropolitana sigue cada mes el precio de una canasta de 586 bienes y servicios que compran los hogares (alimentos, alquiler, transporte, educación, salud y muchos más). Cada producto pesa según cuánto gastaban en él los hogares en la Encuesta Nacional de Presupuestos Familiares 2019–2020, y esos pesos se mantienen fijos (base diciembre de 2021). Es el índice con el que el BCRP evalúa su meta.</p>
+        <div class="inds" id="inds"></div>
+      </section>
+
+      <section id="como-se-mide">
+        <div class="kicker">2 · Medición</div>
+        <h2>¿Cómo se lee la inflación?</h2>
+        <dl class="defs">
+          <dt>Variación de 12 meses</dt>
+          <dd>Cuánto subieron los precios frente al mismo mes del año anterior. Es la cifra con la que el BCRP evalúa su meta. Como compara con el mismo mes del año anterior, se cancelan en buena parte los altibajos de cada estación. Hoy es <span class="n" data-v="tot12"></span>.</dd>
+          <dt>Variación mensual</dt>
+          <dd>Cuánto subieron los precios frente al mes anterior. Sirve para ver cambios recientes, pero tiene patrones de temporada: pensiones y matrículas escolares en marzo, viajes y compras de fin de año, y las cosechas de algunos alimentos. En <span data-v="hasta"></span> fue <span class="n" data-v="totm"></span>.</dd>
+          <dt>Variación de 3 meses anualizada</dt>
+          <dd>Compara el promedio de los últimos tres meses con el de los tres meses anteriores y lo lleva a ritmo anual, usando precios desestacionalizados (sin el efecto de las estaciones). Anticipa giros en la tendencia, pero se mueve más que la de 12 meses.</dd>
+        </dl>
+        <p>La variación de 12 meses arrastra lo ocurrido durante todo el año. Si los precios suben de golpe en un mes, la inflación de 12 meses queda alta durante un año y baja de golpe cuando ese mes sale del cálculo, aunque los precios de hoy no hayan cambiado. Ese cambio, causado por lo que pasó hace un año, se llama <em>efecto base</em>.</p>
+      </section>
+
+      <section id="tendencia">
+        <div class="kicker">3 · Medidas de tendencia</div>
+        <h2>Subyacente y sin alimentos y energía</h2>
+        <p>Algunos precios saltan por razones que la política monetaria no controla: una helada que encarece la papa, el precio internacional del petróleo, un ajuste de tarifas. Para ver la tendencia de fondo se usan índices que dejan fuera esos rubros.</p>
+        <div class="two">
+          <div class="box">
+            <h3><i class="ln" style="background:var(--s2)"></i>Sin alimentos y energía</h3>
+            <p>Excluye todos los alimentos y bebidas (también las comidas fuera del hogar), los combustibles (incluido el gas de cocina) y la electricidad; cubre el 55% de la canasta. Desde mediados de la década de 2010 es la medida de tendencia que el BCRP destaca en sus reportes. Incluye los transportes (pasajes locales, interprovinciales y aéreos). Hoy: <span class="n" data-v="sae12"></span>.</p>
+          </div>
+          <div class="box">
+            <h3>Subyacente</h3>
+            <p>Excluye los alimentos de precios más volátiles y algunos que siguen a los precios internacionales (pan, arroz, fideos, aceites), además de los combustibles, los <b>transportes</b> y los servicios públicos. Hoy: <span class="n" data-v="sub12"></span>.</p>
+          </div>
+        </div>
+        <p style="margin-top:12px">Ojo: en sus comunicados el BCRP suele llamar «subyacente» a la inflación sin alimentos y energía. La subyacente de este recuadro es otra medida, que el BCRP sigue publicando en su base de datos estadística.</p>
+        <p data-v="diverge"></p>
+        <h3>Transables y no transables</h3>
+        <p>Los bienes <b>transables</b> se pueden comprar o vender en el exterior (algunos alimentos, ropa y calzado, electrodomésticos, combustibles), así que sus precios siguen a los precios internacionales y al tipo de cambio. Los <b>no transables</b> son sobre todo servicios (alquiler, educación, salud, transporte, comidas fuera del hogar), además de algunos alimentos frescos, como la papa.</p>
+        <h3>El tipo de cambio y los precios</h3>
+        <p>Cuando sube el dólar, encarece lo importado y lo que se cotiza en dólares, como algunos alquileres. A ese efecto se le llama <em>traspaso</em> del tipo de cambio a los precios. En el Perú se redujo mucho a inicios de los 2000, cuando el BCRP adoptó las metas de inflación y la inflación se volvió baja y estable: según un estudio publicado por el BCRP, el traspaso a los precios al consumidor cayó de alrededor de 60% a cerca de 10%. Sigue presente en los rubros que el BCRP considera vinculados al tipo de cambio (vehículos, electrodomésticos, medicinas, alquileres y pasajes de avión, entre otros), que pesan cerca de 15% de la canasta.</p>
+      </section>
+
+      <section id="meta">
+        <div class="kicker">4 · La meta</div>
+        <h2>La meta de inflación del BCRP</h2>
+        <p>La Constitución (artículo 84) encarga al BCRP preservar la estabilidad monetaria. Desde 2002 lo hace con un esquema de <b>metas explícitas de inflación</b>: anuncia una meta y orienta su política a cumplirla. Entre 2002 y enero de 2007 la meta fue 2.5%, con tolerancia de un punto hacia arriba o hacia abajo; hasta 2005 se evaluaba solo con la inflación de diciembre. Desde 2006 se evalúa todos los meses con la variación de 12 meses, y desde febrero de 2007 la meta es un <b>rango de 1% a 3%</b>, con centro en 2%.</p>
+        <p>La inflación puede salir del rango por choques temporales. Lo que busca el BCRP es que vuelva a él en un plazo razonable y que las expectativas se mantengan dentro del rango.</p>
+        <p>¿Por qué 2% y no cero? La literatura da tres razones: los índices tienden a sobrestimar algo la inflación (cambian la calidad y los productos); un poco de inflación da margen para bajar las tasas en una recesión; y la deflación también es dañina, porque encarece las deudas y frena el gasto. El BCRP, al bajar su meta a 2% en 2007, añadió que así se fortalece la confianza en el sol frente al dólar y la inflación del Perú se iguala a la de las principales economías.</p>
+        <p data-v="meta_hist"></p>
+        <h3>La inflación desde 1950</h3>
+        <p>Inflación promedio anual por década, calculada encadenando las variaciones mensuales del IPC de Lima (la última década, hasta el último dato). Entre 1988 y 1990 el Perú vivió una hiperinflación, con alzas de 114% en un solo mes (setiembre de 1988) y de 397% (agosto de 1990). En <span data-v="max12_m"></span> los precios eran <span class="n" data-v="max12_x"></span> veces los de un año antes.</p>
+        <div class="table-wrap" id="tb-dec"></div>
+      </section>
+
+      <section id="politica">
+        <div class="kicker">5 · Política monetaria</div>
+        <h2>¿Cómo responde el BCRP?</h2>
+        <p>Desde 2003 su instrumento principal es la <b>tasa de referencia</b>, que el Directorio fija cada mes como guía para los préstamos entre bancos, que suelen ser a un día. Cuando la sube, el crédito se encarece, se gasta menos y la presión sobre los precios cede; cuando la baja, ocurre lo contrario. El efecto no es inmediato: según el BCRP, tarda entre 12 y 18 meses en sentirse plenamente en la inflación, así que decide mirando hacia adelante.</p>
+        <p>Por eso importan las <b>expectativas de inflación</b>: si empresas y familias creen que la inflación seguirá alta, fijan precios y salarios con esa idea y la alimentan. El BCRP las mide cada mes con una encuesta a analistas económicos, entidades financieras y empresas. Analistas y entidades financieras esperan hoy <span class="n" data-v="exp"></span> para los próximos 12 meses.</p>
+        <p>La <b>tasa real ex ante</b> resta a la tasa de referencia la inflación esperada: es el costo del dinero ya descontada la inflación. Una tasa real alta frena la economía; una baja la impulsa. En el medio está la tasa <em>neutral</em>, la que ni impulsa ni frena: el BCRP la estima en alrededor de 2% en términos reales. Hoy la tasa real es <span class="n" data-v="real"></span>.</p>
+        <p>El BCRP usa además otros instrumentos: el encaje (la parte de los depósitos que los bancos deben guardar como reserva, en caja o en el BCRP), operaciones para dar o retirar liquidez y la intervención en el mercado cambiario para reducir la volatilidad excesiva del tipo de cambio.</p>
+      </section>
+
+      <section id="literatura">
+        <div class="kicker">6 · Investigación</div>
+        <h2>Qué dice la literatura</h2>
+        <div class="lit">
+          <div class="box">
+            <h3>Metas de inflación</h3>
+            <p>El banco central anuncia una meta numérica de inflación, explica sus decisiones y rinde cuentas: gana transparencia y disciplina sin atarse a una regla rígida. Si la meta es creíble, ayuda a anclar las expectativas. El Perú adoptó este esquema en 2002.</p>
+            <ol class="refs">
+              <li>Bernanke, B. S. y Mishkin, F. S. (1997). <i>Inflation targeting: a new framework for monetary policy?</i> Journal of Economic Perspectives, 11(2), 97–116. <a href="https://doi.org/10.1257/jep.11.2.97" target="_blank" rel="noopener">doi:10.1257/jep.11.2.97</a></li>
+              <li>Armas, A. y Grippa, F. (2005). <i>Targeting inflation in a dollarized economy: the Peruvian experience</i>. Documento de trabajo 538, Departamento de Investigación, Banco Interamericano de Desarrollo. <a href="https://doi.org/10.18235/0010957" target="_blank" rel="noopener">doi:10.18235/0010957</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Reglas de tasa de interés</h3>
+            <p>La regla de Taylor resume cómo mover la tasa de interés según dos señales: la inflación respecto a la meta y la brecha entre el PBI y su tendencia. Por cada punto de inflación adicional, la tasa sube 1.5 puntos, de modo que la tasa real también sube.</p>
+            <ol class="refs">
+              <li>Taylor, J. B. (1993). <i>Discretion versus policy rules in practice</i>. Carnegie-Rochester Conference Series on Public Policy, 39, 195–214. <a href="https://doi.org/10.1016/0167-2231(93)90009-L" target="_blank" rel="noopener">doi:10.1016/0167-2231(93)90009-L</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Cómo terminan las hiperinflaciones</h3>
+            <p>Las hiperinflaciones de los años veinte en Europa terminaron con un cambio de régimen: un presupuesto creíblemente equilibrado y un banco central independiente que se negó a seguir prestándole al Estado. El Perú aplicó una receta parecida desde agosto de 1990, y la Constitución y la Ley Orgánica del BCRP de 1993 prohibieron que el banco central financie al Gobierno.</p>
+            <ol class="refs">
+              <li>Sargent, T. J. (1982). <i>The ends of four big inflations</i>. En R. E. Hall (ed.), Inflation: Causes and Effects (pp. 41–98). University of Chicago Press. <a href="https://www.nber.org/chapters/c11452" target="_blank" rel="noopener">nber.org/chapters/c11452</a></li>
+              <li>Martinelli, C. y Vega, M. (2021). <i>The case of Peru</i>. En T. J. Kehoe y J. P. Nicolini (eds.), A Monetary and Fiscal History of Latin America, 1960–2017. University of Minnesota Press. <a href="https://manifold.bfi.uchicago.edu/read/the-case-of-peru/section/12466d4e-8123-4775-be11-3cc718678fcf" target="_blank" rel="noopener">Texto en línea</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Política monetaria con dolarización</h3>
+            <p>Con muchas deudas en dólares, una subida brusca del tipo de cambio puede dañar a familias, empresas y bancos, aunque su traspaso a los precios es moderado. Por eso el BCRP combina la tasa de interés con encajes altos en dólares, reservas internacionales elevadas e intervención cambiaria para suavizar el tipo de cambio.</p>
+            <ol class="refs">
+              <li>Rossini, R. y Vega, M. (2008). <i>The monetary policy transmission mechanism under financial dollarisation: the case of Peru 1996–2006</i>. En Transmission mechanisms for monetary policy in emerging market economies, BIS Papers 35 (pp. 395–412). Banco de Pagos Internacionales. <a href="https://www.bis.org/publications/paper-35-transmission-mechanisms-monetary-policy-emerging-market-economies" target="_blank" rel="noopener">bis.org</a></li>
+              <li>Armas, A. y Grippa, F. (2005), citado arriba.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="glosario">
+        <div class="kicker">7 · Referencia</div>
+        <h2>Glosario</h2>
+        <dl class="defs">
+          <dt>IPC</dt><dd>Índice de precios al consumidor. Mide cómo cambia el costo de una canasta fija de bienes y servicios que compran los hogares. Lo elabora el INEI.</dd>
+          <dt>Deflación</dt><dd>Caída sostenida y generalizada de los precios: inflación negativa durante un periodo prolongado.</dd>
+          <dt>Desinflación</dt><dd>La inflación baja, pero sigue siendo positiva: los precios suben más despacio.</dd>
+          <dt>Hiperinflación</dt><dd>Inflación extremadamente alta y fuera de control. Una definición clásica (Cagan, 1956) la reserva para cuando los precios suben más de 50% en un mes.</dd>
+          <dt>Inflación subyacente</dt><dd>Medida del BCRP que excluye los alimentos más volátiles, los combustibles, los transportes y los servicios públicos para mostrar la tendencia.</dd>
+          <dt>IPM</dt><dd>Índice de precios al por mayor: mide los precios de bienes que se venden al por mayor (agropecuarios, pesqueros y manufacturados, nacionales e importados). Lo elabora el INEI.</dd>
+          <dt>Rango meta</dt><dd>La meta del BCRP: desde 2007, una inflación de 12 meses entre 1% y 3%.</dd>
+          <dt>Tasa de referencia</dt><dd>Tasa de interés que fija el BCRP como guía para los préstamos de un día entre bancos; desde ahí se traslada a las demás tasas.</dd>
+          <dt>Tasa real</dt><dd>Tasa de interés menos la inflación (esperada, si es ex ante).</dd>
+          <dt>Tasa neutral</dt><dd>La tasa real que ni impulsa ni frena la economía. El BCRP la estima en alrededor de 2%.</dd>
+          <dt>Expectativas de inflación</dt><dd>La inflación que el público espera para el futuro.</dd>
+          <dt>Efecto base</dt><dd>Cambio de la inflación de 12 meses que se debe a lo que pasó hace un año (cuando un mes atípico sale del cálculo), no a lo que pasa hoy.</dd>
+          <dt>Desestacionalizar</dt><dd>Quitar a una serie los patrones que se repiten cada año en la misma época.</dd>
+        </dl>
+      </section>
+
+      <section id="fuentes">
+        <div class="kicker">8 · Fuentes</div>
+        <h2>Fuentes de esta sección</h2>
+        <p>Cada afirmación de esta pestaña se contrastó con estas fuentes. El sitio del BCRP a veces muestra una verificación de seguridad antes de abrir sus documentos.</p>
+        <ul class="srcs">
+          <li>Constitución Política del Perú (1993), artículo 84. <a href="https://leyes.congreso.gob.pe/Documentos/constituciones_ordenado/CONSTIT_1993/Texto_actualizado_CONS_1993.pdf" target="_blank" rel="noopener">Congreso de la República</a></li>
+          <li>INEI, metodología del IPC de Lima Metropolitana (base diciembre 2021 = 100), en <i>Indicadores de Precios de la Economía</i>, enero 2025. <a href="https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1728/Libro58.pdf" target="_blank" rel="noopener">inei.gob.pe</a></li>
+          <li>INEI, <i>Indicadores de Precios de la Economía</i>, marzo 2025 (estacionalidad escolar). <a href="https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1728/Libro60.pdf" target="_blank" rel="noopener">inei.gob.pe</a></li>
+          <li>BCRP, <i>Glosario de términos económicos</i>. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Glosario/Glosario-BCRP.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Programa Monetario para el año 2002</i> (inicio de las metas explícitas). <a href="https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/Programa-Monetario-2002.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Reporte de Inflación, enero 2006</i> (evaluación continua de la meta). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2006/Reporte-Inflacion-Enero-2006.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Reporte de Inflación, enero 2007</i> (meta de 2% y rezagos de la política monetaria). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2007/enero/Reporte-Inflacion-Enero-2007.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Memoria 2007</i> (historia de la meta de inflación). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Memoria/2007/Institucional/Memoria-BCRP-2007-02.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Reporte de Inflación, marzo 2022</i> (nueva base del IPC y ponderaciones). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2022/marzo/reporte-de-inflacion-marzo-2022.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Reporte de Inflación, junio 2026</i> (rango meta, tasa de referencia, tasa neutral, expectativas). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/junio/reporte-de-inflacion-junio-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, <i>Notas de Estudios N.° 26-2026. Inflación: marzo 2026</i> (medidas de tendencia, transables, rubros vinculados al tipo de cambio). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Notas-Estudios/2026/nota-de-estudios-26-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, Notas de Estudios N.° 2-2022 (cálculo de la expectativa de inflación a 12 meses). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Notas-Estudios/2022/nota-de-estudios-02-2022.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>Lahura, E. y Grande, A. (2023). Evaluación de los indicadores de inflación subyacente para el Perú: 2002–2021. <i>Revista Estudios Económicos</i>, 42, BCRP. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/42/ree-42-lahura-grande.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>Winkelried, D. (2012). Traspaso del tipo de cambio y metas de inflación en el Perú. <i>Revista Estudios Económicos</i>, 23, BCRP. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/23/ree-23-winkelried.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>Bernanke, B. S. (2002). <i>Deflation: making sure "it" doesn't happen here</i>. Discurso, Reserva Federal. <a href="https://www.federalreserve.gov/boarddocs/speeches/2002/20021121/default.htm" target="_blank" rel="noopener">federalreserve.gov</a></li>
+          <li>Banco Central Europeo (2021). <i>Monetary policy strategy statement</i>. <a href="https://www.ecb.europa.eu/mopo/strategy/strategy-review/ecb.strategyreview_monpol_strategy_statement.en.html" target="_blank" rel="noopener">ecb.europa.eu</a></li>
+          <li>Banco Central Europeo (2021). <i>What are base effects?</i> Recuadro del Economic Bulletin 3/2021. <a href="https://www.ecb.europa.eu/pub/economic-bulletin/focus/2021/html/ecb.ebbox202103_04~0a0c8f0814.en.html" target="_blank" rel="noopener">ecb.europa.eu</a></li>
+          <li>Fischer, S., Sahay, R. y Végh, C. (2002). <i>Modern hyper- and high inflations</i>. NBER Working Paper 8930 (cita la definición de Cagan, 1956). <a href="https://www.nber.org/papers/w8930" target="_blank" rel="noopener">nber.org</a></li>
+          <li>Hanke, S. y Krus, N. (2012). <i>World hyperinflations</i>. Cato Working Paper 8. <a href="https://www.cato.org/working-paper/world-hyperinflations" target="_blank" rel="noopener">cato.org</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('inflacion-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('inflacion-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const S = D.S;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 2) => v == null ? '—' : fx(v, d) + '%';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const addMonths = (m, n) => { const k = +m.slice(0, 4) * 12 + (+m.slice(5, 7) - 1) + n; return Math.floor(k / 12) + '-' + String(k % 12 + 1).padStart(2, '0'); };
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+
+// Eje de meses común a todas las series (índice i -> 'YYYY-MM').
+const N = S.tot12.length;
+const MONTHS = Array.from({length: N}, (_, i) => {
+  const y0 = +D.start.slice(0, 4), m0 = +D.start.slice(5, 7) - 1 + i;
+  return (y0 + Math.floor(m0 / 12)) + '-' + String(m0 % 12 + 1).padStart(2, '0');
+});
+const idxOf = m => MONTHS.indexOf(m);
+const prevMonth = m => { const y = +m.slice(0, 4), mo = +m.slice(5, 7); return mo === 1 ? (y - 1) + '-12' : y + '-' + String(mo - 1).padStart(2, '0'); };
+const val = (k, i) => (S[k] ? S[k][i] : null) ?? null;
+const firstIdx = k => S[k] ? S[k].findIndex(v => v != null) : -1;
+const lastIdx = k => S[k] ? S[k].map(v => v != null).lastIndexOf(true) : -1;
+const T_NOW = D.targets[D.targets.length - 1];
+
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (hi === lo) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+// Escala vertical: lineal, o logarítmica simétrica cuando hay hiperinflación en el periodo.
+const LOG_TICKS = [-10, -3, 0, 3, 10, 30, 100, 300, 1000, 3000, 10000];
+const slog = v => Math.sign(v) * Math.log10(1 + Math.abs(v));
+function makeScale(lo, hi, top, ph, count) {
+  if (hi > 60) {
+    const a = slog(Math.min(0, lo)), b = slog(hi) * 1.02;
+    const ticks = LOG_TICKS.filter(t => t >= Math.min(0, lo) - 1e-9 && t <= hi * 1.05);
+    return {log: true, ticks, y: v => top + (b - slog(v)) / (b - a) * ph};
+  }
+  const dom = niceDomain(lo, hi, count);
+  return {log: false, ticks: dom.ticks, lo: dom.lo, hi: dom.hi, y: v => top + (dom.hi - v) / (dom.hi - dom.lo) * ph};
+}
+function barPath(x, w, y0, y1) {
+  const h = Math.abs(y1 - y0);
+  if (h < 0.5) return '';
+  const r = Math.min(w >= 8 ? 4 : w >= 4 ? 1.5 : 0, w / 2, h);
+  if (y1 < y0) return `M${x},${y0}V${y1 + r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 + r}V${y0}Z`;
+  return `M${x},${y0}V${y1 - r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 - r}V${y0}Z`;
+}
+// Barra horizontal desde x0 hasta x1 (extremo de dato redondeado).
+function hbarPath(x0, x1, y, h) {
+  const w = x1 - x0;
+  if (w < 0.5) return '';
+  const r = Math.min(4, w, h / 2);
+  return `M${x0},${y}H${x1 - r}Q${x1},${y} ${x1},${y + r}V${y + h - r}Q${x1},${y + h} ${x1 - r},${y + h}H${x0}Z`;
+}
+
+// ---------- Tooltip (valores primero, etiqueta después; texto con textContent) ----------
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r' + (r.em ? ' em' : '')}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+
+// ---------- Ejes de tiempo mensuales ----------
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 ? m.slice(0, 4) : (m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1])}));
+  }
+  const step = [1, 2, 5, 10, 20].find(s => years / s <= maxTicks) || 20;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmtTick) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    const tx = svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g);
+    tx.textContent = fmtTick(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    const tx = svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g);
+    tx.textContent = t.text;
+  }
+}
+const tickFmt = t => t === 0 ? '0' : (t < 0 ? '−' : '') + (Math.abs(t) >= 1000 ? f0.format(Math.abs(t)) : String(Math.abs(t))) + '%';
+
+// ---------- Estado: periodo ----------
+const LAST_M = D.hasta;
+function shiftYears(m, k) { return (+m.slice(0, 4) - k) + m.slice(4); }
+const RANGES = [
+  {id: '5a', label: '5 años', start: shiftYears(LAST_M, 5)},
+  {id: '10a', label: '10 años', start: shiftYears(LAST_M, 10)},
+  {id: '2002', label: 'Desde 2002', start: '2002-01'},
+  {id: '1994', label: 'Desde 1994', start: '1994-01'},
+  {id: 'todo', label: `Todo (desde ${D.start.slice(0, 4)})`, start: D.start},
+];
+let range = RANGES[2];
+// Índices visibles: desde el inicio del periodo (o el primer dato de las series, o un piso) hasta el final.
+function visIdx(keys, floor) {
+  let a = Math.max(0, idxOf(range.start));
+  const firsts = keys.map(firstIdx).filter(i => i >= 0);
+  if (firsts.length) a = Math.max(a, Math.min(...firsts));
+  if (floor) a = Math.max(a, idxOf(floor));
+  const b = Math.max(...keys.map(lastIdx));
+  const out = [];
+  for (let i = a; i <= b; i++) out.push(i);
+  return out;
+}
+
+// ---------- Gráfico de líneas genérico (con franja meta, cruz y tooltip compartido) ----------
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const rows = g.charts.flatMap(c => c.rows(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, mLabel(MONTHS[i]), rows);
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const idx = cfg.idx, n = idx.length;
+  if (n < 2) return null;
+  const compact = !!cfg.compact, narrow = W < 600;
+  const showEnd = cfg.endLabels && !narrow;
+  const vis = (cfg.annot || []).filter(a => a.i >= idx[0] && a.i <= idx[n - 1]);
+  const m = {l: compact ? 40 : 48, r: showEnd ? 132 : (compact ? 8 : 14), t: vis.length ? 30 : (compact ? 8 : 12), b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const series = cfg.series.filter(s => S[s.k] || s.get);
+  const get = (s, i) => s.get ? s.get(i) : val(s.k, i);
+  const vals = [];
+  for (const i of idx) {
+    for (const s of series) { const v = get(s, i); if (v != null) vals.push(v); }
+    for (const r of (cfg.refs || [])) { const v = val(r.k, i); if (v != null) vals.push(v); }
+    if (cfg.band) { if (S.band_lo[i] != null) vals.push(S.band_lo[i]); if (S.band_hi[i] != null) vals.push(S.band_hi[i]); }
+  }
+  let lo = Math.min(0, ...vals), hi = Math.max(...vals);
+  if (cfg.domain) { lo = Math.min(lo, cfg.domain[0]); hi = Math.max(hi, cfg.domain[1]); }
+  const sc = makeScale(lo, hi, m.t, ph, compact ? 3 : 5), y = sc.y;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, sc.ticks, y, m.l, m.l + pw, tickFmt);
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+
+  // Franja del rango meta: escalones a mitad de mes.
+  if (cfg.band) {
+    const half = pw / (n - 1) / 2, clampX = v => Math.max(m.l, Math.min(m.l + pw, v));
+    let run = [];
+    const flush = () => {
+      if (!run.length) return;
+      let top = '', bot = [];
+      run.forEach((i, j) => {
+        const xa = clampX(x(i) - half), xb = clampX(x(i) + half);
+        top += (j ? 'L' : 'M') + xa + ',' + y(S.band_hi[i]) + 'L' + xb + ',' + y(S.band_hi[i]);
+        bot.unshift(xb + ',' + y(S.band_lo[i]), xa + ',' + y(S.band_lo[i]));
+      });
+      svgEl('path', {d: top + 'L' + bot.join('L') + 'Z', fill: 'var(--band)'}, svg);
+      run = [];
+    };
+    for (const i of idx) { if (S.band_lo[i] != null && S.band_hi[i] != null) run.push(i); else flush(); }
+    flush();
+  }
+  const pathOf = (getter, step) => {
+    let d = '', pen = false, py = 0;
+    for (const i of idx) {
+      const v = getter(i);
+      if (v == null) { pen = false; continue; }
+      const px = x(i), yy = y(v);
+      if (!pen) d += 'M' + px + ',' + yy;
+      else d += step ? 'H' + px + 'V' + yy : 'L' + px + ',' + yy;
+      pen = true; py = yy;
+    }
+    return d;
+  };
+  for (const r of (cfg.refs || [])) {
+    svgEl('path', {d: pathOf(i => val(r.k, i), false), fill: 'none', stroke: 'var(--sys)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4', 'stroke-linejoin': 'round'}, svg);
+  }
+  for (const s of series) {
+    svgEl('path', {d: pathOf(i => get(s, i), s.step), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2,
+      'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-opacity': s.op || 1}, svg);
+  }
+  // Anotaciones (p. ej. un choque de precios): punto en la serie y texto arriba.
+  for (const a of vis) {
+    const s = series.find(z => z.k === a.k) || series[0], v = get(s, a.i);
+    if (v == null) continue;
+    const ax = x(a.i);
+    svgEl('line', {x1: ax, x2: ax, y1: m.t - 8, y2: y(v) - 6, stroke: 'var(--muted)', 'stroke-width': 1}, svg);
+    svgEl('circle', {cx: ax, cy: y(v), r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+    const anchor = ax > m.l + pw - 160 ? 'end' : ax < m.l + 160 ? 'start' : 'middle';
+    const t = svgEl('text', {x: anchor === 'end' ? ax + 4 : anchor === 'start' ? ax - 4 : ax, y: m.t - 12, 'text-anchor': anchor, class: 'dlbl'}, svg);
+    t.textContent = narrow ? a.short : a.text;
+  }
+  // Etiquetas directas al final (valor + nombre), separadas para que no se pisen.
+  if (showEnd) {
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      let li = -1;
+      for (let j = n - 1; j >= 0; j--) if (get(s, idx[j]) != null) { li = idx[j]; break; }
+      return li < 0 ? null : {s, i: li, v: get(s, li), y: y(get(s, li))};
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      const a = svgEl('tspan', {class: 'dval'}, t); a.textContent = pct(e.v);
+      const b = svgEl('tspan', {}, t); b.textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] ? get(s, i) : null;
+        dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      if (cfg.rows) return cfg.rows(i);
+      const r = series.filter(s => !s.noTip).map(s => ({value: pct(get(s, i)), label: s.label, color: s.color}));
+      for (const rf of (cfg.refs || [])) r.push({value: pct(val(rf.k, i)), label: rf.label, color: 'var(--sys)'});
+      if (cfg.band && S.band_lo[i] != null) r.push({value: fx(S.band_lo[i], 1) + '–' + fx(S.band_hi[i], 1) + '%', label: 'Rango meta'});
+      return r;
+    },
+  };
+  group.charts.push(chart);
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    group.show(at(idx[0] + Math.round((evt.clientX - r.left - m.l) / pw * (n - 1))), evt, chart);
+  });
+  hit.addEventListener('pointerleave', group.hide); hit.addEventListener('blur', group.hide);
+  hit.addEventListener('focus', () => group.show(group.cur == null ? idx[n - 1] : at(group.cur), null, chart));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    group.show(at((group.cur == null ? idx[n - 1] : group.cur) + (e.key === 'ArrowRight' ? 1 : -1)), null, chart);
+  });
+  return chart;
+}
+
+// ---------- Indicadores ----------
+const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.2 4.7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const UP = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 9.5V3M3 5.5L6 2.5l3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const DOWN = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.5V9M3 6.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function bandChip(v, parent) {
+  const lo = T_NOW.lo, hi = T_NOW.hi;
+  const st = v > hi ? 1 : v < lo ? -1 : 0;
+  const chip = htmlEl('span', {cls: 'chip' + (st === 0 ? ' good' : '')}, parent);
+  chip.innerHTML = st === 0 ? CHECK : st > 0 ? UP : DOWN;   // íconos fijos; el texto va con textContent
+  chip.title = `Rango meta del BCRP: ${fx(lo, 0)}% a ${fx(hi, 0)}%. La meta se aplica a la inflación total; para las demás medidas se usa como referencia.`;
+  chip.appendChild(document.createTextNode(st === 0 ? 'En el rango meta' : st > 0 ? 'Sobre el rango meta' : 'Bajo el rango meta'));
+}
+function deltaTxt(o, unit = 'pp') {
+  if (o.prev == null) return '';
+  const d = +(o.v - o.prev).toFixed(2);
+  const prevM = prevMonth(o.m);
+  return (d === 0 ? '= sin cambio' : (d > 0 ? '▲ ' : '▼ ') + fx(Math.abs(d)) + ' ' + unit) + ' vs ' + mShort(prevM);
+}
+function renderKpis() {
+  const k = D.kpi, box = document.getElementById('kpis');
+  box.replaceChildren();
+  const tiles = [];
+  if (k.tot12) tiles.push({hero: true, lab: 'Inflación de los últimos 12 meses', val: pct(k.tot12.v), unit: mLabel(k.tot12.m),
+    sub: deltaTxt(k.tot12), chip: k.tot12.v, spark: true});
+  if (k.totm) tiles.push({lab: 'Inflación del mes', val: pct(k.totm.v), sub: deltaTxt(k.totm) +
+    (k.totm.yago != null ? ' · ' + pct(k.totm.yago) + ' en ' + mShort(shiftYears(k.totm.m, 1)) : '')});
+  if (k.sae12) tiles.push({lab: 'Sin alimentos y energía (12 meses)', val: pct(k.sae12.v), sub: deltaTxt(k.sae12), chip: k.sae12.v});
+  if (k.sub12) tiles.push({lab: 'Subyacente (12 meses)', val: pct(k.sub12.v), sub: deltaTxt(k.sub12), chip: k.sub12.v});
+  if (k.exp) tiles.push({lab: 'Expectativa de inflación a 12 meses', val: pct(k.exp.v), sub: deltaTxt(k.exp) + ' · encuesta del BCRP', chip: k.exp.v});
+  if (k.ref) tiles.push({lab: 'Tasa de referencia del BCRP', val: pct(k.ref.v), sub: 'vigente en ' + mShort(k.ref.m) + ' · ' + deltaTxt(k.ref)});
+  if (k.real) tiles.push({lab: 'Tasa real ex ante', val: pct(k.real.v), sub: 'tasa de referencia menos expectativa · ' + mShort(k.real.m) + ' · ' + deltaTxt(k.real)});
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: t.val}, d);
+    if (t.unit) htmlEl('span', {cls: 'unit', text: t.unit}, v);
+    htmlEl('div', {cls: 'sub', text: t.sub}, d);
+    if (t.chip != null) bandChip(t.chip, d);
+    if (t.spark) {
+      const sp = htmlEl('div', {cls: 'spark'}, d);
+      htmlEl('div', {cls: 'sub', text: 'Últimos 3 años, con el rango meta'}, sp);
+      t.sparkBox = htmlEl('div', {cls: 'chart'}, sp);
+      t.sparkBox.id = 'ch-spark';
+    }
+  }
+  renderSpark();
+}
+function renderSpark() {
+  const box = document.getElementById('ch-spark');
+  if (!box) return;
+  const b = lastIdx('tot12'), idx = [];
+  for (let i = Math.max(0, b - 35); i <= b; i++) idx.push(i);
+  lineChart(box, {idx, H: 150, compact: true, band: true, series: [{k: 'tot12', label: 'Inflación total', color: 'var(--s1)'}],
+    aria: 'Inflación de 12 meses, últimos tres años'});
+}
+
+// ---------- Gráficos del tablero ----------
+function shockAnnot() {
+  const sh = D.shock;
+  if (!sh) return [];
+  return [{i: idxOf(sh.m), k: 'tot12', text: `${mLabel(sh.m)}: combustibles +${fx(sh.comb, 1)}% en el mes`, short: `${mShort(sh.m)}: combustibles +${fx(sh.comb, 1)}%`}];
+}
+function renderInf() {
+  const idx = visIdx(['tot12', 'sae12']);
+  lineChart(document.getElementById('ch-inf'), {idx, H: 330, band: true, endLabels: true, annot: shockAnnot(),
+    series: [{k: 'sae12', label: 'Sin alimentos y energía', short: 'Sin alim. y energía', color: 'var(--s2)'},
+             {k: 'tot12', label: 'Inflación total', short: 'Total', color: 'var(--s1)'}],
+    aria: 'Inflación de 12 meses total y sin alimentos y energía frente al rango meta'});
+  const first = idx[0], fs = firstIdx('sae12');
+  document.getElementById('note-inf').textContent =
+    (MONTHS[first] < '2006-01' ? 'Entre 1994 y 2005 la meta se refería a la inflación de diciembre de cada año (la franja se dibuja todo el año solo como referencia); desde 2006 se evalúa cada mes con la variación de 12 meses. El esquema de metas explícitas rige desde 2002; antes de 1994 no había meta. ' : '') +
+    (MONTHS[first] < MONTHS[fs] ? `La serie sin alimentos y energía empieza en ${mLabel(MONTHS[fs])}. ` : '') +
+    (S.tot12.slice(first).some(v => v > 60) ? 'El periodo incluye la hiperinflación de 1988–1990, por eso el eje vertical está en escala logarítmica.' : '');
+}
+function renderDes() {
+  const card = document.getElementById('card-des');
+  if (!S.d3m && !S.sae3m) { card.hidden = true; return; }
+  card.hidden = false;
+  const idx = visIdx(['d3m', 'sae3m']);
+  lineChart(document.getElementById('ch-des'), {idx, H: 260, band: true, endLabels: true,
+    series: [{k: 'sae3m', label: 'Sin alimentos y energía', short: 'Sin alim. y energía', color: 'var(--s2)'},
+             {k: 'd3m', label: 'Inflación total', short: 'Total', color: 'var(--s1)'}],
+    aria: 'Inflación desestacionalizada, variación de 3 meses anualizada'});
+  const li = lastIdx('d3m');
+  let mx = null;
+  for (let i = Math.max(0, li - 11); i <= li; i++) if (val('d3m', i) != null && (mx == null || val('d3m', i) > val('d3m', mx))) mx = i;
+  document.getElementById('note-des').textContent = li < 0 ? '' :
+    `A ${mLabel(MONTHS[li])}: ${pct(val('d3m', li))} la total y ${pct(val('sae3m', li))} la sin alimentos y energía. ` +
+    (mx != null ? `El máximo de los últimos 12 meses fue ${pct(val('d3m', mx))} en ${mLabel(MONTHS[mx])}` + (D.shock && MONTHS[mx] > D.shock.m ? `, después del choque de ${mLabel(D.shock.m)}, porque la medida promedia tres meses. ` : '. ') : '') +
+    `La serie empieza en ${mLabel(MONTHS[firstIdx('d3m')])}.`;
+}
+function renderPol() {
+  const idx = visIdx(['ref', 'exp']);
+  const g = makeGroup();
+  lineChart(document.getElementById('ch-pol'), {idx, H: 280, band: true, endLabels: true, group: g,
+    series: [{k: 'tot12', label: 'Inflación total (12 meses)', short: 'Inflación', color: 'var(--s1)'},
+             {k: 'exp', label: 'Expectativa a 12 meses', short: 'Expectativa', color: 'var(--s3)'},
+             {k: 'ref', label: 'Tasa de referencia', short: 'Tasa de referencia', color: 'var(--s4)', step: true}],
+    aria: 'Tasa de referencia, expectativa de inflación e inflación'});
+  lineChart(document.getElementById('ch-real'), {idx, H: 170, endLabels: true, group: g,
+    series: [{k: 'real', label: 'Tasa real ex ante', short: 'Tasa real', color: 'var(--s1)'}],
+    aria: 'Tasa real ex ante'});
+  const k = D.kpi;
+  document.getElementById('note-pol').textContent =
+    `La tasa de referencia existe desde ${mLabel(MONTHS[firstIdx('ref')])}; la serie de expectativas de inflación a 12 meses, desde ${mLabel(MONTHS[firstIdx('exp')])}. ` +
+    (k.ref && k.real && k.ref.m > k.real.m ? `La tasa de ${mLabel(k.ref.m)} (${pct(k.ref.v)}) ya está publicada, pero las expectativas e inflación llegan hasta ${mLabel(k.real.m)}.` : '');
+}
+
+// ---------- Mapa de calor por rubro ----------
+const BINS = [
+  {max: -1, label: '< −1%', v: '--d0'}, {max: 0, label: '−1 a 0', v: '--d1'}, {max: 1, label: '0 a 1', v: '--d2'},
+  {max: 3, label: '1 a 3 meta', v: '--d3', mid: true}, {max: 5, label: '3 a 5', v: '--d4'},
+  {max: 8, label: '5 a 8', v: '--d5'}, {max: Infinity, label: '> 8%', v: '--d6'}];
+const binOf = v => BINS.findIndex((b, j) => j === 3 ? v <= b.max : v < b.max || (j === BINS.length - 1));
+const monthlyKey = k => ({tot12: 'totm', sub12: 'subm', sae12: 'saem'})[k] || k + '_m';
+let heatCur = null;
+function renderHeatScale() {
+  const box = document.getElementById('heat-scale');
+  box.replaceChildren();
+  for (const b of BINS) {
+    const s = htmlEl('span', {cls: b.mid ? 'mid' : ''}, box);
+    const i = htmlEl('i', null, s); i.style.background = `var(${b.v})`;
+    htmlEl('span', {text: b.label}, s);
+  }
+}
+function heatWindow(plotW) {
+  const ncol = Math.max(12, Math.min(36, Math.floor(plotW / 16)));
+  const b = Math.min(...D.heat.map(r => lastIdx(r.k)).filter(i => i >= 0));
+  const a = Math.max(idxOf('2002-01'), b - ncol + 1);
+  const cols = [];
+  for (let i = a; i <= b; i++) cols.push(i);
+  return cols;
+}
+function renderHeat() {
+  const card = document.getElementById('card-heat');
+  if (!D.heat || !D.heat.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const box = document.getElementById('ch-heat');
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600, labW = narrow ? Math.min(150, Math.round(W * 0.42)) : 210;
+  const cols = heatWindow(W - labW), nc = cols.length, cw = (W - labW) / nc;
+  const rowH = 22, grpH = 26, top = 4;
+  // Posición vertical de cada fila, con un espacio y título por grupo.
+  const rows = [];
+  let yy = top;
+  D.heat.forEach((r, j) => {
+    if (r.g !== undefined && r.g !== null && j > 0) yy += r.g ? grpH : 8;
+    rows.push({...r, y: yy});
+    yy += rowH;
+  });
+  const H = yy + 26;
+  const svg = svgEl('svg', {width: W, height: H, class: 'heat', tabindex: 0, role: 'img',
+    'aria-label': 'Mapa de calor de la inflación de 12 meses por rubro; use las flechas para recorrer las celdas'}, box);
+  rows.forEach((r, j) => {
+    if (r.g && j > 0) {
+      const t = svgEl('text', {x: 0, y: r.y - 9, class: 'hgrp'}, svg); t.textContent = r.g;
+    }
+    if (r.lv <= 1 && j > 0 && !r.g) svgEl('line', {x1: 0, x2: W, y1: r.y - 1, y2: r.y - 1, stroke: 'var(--grid)', 'stroke-width': 1}, svg);
+    const t = svgEl('text', {x: r.lv === 2 ? 14 : r.lv === 1 ? 6 : 0, y: r.y + 15, class: 'hlbl l' + r.lv}, svg);
+    t.textContent = r.label;
+    // Recorta etiquetas largas en pantallas angostas.
+    while (t.getComputedTextLength && t.getComputedTextLength() > labW - 10 - (r.lv === 2 ? 14 : r.lv * 6) && t.textContent.length > 4)
+      t.textContent = t.textContent.slice(0, -2) + '…';
+    cols.forEach((i, c) => {
+      const v = val(r.k, i);
+      if (v == null) return;
+      const gap = cw >= 10 ? 2 : 1;
+      svgEl('rect', {x: labW + c * cw + gap / 2, y: r.y + 1, width: Math.max(1, cw - gap), height: rowH - 2,
+        rx: cw >= 10 ? 3 : 1, fill: `var(${BINS[binOf(v)].v})`}, svg);
+    });
+  });
+  drawXTicks(svg, timeTicks(cols.map(i => MONTHS[i]), W - labW), c => labW + (c + 0.5) * cw, H - 8);
+  const outline = svgEl('rect', {fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.5, rx: 3, visibility: 'hidden', 'pointer-events': 'none'}, svg);
+  const show = (rj, c, evt) => {
+    rj = Math.max(0, Math.min(rows.length - 1, rj)); c = Math.max(0, Math.min(nc - 1, c));
+    heatCur = [rj, c];
+    const r = rows[rj], i = cols[c], v = val(r.k, i), vm = val(monthlyKey(r.k), i);
+    outline.setAttribute('x', labW + c * cw); outline.setAttribute('y', r.y); outline.setAttribute('width', cw); outline.setAttribute('height', rowH);
+    outline.setAttribute('visibility', 'visible');
+    const node = {getBoundingClientRect: () => { const b = svg.getBoundingClientRect(); return {left: b.left + labW + c * cw, top: b.top + r.y, width: cw}; }};
+    const [cx, cy] = anchorOf(evt, node);
+    const rowsTip = [{value: pct(v), label: 'en 12 meses', color: v == null ? 'transparent' : `var(${BINS[binOf(v)].v})`, sq: true}];
+    if (vm != null) rowsTip.push({value: pct(vm), label: 'en el mes'});
+    showTip(cx, cy, r.label + ' · ' + mLabel(MONTHS[i]), rowsTip);
+  };
+  const hide = () => { hideTip(); outline.setAttribute('visibility', 'hidden'); };
+  svg.addEventListener('pointermove', evt => {
+    const b = svg.getBoundingClientRect(), px = evt.clientX - b.left, py = evt.clientY - b.top;
+    const c = Math.floor((px - labW) / cw), rj = rows.findIndex(r => py >= r.y && py < r.y + rowH);
+    if (px < labW || c >= nc || rj < 0) { hide(); return; }
+    show(rj, c, evt);
+  });
+  svg.addEventListener('pointerleave', hide); svg.addEventListener('blur', hide);
+  svg.addEventListener('focus', () => show(heatCur ? heatCur[0] : 0, heatCur ? heatCur[1] : nc - 1));
+  svg.addEventListener('keydown', e => {
+    const mv = {ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0]}[e.key];
+    if (!mv) return;
+    e.preventDefault();
+    const [rj, c] = heatCur || [0, nc - 1];
+    show(rj + mv[0], c + mv[1]);
+  });
+}
+
+// ---------- Paneles pequeños ----------
+const SM_FLOOR = '2002-01';   // los cortes de la canasta arrancan en 2002 (antes, cola de la hiperinflación)
+function renderSmall() {
+  const card = document.getElementById('card-sm');
+  if (!D.small || !D.small.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const grid = document.getElementById('smgrid');
+  grid.replaceChildren();
+  const keys = D.small.map(p => p.k);
+  const idx = visIdx(keys, SM_FLOOR);
+  // Misma escala para todos los paneles.
+  let lo = 0, hi = 3;
+  for (const i of idx) for (const k of keys.concat('tot12')) { const v = val(k, i); if (v != null) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }
+  for (const p of D.small) {
+    const cell = htmlEl('div', {cls: 'sm'}, grid);
+    htmlEl('h3', {text: p.label}, cell);
+    const li = lastIdx(p.k);
+    const v = htmlEl('div', {cls: 'v'}, cell);
+    htmlEl('b', {text: pct(val(p.k, li))}, v);
+    v.appendChild(document.createTextNode(' en ' + mShort(MONTHS[li])));
+    htmlEl('div', {cls: 'd', text: p.desc}, cell);
+    const ch = htmlEl('div', {cls: 'chart'}, cell);
+    lineChart(ch, {idx, H: 140, compact: true, band: true, domain: [lo, hi],
+      refs: p.k === 'tot12' ? [] : [{k: 'tot12', label: 'Inflación total'}],
+      series: [{k: p.k, label: p.label, color: 'var(--s1)'}], aria: p.label + ', variación de 12 meses'});
+  }
+  document.getElementById('note-sm').textContent = 'Los paneles empiezan en ' + mLabel(MONTHS[idx[0]]) +
+    (range.start < SM_FLOOR ? ' aunque el periodo elegido sea más largo: antes de 2002 la cola de la hiperinflación deja cifras muy altas que aplastarían la escala.' : '.');
+}
+
+// ---------- Lima vs. nacional ----------
+function renderNac() {
+  const card = document.getElementById('card-nac');
+  if (!S.nac12) { card.hidden = true; return; }
+  card.hidden = false;
+  const idx = visIdx(['nac12']);
+  lineChart(document.getElementById('ch-nac'), {idx, H: 260, band: true, endLabels: true,
+    series: [{k: 'nac12', label: 'Nacional', short: 'Nacional', color: 'var(--s3)'},
+             {k: 'tot12', label: 'Lima Metropolitana', short: 'Lima', color: 'var(--s1)'}],
+    aria: 'Inflación de 12 meses de Lima Metropolitana y nacional'});
+}
+
+// ---------- Región ----------
+const R = D.region;
+const regBy = R ? Object.fromEntries(R.countries.map(c => [c.iso, c])) : {};
+const regVal = (c, i) => {
+  const off = idxOf(c.start);
+  if (off < 0 || i < off) return null;
+  return c.v[i - off] ?? null;
+};
+let regPick = '';
+function renderBars() {
+  const card = document.getElementById('card-bars');
+  if (!R) { card.hidden = true; return; }
+  card.hidden = false;
+  const box = document.getElementById('ch-bars');
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const data = R.countries.slice().sort((a, b) => b.last - a.last);
+  const per = regBy.PER, refM = per ? per.last_m : D.hasta;
+  document.getElementById('bars-title').textContent = 'Inflación de 12 meses en la región, ' + mLabel(refM);
+  const normal = data.filter(c => !c.high);
+  const metaHi = normal.map(c => c.meta ? (c.meta.hi ?? c.meta.c ?? 0) : 0);
+  const xmax = niceDomain(0, Math.max(...normal.map(c => c.last), ...metaHi) * 1.08, 5);
+  const narrow = W < 560, labW = narrow ? 92 : 150, valW = narrow ? 58 : 80, rowH = 30;
+  const pw = W - labW - valW, H = data.length * rowH + 28;
+  const x = v => labW + Math.max(0, Math.min(v, xmax.hi)) / xmax.hi * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Inflación de 12 meses por país, último dato, con la meta de cada banco central'}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of xmax.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: 0, y2: H - 22, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    const tx = svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, g); tx.textContent = t + '%';
+  }
+  data.forEach((c, j) => {
+    const top = j * rowH, by = top + 7, bh = 16;
+    const lab = svgEl('text', {x: labW - 10, y: by + 12, 'text-anchor': 'end', class: 'dlbl'}, svg);
+    lab.textContent = c.name + (c.last_m !== refM ? ' (' + MES[+c.last_m.slice(5, 7) - 1] + ')' : '');
+    if (c.iso === 'PER') lab.setAttribute('class', 'dlbl dval');
+    const clipped = c.last > xmax.hi;
+    svgEl('path', {d: hbarPath(x(0), x(c.last), by, bh), fill: c.iso === 'PER' ? 'var(--s1)' : 'var(--other)'}, svg);
+    if (clipped) {   // marca de corte: la barra no cabe en la escala común
+      const bx = x(xmax.hi) - 14;
+      svgEl('path', {d: `M${bx},${by + bh + 2}l6,-${bh + 4}M${bx + 5},${by + bh + 2}l6,-${bh + 4}`, stroke: 'var(--surface)', 'stroke-width': 3}, svg);
+    }
+    if (c.meta) {
+      const mc = 'var(--ink)', cy = by + bh / 2;
+      if (c.meta.lo != null && c.meta.hi != null) {
+        // Halo del color de fondo para que la marca se lea también sobre la barra del Perú (azul SBS).
+        const md = `M${x(c.meta.lo)},${cy - 7}V${cy + 7}M${x(c.meta.lo)},${cy}H${x(c.meta.hi)}M${x(c.meta.hi)},${cy - 7}V${cy + 7}`;
+        svgEl('path', {d: md, stroke: 'var(--surface)', 'stroke-width': 4, fill: 'none'}, svg);
+        svgEl('path', {d: md, stroke: mc, 'stroke-width': 1.5, fill: 'none'}, svg);
+      } else if (c.meta.hi != null || c.meta.c != null) {
+        const xv = x(c.meta.c ?? c.meta.hi);
+        svgEl('path', {d: `M${xv},${cy - 8}V${cy + 8}`, stroke: 'var(--surface)', 'stroke-width': 4.5}, svg);
+        svgEl('path', {d: `M${xv},${cy - 8}V${cy + 8}`, stroke: mc, 'stroke-width': 2}, svg);
+      }
+    }
+    // El valor va después de la barra y de la marca de la meta, para no pisarlas.
+    const metaEnd = c.meta ? x(c.meta.hi ?? c.meta.c ?? 0) : 0;
+    const vt = svgEl('text', {x: Math.max(Math.min(x(c.last), labW + pw), metaEnd) + 8, y: by + 12, class: 'dlbl'}, svg);
+    const s = svgEl('tspan', {class: 'dval'}, vt); s.textContent = pct(c.last, 1);
+    const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: rowH, tabindex: 0,
+      'aria-label': `${c.name}: ${pct(c.last, 1)} en ${mLabel(c.last_m)}`}, svg);
+    const show = evt => {
+      const [cx, cy] = anchorOf(evt, hit);
+      const rows = [{value: pct(c.last, 2), label: 'en 12 meses, ' + mLabel(c.last_m), color: c.iso === 'PER' ? 'var(--s1)' : 'var(--other)', sq: true}];
+      rows.push({value: metaTxt(c.meta), label: 'meta del banco central'});
+      if (c.cob && c.cob !== 'nacional') rows.push({value: '', label: 'Cobertura: ' + c.cob});
+      showTip(cx, cy, c.name, rows);
+    };
+    hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+  });
+  const high = data.filter(c => c.high), cob = data.filter(c => c.cob && c.cob !== 'nacional'), late = data.filter(c => c.last_m !== refM);
+  document.getElementById('note-bars').textContent =
+    (high.length ? high.map(c => c.name).join(', ') + ' no cabe en la escala común (barra cortada). ' : '') +
+    (late.length ? late.map(c => `${c.name}: la fuente usada aquí llega hasta ${mLabel(c.last_m)}`).join('; ') + '. ' : '') +
+    (cob.length ? 'Cobertura: ' + cob.map(c => c.name + ', ' + c.cob).join('; ') + '; el resto, índices nacionales (en su mayoría, de zonas urbanas). ' : '') +
+    'Para el Perú y Paraguay se compara el índice de la capital, que es el que usa cada banco central para su meta.';
+}
+function metaTxt(mt) {
+  if (!mt) return 'sin meta';
+  if (mt.lo != null && mt.hi != null) return (mt.c != null ? fx(mt.c, 1) + '% (' : '') + fx(mt.lo, 1) + '–' + fx(mt.hi, 1) + '%' + (mt.c != null ? ')' : '');
+  if (mt.c != null) return fx(mt.c, 1) + '%';
+  return 'hasta ' + fx(mt.hi, 1) + '%';
+}
+function renderReg() {
+  const card = document.getElementById('card-reg');
+  if (!R) { card.hidden = true; return; }
+  card.hidden = false;
+  const cs = R.countries.filter(c => !c.high);
+  const per = regBy.PER;
+  const pick = regPick && regBy[regPick] && !regBy[regPick].high ? regBy[regPick] : null;
+  const others = cs.filter(c => c.iso !== 'PER' && c !== pick);
+  const series = others.map(c => ({k: 'reg_' + c.iso, get: i => regVal(c, i), label: c.name, color: 'var(--other)', w: 1.25, noEnd: true, noTip: true}));
+  if (pick) series.push({k: 'reg_' + pick.iso, get: i => regVal(pick, i), label: pick.name, short: pick.name, color: 'var(--s2)'});
+  if (per) series.push({k: 'reg_PER', get: i => regVal(per, i), label: 'Perú', short: 'Perú', color: 'var(--s1)'});
+  const starts = cs.map(c => idxOf(c.start)).filter(i => i >= 0);
+  const a = Math.max(idxOf(range.start), Math.min(...starts));
+  const b = Math.max(...cs.map(c => idxOf(c.last_m)));
+  const idx = []; for (let i = a; i <= b; i++) idx.push(i);
+  lineChart(document.getElementById('ch-reg'), {idx, H: 300, endLabels: true, series,
+    aria: 'Inflación de 12 meses en países de la región',
+    rows: i => cs.map(c => ({c, v: regVal(c, i)})).filter(o => o.v != null).sort((p, q) => q.v - p.v)
+      .map(o => ({value: pct(o.v), label: o.c.name, em: o.c.iso === 'PER' || o.c === pick,
+        color: o.c.iso === 'PER' ? 'var(--s1)' : o.c === pick ? 'var(--s2)' : 'var(--other)'}))});
+  const leg = document.getElementById('reg-legend');
+  leg.replaceChildren();
+  const add = (color, text) => { const s = htmlEl('span', null, leg); const i = htmlEl('i', {cls: 'ln'}, s); i.style.background = color; s.appendChild(document.createTextNode(text)); };
+  add('var(--s1)', 'Perú (Lima Metropolitana)');
+  if (pick) add('var(--s2)', pick.name);
+  add('var(--other)', 'Otros países');
+  const high = R.countries.filter(c => c.high), shortS = cs.filter(c => c.start > '2005-01');
+  document.getElementById('note-reg').textContent =
+    (high.length ? high.map(c => (c.max != null
+        ? `${c.name} no se muestra porque su inflación llegó a ${pct(c.max, 0)} en ${mLabel(c.max_m)} y aplastaría la escala; en ${mLabel(c.last_m)} fue ${pct(c.last, 1)}. `
+        : `${c.name} no se muestra por su inflación muy alta (${pct(c.last, 1)} en ${mLabel(c.last_m)}). `)).join('') : '') +
+    (shortS.length ? 'Series disponibles aquí: ' + shortS.map(c => `${c.name} desde ${mLabel(c.start)}`).join('; ') + '.' : '');
+}
+function fillRegPick() {
+  const sel = document.getElementById('reg-pick');
+  if (!R) return;
+  sel.replaceChildren();
+  htmlEl('option', {value: '', text: 'Ninguno'}, sel);
+  R.countries.filter(c => c.iso !== 'PER' && !c.high).sort((a, b) => a.name.localeCompare(b.name, 'es'))
+    .forEach(c => htmlEl('option', {value: c.iso, text: c.name}, sel));
+  sel.addEventListener('change', () => { regPick = sel.value; renderReg(); if (!document.getElementById('tb-reg').hidden) fillTable('reg'); });
+}
+
+// ---------- Nota: por qué divergen subyacente y sin alimentos y energía ----------
+function renderShock() {
+  const box = document.getElementById('shock'), k = D.kpi, sh = D.shock;
+  if (!k.sae12 || !k.sub12 || Math.abs(k.sae12.v - k.sub12.v) < 0.75) { box.hidden = true; return; }
+  box.hidden = false;
+  box.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'Para leer el último dato'}, box);
+  htmlEl('h2', {text: 'Por qué se separan la subyacente y la sin alimentos y energía'}, box);
+  const p = htmlEl('p', null, box);
+  const transDriven = sh && sh.trans12 != null && sh.trans12 - k.sae12.v >= 5;
+  p.textContent = `En ${mLabel(k.sae12.m)} la inflación sin alimentos y energía es ${pct(k.sae12.v)} y la subyacente, ${pct(k.sub12.v)}. ` +
+    (transDriven
+      ? 'La mayor parte de la diferencia viene de los transportes (sobre todo pasajes): la sin alimentos y energía los incluye y la subyacente no. ' +
+        `En los últimos 12 meses los transportes subieron ${pct(sh.trans12, 1)} y los combustibles ${pct(sh.comb12, 1)}. `
+      : 'Las dos medidas excluyen rubros distintos: la subyacente deja fuera transportes y servicios públicos; la sin alimentos y energía, todos los alimentos. ') +
+    'Además, la subyacente sí incluye las comidas fuera del hogar y otros alimentos, que la sin alimentos y energía deja fuera. ' +
+    (sh ? `El salto vino en ${mLabel(sh.m)}` + (sh.cause ? `, tras ${sh.cause}` : '') +
+      `: ese mes los combustibles subieron ${pct(sh.comb, 1)}, los transportes ${pct(sh.trans, 1)}` +
+      (sh.alim != null ? ` y los alimentos que excluye la subyacente ${pct(sh.alim, 1)}` : '') +
+      `. El IPC total subió ${pct(sh.ipc)}` + (sh.record_since ? `, su mayor alza mensual desde ${mLabel(sh.record_since)}. ` : '. ') +
+      `Ese mes seguirá dentro del cálculo de 12 meses hasta el dato de ${mLabel(addMonths(sh.m, 11))}. ` +
+      `Cuando salga, con el dato de ${mLabel(addMonths(sh.m, 12))}, la inflación de 12 meses debería bajar con fuerza si no hay otra alza parecida: eso es el «efecto base».` : '');
+  if (sh && sh.cause) htmlEl('p', {cls: 'note', text: 'Causa del choque según el BCRP (Notas de Estudios sobre la inflación del mes).'}, box);
+  htmlEl('p', {cls: 'note', text: 'Ojo: en la prensa, y a veces en los comunicados del BCRP, se llama «subyacente» a la inflación sin alimentos y energía. Aquí son dos medidas distintas del BCRP.'}, box);
+}
+
+// ---------- Tablas (equivalente accesible de cada gráfico) ----------
+const rowsDesc = (keys, floor) => visIdx(keys, floor).slice().reverse();
+const TABLES = {
+  inf: () => [['Mes', 'Inflación total', 'Sin alimentos y energía', 'Subyacente', 'Rango meta'],
+    rowsDesc(['tot12', 'sae12']).map(i => [mLabel(MONTHS[i]), pct(val('tot12', i)), pct(val('sae12', i)), pct(val('sub12', i)),
+      S.band_lo[i] != null ? fx(S.band_lo[i], 1) + '–' + fx(S.band_hi[i], 1) + '%' : '—'])],
+  des: () => [['Mes', 'Total (3 meses anualizada)', 'Sin alimentos y energía'],
+    rowsDesc(['d3m', 'sae3m']).map(i => [mLabel(MONTHS[i]), pct(val('d3m', i)), pct(val('sae3m', i))])],
+  pol: () => [['Mes', 'Tasa de referencia', 'Expectativa 12 m', 'Inflación total', 'Tasa real ex ante'],
+    rowsDesc(['ref', 'exp']).map(i => [mLabel(MONTHS[i]), pct(val('ref', i)), pct(val('exp', i)), pct(val('tot12', i)), pct(val('real', i))])],
+  heat: () => {
+    const cols = heatWindow(document.getElementById('ch-heat').clientWidth - 210).slice().reverse();
+    return [['Rubro'].concat(cols.map(i => mShort(MONTHS[i]))),
+      D.heat.map(r => [(r.lv === 2 ? '   ' : r.lv === 1 ? ' ' : '') + r.label].concat(cols.map(i => pct(val(r.k, i)))))];
+  },
+  sm: () => [['Mes'].concat(D.small.map(p => p.label)),
+    rowsDesc(D.small.map(p => p.k), SM_FLOOR).map(i => [mLabel(MONTHS[i])].concat(D.small.map(p => pct(val(p.k, i)))))],
+  nac: () => [['Mes', 'Lima Metropolitana', 'Nacional'],
+    rowsDesc(['nac12']).map(i => [mLabel(MONTHS[i]), pct(val('tot12', i)), pct(val('nac12', i))])],
+  bars: () => [['País', 'Inflación 12 m', 'Mes', 'Meta', 'Cobertura'],
+    R.countries.slice().sort((a, b) => b.last - a.last).map(c => [c.name, pct(c.last), mLabel(c.last_m), metaTxt(c.meta), c.cob || 'nacional'])],
+  reg: () => {
+    const cs = R.countries.slice().sort((a, b) => (a.iso === 'PER' ? -1 : b.iso === 'PER' ? 1 : a.name.localeCompare(b.name, 'es')));
+    const a = Math.max(idxOf(range.start), Math.min(...cs.map(c => idxOf(c.start))));
+    const b = Math.max(...cs.map(c => idxOf(c.last_m)));
+    const rows = [];
+    for (let i = b; i >= a; i--) rows.push([mLabel(MONTHS[i])].concat(cs.map(c => pct(regVal(c, i)))));
+    return [['Mes'].concat(cs.map(c => c.name)), rows];
+  },
+};
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  const [head, rows] = TABLES[key]();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+
+// ---------- Filtro de periodo ----------
+const seg = document.getElementById('range');
+for (const r of RANGES) {
+  const b = htmlEl('button', {type: 'button', text: r.label, 'aria-pressed': String(r === range)}, seg);
+  b.addEventListener('click', () => {
+    range = r;
+    seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    renderTimed();
+    for (const k of ['inf', 'des', 'pol', 'sm', 'nac', 'reg']) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+  });
+}
+function renderTimed() { renderInf(); renderDes(); renderPol(); renderSmall(); renderNac(); renderReg(); }
+function renderAll() {
+  renderSpark(); renderShock(); renderHeatScale(); renderHeat(); renderBars(); renderTimed();
+  document.getElementById('sec-ctx').hidden = !S.nac12 && !R;
+}
+
+// ---------- Pestaña educativa ----------
+const E = D.edu, K = D.kpi;
+const V = {
+  tot12: K.tot12 ? pct(K.tot12.v) : '—', totm: K.totm ? pct(K.totm.v) : '—', hasta: mLabel(D.hasta),
+  sae12: K.sae12 ? pct(K.sae12.v) : '—', sub12: K.sub12 ? pct(K.sub12.v) : '—',
+  exp: K.exp ? pct(K.exp.v) : '—', real: K.real ? pct(K.real.v) : '—',
+  max12_m: mLabel(E.max12_m), max12_x: f0.format(Math.round(1 + E.max12 / 100)),
+  diverge: K.sae12 && K.sub12 ? (Math.abs(K.sae12.v - K.sub12.v) >= 0.75
+    ? (D.shock && D.shock.trans12 != null && D.shock.trans12 - K.sae12.v >= 5
+      ? `Hoy las dos medidas se separan (${pct(K.sae12.v)} frente a ${pct(K.sub12.v)}), sobre todo por los transportes: subieron ${pct(D.shock.trans12, 1)} en 12 meses y solo la sin alimentos y energía los incluye. También influye que la subyacente sí incluye las comidas fuera del hogar y otros alimentos.`
+      : `Hoy las dos medidas se separan (${pct(K.sae12.v)} frente a ${pct(K.sub12.v)}) porque excluyen rubros distintos.`)
+    : `Hoy las dos medidas están cerca (${pct(K.sae12.v)} y ${pct(K.sub12.v)}).`) : '',
+  meta_hist: `Desde ${mLabel(E.inside_from)}, la inflación de 12 meses estuvo dentro del rango meta el ${E.inside_pct}% de los meses. ` +
+    `La inflación más alta en ese periodo fue ${pct(E.max02)}, en ${mLabel(E.max02_m)}` + (E.max02_m === '2022-06' ? ', tras el alza de los precios internacionales de alimentos y combustibles. ' : '. ') +
+    (E.streak_state === 0 ? `Hoy lleva ${E.streak} ${E.streak === 1 ? 'mes' : 'meses'} seguidos dentro del rango.`
+      : `Hoy lleva ${E.streak} ${E.streak === 1 ? 'mes' : 'meses'} seguidos ${E.streak_state > 0 ? 'por encima' : 'por debajo'} del rango.`),
+};
+function fillEduText() {
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = V[e.dataset.v] ?? '—'; });
+}
+function renderEdu() {
+  const box = document.getElementById('inds');
+  box.replaceChildren();
+  const inds = [
+    {lab: 'Lo que costaba S/ 100 en ' + mLabel(E.pp_base), val: 'S/ ' + f0.format(E.pp_val), ref: 'cuesta hoy (' + mLabel(E.pp_m) + '), según el IPC de Lima.'},
+    {lab: 'Inflación promedio anual desde 2002', val: fx(E.avg02, 1), unit: '%', ref: 'Desde que rige el esquema de metas de inflación.'},
+    {lab: 'Meses dentro del rango meta', val: String(E.inside_pct), unit: '%', ref: 'Desde ' + mLabel(E.inside_from) + ', cuando empezó la meta de 2% (1% a 3%).'},
+    {lab: 'Mayor inflación de 12 meses registrada', val: f0.format(E.max12), unit: '%', ref: 'En ' + mLabel(E.max12_m) + ', durante la hiperinflación.'},
+  ];
+  for (const i of inds) {
+    const d = htmlEl('div', {cls: 'ind'}, box);
+    htmlEl('div', {cls: 'lab', text: i.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: i.val}, d);
+    if (i.unit) htmlEl('small', {text: i.unit}, v);
+    htmlEl('div', {cls: 'ref', text: i.ref}, d);
+  }
+  const wrap = document.getElementById('tb-dec');
+  wrap.replaceChildren();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  ['Década', 'Inflación promedio anual', 'Máxima de 12 meses'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  E.decades.forEach(d => {
+    const row = htmlEl('tr', null, tb);
+    const big = v => v >= 1000 ? f0.format(v) + '%' : pct(v, 1);
+    [d.d.replace('s', '') + (d.to.slice(0, 4) !== String(+d.d.slice(0, 4) + 9) ? '–' + mShort(d.to) : 's'), big(d.v), big(d.max)]
+      .forEach(c => htmlEl('td', {text: c}, row));
+  });
+}
+
+// ---------- Pestañas ----------
+const TABS = ['tablero', 'aprende'];
+let tab = 'tablero';
+function renderVisible() { if (tab === 'tablero') renderAll(); else renderEdu(); }
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  hideTip();
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+document.querySelectorAll('.toc a').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector(a.getAttribute('href')).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}));
+
+document.getElementById('lede').textContent =
+  'Cuánto suben los precios frente a la meta del BCRP, qué rubros lo explican, cómo responde la política monetaria y cómo se compara el Perú con la región. Datos de precios a ' + mLabel(D.hasta) + '.';
+const foot = document.getElementById('foot');
+const fuentesReg = R ? Object.entries(R.fuentes).filter(([iso]) => iso !== 'PER').map(([iso, f]) => (regBy[iso] ? regBy[iso].name : iso) + ': ' + f).join('; ') : '';
+[
+  'Fuente: BCRPData (Banco Central de Reserva del Perú). Precios al consumidor: IPC de Lima Metropolitana elaborado por el INEI: índice y variaciones (PN38705PM, PN01271PM, PN01273PM), sin alimentos y energía (PN01276PM, PN01277PM), subyacente (PN01278PM, PN01279PM), clasificación sectorial y de transables (PN01296PM–PN01382PM), IPC desestacionalizado (PN42109PM, PN42110PM) y otras medidas (PN01281PM, PN01283PM, PN09819PM–PN09822PM, PN40410PM, PN40411PM). Precios al por mayor: INEI, nacional (PN01287PM). Expectativa de inflación a 12 meses: encuesta del BCRP, promedio de analistas económicos y sistema financiero (PD12912AM). Tasa de referencia: BCRP (PD04722MM). Causa del choque de precios: Notas de Estudios del BCRP.',
+  (S.nac12 ? 'IPC nacional: ' + (D.src_nac || 'INEI') + '. ' : '') + (R ? 'Comparación regional, institutos de estadística y bancos centrales de cada país: ' + fuentesReg + '. Metas de inflación: comunicados y reportes oficiales de cada banco central o de la autoridad que fija la meta (en Brasil, el Consejo Monetario Nacional; en Uruguay, el Comité de Coordinación Macroeconómica).' : ''),
+  'La tasa real ex ante, las variaciones de 12 meses de los rubros y, para Chile antes de 2011, la inflación de 12 meses compuesta desde la variación mensual son cálculos propios a partir de estas series.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].filter(Boolean).forEach(t => htmlEl('p', {text: t}, foot));
+
+renderKpis();
+fillRegPick();
+fillEduText();
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'tablero', false);
+let rt;
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

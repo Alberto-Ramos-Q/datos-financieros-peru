@@ -1,0 +1,902 @@
+﻿codigo,nombre_corto,frecuencia,tema,titulo_bcrp,n_obs,desde,hasta
+PN01770AM,pbi_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - PBI,391,1994-01-01,2026-07-01
+PN01773AM,pbi_desest_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - PBI Desestacionalizado - mensual,283,2003-01-01,2026-07-01
+PN01728AM,pbi_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - PBI,379,1995-01-01,2026-07-01
+PN01731AM,pbi_desest_var_mensual,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - PBI Desestacionalizado - Var% mensual,282,2003-02-01,2026-07-01
+PN01774AM,demanda_interna_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Indicador de Demanda Interna,283,2003-01-01,2026-07-01
+PN01732AM,demanda_interna_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Indicador de Demanda Interna,271,2004-01-01,2026-07-01
+PN01713AM,pbi_agropecuario_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Agropecuario,379,1995-01-01,2026-07-01
+PN01716AM,pbi_pesca_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Pesca,379,1995-01-01,2026-07-01
+PN01717AM,pbi_mineria_hidrocarburos_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Minería e Hidrocarburos,379,1995-01-01,2026-07-01
+PN01720AM,pbi_manufactura_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Manufactura,379,1995-01-01,2026-07-01
+PN01723AM,pbi_electricidad_agua_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Electricidad y Agua,379,1995-01-01,2026-07-01
+PN01724AM,pbi_construccion_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Construcción,379,1995-01-01,2026-07-01
+PN01725AM,pbi_comercio_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Comercio,379,1995-01-01,2026-07-01
+PN01726AM,pbi_otros_servicios_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Otros Servicios,379,1995-01-01,2026-07-01
+PD37966AM,electricidad_gwh,mensual,actividad,Indicadores de coyuntura - Electricidad (GWH),349,1997-07-01,2026-07-01
+PD37967GM,consumo_cemento_var12m,mensual,actividad,Indicadores de coyuntura - Consumo interno de cemento (var% 12 meses),391,1994-01-01,2026-07-01
+PD37982GM,inversion_minera_var12m,mensual,actividad,Indicadores de coyuntura - Inversión minera (var% real 12 meses),306,2001-01-01,2026-06-01
+PN38705PM,ipc_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - Índice de Precios al Consumidor (IPC),429,1991-01-01,2026-09-01
+PN38708PM,ipc_subyacente_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - IPC Subyacente,417,1992-01-01,2026-09-01
+PN01271PM,ipc_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC,932,1949-02-01,2026-09-01
+PN01273PM,ipc_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC,921,1950-01-01,2026-09-01
+PN01277PM,ipc_sin_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Sin Alimentos y Energía,405,1993-01-01,2026-09-01
+PN01279PM,ipc_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Subyacente,405,1993-01-01,2026-09-01
+PN01281PM,ipc_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Transables,405,1993-01-01,2026-09-01
+PN01283PM,ipc_no_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Transables,405,1993-01-01,2026-09-01
+PN01287PM,ipm_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - Índice de Precios al por Mayor,405,1993-01-01,2026-09-01
+PD04722MM,tasa_referencia,mensual,tasas,Tasas de interés del Banco Central de Reserva - Tasa de Referencia de la Política Monetaria,278,2003-09-01,2026-10-01
+PN07819NM,tasa_interbancaria_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Tasa Interbancaria Promedio,372,1995-10-01,2026-09-01
+PN07839NM,tasa_interbancaria_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Tasa Interbancaria Promedio,372,1995-10-01,2026-09-01
+PN07807NM,tamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - TAMN,416,1992-02-01,2026-09-01
+PN07808NM,ftamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - FTAMN,194,2010-08-01,2026-09-01
+PN07827NM,tamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - TAMEX,416,1992-02-01,2026-09-01
+PN07816NM,tipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - TIPMN,416,1992-02-01,2026-09-01
+PN07836NM,tipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - TIPMEX,416,1992-02-01,2026-09-01
+PN07809NM,tasa_preferencial_corp_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,194,2010-08-01,2026-09-01
+PN00535MM,credito_privado_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos (millones S/)",309,2001-01-01,2026-09-01
+PN00539MM,credito_privado_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Tasas de Crecimiento Anual (%)",297,2002-01-01,2026-09-01
+PN00532MM,credito_empresas_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos - A Empresas (millones S/)",309,2001-01-01,2026-09-01
+PN00533MM,credito_consumo_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos - Consumo (millones S/)",309,2001-01-01,2026-09-01
+PN00534MM,credito_hipotecario_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos - Hipotecario (millones S/)",309,2001-01-01,2026-09-01
+PN00536MM,credito_empresas_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Tasas de Crecimiento Anual (%) - A Empresas",297,2002-01-01,2026-09-01
+PN00537MM,credito_consumo_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Tasas de Crecimiento Anual (%) - Consumo",297,2002-01-01,2026-09-01
+PN00538MM,credito_hipotecario_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Tasas de Crecimiento Anual (%) - Hipotecario",297,2002-01-01,2026-09-01
+PN00511MM,dolarizacion_credito,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Coeficiente de Dolarización (%),417,1992-01-01,2026-09-01
+PN00193MM,liquidez_total,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Liquidez Total a Tipo de Cambio Corriente (millones S/),417,1992-01-01,2026-09-01
+PN00178MM,circulante,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Circulante (millones S/),417,1992-01-01,2026-09-01
+PN00025MM,dolarizacion_liquidez,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Coeficiente de Dolarización de la Liquidez (%),417,1992-01-01,2026-09-01
+PN01207PM,tc_interbancario_prom,mensual,tipo-cambio-reservas,Tipo de cambio - promedio del periodo (S/ por US$) - Interbancario - Promedio,381,1995-01-01,2026-09-01
+PN01216PM,tc_interbancario_fin,mensual,tipo-cambio-reservas,Tipo de cambio - fin de periodo (S/ por US$) - Interbancario - Promedio,381,1995-01-01,2026-09-01
+PN01259PM,tcr_multilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Multilateral,429,1991-01-01,2026-09-01
+PN01251PM,tcr_bilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Bilateral,429,1991-01-01,2026-09-01
+PN00027MM,rin,mensual,tipo-cambio-reservas,Cuentas monetarias del Banco Central de Reserva del Perú - Reservas Internacionales Netas (millones US$),382,1994-12-01,2026-09-01
+PN06483IM,posicion_cambio,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio (millones US$),417,1992-01-01,2026-09-01
+PN01031MM,rin_variacion,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Variación de RIN,345,1998-01-01,2026-09-01
+PN01032MM,rin_var_op_cambiarias,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias,345,1998-01-01,2026-09-01
+PN01033MM,rin_var_compras_netas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa,345,1998-01-01,2026-09-01
+PN01034MM,rin_var_compras_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Compras,345,1998-01-01,2026-09-01
+PN01035MM,rin_var_ventas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Ventas,345,1998-01-01,2026-09-01
+PN01036MM,rin_var_sector_publico,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Sector Público,345,1998-01-01,2026-09-01
+PN01039MM,rin_var_op_cambiarias_otros,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Otros,345,1998-01-01,2026-09-01
+PN01040MM,rin_var_resto,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones,345,1998-01-01,2026-09-01
+PN01041MM,rin_var_dep_intermediarios,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos de Intermediarios Financieros,345,1998-01-01,2026-09-01
+PN01045MM,rin_var_dep_publicos,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos Públicos,345,1998-01-01,2026-09-01
+PN06479IM,rin_activos_brutos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Activos Internacionales (Reservas Brutas) (millones US$),417,1992-01-01,2026-09-01
+PN06480IM,rin_obligaciones_cp,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Obligaciones Corto Plazo Internacionales (millones US$),261,2005-01-01,2026-09-01
+PN06482IM,posicion_cambio_oblig_residentes,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio - Obligaciones Corto Plazo con Residentes (Neto) (millones US$),261,2005-01-01,2026-09-01
+PN06473IM,liquidez_intl_depositos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Depósitos (millones US$),261,2005-01-01,2026-09-01
+PN06474IM,liquidez_intl_valores,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Valores (millones US$),261,2005-01-01,2026-09-01
+PN06475IM,liquidez_intl_oro_plata,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Oro y Plata (millones US$),261,2005-01-01,2026-09-01
+PN06476IM,liquidez_intl_fmi_bis_flar,mensual,tipo-cambio-reservas,"Liquidez internacional del BCRP - Liquidez Total - Suscripciones FMI, BIS y FLAR (millones US$)",261,2005-01-01,2026-09-01
+PN06477IM,liquidez_intl_otros,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Otros (millones US$),261,2005-01-01,2026-09-01
+PN06478IM,liquidez_intl_total,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total (millones US$),261,2005-01-01,2026-09-01
+PN06484IM,oro_valuacion_contable,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Valuación Contable del Oro (US$ por onzas troy),261,2005-01-01,2026-09-01
+PN09495TM,bcrp_contado_compras,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras,225,2008-01-01,2026-09-01
+PN09496TM,bcrp_contado_ventas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Ventas,225,2008-01-01,2026-09-01
+PN09497TM,bcrp_contado_compras_netas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras Netas,225,2008-01-01,2026-09-01
+PN09500TM,bcrp_cdr_emision_neta,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Certificados de Depósito Reajustables del BCRP - Emisión Neta,225,2008-01-01,2026-09-01
+PN09506TM,bcrp_swap_venta_neto,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - SWAP Cambiarios del BCRP Venta - Pactado Neto,225,2008-01-01,2026-09-01
+PN38714BM,exportaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones,368,1996-01-01,2026-08-01
+PN38715BM,exportaciones_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos Tradicionales,176,2012-01-01,2026-08-01
+PN38716BM,exportaciones_no_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos no Tradicionales,176,2012-01-01,2026-08-01
+PN38718BM,importaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Importaciones,368,1996-01-01,2026-08-01
+PN38723BM,balanza_comercial,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Balanza Comercial,176,2012-01-01,2026-08-01
+PN38923BM,terminos_intercambio_indice,mensual,sector-externo,Términos de intercambio de comercio exterior (índice 2007 = 100) - Términos de Intercambio,368,1996-01-01,2026-08-01
+PN38926BM,terminos_intercambio_var12m,mensual,sector-externo,Términos de intercambio de comercio exterior (var% 12 meses) - Términos de Intercambio,356,1997-01-01,2026-08-01
+PN01652XM,cobre,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Cobre - LME (¢US$ por libras),321,2000-01-01,2026-09-01
+PN01654XM,oro,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Oro - LME (US$ por onzas troy),321,2000-01-01,2026-09-01
+PN01655XM,plata,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Plata - H. Harman (US$ por onzas troy),321,2000-01-01,2026-09-01
+PN01657XM,zinc,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Zinc - LME (¢US$ por libras),309,2001-01-01,2026-09-01
+PN01660XM,petroleo_wti,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Petróleo - WTI (US$ por barriles),321,2000-01-01,2026-09-01
+PN01129XM,embig_peru,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Diferencial de Rendimientos del Índice de Bonos de Mercados Emergentes (EMBIG) - Perú,242,2006-08-01,2026-09-01
+PN01137XM,embig_latam,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Latin EMBIG Países Latinoamericanos,242,2006-08-01,2026-09-01
+PN01142MM,igbvl,mensual,mercados,Bolsa de Valores de Lima - Índices Bursátiles - Índice General BVL (base 31/12/91 = 100),330,1999-01-01,2026-09-01
+PN02204FM,ingresos_corrientes_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General,249,2006-01-01,2026-09-01
+PN02205FM,ingresos_tributarios_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios,249,2006-01-01,2026-09-01
+PN02221FM,gasto_no_financiero_gc,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros,381,1995-01-01,2026-09-01
+PN02216FM,resultado_primario_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Primario,249,2006-01-01,2026-09-01
+PN02218FM,resultado_economico_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Económico,249,2006-01-01,2026-09-01
+PN38063GM,desempleo_lima,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (porcentaje) - Tasa de Desempleo (%),304,2001-05-01,2026-08-01
+PN38066GM,desempleo_lima_14_24,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (porcentaje) - Tasa de Desempleo (%) - Por Grupos de Edad - 14 a 24 años,304,2001-05-01,2026-08-01
+PN38070GM,ingreso_mensual_lima,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (miles de personas) - Ingreso Mensual,304,2001-05-01,2026-08-01
+PN31879GM,puestos_formales,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Puestos de trabajo del sector formal total (miles),140,2015-01-01,2026-08-01
+PN31885GM,masa_salarial_formal,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (millones S/),140,2015-01-01,2026-08-01
+PN31886GM,masa_salarial_formal_var12m,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (var.% 12 meses),128,2016-01-01,2026-08-01
+PN02124PM,rmv,mensual,empleo,Remuneraciones - Remuneración Mínima Vital - Nominal (S/),428,1991-01-01,2026-08-01
+PD12912AM,expectativa_inflacion_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de Inflación a 12 meses,297,2002-01-01,2026-09-01
+PD38048AM,expectativa_pbi_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de PBI a 12 meses,238,2006-12-01,2026-09-01
+PD38049AM,expectativa_tc_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de TC a 12 meses,238,2006-12-01,2026-09-01
+PD37981AM,expectativa_economia_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 12 meses,220,2008-06-01,2026-09-01
+PN02526AQ,pbi_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - PBI,186,1980-01-01,2026-04-01
+PN37939AQ,pbi_desest_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - PBI - desestacionalizado,77,2007-04-01,2026-04-01
+PN02517AQ,demanda_interna_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna,186,1980-01-01,2026-04-01
+PN02518AQ,consumo_privado_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Consumo Privado,186,1980-01-01,2026-04-01
+PN02519AQ,consumo_publico_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Consumo Público,186,1980-01-01,2026-04-01
+PN02521AQ,inversion_bruta_fija_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija,186,1980-01-01,2026-04-01
+PN02522AQ,inversion_privada_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,186,1980-01-01,2026-04-01
+PN02523AQ,inversion_publica_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Pública,186,1980-01-01,2026-04-01
+PN02524AQ,exportaciones_bys_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Exportaciones,186,1980-01-01,2026-04-01
+PN02525AQ,importaciones_bys_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Importaciones,186,1980-01-01,2026-04-01
+PN02556AQ,inversion_privada_pct_pbi,trimestral,actividad,Producto bruto interno por tipo de gasto (porcentaje del PBI nominal) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,186,1980-01-01,2026-04-01
+PN38975BQ,cuenta_corriente,trimestral,sector-externo,Balanza de pagos (millones US$) - Balanza en Cuenta Corriente,130,1994-01-01,2026-04-01
+PN02443FQ,cuenta_corriente_pct_pbi,trimestral,sector-externo,Flujos macroeconómicos (porcentaje del PBI) - Balanza de Pagos - Balanza en Cuenta Corriente,58,2012-01-01,2026-04-01
+PN03095FQ,resultado_economico_spnf_pct_pbi,trimestral,fiscal,Operaciones del sector público no financiero (porcentaje del PBI) - Resultado Económico,82,2006-01-01,2026-04-01
+PN03432FQ,deuda_publica_pct_pbi,trimestral,fiscal,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública,110,1999-01-01,2026-04-01
+PN39323BQ,deuda_externa_cp,trimestral,tipo-cambio-reservas,"Posición de activos y pasivos externos (millones US$) - Pasivos - Deuda por préstamos, bonos y otros - Corto plazo",58,2012-01-01,2026-04-01
+PN39331BQ,reservas_pct_pbi,trimestral,tipo-cambio-reservas,Posición de activos y pasivos externos (porcentaje del PBI) - Activos - Activos de Reserva del BCRP,58,2012-01-01,2026-04-01
+PM04946AA,pbi_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - PBI,76,1950-01-01,2025-01-01
+PM05000AA,pbi_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - PBI,104,1922-01-01,2025-01-01
+PM04923AA,pbi_var_anual,anual,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales) - PBI,104,1922-01-01,2025-01-01
+PM04862AA,pbi_per_capita_anual,anual,actividad,Producto bruto interno y otros indicadores - PBI per cápita (S/ 2007),104,1922-01-01,2025-01-01
+PM04861AA,poblacion_anual,anual,actividad,Producto bruto interno y otros indicadores - Población (miles),104,1922-01-01,2025-01-01
+PM06168MA,rin_flujo_op_cambiarias_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Operaciones Cambiarias,23,2003-01-01,2025-01-01
+PM06169MA,rin_flujo_mesa_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Operaciones Cambiarias - Operaciones en Mesa de Negociación,23,2003-01-01,2025-01-01
+PM06170MA,rin_flujo_compras_mesa_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa de Negociación - Compras,23,2003-01-01,2025-01-01
+PM06171MA,rin_flujo_ventas_mesa_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa de Negociación - Ventas,23,2003-01-01,2025-01-01
+PM06172MA,rin_flujo_sector_publico_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Compras Netas al sector público,23,2003-01-01,2025-01-01
+PM06173MA,rin_flujo_op_cambiarias_otros_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Operaciones Cambiarias - Otros,23,2003-01-01,2025-01-01
+PM06174MA,rin_flujo_dep_sist_financiero_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Depósitos del Sistema Financiero,23,2003-01-01,2025-01-01
+PM06175MA,rin_flujo_dep_sector_publico_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Depósitos del Sector Público,23,2003-01-01,2025-01-01
+PM06176MA,rin_flujo_intereses_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Intereses Netos,17,2003-01-01,2019-01-01
+PM06177MA,rin_flujo_otros_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Otros Flujos,23,2003-01-01,2025-01-01
+PM06178MA,rin_flujo_total_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Total,66,1960-01-01,2025-01-01
+PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7428,1997-01-02,2026-10-29
+PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7429,1997-01-02,2026-10-20
+PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6931,1999-01-04,2026-10-20
+PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4945,1995-01-04,2026-10-20
+PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6931,1999-01-04,2026-10-20
+PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6932,1999-01-04,2026-10-20
+PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6932,1999-01-04,2026-10-20
+PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6449,1995-01-04,2026-10-20
+PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3190,1999-01-06,2026-10-20
+PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3323,1999-01-13,2026-10-20
+PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5922,2003-09-05,2026-10-30
+PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",7997,1995-04-03,2026-10-29
+PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1431,2021-05-10,2026-11-02
+PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5302,2005-05-13,2026-10-30
+PD04709XD,embig_peru_diario,diaria,mercados,Tasas de interés: EMBIG (variación en pbs) - Spread - EMBIG Perú (pbs),7481,1998-01-01,2026-09-03
+PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5348,2006-01-02,2026-10-20
+PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7605,1997-01-14,2026-10-19
+PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7646,1997-01-02,2026-10-19
+PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7710,1997-01-02,2026-10-19
+PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7631,1997-01-02,2026-10-19
+PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1431,2021-05-10,2026-11-02
+PN07843NM,tasa_bancos_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
+PN07844NM,tasa_bancos_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
+PN07845NM,tasa_bancos_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,194,2010-08-01,2026-09-01
+PN07846NM,tasa_bancos_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
+PN07847NM,tasa_bancos_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
+PN07852NM,tasa_bancos_pyme_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
+PN07853NM,tasa_bancos_pyme_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
+PN07854NM,tasa_bancos_consumo_tarjeta_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Tarjeta de Crédito,194,2010-08-01,2026-09-01
+PN07855NM,tasa_bancos_consumo_prest_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
+PN07856NM,tasa_bancos_consumo_prest_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
+PN07861NM,tasa_cmac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
+PN07862NM,tasa_cmac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
+PN07863NM,tasa_cmac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,195,2010-07-01,2026-09-01
+PN07864NM,tasa_cmac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
+PN07865NM,tasa_cmac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
+PN07879NM,tasa_crac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
+PN07880NM,tasa_crac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
+PN07881NM,tasa_crac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,154,2013-12-01,2026-09-01
+PN07882NM,tasa_crac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
+PN07883NM,tasa_crac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
+PN00541MM,credito_consumo_mn_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - MN - Consumo (millones S/)",309,2001-01-01,2026-09-01
+PN00544MM,credito_consumo_me_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - ME - Consumo (millones US$)",309,2001-01-01,2026-09-01
+PN01278PM,ipc_subyacente_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Subyacente,416,1992-02-01,2026-09-01
+PN01276PM,ipc_sin_alim_energia_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Sin Alimentos y Energía,416,1992-02-01,2026-09-01
+PN01296PM,ipc_sub_bienes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes,416,1992-02-01,2026-09-01
+PN01297PM,ipc_sub_bienes_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Alimentos y Bebidas,416,1992-02-01,2026-09-01
+PN01298PM,ipc_sub_bienes_textiles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Textiles y Calzado,416,1992-02-01,2026-09-01
+PN01299PM,ipc_sub_bienes_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Aparatos Electrodomésticos,416,1992-02-01,2026-09-01
+PN01300PM,ipc_sub_bienes_resto_industriales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Resto de Productos Industriales,416,1992-02-01,2026-09-01
+PN01301PM,ipc_sub_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios,416,1992-02-01,2026-09-01
+PN01302PM,ipc_sub_serv_comidas_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Comidas Fuera del Hogar,416,1992-02-01,2026-09-01
+PN01303PM,ipc_sub_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Educación,416,1992-02-01,2026-09-01
+PN01304PM,ipc_sub_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Salud,416,1992-02-01,2026-09-01
+PN01305PM,ipc_sub_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Alquileres,416,1992-02-01,2026-09-01
+PN01306PM,ipc_sub_serv_resto_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Resto de Servicios,416,1992-02-01,2026-09-01
+PN01308PM,ipc_nosub_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Alimentos,416,1992-02-01,2026-09-01
+PN01309PM,ipc_nosub_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Combustibles,416,1992-02-01,2026-09-01
+PN01310PM,ipc_nosub_transportes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Transportes,416,1992-02-01,2026-09-01
+PN01311PM,ipc_nosub_servicios_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Servicios Públicos,416,1992-02-01,2026-09-01
+PN01366PM,ipc_trans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Alimentos,416,1992-02-01,2026-09-01
+PN01367PM,ipc_trans_textil_calzado_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Textil y Calzado,416,1992-02-01,2026-09-01
+PN01368PM,ipc_trans_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Combustibles,416,1992-02-01,2026-09-01
+PN01369PM,ipc_trans_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Aparatos Electrodomésticos,416,1992-02-01,2026-09-01
+PN01370PM,ipc_trans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Otros Transables,416,1992-02-01,2026-09-01
+PN01372PM,ipc_notrans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Alimentos,416,1992-02-01,2026-09-01
+PN01373PM,ipc_notrans_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios,416,1992-02-01,2026-09-01
+PN01374PM,ipc_notrans_serv_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios Públicos,416,1992-02-01,2026-09-01
+PN01375PM,ipc_notrans_serv_personales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios Personales,416,1992-02-01,2026-09-01
+PN01376PM,ipc_notrans_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Salud,416,1992-02-01,2026-09-01
+PN01377PM,ipc_notrans_serv_transporte_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Transporte,416,1992-02-01,2026-09-01
+PN01378PM,ipc_notrans_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Educación,416,1992-02-01,2026-09-01
+PN01379PM,ipc_notrans_serv_comida_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Comida Fuera del Hogar,416,1992-02-01,2026-09-01
+PN01380PM,ipc_notrans_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Alquileres,416,1992-02-01,2026-09-01
+PN01381PM,ipc_notrans_serv_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios,416,1992-02-01,2026-09-01
+PN01382PM,ipc_notrans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Otros No Transables,416,1992-02-01,2026-09-01
+PN42107PM,ipc_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC,297,2002-01-01,2026-09-01
+PN42108PM,ipc_sae_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía,297,2002-01-01,2026-09-01
+PN42109PM,ipc_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC -  Var. % Promedio móvil 3 meses anualizada,293,2002-05-01,2026-09-01
+PN42110PM,ipc_sae_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía - Var. % Promedio móvil 3 meses anualizada,293,2002-05-01,2026-09-01
+PN09819PM,ipc_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Energía,418,1991-12-01,2026-09-01
+PN09820PM,ipc_no_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Subyacente,418,1991-12-01,2026-09-01
+PN09821PM,ipc_importado_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Importado,418,1991-12-01,2026-09-01
+PN09822PM,ipc_alim_bebidas_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Bebidas,405,1993-01-01,2026-09-01
+PN40410PM,ipc_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros vinculados a tipo de cambio, IPM y cotizaciones",309,2001-01-01,2026-09-01
+PN40411PM,ipc_no_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros no vinculados a tipo de cambio, IPM y cotizaciones",309,2001-01-01,2026-09-01
+PN01755AM,pbi_agropecuario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario,391,1994-01-01,2026-07-01
+PN01756AM,pbi_agricola_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario - Agrícola,391,1994-01-01,2026-07-01
+PN01757AM,pbi_pecuario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario - Pecuario,391,1994-01-01,2026-07-01
+PN01758AM,pbi_pesca_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Pesca,391,1994-01-01,2026-07-01
+PN01759AM,pbi_mineria_hidrocarburos_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Minería e Hidrocarburos,391,1994-01-01,2026-07-01
+PN01760AM,pbi_mineria_metalica_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Minería e Hidrocarburos - Minería Metálica,391,1994-01-01,2026-07-01
+PN01761AM,pbi_hidrocarburos_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Minería e Hidrocarburos - Hidrocarburos,391,1994-01-01,2026-07-01
+PN01762AM,pbi_manufactura_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Manufactura,391,1994-01-01,2026-07-01
+PN01763AM,pbi_manufactura_primaria_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Manufactura - Procesadores Recursos Primarios,391,1994-01-01,2026-07-01
+PN01764AM,pbi_manufactura_no_primaria_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Manufactura - Manufactura no Primaria,391,1994-01-01,2026-07-01
+PN01765AM,pbi_electricidad_agua_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Electricidad y Agua,391,1994-01-01,2026-07-01
+PN01766AM,pbi_construccion_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Construcción,391,1994-01-01,2026-07-01
+PN01767AM,pbi_comercio_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Comercio,391,1994-01-01,2026-07-01
+PN01768AM,pbi_otros_servicios_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Otros Servicios,391,1994-01-01,2026-07-01
+PN01769AM,pbi_derechos_impuestos_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Derechos de Importación y Otros Impuestos,391,1994-01-01,2026-07-01
+PN01771AM,pbi_primario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Sectores Primarios,391,1994-01-01,2026-07-01
+PN01772AM,pbi_no_primario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Sectores no Primarios,391,1994-01-01,2026-07-01
+PN14206AM,demanda_interna_sin_inventarios_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Indicador de Demanda Interna sin inventarios,283,2003-01-01,2026-07-01
+PN38081AM,pbi_desest_pm3_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - PBI Desestacionalizado - Promedio móvil 3 meses,281,2003-03-01,2026-07-01
+PN01714AM,pbi_agricola_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Agropecuario - Agrícola,379,1995-01-01,2026-07-01
+PN01715AM,pbi_pecuario_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Agropecuario - Pecuario,379,1995-01-01,2026-07-01
+PN01718AM,pbi_mineria_metalica_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Minería e Hidrocarburos - Minería Metálica,379,1995-01-01,2026-07-01
+PN01719AM,pbi_hidrocarburos_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Minería e Hidrocarburos - Hidrocarburos,379,1995-01-01,2026-07-01
+PN01721AM,pbi_manufactura_primaria_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Manufactura - Procesadores Recursos Primarios,379,1995-01-01,2026-07-01
+PN01722AM,pbi_manufactura_no_primaria_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Manufactura - Manufactura no Primaria,379,1995-01-01,2026-07-01
+PN01727AM,pbi_derechos_impuestos_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Derechos de Importación y Otros Impuestos,379,1995-01-01,2026-07-01
+PN01729AM,pbi_primario_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Sectores Primarios,379,1995-01-01,2026-07-01
+PN01730AM,pbi_no_primario_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Sectores no Primarios,379,1995-01-01,2026-07-01
+PN14204AM,demanda_interna_sin_inventarios_var12m,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - Indicador de Demanda Interna sin inventarios,271,2004-01-01,2026-07-01
+PN38082AM,pbi_desest_pm3_var_mensual,mensual,actividad,Producto bruto interno y demanda interna (variación porcentual interanual) - PBI Desestacionalizado - Var% promedio móvil 3 meses,280,2003-04-01,2026-07-01
+PN37684AQ,pbi_agropecuario_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Agropecuario,186,1980-01-01,2026-04-01
+PN37685AQ,pbi_pesca_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Pesca,186,1980-01-01,2026-04-01
+PN37686AQ,pbi_mineria_hidrocarburos_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Minería e Hidrocarburos,186,1980-01-01,2026-04-01
+PN37687AQ,pbi_manufactura_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Manufactura,186,1980-01-01,2026-04-01
+PN37688AQ,pbi_electricidad_agua_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Electricidad y Agua,186,1980-01-01,2026-04-01
+PN37689AQ,pbi_construccion_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Construcción,186,1980-01-01,2026-04-01
+PN37690AQ,pbi_comercio_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Comercio,186,1980-01-01,2026-04-01
+PN37691AQ,pbi_servicios_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Servicios,186,1980-01-01,2026-04-01
+PN37692AQ,pbi_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - PBI Global,190,1979-01-01,2026-04-01
+PN37693AQ,pbi_primario_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Sectores primarios,130,1994-01-01,2026-04-01
+PN37694AQ,pbi_no_primario_real_trim,trimestral,actividad,Producto bruto interno (millones S/ de 2007) - Sectores no primarios,130,1994-01-01,2026-04-01
+PN02528AQ,demanda_interna_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna,190,1979-01-01,2026-04-01
+PN02529AQ,consumo_privado_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Consumo Privado,190,1979-01-01,2026-04-01
+PN02530AQ,consumo_publico_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Consumo Público,190,1979-01-01,2026-04-01
+PN02531AQ,inversion_bruta_interna_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna,190,1979-01-01,2026-04-01
+PN02532AQ,inversion_bruta_fija_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija,190,1979-01-01,2026-04-01
+PN02533AQ,inversion_privada_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,190,1979-01-01,2026-04-01
+PN02534AQ,inversion_publica_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Pública,190,1979-01-01,2026-04-01
+PN02535AQ,variacion_inventarios_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Variación de Inventarios,190,1979-01-01,2026-04-01
+PN02536AQ,exportaciones_bys_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Exportaciones,190,1979-01-01,2026-04-01
+PN02537AQ,importaciones_bys_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Importaciones,190,1979-01-01,2026-04-01
+PN02538AQ,pbi_gasto_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - PBI,190,1979-01-01,2026-04-01
+PN02539AQ,demanda_interna_sin_inventarios_real_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna sin Inventarios,190,1979-01-01,2026-04-01
+PN02540AQ,demanda_interna_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna,186,1980-01-01,2026-04-01
+PN02541AQ,consumo_privado_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Consumo Privado,186,1980-01-01,2026-04-01
+PN02542AQ,consumo_publico_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Consumo Público,186,1980-01-01,2026-04-01
+PN02543AQ,inversion_bruta_interna_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna,186,1980-01-01,2026-04-01
+PN02544AQ,inversion_bruta_fija_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija,186,1980-01-01,2026-04-01
+PN02545AQ,inversion_privada_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,186,1980-01-01,2026-04-01
+PN02546AQ,inversion_publica_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Pública,186,1980-01-01,2026-04-01
+PN02547AQ,variacion_inventarios_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Variación de Inventarios,186,1980-01-01,2026-04-01
+PN02548AQ,exportaciones_bys_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Exportaciones,186,1980-01-01,2026-04-01
+PN02549AQ,importaciones_bys_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - Importaciones,186,1980-01-01,2026-04-01
+PN02550AQ,pbi_nominal_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (millones S/) - PBI,186,1980-01-01,2026-04-01
+PN02520AQ,inversion_bruta_interna_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna - Inversión Bruta Interna,186,1980-01-01,2026-04-01
+PN02527AQ,demanda_interna_sin_inventarios_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna sin Inventarios,186,1980-01-01,2026-04-01
+PN02572AQ,renta_factores_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI - Renta de Factores,94,2003-01-01,2026-04-01
+PN02573AQ,pnb_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI - Producto Nacional Bruto,94,2003-01-01,2026-04-01
+PN02574AQ,efecto_terminos_intercambio_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI - Producto Nacional Bruto - Efecto Términos de Intercambio,94,2003-01-01,2026-04-01
+PN02575AQ,inb_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI - Ingreso Nacional Bruto,94,2003-01-01,2026-04-01
+PN02576AQ,transferencias_corrientes_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI - Ingreso Nacional Bruto - Transferencias Corrientes,94,2003-01-01,2026-04-01
+PN02577AQ,ingreso_nacional_disponible_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - Ingreso Nacional Disponible,94,2003-01-01,2026-04-01
+PN02580AQ,absorcion_real_trim,trimestral,actividad,Ingreso nacional disponible (millones S/ 2007) - Absorción,94,2003-01-01,2026-04-01
+PN02436FQ,ahorro_nacional_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Ahorro Nacional,58,2012-01-01,2026-04-01
+PN02437FQ,ahorro_nacional_publico_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Ahorro Nacional - Sector Público,58,2012-01-01,2026-04-01
+PN02438FQ,ahorro_nacional_privado_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Ahorro Nacional - Sector Privado,58,2012-01-01,2026-04-01
+PN02439FQ,ahorro_externo_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Ahorro Externo,58,2012-01-01,2026-04-01
+PN02440FQ,inversion_total_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Inversión,58,2012-01-01,2026-04-01
+PN02441FQ,inversion_total_publica_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Inversión - Sector Público,58,2012-01-01,2026-04-01
+PN02442FQ,inversion_total_privada_pct_pbi,trimestral,actividad,Flujos macroeconómicos (porcentaje del PBI) - Ahorro-Inversión - Inversión - Sector Privado,58,2012-01-01,2026-04-01
+PN39029BQ,pbi_usd_trim,trimestral,actividad,Producto bruto interno (millones US$) - PBI (millones US$),130,1994-01-01,2026-04-01
+PM04925AA,demanda_interna_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna,104,1922-01-01,2025-01-01
+PM04926AA,consumo_privado_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Consumo Privado,104,1922-01-01,2025-01-01
+PM04927AA,consumo_publico_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Consumo Público,104,1922-01-01,2025-01-01
+PM04928AA,inversion_bruta_interna_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna,104,1922-01-01,2025-01-01
+PM04929AA,inversion_bruta_fija_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija,104,1922-01-01,2025-01-01
+PM04930AA,inversion_privada_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,76,1950-01-01,2025-01-01
+PM04931AA,inversion_publica_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Pública,76,1950-01-01,2025-01-01
+PM04932AA,variacion_inventarios_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Variación de inventarios,76,1950-01-01,2025-01-01
+PM04933AA,exportaciones_bys_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Exportaciones,104,1922-01-01,2025-01-01
+PM04934AA,importaciones_bys_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - Importaciones,104,1922-01-01,2025-01-01
+PM04935AA,pbi_gasto_real_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/ 2007) - PBI,104,1922-01-01,2025-01-01
+PM04936AA,demanda_interna_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna,76,1950-01-01,2025-01-01
+PM04937AA,consumo_privado_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Consumo Privado,76,1950-01-01,2025-01-01
+PM04938AA,consumo_publico_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Consumo Público,76,1950-01-01,2025-01-01
+PM04939AA,inversion_bruta_interna_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna,76,1950-01-01,2025-01-01
+PM04940AA,inversion_bruta_fija_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija,76,1950-01-01,2025-01-01
+PM04941AA,inversion_privada_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Privada,76,1950-01-01,2025-01-01
+PM04942AA,inversion_publica_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Pública,76,1950-01-01,2025-01-01
+PM04943AA,variacion_inventarios_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Demanda Interna - Inversión Bruta Interna - Inversión Bruta Fija - Variación de inventarios,76,1950-01-01,2025-01-01
+PM04944AA,exportaciones_bys_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Exportaciones,76,1950-01-01,2025-01-01
+PM04945AA,importaciones_bys_nominal_anual,anual,actividad,Producto bruto interno por tipo de gasto (millones S/) - Importaciones,76,1950-01-01,2025-01-01
+PM04986AA,pbi_agropecuario_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Agropecuario,104,1922-01-01,2025-01-01
+PM04987AA,pbi_agricola_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Agropecuario - Agrícola,32,1994-01-01,2025-01-01
+PM04988AA,pbi_pecuario_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Agropecuario - Pecuario,32,1994-01-01,2025-01-01
+PM04989AA,pbi_pesca_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Pesca,97,1929-01-01,2025-01-01
+PM04990AA,pbi_mineria_hidrocarburos_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Minería e Hidrocarburos,104,1922-01-01,2025-01-01
+PM04991AA,pbi_mineria_metalica_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Minería e Hidrocarburos - Minería Metálica,36,1990-01-01,2025-01-01
+PM04992AA,pbi_hidrocarburos_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Minería e Hidrocarburos - Hidrocarburos,36,1990-01-01,2025-01-01
+PM04993AA,pbi_manufactura_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Manufactura,104,1922-01-01,2025-01-01
+PM04994AA,pbi_manufactura_primaria_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Manufactura - Procesadores Recursos Primarios,32,1994-01-01,2025-01-01
+PM04995AA,pbi_manufactura_no_primaria_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Manufactura - Manufactura no Primaria,32,1994-01-01,2025-01-01
+PM04996AA,pbi_electricidad_agua_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Electricidad y Agua,104,1922-01-01,2025-01-01
+PM04997AA,pbi_construccion_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Construcción,104,1922-01-01,2025-01-01
+PM04998AA,pbi_comercio_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Comercio,104,1922-01-01,2025-01-01
+PM04999AA,pbi_servicios_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Servicios,104,1922-01-01,2025-01-01
+PM05002AA,pbi_primario_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Sectores Primarios,32,1994-01-01,2025-01-01
+PM05003AA,pbi_no_primario_real_anual,anual,actividad,Producto bruto interno por sectores productivos (millones S/ de 2007) - Sectores no Primarios,32,1994-01-01,2025-01-01
+PM04901AA,pbi_ingreso_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - PBI,76,1950-01-01,2025-01-01
+PM04902AA,renta_factores_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Renta de Factores,76,1950-01-01,2025-01-01
+PM04903AA,pnb_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Producto Nacional Bruto,76,1950-01-01,2025-01-01
+PM04904AA,efecto_terminos_intercambio_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Efecto Términos de Intercambio,76,1950-01-01,2025-01-01
+PM04905AA,inb_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Ingreso Nacional Bruto,76,1950-01-01,2025-01-01
+PM04906AA,transferencias_corrientes_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Transferencias Corrientes,76,1950-01-01,2025-01-01
+PM04907AA,ingreso_nacional_disponible_real_anual,anual,actividad,Ingreso nacional disponible (millones S/ 2007) - Ingreso Nacional Disponible,76,1950-01-01,2025-01-01
+PM40026BA,pbi_usd_anual,anual,actividad,Producto bruto interno (millones US$) - Producto Bruto Interno (millones de USD),76,1950-01-01,2025-01-01
+PM04860AA,pbi_indicadores_real_anual,anual,actividad,Producto bruto interno y otros indicadores - PBI (millones S/ 2007),104,1922-01-01,2025-01-01
+PM04863AA,pbi_indicadores_var_anual,anual,actividad,Producto bruto interno y otros indicadores - PBI (variación porcentual),104,1922-01-01,2025-01-01
+PM04864AA,poblacion_var_anual,anual,actividad,Producto bruto interno y otros indicadores - Población (variación porcentual),104,1922-01-01,2025-01-01
+PM04865AA,pbi_per_capita_var_anual,anual,actividad,Producto bruto interno y otros indicadores - PBI per cápita (variación porcentual),104,1922-01-01,2025-01-01
+RD17000DA,pbi_dpto_amazonas_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Amazonas",17,2007-01-01,2023-01-01
+RD17001DA,pbi_dpto_ancash_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Ancash",17,2007-01-01,2023-01-01
+RD17002DA,pbi_dpto_apurimac_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Apurímac",17,2007-01-01,2023-01-01
+RD17003DA,pbi_dpto_arequipa_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Arequipa",17,2007-01-01,2023-01-01
+RD17004DA,pbi_dpto_ayacucho_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Ayacucho",17,2007-01-01,2023-01-01
+RD17005DA,pbi_dpto_cajamarca_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Cajamarca",17,2007-01-01,2023-01-01
+RD17006DA,pbi_dpto_cusco_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Cusco",17,2007-01-01,2023-01-01
+RD17007DA,pbi_dpto_huancavelica_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Huancavelica",17,2007-01-01,2023-01-01
+RD17008DA,pbi_dpto_huanuco_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Huánuco",17,2007-01-01,2023-01-01
+RD17009DA,pbi_dpto_ica_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Ica",17,2007-01-01,2023-01-01
+RD17010DA,pbi_dpto_junin_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Junín",17,2007-01-01,2023-01-01
+RD17011DA,pbi_dpto_la_libertad_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - La Libertad",17,2007-01-01,2023-01-01
+RD17012DA,pbi_dpto_lambayeque_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Lambayeque",17,2007-01-01,2023-01-01
+RD17013DA,pbi_dpto_lima_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Lima",17,2007-01-01,2023-01-01
+RD17014DA,pbi_dpto_loreto_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Loreto",17,2007-01-01,2023-01-01
+RD17015DA,pbi_dpto_madre_de_dios_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Madre de Dios",17,2007-01-01,2023-01-01
+RD17016DA,pbi_dpto_moquegua_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Moquegua",17,2007-01-01,2023-01-01
+RD17017DA,pbi_dpto_pasco_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Pasco",17,2007-01-01,2023-01-01
+RD17018DA,pbi_dpto_piura_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Piura",17,2007-01-01,2023-01-01
+RD17019DA,pbi_dpto_puno_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Puno",17,2007-01-01,2023-01-01
+RD17020DA,pbi_dpto_san_martin_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - San Martin",17,2007-01-01,2023-01-01
+RD17021DA,pbi_dpto_tacna_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Tacna",17,2007-01-01,2023-01-01
+RD17022DA,pbi_dpto_tumbes_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Tumbes",17,2007-01-01,2023-01-01
+RD17023DA,pbi_dpto_ucayali_real_anual,anual,actividad,"Producto Bruto Interno, valores a precios constantes (millones S/ 2007) - Ucayali",17,2007-01-01,2023-01-01
+RD17024DA,pbi_dpto_amazonas_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Amazonas",17,2007-01-01,2023-01-01
+RD17025DA,pbi_dpto_ancash_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Ancash",17,2007-01-01,2023-01-01
+RD17026DA,pbi_dpto_apurimac_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Apurímac",17,2007-01-01,2023-01-01
+RD17027DA,pbi_dpto_arequipa_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Arequipa",17,2007-01-01,2023-01-01
+RD17028DA,pbi_dpto_ayacucho_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Ayacucho",17,2007-01-01,2023-01-01
+RD17029DA,pbi_dpto_cajamarca_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Cajamarca",17,2007-01-01,2023-01-01
+RD17030DA,pbi_dpto_cusco_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Cusco",17,2007-01-01,2023-01-01
+RD17031DA,pbi_dpto_huancavelica_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Huancavelica",17,2007-01-01,2023-01-01
+RD17032DA,pbi_dpto_huanuco_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Huánuco",17,2007-01-01,2023-01-01
+RD17033DA,pbi_dpto_ica_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Ica",17,2007-01-01,2023-01-01
+RD17034DA,pbi_dpto_junin_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Junín",17,2007-01-01,2023-01-01
+RD17035DA,pbi_dpto_la_libertad_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - La Libertad",17,2007-01-01,2023-01-01
+RD17036DA,pbi_dpto_lambayeque_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Lambayeque",17,2007-01-01,2023-01-01
+RD17037DA,pbi_dpto_lima_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Lima",17,2007-01-01,2023-01-01
+RD17038DA,pbi_dpto_loreto_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Loreto",17,2007-01-01,2023-01-01
+RD17039DA,pbi_dpto_madre_de_dios_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Madre de Dios",17,2007-01-01,2023-01-01
+RD17040DA,pbi_dpto_moquegua_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Moquegua",17,2007-01-01,2023-01-01
+RD17041DA,pbi_dpto_pasco_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Pasco",17,2007-01-01,2023-01-01
+RD17042DA,pbi_dpto_piura_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Piura",17,2007-01-01,2023-01-01
+RD17043DA,pbi_dpto_puno_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Puno",17,2007-01-01,2023-01-01
+RD17044DA,pbi_dpto_san_martin_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - San Martin",17,2007-01-01,2023-01-01
+RD17045DA,pbi_dpto_tacna_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Tacna",17,2007-01-01,2023-01-01
+RD17046DA,pbi_dpto_tumbes_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Tumbes",17,2007-01-01,2023-01-01
+RD17047DA,pbi_dpto_ucayali_nominal_anual,anual,actividad,"Producto Bruto Interno, valores a precios corrientes (millones S/) - Ucayali",17,2007-01-01,2023-01-01
+PN02020AM,manuf_primaria_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios,391,1994-01-01,2026-07-01
+PN02021AM,manuf_arroz_pilado_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Arroz Pilado,391,1994-01-01,2026-07-01
+PN02022AM,manuf_azucar_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Azúcar,391,1994-01-01,2026-07-01
+PN02023AM,manuf_carnicos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Productos Cárnicos,391,1994-01-01,2026-07-01
+PN02024AM,manuf_harina_aceite_pescado_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Harina y Aceite de Pescado,391,1994-01-01,2026-07-01
+PN02025AM,manuf_conservas_congelados_pescado_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Conservas y Productos Congelados de Pescado,391,1994-01-01,2026-07-01
+PN02026AM,manuf_refinacion_metales_no_ferrosos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Refinación de Mateles no Ferrosos,391,1994-01-01,2026-07-01
+PN02027AM,manuf_refinacion_petroleo_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Procesadores de Recursos Primarios - Refinación de Petróleo,391,1994-01-01,2026-07-01
+PN02028AM,manuf_no_primaria_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura no Primaria,391,1994-01-01,2026-07-01
+PN02029AM,manuf_alimentos_bebidas_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas,391,1994-01-01,2026-07-01
+PN02030AM,manuf_lacteos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Productos Lácteos,391,1994-01-01,2026-07-01
+PN02031AM,manuf_molineria_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Molinería,391,1994-01-01,2026-07-01
+PN02032AM,manuf_panaderia_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Panadería,391,1994-01-01,2026-07-01
+PN02033AM,manuf_fideos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Fideos,391,1994-01-01,2026-07-01
+PN02034AM,manuf_aceites_grasas_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Aceites y Grasas,391,1994-01-01,2026-07-01
+PN02035AM,manuf_alimentos_animales_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Alimentos para Animales,391,1994-01-01,2026-07-01
+PN02036AM,manuf_alimenticios_diversos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Productos Alimenticios Diversos,391,1994-01-01,2026-07-01
+PN02037AM,manuf_cerveza_malta_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Cerveza y Malta,391,1994-01-01,2026-07-01
+PN02038AM,manuf_gaseosas_agua_mesa_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Bebidas Gaseosas y Agua de Mesa,391,1994-01-01,2026-07-01
+PN02040AM,manuf_textil_cuero_calzado_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado",391,1994-01-01,2026-07-01
+PN02041AM,manuf_hilados_tejidos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Hilados, Tejidos y Acabados",391,1994-01-01,2026-07-01
+PN02042AM,manuf_tejidos_punto_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Tejidos y Artículos de Punto",391,1994-01-01,2026-07-01
+PN02043AM,manuf_cuerdas_redes_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Cuerdas, Cordeles, Bramantes y Redes",391,1994-01-01,2026-07-01
+PN02044AM,manuf_cuero_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Cuero",391,1994-01-01,2026-07-01
+PN02045AM,manuf_prendas_vestir_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Prendas de Vestir",391,1994-01-01,2026-07-01
+PN02046AM,manuf_otros_textiles_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Otros Productos Textiles",391,1994-01-01,2026-07-01
+PN02047AM,manuf_calzado_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Textil, Cuero y Calzado - Calzado",391,1994-01-01,2026-07-01
+PN02048AM,manuf_madera_muebles_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Madera y Muebles,391,1994-01-01,2026-07-01
+PN02049AM,manuf_madera_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Madera y Muebles - Madera,391,1994-01-01,2026-07-01
+PN02050AM,manuf_muebles_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Madera y Muebles - Muebles,391,1994-01-01,2026-07-01
+PN02051AM,manuf_papel_imprenta_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria de Papel e Imprenta,391,1994-01-01,2026-07-01
+PN02052AM,manuf_papel_carton_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria de Papel e Imprenta - Papel y Cartón,391,1994-01-01,2026-07-01
+PN02053AM,manuf_envases_papel_carton_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria de Papel e Imprenta - Envases de Papel y Cartón,391,1994-01-01,2026-07-01
+PN02054AM,manuf_otros_papel_carton_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria de Papel e Imprenta - Otros Artículos de Papel y Cartón,391,1994-01-01,2026-07-01
+PN02055AM,manuf_impresion_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria de Papel e Imprenta - Actividades de Impresión,391,1994-01-01,2026-07-01
+PN02056AM,manuf_quimicos_caucho_plasticos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico",391,1994-01-01,2026-07-01
+PN02057AM,manuf_quimicos_basicos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Sustancias Químicas Básicas",391,1994-01-01,2026-07-01
+PN02058AM,manuf_fibras_artificiales_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Fibras Artificiales",391,1994-01-01,2026-07-01
+PN02059AM,manuf_farmaceuticos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Productos Farmacéuticos y Medicamentos",391,1994-01-01,2026-07-01
+PN02060AM,manuf_pinturas_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Pinturas, Barnices y Lacas",391,1994-01-01,2026-07-01
+PN02061AM,manuf_tocador_limpieza_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Productos de Tocador y Limpieza",391,1994-01-01,2026-07-01
+PN02062AM,manuf_explosivos_esencias_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Explosivos, Esencias Naturales y Químicas",391,1994-01-01,2026-07-01
+PN02063AM,manuf_caucho_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Caucho",391,1994-01-01,2026-07-01
+PN02064AM,manuf_plasticos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Plásticos",391,1994-01-01,2026-07-01
+PN02065AM,manuf_plaguicidas_abonos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Químicos, Caucho y Plástico - Plaguicidas, Abonos Compuestos y Plásticos Primarios",391,1994-01-01,2026-07-01
+PN02066AM,manuf_minerales_no_metalicos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Minerales no Metálicos,391,1994-01-01,2026-07-01
+PN02067AM,manuf_vidrio_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Minerales no Metálicos - Vidrio y Productos de Vidrio,391,1994-01-01,2026-07-01
+PN02068AM,manuf_cemento_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Minerales no Metálicos - Cemento,391,1994-01-01,2026-07-01
+PN02069AM,manuf_materiales_construccion_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Minerales no Metálicos - Materiales para la Construcción,391,1994-01-01,2026-07-01
+PN02070AM,manuf_minerales_no_metalicos_diversos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Minerales no Metálicos - Productos Minerales no Metálicos Diversos,391,1994-01-01,2026-07-01
+PN02071AM,manuf_hierro_acero_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Industria del Hierro y Acero,391,1994-01-01,2026-07-01
+PN02072AM,manuf_metalmecanica_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Metálicos, Maquinaria y Equipo",391,1994-01-01,2026-07-01
+PN02073AM,manuf_productos_metalicos_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Metálicos, Maquinaria y Equipo - Productos Metálicos",391,1994-01-01,2026-07-01
+PN02074AM,manuf_maquinaria_equipo_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Metálicos, Maquinaria y Equipo - Maquinaria y Equipo",391,1994-01-01,2026-07-01
+PN02075AM,manuf_maquinaria_electrica_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Metálicos, Maquinaria y Equipo - Maquinaria Eléctrica",391,1994-01-01,2026-07-01
+PN02076AM,manuf_material_transporte_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Productos Metálicos, Maquinaria y Equipo - Material de Transporte",391,1994-01-01,2026-07-01
+PN02077AM,manuf_manufacturas_diversas_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Manufacturas Diversas,391,1994-01-01,2026-07-01
+PN02078AM,manuf_servicios_industriales_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Servicios Industriales,391,1994-01-01,2026-07-01
+PN02079AM,manuf_total_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Total,391,1994-01-01,2026-07-01
+PN14222AM,manuf_conservas_alimentos_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Conservas de Alimentos,391,1994-01-01,2026-07-01
+PN14223AM,manuf_cacao_chocolate_confiteria_indice,mensual,actividad,"Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Cacao, Chocolate y Productos de Confitería",391,1994-01-01,2026-07-01
+PN14224AM,manuf_bebidas_alcoholicas_indice,mensual,actividad,Producción manufacturera (índice 2007 = 100) - Manufactura No Primaria - Alimentos y Bebidas - Bebidas Alcohólicas,391,1994-01-01,2026-07-01
+PN37618AM,manuf_primaria_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios,391,1994-01-01,2026-07-01
+PN37619AM,manuf_arroz_pilado_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Arroz pilado,391,1994-01-01,2026-07-01
+PN37620AM,manuf_azucar_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Azúcar,391,1994-01-01,2026-07-01
+PN37621AM,manuf_carnicos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Productos cárnicos,391,1994-01-01,2026-07-01
+PN37622AM,manuf_harina_aceite_pescado_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Harina y aceite de pescado,391,1994-01-01,2026-07-01
+PN37623AM,manuf_conservas_congelados_pescado_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Conservas y productos congelados de pescado,391,1994-01-01,2026-07-01
+PN37624AM,manuf_refinacion_metales_no_ferrosos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Refinación de mateles no ferrosos,391,1994-01-01,2026-07-01
+PN37625AM,manuf_refinacion_petroleo_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Procesadores de recursos primarios - Refinación de petróleo,391,1994-01-01,2026-07-01
+PN37626AM,manuf_no_primaria_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria,391,1994-01-01,2026-07-01
+PN37627AM,manuf_alimentos_bebidas_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas,391,1994-01-01,2026-07-01
+PN37628AM,manuf_conservas_alimentos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Conservas de alimentos,391,1994-01-01,2026-07-01
+PN37629AM,manuf_lacteos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Productos lácteos,391,1994-01-01,2026-07-01
+PN37630AM,manuf_molineria_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Molinería,391,1994-01-01,2026-07-01
+PN37631AM,manuf_panaderia_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Panadería,391,1994-01-01,2026-07-01
+PN37632AM,manuf_fideos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Fideos,391,1994-01-01,2026-07-01
+PN37633AM,manuf_aceites_grasas_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Aceites y grasas,391,1994-01-01,2026-07-01
+PN37634AM,manuf_cacao_chocolate_confiteria_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Cocoa, chocolate y productos de confitería",391,1994-01-01,2026-07-01
+PN37635AM,manuf_alimentos_animales_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Alimentos para animales,391,1994-01-01,2026-07-01
+PN37636AM,manuf_alimenticios_diversos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Productos alimenticios diversos,391,1994-01-01,2026-07-01
+PN37637AM,manuf_bebidas_alcoholicas_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Bebidas alcohólicas,391,1994-01-01,2026-07-01
+PN37638AM,manuf_cerveza_malta_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Cerveza y malta,391,1994-01-01,2026-07-01
+PN37639AM,manuf_gaseosas_agua_mesa_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Alimentos y bebidas - Bebidas gaseosas y agua de mesa,391,1994-01-01,2026-07-01
+PN37640AM,manuf_textil_cuero_calzado_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado",391,1994-01-01,2026-07-01
+PN37641AM,manuf_hilados_tejidos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Hilados, tejidos y acabados",391,1994-01-01,2026-07-01
+PN37642AM,manuf_tejidos_punto_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Tejidos y artículos de punto",391,1994-01-01,2026-07-01
+PN37643AM,manuf_cuerdas_redes_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Cuerdas, cordeles, bramantes y redes",391,1994-01-01,2026-07-01
+PN37644AM,manuf_cuero_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Cuero",391,1994-01-01,2026-07-01
+PN37645AM,manuf_prendas_vestir_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Prendas de vestir",391,1994-01-01,2026-07-01
+PN37646AM,manuf_otros_textiles_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Otros productos textiles",391,1994-01-01,2026-07-01
+PN37647AM,manuf_calzado_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Textil, cuero y calzado - Calzado",391,1994-01-01,2026-07-01
+PN37648AM,manuf_madera_muebles_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Madera y muebles,391,1994-01-01,2026-07-01
+PN37649AM,manuf_madera_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Madera y muebles - Madera procesada,391,1994-01-01,2026-07-01
+PN37650AM,manuf_muebles_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Madera y muebles - Muebles,391,1994-01-01,2026-07-01
+PN37651AM,manuf_papel_imprenta_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria de papel e imprenta,391,1994-01-01,2026-07-01
+PN37652AM,manuf_papel_carton_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria de papel e imprenta - Papel y cartón,391,1994-01-01,2026-07-01
+PN37653AM,manuf_envases_papel_carton_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria de papel e imprenta - Envases de papel y cartón,391,1994-01-01,2026-07-01
+PN37654AM,manuf_otros_papel_carton_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria de papel e imprenta - Otros artículos de papel y cartón,391,1994-01-01,2026-07-01
+PN37655AM,manuf_impresion_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria de papel e imprenta - Actividades de impresión,391,1994-01-01,2026-07-01
+PN37656AM,manuf_quimicos_caucho_plasticos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos",391,1994-01-01,2026-07-01
+PN37657AM,manuf_quimicos_basicos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Sustancias químicas básicas",391,1994-01-01,2026-07-01
+PN37658AM,manuf_fibras_artificiales_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Fibras artificiales",391,1994-01-01,2026-07-01
+PN37659AM,manuf_farmaceuticos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Productos farmacéuticos y medicamentos",391,1994-01-01,2026-07-01
+PN37660AM,manuf_pinturas_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Pinturas, barnices y lacas",391,1994-01-01,2026-07-01
+PN37661AM,manuf_tocador_limpieza_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Productos de tocador y limpieza",391,1994-01-01,2026-07-01
+PN37662AM,manuf_explosivos_esencias_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Explosivos, esencias naturales y químicas",391,1994-01-01,2026-07-01
+PN37663AM,manuf_caucho_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Caucho",391,1994-01-01,2026-07-01
+PN37664AM,manuf_plasticos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Plásticos",391,1994-01-01,2026-07-01
+PN37665AM,manuf_plaguicidas_abonos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos químicos, caucho y plásticos - Plaguicidas, abonos compuestos y plásticos primarios",391,1994-01-01,2026-07-01
+PN37666AM,manuf_minerales_no_metalicos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Minerales no metálicos,391,1994-01-01,2026-07-01
+PN37667AM,manuf_vidrio_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Minerales no metálicos - Vidrio y productos de vidrio,391,1994-01-01,2026-07-01
+PN37668AM,manuf_cemento_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Minerales no metálicos - Cemento,391,1994-01-01,2026-07-01
+PN37669AM,manuf_materiales_construccion_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Minerales no metálicos - Materiales para la construcción,391,1994-01-01,2026-07-01
+PN37670AM,manuf_minerales_no_metalicos_diversos_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Minerales no metálicos - Productos minerales no metálicos diversos,391,1994-01-01,2026-07-01
+PN37671AM,manuf_hierro_acero_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Industria del hierro y acero,391,1994-01-01,2026-07-01
+PN37672AM,manuf_metalmecanica_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos metálicos, maquinaria y equipo",391,1994-01-01,2026-07-01
+PN37673AM,manuf_productos_metalicos_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos metálicos, maquinaria y equipo - Productos metálicos",391,1994-01-01,2026-07-01
+PN37674AM,manuf_maquinaria_equipo_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos metálicos, maquinaria y equipo - Maquinaria y equipo",391,1994-01-01,2026-07-01
+PN37675AM,manuf_maquinaria_electrica_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos metálicos, maquinaria y equipo - Maquinaria eléctrica",391,1994-01-01,2026-07-01
+PN37676AM,manuf_material_transporte_capacidad_pct,mensual,actividad,"Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Productos metálicos, maquinaria y equipo - Material de transporte",391,1994-01-01,2026-07-01
+PN37677AM,manuf_manufacturas_diversas_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Manufacturas diversas,391,1994-01-01,2026-07-01
+PN37678AM,manuf_servicios_industriales_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Manufactura no primaria - Servicios industriales,391,1994-01-01,2026-07-01
+PN37679AM,manuf_total_capacidad_pct,mensual,actividad,Indicadores indirectos de la tasa de utilización de la capacidad instalada del sector manufacturero - Total,391,1994-01-01,2026-07-01
+PN01873AM,mineria_cobre_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Cobre (miles de toneladas),319,2000-01-01,2026-07-01
+PN01874AM,mineria_estano_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Estaño (miles de toneladas),319,2000-01-01,2026-07-01
+PN01875AM,mineria_hierro_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Hierro (miles de toneladas),319,2000-01-01,2026-07-01
+PN01876AM,mineria_oro_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Oro (Kilogramos),319,2000-01-01,2026-07-01
+PN01877AM,mineria_plata_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Plata (Kilogramos),319,2000-01-01,2026-07-01
+PN01878AM,mineria_plomo_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Plomo (miles de toneladas),319,2000-01-01,2026-07-01
+PN01879AM,mineria_zinc_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Zinc (miles de toneladas),319,2000-01-01,2026-07-01
+PN01880AM,mineria_molibdeno_miles_t,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Minería Metálica - Molibdeno (miles de toneladas),319,2000-01-01,2026-07-01
+PN01882AM,hidrocarburos_petroleo_miles_bl,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Hidrocarburos - Petróleo (miles de barriles),319,2000-01-01,2026-07-01
+PN01883AM,hidrocarburos_lgn_miles_bl,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Hidrocarburos - Líquidos de gas natural (miles de barriles),319,2000-01-01,2026-07-01
+PN01884AM,hidrocarburos_gas_natural_mmpc,mensual,actividad,Producción minera e hidrocarburos (miles de unidades recuperables) - Hidrocarburos - Gas Natural (millones de pies cúbicos),319,2000-01-01,2026-07-01
+PN01777AM,agro_papa_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Papa,235,2007-01-01,2026-07-01
+PN01778AM,agro_arroz_cascara_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Arroz Cáscara,235,2007-01-01,2026-07-01
+PN01779AM,agro_cebolla_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Cebolla,235,2007-01-01,2026-07-01
+PN01780AM,agro_mandarina_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Mandarina,235,2007-01-01,2026-07-01
+PN01781AM,agro_naranja_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Naranja,235,2007-01-01,2026-07-01
+PN01782AM,agro_alfalfa_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Alfalfa,235,2007-01-01,2026-07-01
+PN01783AM,agro_tomate_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Tomate,235,2007-01-01,2026-07-01
+PN01784AM,agro_platano_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Plátano,235,2007-01-01,2026-07-01
+PN01785AM,agro_yuca_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Yuca,235,2007-01-01,2026-07-01
+PN01786AM,agro_maiz_amilaceo_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Maíz Amiláceo,235,2007-01-01,2026-07-01
+PN01787AM,agro_ajo_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Ajo,235,2007-01-01,2026-07-01
+PN01788AM,agro_limon_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Limón,235,2007-01-01,2026-07-01
+PN01789AM,agro_cafe_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Café,235,2007-01-01,2026-07-01
+PN01790AM,agro_cana_azucar_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Caña de Azúcar,235,2007-01-01,2026-07-01
+PN01791AM,agro_maiz_amarillo_duro_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Maíz Amarillo Duro,235,2007-01-01,2026-07-01
+PN01792AM,agro_esparrago_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Espárrago,235,2007-01-01,2026-07-01
+PN01793AM,agro_uva_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Uva,235,2007-01-01,2026-07-01
+PN01794AM,agro_aceituna_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Aceituna,235,2007-01-01,2026-07-01
+PN01795AM,agro_mango_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Mango,235,2007-01-01,2026-07-01
+PN01796AM,agro_cacao_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Cacao,235,2007-01-01,2026-07-01
+PN01797AM,agro_palma_aceitera_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Palma Aceitera,235,2007-01-01,2026-07-01
+PN01798AM,agro_quinua_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Agrícola - Quinua,235,2007-01-01,2026-07-01
+PN01800AM,agro_ave_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Ave,283,2003-01-01,2026-07-01
+PN01801AM,agro_vacuno_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Vacuno,283,2003-01-01,2026-07-01
+PN01802AM,agro_huevos_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Huevos,283,2003-01-01,2026-07-01
+PN01803AM,agro_porcino_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Porcino,283,2003-01-01,2026-07-01
+PN01804AM,agro_leche_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Leche,283,2003-01-01,2026-07-01
+PN01805AM,agro_otros_pecuarios_miles_t,mensual,actividad,Producción agropecuaria (miles de toneladas) - Pecuario - Otros Pecuarios,283,2003-01-01,2026-07-01
+PN01848AM,pesca_anchoveta_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Industrial - Anchoveta,283,2003-01-01,2026-07-01
+PN01849AM,pesca_ci_otras_especies_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Industrial - Otras Especies,283,2003-01-01,2026-07-01
+PN01851AM,pesca_chd_congelado_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Humano Directo - Congelado,283,2003-01-01,2026-07-01
+PN01852AM,pesca_chd_conservas_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Humano Directo - Conservas,283,2003-01-01,2026-07-01
+PN01853AM,pesca_chd_fresco_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Humano Directo - Fresco,283,2003-01-01,2026-07-01
+PN01854AM,pesca_chd_seco_salado_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Marítima - Consumo Humano Directo - Seco-Salado,283,2003-01-01,2026-07-01
+PN01856AM,pesca_continental_fresco_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Continental - Fresco,283,2003-01-01,2026-07-01
+PN01857AM,pesca_continental_seco_salado_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Continental - Seco-Salado,235,2007-01-01,2026-07-01
+PN38083AM,pesca_continental_congelado_miles_t,mensual,actividad,Producción pesquera (miles de toneladas) - Pesca Continental - Congelado,235,2007-01-01,2026-07-01
+PN01846AM,pesca_maritima_var12m,mensual,actividad,Producción pesquera (variación porcentual interanual) - Pesca Marítima,283,2003-01-01,2026-07-01
+PN01850AM,pesca_chd_var12m,mensual,actividad,Producción pesquera (variación porcentual interanual) - Pesca Marítima - Consumo Humano Directo,283,2003-01-01,2026-07-01
+PN01855AM,pesca_continental_var12m,mensual,actividad,Producción pesquera (variación porcentual interanual) - Pesca Continental,283,2003-01-01,2026-07-01
+RD17048DA,pea_dpto_amazonas_anual,anual,actividad,Población económicamente activa (miles de personas) - Amazonas,14,2008-01-01,2021-01-01
+RD17049DA,pea_dpto_ancash_anual,anual,actividad,Población económicamente activa (miles de personas) - Ancash,14,2008-01-01,2021-01-01
+RD17050DA,pea_dpto_apurimac_anual,anual,actividad,Población económicamente activa (miles de personas) - Apurímac,14,2008-01-01,2021-01-01
+RD17051DA,pea_dpto_arequipa_anual,anual,actividad,Población económicamente activa (miles de personas) - Arequipa,14,2008-01-01,2021-01-01
+RD17052DA,pea_dpto_ayacucho_anual,anual,actividad,Población económicamente activa (miles de personas) - Ayacucho,14,2008-01-01,2021-01-01
+RD17053DA,pea_dpto_cajamarca_anual,anual,actividad,Población económicamente activa (miles de personas) - Cajamarca,14,2008-01-01,2021-01-01
+RD17054DA,pea_dpto_cusco_anual,anual,actividad,Población económicamente activa (miles de personas) - Cusco,14,2008-01-01,2021-01-01
+RD17055DA,pea_dpto_huancavelica_anual,anual,actividad,Población económicamente activa (miles de personas) - Huancavelica,14,2008-01-01,2021-01-01
+RD17056DA,pea_dpto_huanuco_anual,anual,actividad,Población económicamente activa (miles de personas) - Huánuco,14,2008-01-01,2021-01-01
+RD17057DA,pea_dpto_ica_anual,anual,actividad,Población económicamente activa (miles de personas) - Ica,14,2008-01-01,2021-01-01
+RD17058DA,pea_dpto_junin_anual,anual,actividad,Población económicamente activa (miles de personas) - Junín,14,2008-01-01,2021-01-01
+RD17059DA,pea_dpto_la_libertad_anual,anual,actividad,Población económicamente activa (miles de personas) - La Libertad,14,2008-01-01,2021-01-01
+RD17060DA,pea_dpto_lambayeque_anual,anual,actividad,Población económicamente activa (miles de personas) - Lambayeque,14,2008-01-01,2021-01-01
+RD17061DA,pea_dpto_lima_anual,anual,actividad,Población económicamente activa (miles de personas) - Lima,14,2008-01-01,2021-01-01
+RD17062DA,pea_dpto_loreto_anual,anual,actividad,Población económicamente activa (miles de personas) - Loreto,14,2008-01-01,2021-01-01
+RD17063DA,pea_dpto_madre_de_dios_anual,anual,actividad,Población económicamente activa (miles de personas) - Madre de Dios,14,2008-01-01,2021-01-01
+RD17064DA,pea_dpto_moquegua_anual,anual,actividad,Población económicamente activa (miles de personas) - Moquegua,14,2008-01-01,2021-01-01
+RD17065DA,pea_dpto_pasco_anual,anual,actividad,Población económicamente activa (miles de personas) - Pasco,14,2008-01-01,2021-01-01
+RD17066DA,pea_dpto_piura_anual,anual,actividad,Población económicamente activa (miles de personas) - Piura,14,2008-01-01,2021-01-01
+RD17067DA,pea_dpto_puno_anual,anual,actividad,Población económicamente activa (miles de personas) - Puno,14,2008-01-01,2021-01-01
+RD17068DA,pea_dpto_san_martin_anual,anual,actividad,Población económicamente activa (miles de personas) - San Martin,14,2008-01-01,2021-01-01
+RD17069DA,pea_dpto_tacna_anual,anual,actividad,Población económicamente activa (miles de personas) - Tacna,14,2008-01-01,2021-01-01
+RD17070DA,pea_dpto_tumbes_anual,anual,actividad,Población económicamente activa (miles de personas) - Tumbes,14,2008-01-01,2021-01-01
+RD17071DA,pea_dpto_ucayali_anual,anual,actividad,Población económicamente activa (miles de personas) - Ucayali,14,2008-01-01,2021-01-01
+RD17072DA,pea_ocupada_dpto_amazonas_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Amazonas,15,2007-01-01,2021-01-01
+RD17073DA,pea_ocupada_dpto_ancash_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Ancash,15,2007-01-01,2021-01-01
+RD17074DA,pea_ocupada_dpto_apurimac_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Apurímac,15,2007-01-01,2021-01-01
+RD17075DA,pea_ocupada_dpto_arequipa_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Arequipa,15,2007-01-01,2021-01-01
+RD17076DA,pea_ocupada_dpto_ayacucho_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Ayacucho,15,2007-01-01,2021-01-01
+RD17077DA,pea_ocupada_dpto_cajamarca_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Cajamarca,15,2007-01-01,2021-01-01
+RD17078DA,pea_ocupada_dpto_cusco_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Cusco,15,2007-01-01,2021-01-01
+RD17079DA,pea_ocupada_dpto_huancavelica_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Huancavelica,15,2007-01-01,2021-01-01
+RD17080DA,pea_ocupada_dpto_huanuco_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Huánuco,15,2007-01-01,2021-01-01
+RD17081DA,pea_ocupada_dpto_ica_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Ica,15,2007-01-01,2021-01-01
+RD17082DA,pea_ocupada_dpto_junin_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Junín,15,2007-01-01,2021-01-01
+RD17083DA,pea_ocupada_dpto_la_libertad_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - La Libertad,15,2007-01-01,2021-01-01
+RD17084DA,pea_ocupada_dpto_lambayeque_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Lambayeque,15,2007-01-01,2021-01-01
+RD17085DA,pea_ocupada_dpto_lima_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Lima,15,2007-01-01,2021-01-01
+RD17086DA,pea_ocupada_dpto_loreto_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Loreto,15,2007-01-01,2021-01-01
+RD17087DA,pea_ocupada_dpto_madre_de_dios_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Madre de Dios,15,2007-01-01,2021-01-01
+RD17088DA,pea_ocupada_dpto_moquegua_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Moquegua,15,2007-01-01,2021-01-01
+RD17089DA,pea_ocupada_dpto_pasco_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Pasco,15,2007-01-01,2021-01-01
+RD17090DA,pea_ocupada_dpto_piura_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Piura,15,2007-01-01,2021-01-01
+RD17091DA,pea_ocupada_dpto_puno_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Puno,15,2007-01-01,2021-01-01
+RD17092DA,pea_ocupada_dpto_san_martin_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - San Martin,15,2007-01-01,2021-01-01
+RD17093DA,pea_ocupada_dpto_tacna_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Tacna,15,2007-01-01,2021-01-01
+RD17094DA,pea_ocupada_dpto_tumbes_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Tumbes,15,2007-01-01,2021-01-01
+RD17095DA,pea_ocupada_dpto_ucayali_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Ucayali,15,2007-01-01,2021-01-01
+PD39598DA,pea_nacional_anual,anual,actividad,PBI y demografía - PEA (Miles Personas),100,1922-01-01,2021-01-01
+PD38045AM,expectativa_economia_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 3 meses,294,2002-04-01,2026-09-01
+PD38046AM,expectativa_sector_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 3 meses,292,2002-06-01,2026-09-01
+PD39752AM,expectativa_sector_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 12 meses,213,2009-01-01,2026-09-01
+PD39754AM,expectativa_mineria_hidrocarburos_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
+PD39755AM,expectativa_mineria_hidrocarburos_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
+PD39757AM,expectativa_mineria_hidrocarburos_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
+PD39758AM,expectativa_mineria_hidrocarburos_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
+PD39763AM,expectativa_manufactura_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Manufactura,201,2010-01-01,2026-09-01
+PD39764AM,expectativa_manufactura_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Manufactura,201,2010-01-01,2026-09-01
+PD39766AM,expectativa_manufactura_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Manufactura,201,2010-01-01,2026-09-01
+PD39767AM,expectativa_manufactura_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Manufactura,201,2010-01-01,2026-09-01
+PD39772AM,expectativa_construccion_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Construcción,201,2010-01-01,2026-09-01
+PD39773AM,expectativa_construccion_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Construcción,201,2010-01-01,2026-09-01
+PD39775AM,expectativa_construccion_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Construcción,201,2010-01-01,2026-09-01
+PD39776AM,expectativa_construccion_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Construcción,201,2010-01-01,2026-09-01
+PD39781AM,expectativa_comercio_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Comercio,201,2010-01-01,2026-09-01
+PD39782AM,expectativa_comercio_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Comercio,201,2010-01-01,2026-09-01
+PD39784AM,expectativa_comercio_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Comercio,201,2010-01-01,2026-09-01
+PD39785AM,expectativa_comercio_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Comercio,201,2010-01-01,2026-09-01
+PD39789AM,expectativa_servicios_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Servicios,201,2010-01-01,2026-09-01
+PD39790AM,expectativa_servicios_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Servicios,201,2010-01-01,2026-09-01
+PD39792AM,expectativa_servicios_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Servicios,201,2010-01-01,2026-09-01
+PD39793AM,expectativa_servicios_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Servicios,201,2010-01-01,2026-09-01
+PD39875AM,expectativa_zona_norte_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
+PD39876AM,expectativa_zona_norte_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
+PD39877AM,expectativa_zona_norte_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
+PD39878AM,expectativa_zona_norte_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
+PD39896AM,expectativa_zona_centro_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
+PD39897AM,expectativa_zona_centro_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
+PD39898AM,expectativa_zona_centro_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
+PD39899AM,expectativa_zona_centro_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
+PD39917AM,expectativa_zona_sur_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
+PD39918AM,expectativa_zona_sur_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
+PD39919AM,expectativa_zona_sur_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
+PD39920AM,expectativa_zona_sur_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
+PM05060AA,agro_trigo_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Trigo,21,2005-01-01,2025-01-01
+PM05061AA,agro_frijol_grano_seco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Frijol Grano Seco,21,2005-01-01,2025-01-01
+PM05064AA,agro_maiz_choclo_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Maíz Choclo,21,2005-01-01,2025-01-01
+PM05068AA,agro_camote_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Camote,21,2005-01-01,2025-01-01
+PM05071AA,agro_cebada_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Cebada,21,2005-01-01,2025-01-01
+PM05072AA,agro_arveja_grano_verde_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Arveja Grano Verde,21,2005-01-01,2025-01-01
+PM05073AA,agro_haba_grano_verde_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Haba Grano Verde,21,2005-01-01,2025-01-01
+PM05074AA,agro_arveja_grano_seco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Arveja Grano Seco,21,2005-01-01,2025-01-01
+PM05075AA,agro_haba_grano_seco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Haba Grano Seco,21,2005-01-01,2025-01-01
+PM05076AA,agro_pallar_grano_seco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Pallar Grano Seco,21,2005-01-01,2025-01-01
+PM05077AA,agro_olluco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Olluco,21,2005-01-01,2025-01-01
+PM05078AA,agro_oca_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Oca,21,2005-01-01,2025-01-01
+PM05079AA,agro_melocoton_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Melocotón,21,2005-01-01,2025-01-01
+PM05083AA,agro_algodon_rama_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Agroexportación e Industrial - Algodón Rama,21,2005-01-01,2025-01-01
+PM05089AA,agro_palta_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Agroexportación e Industrial - Palta,21,2005-01-01,2025-01-01
+PM05092AA,agro_oregano_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Agroexportación e Industrial - Orégano,21,2005-01-01,2025-01-01
+PM05093AA,agro_te_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Agroexportación e Industrial - Té,21,2005-01-01,2025-01-01
+PM05117AA,pesca_congelado_concha_abanico_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Congelado - Concha de abanico,21,2005-01-01,2025-01-01
+PM05118AA,pesca_congelado_langostino_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Congelado - Langostino,21,2005-01-01,2025-01-01
+PM05119AA,pesca_congelado_merluza_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Congelado - Merluza,21,2005-01-01,2025-01-01
+PM05120AA,pesca_congelado_calamar_gigante_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Congelado - Calamar gigante,21,2005-01-01,2025-01-01
+PM05122AA,pesca_conservas_atun_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Conservas - Atún,21,2005-01-01,2025-01-01
+PM05123AA,pesca_conservas_caballa_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Conservas - Caballa,21,2005-01-01,2025-01-01
+PM05124AA,pesca_conservas_jurel_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Conservas - Jurel,21,2005-01-01,2025-01-01
+PM05125AA,pesca_conservas_sardina_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Conservas - Sardina,21,2005-01-01,2025-01-01
+PM05127AA,pesca_fresco_concha_abanico_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Concha de abanico,21,2005-01-01,2025-01-01
+PM05128AA,pesca_fresco_jurel_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Jurel,21,2005-01-01,2025-01-01
+PM05129AA,pesca_fresco_liza_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Liza,21,2005-01-01,2025-01-01
+PM05130AA,pesca_fresco_tollo_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Tollo,21,2005-01-01,2025-01-01
+PM05149AA,mineria_oro_t_anual,anual,actividad,Producción minera e hidrocarburos por principales productos (miles de unidades recuperables) - Minería Metálica - Oro (Kilogramos),56,1970-01-01,2025-01-01
+RD12951DM,mineria_dpto_cobre_total_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Total (tm.f),306,2001-01-01,2026-06-01
+RD12952DM,mineria_dpto_cobre_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ancash (tm.f),306,2001-01-01,2026-06-01
+RD12953DM,mineria_dpto_cobre_apurimac_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Apurimac (tm.f),127,2015-12-01,2026-06-01
+RD12954DM,mineria_dpto_cobre_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Arequipa (tm.f),306,2001-01-01,2026-06-01
+RD12955DM,mineria_dpto_cobre_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ayacucho (tm.f),306,2001-01-01,2026-06-01
+RD12956DM,mineria_dpto_cobre_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cajamarca (tm.f),306,2001-01-01,2026-06-01
+RD12957DM,mineria_dpto_cobre_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cusco (tm.f),306,2001-01-01,2026-06-01
+RD12958DM,mineria_dpto_cobre_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huancavelica (tm.f),306,2001-01-01,2026-06-01
+RD12959DM,mineria_dpto_cobre_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huánuco (tm.f),306,2001-01-01,2026-06-01
+RD12960DM,mineria_dpto_cobre_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ica (tm.f),306,2001-01-01,2026-06-01
+RD12961DM,mineria_dpto_cobre_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Junín (tm.f),306,2001-01-01,2026-06-01
+RD12962DM,mineria_dpto_cobre_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - La Libertad (tm.f),305,2001-01-01,2026-06-01
+RD12963DM,mineria_dpto_cobre_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Lima (tm.f),306,2001-01-01,2026-06-01
+RD12964DM,mineria_dpto_cobre_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Moquegua (tm.f),306,2001-01-01,2026-06-01
+RD12965DM,mineria_dpto_cobre_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Pasco (tm.f),306,2001-01-01,2026-06-01
+RD12966DM,mineria_dpto_cobre_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Puno (tm.f),306,2001-01-01,2026-06-01
+RD12967DM,mineria_dpto_cobre_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Tacna (tm.f),306,2001-01-01,2026-06-01
+RD12968DM,mineria_dpto_estano_total_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Total (tm.f),306,2001-01-01,2026-06-01
+RD12969DM,mineria_dpto_estano_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Puno (tm.f),306,2001-01-01,2026-06-01
+RD12970DM,mineria_dpto_hierro_total_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Total (tm.f),306,2001-01-01,2026-06-01
+RD12971DM,mineria_dpto_hierro_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Ica (tm.f),306,2001-01-01,2026-06-01
+RD12972DM,mineria_dpto_molibdeno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Total (tm.f),306,2001-01-01,2026-06-01
+RD12973DM,mineria_dpto_molibdeno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Ancash (tm.f),306,2001-01-01,2026-06-01
+RD12974DM,mineria_dpto_molibdeno_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Arequipa (tm.f),306,2001-01-01,2026-06-01
+RD12975DM,mineria_dpto_molibdeno_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Junín (tm.f),306,2001-01-01,2026-06-01
+RD12976DM,mineria_dpto_molibdeno_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Moquegua (tm.f),306,2001-01-01,2026-06-01
+RD12977DM,mineria_dpto_molibdeno_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Tacna (tm.f),306,2001-01-01,2026-06-01
+RD12978DM,mineria_dpto_oro_total_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Total (grs.f),306,2001-01-01,2026-06-01
+RD12979DM,mineria_dpto_oro_ancash_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ancash (grs.f),306,2001-01-01,2026-06-01
+RD12980DM,mineria_dpto_oro_apurimac_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Apurimac (grs.f),306,2001-01-01,2026-06-01
+RD12981DM,mineria_dpto_oro_arequipa_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Arequipa (grs.f),306,2001-01-01,2026-06-01
+RD12982DM,mineria_dpto_oro_ayacucho_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ayacucho (grs.f),306,2001-01-01,2026-06-01
+RD12983DM,mineria_dpto_oro_cajamarca_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cajamarca (grs.f),306,2001-01-01,2026-06-01
+RD12984DM,mineria_dpto_oro_cusco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cusco (grs.f),306,2001-01-01,2026-06-01
+RD12985DM,mineria_dpto_oro_huancavelica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Huancavelica (grs.f),306,2001-01-01,2026-06-01
+RD12986DM,mineria_dpto_oro_ica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ica (grs.f),306,2001-01-01,2026-06-01
+RD12987DM,mineria_dpto_oro_junin_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Junín (grs.f),306,2001-01-01,2026-06-01
+RD12988DM,mineria_dpto_oro_la_libertad_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - La Libertad (grs.f),306,2001-01-01,2026-06-01
+RD12989DM,mineria_dpto_oro_lambayeque_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lambayeque (grs.f),306,2001-01-01,2026-06-01
+RD12990DM,mineria_dpto_oro_lima_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lima (grs.f),306,2001-01-01,2026-06-01
+RD12991DM,mineria_dpto_oro_madre_de_dios_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Madre de Dios (grs.f),306,2001-01-01,2026-06-01
+RD12992DM,mineria_dpto_oro_moquegua_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Moquegua (grs.f),306,2001-01-01,2026-06-01
+RD12993DM,mineria_dpto_oro_pasco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Pasco (grs.f),306,2001-01-01,2026-06-01
+RD12994DM,mineria_dpto_oro_puno_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Puno (grs.f),306,2001-01-01,2026-06-01
+RD12995DM,mineria_dpto_oro_tacna_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Tacna (grs.f),306,2001-01-01,2026-06-01
+RD12996DM,mineria_dpto_plata_total_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Total (kg.f),306,2001-01-01,2026-06-01
+RD12997DM,mineria_dpto_plata_ancash_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ancash (kg.f),306,2001-01-01,2026-06-01
+RD12998DM,mineria_dpto_plata_apurimac_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Apurímac (kg.f),306,2001-01-01,2026-06-01
+RD12999DM,mineria_dpto_plata_arequipa_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Arequipa (kg.f),306,2001-01-01,2026-06-01
+RD13000DM,mineria_dpto_plata_ayacucho_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ayacucho (kg.f),306,2001-01-01,2026-06-01
+RD13001DM,mineria_dpto_plata_cajamarca_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cajamarca (kg.f),306,2001-01-01,2026-06-01
+RD13002DM,mineria_dpto_plata_cusco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cusco (kg.f),306,2001-01-01,2026-06-01
+RD13003DM,mineria_dpto_plata_huancavelica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huancavelica (kg.f),306,2001-01-01,2026-06-01
+RD13004DM,mineria_dpto_plata_huanuco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huánuco (kg.f),306,2001-01-01,2026-06-01
+RD13005DM,mineria_dpto_plata_ica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ica (kg.f),306,2001-01-01,2026-06-01
+RD13006DM,mineria_dpto_plata_junin_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Junín (kg.f),306,2001-01-01,2026-06-01
+RD13007DM,mineria_dpto_plata_la_libertad_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - La Libertad (kg.f),306,2001-01-01,2026-06-01
+RD13008DM,mineria_dpto_plata_lima_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Lima (kg.f),306,2001-01-01,2026-06-01
+RD13009DM,mineria_dpto_plata_moquegua_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Moquegua (kg.f),306,2001-01-01,2026-06-01
+RD13010DM,mineria_dpto_plata_pasco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Pasco (kg.f),306,2001-01-01,2026-06-01
+RD13011DM,mineria_dpto_plata_puno_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Puno (kg.f),306,2001-01-01,2026-06-01
+RD13012DM,mineria_dpto_plata_tacna_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Tacna (kg.f),306,2001-01-01,2026-06-01
+RD13013DM,mineria_dpto_plomo_total_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Total (tm.f),306,2001-01-01,2026-06-01
+RD13014DM,mineria_dpto_plomo_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ancash (tm.f),306,2001-01-01,2026-06-01
+RD13015DM,mineria_dpto_plomo_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Arequipa (tm.f),306,2001-01-01,2026-06-01
+RD13016DM,mineria_dpto_plomo_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ayacucho (tm.f),306,2001-01-01,2026-06-01
+RD13017DM,mineria_dpto_plomo_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cajamarca (tm.f),306,2001-01-01,2026-06-01
+RD13018DM,mineria_dpto_plomo_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cusco (tm.f),306,2001-01-01,2026-06-01
+RD13019DM,mineria_dpto_plomo_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huancavelica (tm.f),306,2001-01-01,2026-06-01
+RD13020DM,mineria_dpto_plomo_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huánuco (tm.f),306,2001-01-01,2026-06-01
+RD13021DM,mineria_dpto_plomo_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ica (tm.f),306,2001-01-01,2026-06-01
+RD13022DM,mineria_dpto_plomo_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Junín (tm.f),305,2001-01-01,2026-06-01
+RD13023DM,mineria_dpto_plomo_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - La Libertad (tm.f),306,2001-01-01,2026-06-01
+RD13024DM,mineria_dpto_plomo_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Lima (tm.f),306,2001-01-01,2026-06-01
+RD13025DM,mineria_dpto_plomo_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Pasco (tm.f),306,2001-01-01,2026-06-01
+RD13026DM,mineria_dpto_plomo_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Puno (tm.f),306,2001-01-01,2026-06-01
+RD13027DM,mineria_dpto_tungsteno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Total (tm.f),306,2001-01-01,2026-06-01
+RD13028DM,mineria_dpto_tungsteno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Ancash (tm.f),306,2001-01-01,2026-06-01
+RD13029DM,mineria_dpto_zinc_total_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Total (tm.f),306,2001-01-01,2026-06-01
+RD13030DM,mineria_dpto_zinc_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ancash (tm.f),306,2001-01-01,2026-06-01
+RD13031DM,mineria_dpto_zinc_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Arequipa (tm.f),306,2001-01-01,2026-06-01
+RD13032DM,mineria_dpto_zinc_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ayacucho (tm.f),306,2001-01-01,2026-06-01
+RD13033DM,mineria_dpto_zinc_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cajamarca (tm.f),306,2001-01-01,2026-06-01
+RD13034DM,mineria_dpto_zinc_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cusco (tm.f),306,2001-01-01,2026-06-01
+RD13035DM,mineria_dpto_zinc_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huancavelica (tm.f),306,2001-01-01,2026-06-01
+RD13036DM,mineria_dpto_zinc_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huánuco (tm.f),306,2001-01-01,2026-06-01
+RD13037DM,mineria_dpto_zinc_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ica (tm.f),306,2001-01-01,2026-06-01
+RD13038DM,mineria_dpto_zinc_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Junín (tm.f),306,2001-01-01,2026-06-01
+RD13039DM,mineria_dpto_zinc_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - La Libertad (tm.f),305,2001-01-01,2026-06-01
+RD13040DM,mineria_dpto_zinc_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Lima (tm.f),306,2001-01-01,2026-06-01
+RD13041DM,mineria_dpto_zinc_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Pasco (tm.f),306,2001-01-01,2026-06-01
+RD13042DM,mineria_dpto_zinc_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Puno (tm.f),306,2001-01-01,2026-06-01
+PD04723MM,tasa_creditos_regulacion_monetaria_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Créditos de Regulación Monetaria en MN,303,2001-08-01,2026-10-01
+PD04724MM,tasa_depositos_overnight_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Depósitos Overnight en MN,310,2001-01-01,2026-10-01
+PN06503OM,tasa_cd_bcrp_saldo,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Saldo CD BCRP,407,1992-06-01,2026-09-01
+PN06504OM,tasa_cd_bcrp_colocacion,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Colocación del mes CD BCRP,284,2003-01-01,2026-09-01
+PN06536OM,tasa_cd_bcrp_hasta3m,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 1 día - 3 meses - promedio ponderada,257,2003-01-01,2026-09-01
+PN06539OM,tasa_cd_bcrp_4a6m,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 4 - 6 meses - promedio ponderada,235,2003-01-01,2026-08-01
+PN06542OM,tasa_cd_bcrp_7m_1a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 7 meses - 1 año - promedio ponderada,213,2003-01-01,2026-09-01
+PN06545OM,tasa_cd_bcrp_1a_2a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - Mayor a 1 - 2 años - promedio ponderada,152,2003-01-01,2026-09-01
+PN06502OM,cd_bcrp_plazos_saldo_total,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Total - Saldo,412,1992-06-01,2026-09-01
+PN06487OM,cd_bcrp_hasta3m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 1 dia a 3 meses - Saldo,285,2003-01-01,2026-09-01
+PN06490OM,cd_bcrp_4a6m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 4 meses a 6 meses - Saldo,285,2003-01-01,2026-09-01
+PN06493OM,cd_bcrp_7m_1a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 7 meses a 1 año - Saldo,285,2003-01-01,2026-09-01
+PN06496OM,cd_bcrp_1a_2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 1 año a 2 años - Saldo,285,2003-01-01,2026-09-01
+PN06499OM,cd_bcrp_mas2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 2 años - Saldo,285,2003-01-01,2026-09-01
+PN06519TM,depositos_plazo_bcrp_saldo,mensual,politica-monetaria,Monto nominal de certificados y depósitos del Banco Central (millones S/) - Depósito a Plazo del BCRP - Saldo,201,2010-01-01,2026-09-01
+PN06525TM,repo_monedas_regular_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Regular - Saldo,201,2010-01-01,2026-09-01
+PN06528TM,repo_monedas_sustitucion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Sustitución - Saldo,201,2010-01-01,2026-09-01
+PN06531TM,repo_monedas_expansion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Expansión - Saldo,201,2010-01-01,2026-09-01
+PN06534TM,subasta_depositos_publicos_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Depósitos Públicos - Saldo,201,2010-01-01,2026-09-01
+PN01014MM,op_bcrp_sistema_financiero_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero,382,1994-12-01,2026-09-01
+PN01016MM,repo_valores_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Compra Temporal de Títulos Valores,349,1997-09-01,2026-09-01
+PN01017MM,repo_monedas_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Operaciones de Reporte de Monedas,382,1994-12-01,2026-09-01
+PN39863MM,repo_cartera_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte de cartera,105,2018-01-01,2026-09-01
+PN39864MM,repo_cartera_garantia_estatal_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte con garantía,105,2018-01-01,2026-09-01
+PN01019MM,valores_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP,345,1998-01-01,2026-09-01
+PN01020MM,cd_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos del BCRP (CDBCRP),345,1998-01-01,2026-09-01
+PN01023MM,cdr_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos Reajustables del BCRP (CDR),345,1998-01-01,2026-09-01
+PN01025MM,cdv_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos con Tasa variable del BCRP (CDV BCRP),345,1998-01-01,2026-09-01
+PN01027MM,depositos_intermediarios_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros,345,1998-01-01,2026-09-01
+PN01028MM,depositos_overnight_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Facilidades de Depósitos,345,1998-01-01,2026-09-01
+PN01029MM,depositos_intermediarios_otros_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Otras Depósitos,345,1998-01-01,2026-09-01
+PN01030MM,depositos_publicos_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos Públicos,345,1998-01-01,2026-09-01
+PN07683NM,encaje_exigible_mn_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - MN (%) - MN - Tasa de encaje (%) - Exigible,298,2001-12-01,2026-09-01
+PN07684NM,encaje_efectivo_mn_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - MN (%) - MN - Tasa de encaje (%) - Efectivo,298,2001-12-01,2026-09-01
+PN07691NM,encaje_exigible_me_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - ME (%) - ME - Tasa de encaje (%) - Exigible,298,2001-12-01,2026-09-01
+PN07692NM,encaje_efectivo_me_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - ME (%) - ME - Tasa de encaje (%) - Efectivo,298,2001-12-01,2026-09-01
+PN07682NM,encaje_excedente_mn_pct_tose,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - MN - Excedente / (Deficit) - % del TOSE,298,2001-12-01,2026-09-01
+PN07690NM,encaje_excedente_me_pct_tose,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - ME - Excedente / (Deficit) - % del TOSE,298,2001-12-01,2026-09-01
+PN07678NM,encaje_tose_mn,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - MN - TOSE (millones S/),298,2001-12-01,2026-09-01
+PN07685NM,encaje_tose_me,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - ME - TOSE (millones US$),298,2001-12-01,2026-09-01
+PN00493MM,tasa_encaje_bcrp,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de Encaje,416,1992-01-01,2026-08-01
+PN00486MM,emision_primaria_fin,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Fin de Periodo,417,1992-01-01,2026-09-01
+PN00489MM,emision_primaria_prom,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Promedio Mes,417,1992-01-01,2026-09-01
+PN00488MM,emision_primaria_fin_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Fin de Periodo,405,1993-01-01,2026-09-01
+PN00491MM,emision_primaria_prom_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Promedio Mes,405,1993-01-01,2026-09-01
+PN00483MM,emision_primaria_encaje,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Encaje,416,1992-01-01,2026-08-01
+PN00494MM,multiplicador_monetario,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Multiplicador Monetario,416,1992-01-01,2026-08-01
+PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6944,1999-01-04,2026-10-29
+PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4881,1997-09-22,2026-10-29
+PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6944,1999-01-04,2026-10-29
+PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4881,1997-09-22,2026-10-29
+PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),2997,1999-01-04,2026-10-29
+PN07801NM,tasa_bancos_corporativo_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,194,2010-08-01,2026-09-01
+PN07802NM,tasa_bancos_grandes_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
+PN07803NM,tasa_bancos_medianas_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
+PN07804NM,tasa_bancos_corporativo_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,194,2010-08-01,2026-09-01
+PN07805NM,tasa_bancos_grandes_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
+PN07806NM,tasa_bancos_medianas_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
+PN07841NM,tasa_bancos_corp_grandes_medianas_hasta360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",194,2010-08-01,2026-09-01
+PN07842NM,tasa_bancos_corp_grandes_medianas_mas360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",194,2010-08-01,2026-09-01
+PN07848NM,tasa_bancos_hipotecario_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Hipotecario,298,2001-12-01,2026-09-01
+PN07849NM,tasa_bancos_estructura_constante_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Promedio estructura constante,194,2010-08-01,2026-09-01
+PN07821NM,tasa_bancos_corporativo_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,194,2010-08-01,2026-09-01
+PN07822NM,tasa_bancos_grandes_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
+PN07823NM,tasa_bancos_medianas_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
+PN07824NM,tasa_bancos_corporativo_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,194,2010-08-01,2026-09-01
+PN07825NM,tasa_bancos_grandes_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
+PN07826NM,tasa_bancos_medianas_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
+PN07828NM,ftamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - FTAMEX,194,2010-08-01,2026-09-01
+PN07829NM,tasa_preferencial_corp_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,194,2010-08-01,2026-09-01
+PN07850NM,tasa_bancos_corp_grandes_medianas_hasta360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",194,2010-08-01,2026-09-01
+PN07851NM,tasa_bancos_corp_grandes_medianas_mas360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",194,2010-08-01,2026-09-01
+PN07857NM,tasa_bancos_hipotecario_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Hipotecario,298,2001-12-01,2026-09-01
+PN07858NM,tasa_bancos_estructura_constante_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Promedio estructura constante,194,2010-08-01,2026-09-01
+PN07810NM,tasa_pasiva_cuenta_corriente_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Cuenta Corriente,194,2010-08-01,2026-09-01
+PN07811NM,tasa_pasiva_ahorro_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Ahorro,416,1992-02-01,2026-09-01
+PN07812NM,tasa_pasiva_plazo_hasta30d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,194,2010-08-01,2026-09-01
+PN07813NM,tasa_pasiva_plazo_31a180d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,194,2010-08-01,2026-09-01
+PN07814NM,tasa_pasiva_plazo_181a360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,194,2010-08-01,2026-09-01
+PN07815NM,tasa_pasiva_plazo_mas360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,194,2010-08-01,2026-09-01
+PN07817NM,ftipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - FTIPMN,194,2010-08-01,2026-09-01
+PN07830NM,tasa_pasiva_cuenta_corriente_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Cuenta Corriente,194,2010-08-01,2026-09-01
+PN07831NM,tasa_pasiva_ahorro_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Ahorro,416,1992-02-01,2026-09-01
+PN07832NM,tasa_pasiva_plazo_hasta30d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,194,2010-08-01,2026-09-01
+PN07833NM,tasa_pasiva_plazo_31a180d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,194,2010-08-01,2026-09-01
+PN07834NM,tasa_pasiva_plazo_181a360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,194,2010-08-01,2026-09-01
+PN07835NM,tasa_pasiva_plazo_mas360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,194,2010-08-01,2026-09-01
+PN07837NM,ftipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - FTIPMEX,194,2010-08-01,2026-09-01
+PD31895MM,bono_soberano_10a_soles,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en S/),257,2005-05-01,2026-09-01
+PD31896MM,bono_soberano_10a_usd,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en US$),207,2009-07-01,2026-09-01
+PN01124MM,tasa_bonos_tesoro_hasta5a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Hasta 5 años,227,2002-01-01,2026-09-01
+PN01125MM,tasa_bonos_tesoro_5a10a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 5 hasta 10 años,211,2004-03-01,2026-09-01
+PN01126MM,tasa_bonos_tesoro_10a15a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 10 hasta 15 años,205,2005-07-01,2026-09-01
+PN01127MM,tasa_bonos_tesoro_15a20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 15 hasta 20 años,206,2006-05-01,2026-09-01
+PN01128MM,tasa_bonos_tesoro_mas20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Más de 20 años,209,2007-07-01,2026-09-01
+PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7327,1995-04-03,2026-10-29
+PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6001,2002-08-01,2026-10-29
+PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3141,2012-12-31,2026-10-29
+PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4283,2009-07-30,2026-10-30
+PN00496MM,credito_privado_mn_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito MN (millones S/),417,1992-01-01,2026-09-01
+PN00499MM,credito_privado_me_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito ME (millones US$),417,1992-01-01,2026-09-01
+PN00498MM,credito_privado_mn_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Crédito MN,405,1993-01-01,2026-09-01
+PN00501MM,credito_privado_me_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Crédito ME,405,1993-01-01,2026-09-01
+PN00507MM,credito_privado_tc_constante_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Total a Tipo de Cambio Constante,405,1993-01-01,2026-09-01
+PN00540MM,credito_empresas_mn_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - MN - A Empresas (millones S/)",309,2001-01-01,2026-09-01
+PN00542MM,credito_hipotecario_mn_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - MN - Hipotecario (millones S/)",309,2001-01-01,2026-09-01
+PN00543MM,credito_empresas_me_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - ME - A Empresas (millones US$)",309,2001-01-01,2026-09-01
+PN00545MM,credito_hipotecario_me_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - ME - Hipotecario (millones US$)",309,2001-01-01,2026-09-01
+PN00546MM,credito_empresas_mn_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - MN - A Empresas",297,2002-01-01,2026-09-01
+PN00547MM,credito_consumo_mn_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - MN - Consumo",297,2002-01-01,2026-09-01
+PN00548MM,credito_hipotecario_mn_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - MN - Hipotecario",297,2002-01-01,2026-09-01
+PN00549MM,credito_empresas_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - A Empresas",297,2002-01-01,2026-09-01
+PN00550MM,credito_consumo_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Consumo",297,2002-01-01,2026-09-01
+PN00551MM,credito_hipotecario_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Hipotecario",297,2002-01-01,2026-09-01

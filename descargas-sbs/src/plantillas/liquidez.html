@@ -1,0 +1,1919 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquidez del sistema financiero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas), con la paleta
+   de la SBS: azul #001E6B y gris #B2B4B5. Subsistemas: s1–s5 en orden fijo (validados para daltonismo); el
+   sistema en gris discontinuo. Una entidad: azul (s1), su subsistema en azul medio (c-sub), el sistema en
+   gris discontinuo. Estados sin rojo ni verde: dentro del mínimo en azul (up), bajo el mínimo y la línea del
+   mínimo regulatorio en morado (bad), siempre con etiqueta o flecha. Composiciones (partes del fondeo, tipos
+   de depósito, adeudos, tramos de la escala de montos): rampa ordinal del gris SBS al azul SBS (q1–q6,
+   validada en claro y en oscuro) en el orden del cuadro; «otros» en el gris q1; 2 px entre capas. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a; --s5: #8bb0b2;
+  --sys: #868a93; --c-sub: #6a7ca6; --up: #001e6b; --bad: #5a2a85;
+  --q1: #b2b4b5; --q2: #8e99b4; --q3: #6a7ca6; --q4: #475d96; --q5: #243f82; --q6: #001e6b;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4; --s5: #356e6e;
+  --sys: #8a8f9c; --c-sub: #6e89cc; --up: #9fb2e6; --bad: #d2b4f0;
+  --q1: #4a5573; --q2: #4f68a8; --q3: #6e89cc; --q4: #93aae0; --q5: #b9c8ee; --q6: #dce3f5;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 32px 0 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile.hero .val.long { font-size: 34px; }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 6px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+.d-bad { color: var(--bad); font-weight: 600; }
+.d-good { color: var(--up); font-weight: 600; }
+.d-flat { color: var(--ink); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+/* Muestra discontinua con degradado: un borde «dashed» de 16 px se ve continuo en Chromium. */
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.ln.mindash { background: repeating-linear-gradient(90deg, var(--bad) 0 5px, transparent 5px 8px) !important; height: 2px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.sq { border-radius: 2px; }
+.dot.hollow { background: var(--surface); box-shadow: inset 0 0 0 2px var(--muted); }
+.dot.ring { box-shadow: 0 0 0 2px var(--bad); }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--ink2) 0 3px, transparent 3px 5px); }
+.vref.min { background: repeating-linear-gradient(180deg, var(--bad) 0 4px, transparent 4px 6px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 32px 0; text-align: center; margin: 0; }
+.callout { color: var(--ink2); font-size: 14px; margin: 12px 0 0; max-width: 760px; }
+.callout b { color: var(--ink); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.lag { color: var(--muted); }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button:hover { color: var(--ink); }
+th[aria-sort] button { color: var(--ink); }
+td.bad { color: var(--bad); font-weight: 600; }
+
+/* Ranking, dispersión y barras */
+.rank-row, .bar-seg { cursor: pointer; }
+.rank-row .bg { fill: transparent; }
+.rank-row:hover .bg, .rank-row:focus-visible .bg { fill: var(--wash); }
+.rank-row.sel .bg { fill: var(--wash); }
+.rank-row.sel .nm { font-weight: 600; fill: var(--ink); }
+.rank-row:focus-visible, .bar-seg:focus-visible { outline: none; }
+.rank-row:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.bar-seg:hover rect, .bar-seg:focus-visible rect { stroke: var(--ink); stroke-width: 1.5; }
+.pt { cursor: pointer; outline: none; }
+.pt circle.m { stroke: var(--surface); stroke-width: 2; }
+.pt:hover circle.m, .pt:focus-visible circle.m, .pt.sel circle.m { stroke: var(--ink); stroke-width: 2; }
+.ptl { font-size: 11.5px; fill: var(--ink2); pointer-events: none; }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.rv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rv.bad { fill: var(--bad); }
+.rs { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ent-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 4px; }
+.ent-stats div { min-width: 0; }
+.ent-stats .lab { font-size: 12.5px; color: var(--ink2); }
+.ent-stats .val { font-size: 20px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.ent-stats .sub { font-size: 12px; color: var(--ink2); }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.minlbl { font-size: 11.5px; fill: var(--bad); font-weight: 600; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+/* Pestañas */
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, th button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña de metodología */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 18px 0 6px; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul, .edu ol { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; }
+.example { border-left: 3px solid var(--axis); padding: 4px 0 4px 14px; margin: 10px 0 12px; max-width: 72ch; color: var(--ink2); }
+.example b { color: var(--ink); }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 16px; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.edu .table-wrap { max-height: none; }
+.edu td, .edu th { white-space: normal; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .ent-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile.hero .val.long { font-size: 28px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Liquidez y fondeo del sistema financiero</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuántos activos líquidos tienen los bancos, financieras y cajas del Perú frente a lo que podrían tener que pagar pronto a sus depositantes y acreedores, con qué se financian y cuántos depositantes tienen, mes a mes.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-sistema" aria-controls="tab-sistema" aria-selected="true">Sistema y subsistemas</button>
+    <button type="button" role="tab" id="tabbtn-entidades" aria-controls="tab-entidades" aria-selected="false" tabindex="-1">Entidades</button>
+    <button type="button" role="tab" id="tabbtn-metodologia" aria-controls="tab-metodologia" aria-selected="false" tabindex="-1">Cómo leer los datos</button>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtros">
+    <div class="f"><span class="lab" id="lab-ind">Indicador</span><div class="seg" id="f-ind" role="group" aria-labelledby="lab-ind"></div></div>
+    <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+    <div class="f"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+  </div>
+
+  <!-- ===================== Sistema y subsistemas ===================== -->
+  <div id="tab-sistema" role="tabpanel" aria-labelledby="tabbtn-sistema">
+    <div class="section-title">Resumen</div>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Ámbito">
+      <div class="f"><span class="lab" id="lab-scope">Ámbito</span><div class="seg" id="f-scope" role="group" aria-labelledby="lab-scope"></div></div>
+    </div>
+    <section class="kpis" id="kpis" aria-label="Indicadores del mes seleccionado"></section>
+    <p class="note" id="kpi-note" hidden></p>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-evo">
+      <div class="card-head">
+        <div>
+          <h2 id="evo-title"></h2>
+          <p id="evo-desc"></p>
+        </div>
+        <button class="btn" data-table="evo">Ver tabla</button>
+      </div>
+      <div class="legend" id="evo-legend"></div>
+      <div class="chart" id="ch-evo"></div>
+      <p class="note" id="evo-note" hidden></p>
+      <div class="table-wrap" id="tb-evo" hidden></div>
+    </figure>
+
+    <div class="section-title">Con qué se financian</div>
+    <figure class="card" id="card-fon">
+      <div class="card-head">
+        <div>
+          <h2 id="fon-title"></h2>
+          <p id="fon-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-fview" role="group" aria-label="Qué mostrar"></div><button class="btn" data-table="fon">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="fon-legend"></div>
+      <div class="chart" id="ch-fon"></div>
+      <p class="note" id="fon-note"></p>
+      <div class="table-wrap" id="tb-fon" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-cmp">
+      <div class="card-head">
+        <div>
+          <h2 id="cmp-title"></h2>
+          <p id="cmp-desc"></p>
+        </div>
+        <button class="btn" data-table="cmp">Ver tabla</button>
+      </div>
+      <div class="legend" id="cmp-legend"></div>
+      <div class="chart" id="ch-cmp"></div>
+      <p class="note" id="cmp-note"></p>
+      <div class="table-wrap" id="tb-cmp" hidden></div>
+    </figure>
+
+    <div class="section-title">Depositantes y seguro de depósitos</div>
+    <figure class="card" id="card-dpt">
+      <div class="card-head">
+        <div>
+          <h2 id="dpt-title"></h2>
+          <p id="dpt-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-dview" role="group" aria-label="Qué mostrar"></div><button class="btn" data-table="dpt">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="dpt-legend"></div>
+      <div class="chart" id="ch-dpt"></div>
+      <p class="note" id="dpt-note"></p>
+      <div class="table-wrap" id="tb-dpt" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-esc">
+      <div class="card-head">
+        <div>
+          <h2 id="esc-title"></h2>
+          <p id="esc-desc"></p>
+        </div>
+        <button class="btn" data-table="esc">Ver tabla</button>
+      </div>
+      <div class="legend" id="esc-legend"></div>
+      <div class="chart" id="ch-esc"></div>
+      <p class="callout" id="esc-callout"></p>
+      <p class="note" id="esc-note"></p>
+      <div class="table-wrap" id="tb-esc" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-fsd">
+      <div class="card-head">
+        <div>
+          <h2 id="fsd-title">Depósitos dentro de la cobertura del Fondo de Seguro de Depósitos</h2>
+          <p id="fsd-desc"></p>
+        </div>
+        <button class="btn" data-table="fsd">Ver tabla</button>
+      </div>
+      <div class="legend" id="fsd-legend"></div>
+      <div class="chart" id="ch-fsd"></div>
+      <p class="note" id="fsd-note"></p>
+      <div class="table-wrap" id="tb-fsd" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Entidades ===================== -->
+  <div id="tab-entidades" role="tabpanel" aria-labelledby="tabbtn-entidades" hidden>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Subsistema">
+      <div class="f"><span class="lab" id="lab-sub">Subsistema</span><div class="seg" id="f-sub" role="group" aria-labelledby="lab-sub"></div></div>
+    </div>
+
+    <figure class="card" id="card-rank">
+      <div class="card-head">
+        <div>
+          <h2 id="rank-title"></h2>
+          <p id="rank-desc"></p>
+        </div>
+        <button class="btn" data-table="rank">Ver tabla</button>
+      </div>
+      <div class="legend" id="rank-legend"></div>
+      <div class="chart" id="ch-rank"></div>
+      <p class="note" id="rank-note"></p>
+      <div class="table-wrap" id="tb-rank" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-sc">
+      <div class="card-head">
+        <div>
+          <h2 id="sc-title"></h2>
+          <p id="sc-desc"></p>
+        </div>
+        <div class="card-tools"><span class="note" id="lab-scx" style="margin:0">Eje horizontal</span><div class="seg" id="f-scx" role="group" aria-labelledby="lab-scx"></div></div>
+      </div>
+      <div class="legend" id="sc-legend"></div>
+      <div class="chart" id="ch-sc"></div>
+      <p class="note" id="sc-note"></p>
+    </figure>
+
+    <figure class="card" id="card-ent">
+      <div class="card-head">
+        <div>
+          <h2 id="ent-title">Detalle de la entidad</h2>
+          <p id="ent-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-ent" style="margin:0">Entidad</label>
+          <select class="btn" id="f-ent"></select>
+          <button class="btn" data-table="ent">Ver tabla</button>
+        </div>
+      </div>
+      <div class="ent-stats" id="ent-stats"></div>
+      <div class="legend" id="ent-legend"></div>
+      <div class="chart" id="ch-ent"></div>
+      <h3 id="ent-fon-title" style="margin-top:18px">Con qué se financia</h3>
+      <div class="legend" id="ent-fon-legend"></div>
+      <div class="chart" id="ch-ent-fon"></div>
+      <p class="note" id="ent-note" hidden></p>
+      <div class="table-wrap" id="tb-ent" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Metodología ===================== -->
+  <div id="tab-metodologia" role="tabpanel" aria-labelledby="tabbtn-metodologia" hidden>
+    <div class="edu">
+      <section id="liquidez">
+        <h2>Qué es la liquidez y por qué importa</h2>
+        <p>Un banco, una financiera o una caja presta a plazos largos (un crédito hipotecario dura años) con dinero que en buena parte puede pedirse de vuelta en cualquier momento (una cuenta de ahorro se retira cuando el cliente quiere). La <b>liquidez</b> es la capacidad de pagar esas obligaciones cuando vencen o cuando se piden, sin tener que vender activos con pérdida. El reglamento de la SBS la define como la «capacidad de generar u obtener efectivo o su equivalente en cantidad suficiente, de manera oportuna y a un precio razonable, que le permita a la empresa cumplir con sus compromisos y financiar nuevas actividades de negocio» (Res. SBS N.° 4221-2023, art. 2, literal i).</p>
+        <p>El mismo reglamento define el <b>riesgo de liquidez</b> como la «posibilidad de pérdidas por mantener insuficiente liquidez para resistir a eventos de estrés idiosincrático y/o sistémico» (art. 2, literal j). Idiosincrático es un problema propio de la entidad (por ejemplo, una mala noticia que lleva a sus depositantes a retirar su dinero); sistémico, uno que golpea a todo el sistema a la vez.</p>
+        <p>Una entidad puede ser solvente (tener capital suficiente) y aun así quedarse sin efectivo para pagar en un día dado. Por eso la regulación mide la liquidez por separado del capital, con tres ratios que miran horizontes distintos:</p>
+        <ul>
+          <li><b>Ratio de liquidez</b> (en soles y en dólares): cuántos activos líquidos hay frente a las deudas de corto plazo. Es el más antiguo de los tres y el único con serie mensual por entidad desde el inicio del tablero (julio de 2010; en las financieras, octubre de 2010).</li>
+          <li><b>Ratio de cobertura de liquidez (RCL)</b>: si la entidad aguantaría 30 días de una salida fuerte de fondos.</li>
+          <li><b>Ratio de financiación neta estable (RFNE)</b>: si sus activos de largo plazo están financiados con fuentes estables a un año.</li>
+        </ul>
+        <p>La otra mitad de la historia es el <b>fondeo</b>: de dónde viene el dinero que la entidad presta (depósitos, préstamos de otras instituciones, bonos o capital propio). Un fondeo concentrado en pocas fuentes o de corto plazo hace más frágil la liquidez.</p>
+      </section>
+
+      <section id="rl">
+        <h2>Ratio de liquidez en moneda nacional y en moneda extranjera</h2>
+        <div class="formula">Ratio de liquidez = activos líquidos ÷ pasivos de corto plazo (por separado en soles y en dólares)</div>
+        <p>Las entidades lo calculan cada día con sus saldos diarios (Res. SBS N.° 4221-2023, art. 17), y el límite se mide con el <b>promedio mensual de los saldos diarios</b> (art. 45.4). Es el dato que publica la SBS cada mes en su cuadro de ratios de liquidez, que sale del Anexo N.° 15-C (Posición Mensual de Liquidez). Ese anexo rige desde diciembre de 2013 (Res. SBS N.° 5760-2013); antes, las entidades enviaban los anexos de las Normas para la Gestión de Tesorería (Res. SBS N.° 472-2001), y los cuadros de esos años citan el Anexo N.° 15-B (Posición Mensual de Liquidez) (las notas de la banca y las financieras siguen citando el 15-B hasta 2015). Las definiciones de abajo son las del reglamento vigente.</p>
+        <dl class="defs">
+          <dt>Activos líquidos</dt><dd>Caja; fondos disponibles en el Banco Central de Reserva (BCRP), en otras entidades del sistema financiero del país y en bancos del exterior de primera categoría; fondos interbancarios netos a favor; valores de deuda del BCRP y del Gobierno Central; certificados de depósito negociables y certificados bancarios; deuda pública y de entidades financieras del exterior con grado de inversión; algunos bonos corporativos, y otros que determine la SBS (art. 20.1).</dd>
+          <dt>Pasivos de corto plazo</dt><dd>Obligaciones a la vista; cuentas de ahorro; depósitos a plazo que vencen en los próximos 360 días; fondos interbancarios netos en contra; adeudos y valores en circulación que vencen en 360 días o menos, entre otros, con sus intereses por pagar (art. 21.1). Desde el 1 de diciembre de 2024 incluyen también los depósitos CTS de libre disponibilidad (art. 21.1, literal e, y Artículo Cuarto de la resolución); antes se excluían todos los depósitos CTS (Res. SBS 9075-2012, art. 19).</dd>
+        </dl>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Ratio</th><th scope="col">Mínimo</th><th scope="col">Mínimo si los 20 mayores depositantes tienen más de 25% de los depósitos</th><th scope="col">Norma</th></tr></thead>
+            <tbody>
+              <tr><td>Liquidez en moneda nacional</td><td>8%</td><td>10%</td><td style="text-align:left">Hasta setiembre de 2013, Res. SBS 472-2001 (mínimo general); Res. SBS 9075-2012, art. 30 a); Res. SBS 4221-2023, art. 45.1 a)</td></tr>
+              <tr><td>Liquidez en moneda extranjera</td><td>20%</td><td>25%</td><td style="text-align:left">Hasta setiembre de 2013, Res. SBS 472-2001 (mínimo general); Res. SBS 9075-2012, art. 30 b); Res. SBS 4221-2023, art. 45.1 b)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px">Los mínimos generales son los mismos en todo el periodo del tablero. Hasta setiembre de 2013 regían las Normas para la Gestión de Tesorería (Res. SBS N.° 472-2001), que la Res. SBS N.° 9075-2012 derogó desde el 1 de octubre de 2013 (Artículo Quinto); el Glosario de la SBS de abril de 2011 recoge un mínimo de 8% en soles y de 20% en dólares, que no se aplica a las EDPYME. Tampoco se aplicaban a las EDPYME los límites de la Res. SBS N.° 9075-2012 (art. 30, último párrafo), y hoy no se aplican a las empresas de créditos (Res. SBS N.° 4221-2023, art. 45.2). El mínimo mayor por concentración de depositantes (10% y 25%) es el de la Res. SBS N.° 9075-2012 y la 4221-2023. La línea morada de los gráficos es el mínimo general (8% y 20%): la SBS no publica por entidad la concentración de sus 20 mayores depositantes, así que no se puede saber a qué entidades se les exige 10% o 25%.</p>
+        <div class="example" id="ex-rl"></div>
+        <h3>Cómo leerlo</h3>
+        <ul>
+          <li>Más alto es más holgado: hay más dinero disponible o fácil de vender por cada sol que podría tener que pagarse pronto. Un ratio muy alto también tiene un costo, porque los activos líquidos suelen rendir menos que los créditos.</li>
+          <li>El ratio en dólares suele ser mucho mayor que el de soles. En las cajas, que casi no captan en dólares, puede pasar de 100%: con pasivos en dólares tan pequeños, el valor dice poco por sí solo.</li>
+          <li>Que todas las entidades estén sobre el mínimo es lo normal: el límite es un piso, no una meta.</li>
+        </ul>
+      </section>
+
+      <section id="rcl">
+        <h2>Ratio de cobertura de liquidez (RCL)</h2>
+        <p>Busca «asegurar que las entidades financieras posean un adecuado nivel de Activos Líquidos de Alta Calidad (ALAC) para hacer frente a sus necesidades de liquidez en un horizonte de treinta (30) días calendario bajo un escenario de estrés de liquidez» (Res. SBS N.° 4221-2023, art. 24.1). Es la versión peruana del <i>Liquidity Coverage Ratio</i> de Basilea III.</p>
+        <div class="formula">RCL = [activos líquidos de alta calidad + mínimo (flujos entrantes a 30 días ; 75% de los flujos salientes a 30 días)] ÷ flujos salientes a 30 días</div>
+        <p>Es la fórmula del art. 25, que se aplica por separado en soles, en dólares y en total (soles más dólares, expresados en soles).</p>
+        <dl class="defs">
+          <dt>Activos líquidos de alta calidad (ALAC)</dt><dd>Activos que se convierten en efectivo rápido y casi sin pérdida aun en una crisis. Nivel 1, al 100%: caja, fondos en el BCRP (con un ajuste por el encaje exigible en dólares) y valores del BCRP y del Gobierno Central, entre otros. Nivel 2, con descuento: deuda de gobiernos del exterior con menor calificación y bonos corporativos elegibles, al 85%, 75% o 50% de su valor (art. 27.1).</dd>
+          <dt>Flujos salientes</dt><dd>Lo que podría salir en 30 días de estrés: un porcentaje de cada fuente según su estabilidad. Por ejemplo, 6% de los depósitos de personas naturales totalmente cubiertos por el FSD y 12% de los cubiertos solo en parte o no cubiertos; 100% de los depósitos de empresas del sistema financiero y de los adeudos y valores que vencen en 30 días o menos; y 5% de las líneas de crédito no utilizadas (art. 31).</dd>
+          <dt>Flujos entrantes</dt><dd>Lo que la entidad espera cobrar en esos 30 días: por ejemplo, el 100% de sus fondos en otras entidades y el 50% de lo que debe cobrar de sus créditos no revolventes. Solo se reconocen hasta un 75% de los flujos salientes (arts. 28 y 29).</dd>
+        </dl>
+        <p><b>Cómo leerlo.</b> Un RCL de 100% o más significa que, con el promedio del trimestre, los activos líquidos de alta calidad más las entradas reconocidas alcanzan para cubrir las salidas del escenario de estrés de 30 días. Por debajo de 100%, no alcanzan.</p>
+        <p><b>Diferencia con Basilea.</b> En el estándar de Basilea los flujos entrantes (con el mismo tope de 75% de las salidas) se <i>restan</i> de los salientes en el denominador: activos líquidos ÷ salidas netas (<i>Basel III: The Liquidity Coverage Ratio</i>, párrafos 16 y 69). En la fórmula peruana del art. 25 se <i>suman</i> a los activos líquidos en el numerador. Con los mismos montos, las dos fórmulas dan exactamente 100% en el mismo punto, pero fuera de ese punto la peruana da valores más cercanos a 100%: un RCL peruano de 150% equivaldría a más de 150% con la fórmula de Basilea. Además, Basilea deja a cada país fijar parte de los porcentajes: por ejemplo, para los depósitos minoristas estables pide en general 5% (3% en algunos casos) y para los menos estables, al menos 10% (párrafos 75 a 79); en el Perú son 6% y 12%. Por eso el RCL de una entidad peruana no se compara directamente con el LCR de un banco de otro país.</p>
+        <div class="example" id="ex-rcl"></div>
+        <h3>Límites</h3>
+        <p>Desde enero de 2024: RCL en moneda nacional ≥ 80%, en moneda extranjera ≥ 100% y total ≥ 100%, con cumplimiento diario (art. 45.1 d) y 45.4). El tablero muestra el RCL total y su mínimo de 100%; el de soles y el de dólares están en la tabla del ranking. Con el reglamento anterior (Res. SBS 9075-2012, art. 30) el mínimo, en soles y en dólares, subió de 80% (2014–2017) a 90% (2018) y a 100% (desde 2019). El 16 de marzo de 2020, al inicio de la pandemia, la SBS, en coordinación con el BCRP, suspendió temporalmente los mínimos del RCL para que las entidades pudieran usar sus colchones de liquidez (Oficio Múltiple 11148-2020-SBS, citado en el Informe de Estabilidad del Sistema Financiero de la SBS de diciembre de 2020). No se encontró una fuente pública que fije la fecha en que se levantó la suspensión; el reglamento vigente desde 2024 fija los límites de arriba y permite a la SBS reducirlos temporalmente en situaciones excepcionales (art. 46.2). La serie publicada del RCL empieza en 2024, así que el tablero no cubre ese periodo.</p>
+        <h3>Periodicidad y rezago</h3>
+        <p>La SBS publica el RCL por trimestre, unos tres meses después del cierre: el cuadro de junio trae el promedio de enero a marzo. Cada valor es el <b>promedio simple de los ratios diarios</b> de los días hábiles del trimestre (nota de los cuadros de la SBS). El tablero ubica cada valor en el mes de cierre del trimestre (marzo para enero–marzo) y, en los demás meses, muestra el último trimestre con dato. Hay datos desde el trimestre enero–marzo de 2024; para el total de las cajas municipales, el tablero muestra datos desde abril–junio de 2024.</p>
+        <p>El RCL del sistema no se calcula: como es un promedio de ratios diarios, no se puede reconstruir sumando los montos de los subsistemas.</p>
+      </section>
+
+      <section id="rfne">
+        <h2>Ratio de financiación neta estable (RFNE)</h2>
+        <div class="formula">RFNE = financiación estable disponible ÷ financiación estable requerida</div>
+        <p>La <b>financiación estable disponible</b> es la «porción de patrimonio y pasivos de la empresa que se espera sean estables en un horizonte temporal de un (1) año» (Res. SBS N.° 4221-2023, art. 34.1). Cada partida cuenta con un porcentaje según su estabilidad (art. 35): el patrimonio efectivo y los pasivos que vencen en un año o más cuentan al 100%; los pasivos de mayor plazo cuentan más que los de menor plazo, los depósitos de personas naturales más que la financiación de empresas e inversionistas, y los depósitos totalmente cubiertos por el FSD más que los que no lo están. La <b>financiación estable requerida</b> es la parte de los activos que necesita financiarse de forma estable: un crédito de largo plazo requiere más que el efectivo. Es la versión peruana del <i>Net Stable Funding Ratio</i> de Basilea III.</p>
+        <p>Se calcula con los saldos de fin de mes, sumando soles y dólares (art. 33). La SBS lo publica en <b>veces</b> (1.21 = 121%); el tablero lo muestra en porcentaje. Los subsistemas y el sistema se calculan sumando la financiación disponible y la requerida de las entidades y dividiendo: el resultado coincide exactamente con el total publicado de cada subsistema (el del sistema es cálculo propio).</p>
+        <p><b>Cómo leerlo.</b> Por encima de 100%, la financiación estable disponible supera a la que exigen los activos de la entidad; por debajo, parte de lo que el reglamento considera que debe financiarse de forma estable se sostiene con fuentes que podrían retirarse dentro del año.</p>
+        <div class="example" id="ex-rfne"></div>
+        <p><b>Límite y gradualidad</b> (art. 45.1, literal e, y Segunda Disposición Complementaria Transitoria): el RFNE rige desde el 1 de diciembre de 2024 (Artículo Cuarto de la resolución), con un mínimo de 80% desde diciembre de 2024, 90% desde diciembre de 2025 y 100% desde diciembre de 2026. La SBS lo publica en su boletín desde <span data-v="nsfrFrom"></span>; el último dato disponible es de <span data-v="nsfrTo"></span>. En los meses sin dato, el tablero muestra el último publicado.</p>
+      </section>
+
+      <section id="basilea">
+        <h2>Relación con Basilea III</h2>
+        <p>El Comité de Supervisión Bancaria de Basilea publicó el <i>Liquidity Coverage Ratio</i> en enero de 2013, con un mínimo de 100% al que se llegaba en escalones (60% en 2015 hasta 100% en 2019), y el <i>Net Stable Funding Ratio</i> en octubre de 2014, como estándar mínimo desde 2018, con un nivel de al menos 100%. Son estándares internacionales que cada país incorpora en sus normas. En el Perú, el RCL existe desde el reglamento de 2012 (Res. SBS 9075-2012); la Res. SBS 3296-2022 lo adecuó al estándar de Basilea desde enero de 2024, y la Res. SBS 4221-2023, que reemplazó al reglamento de 2012 desde esa fecha, añadió el RFNE. Como se vio arriba, la fórmula peruana del RCL no es idéntica a la de Basilea.</p>
+      </section>
+
+      <section id="fondeo">
+        <h2>Con qué se financian</h2>
+        <p>Todo lo que la entidad tiene (activo) se financia con lo que debe (pasivo) o con su capital propio (patrimonio). El tablero reparte el pasivo más el patrimonio del balance de fin de mes en cinco fuentes:</p>
+        <dl class="defs">
+          <dt>Depósitos totales</dt><dd>Depósitos a la vista, de ahorro, a plazo y CTS del público, más los depósitos de empresas del sistema financiero y organismos internacionales. Es la definición del Glosario de la SBS y la de su ranking de depósitos, que el tablero reproduce con el balance. Como en el Glosario, los depósitos a plazo incluyen los depósitos restringidos («obligaciones con el público de carácter restringido»).</dd>
+          <dt>CTS</dt><dd>Depósitos por Compensación por Tiempo de Servicios: la «captación de recursos […] provenientes de los importes que les corresponde a los trabajadores por concepto de beneficios sociales» (Glosario SBS). En el balance de la SBS figuran dentro de los depósitos a plazo; el tablero los muestra aparte.</dd>
+          <dt>Adeudos y obligaciones financieras</dt><dd>Préstamos que la entidad recibe de instituciones financieras del país o del exterior y de organismos internacionales, de corto y de largo plazo. La SBS publica su estructura por origen (país o exterior) y plazo (corto o largo).</dd>
+          <dt>Valores en circulación</dt><dd>Bonos y otros instrumentos de deuda que emite la entidad: bonos de arrendamiento financiero, instrumentos hipotecarios, otros instrumentos de deuda y deuda subordinada.</dd>
+          <dt>Otros pasivos</dt><dd>Cuentas por pagar, intereses por pagar, provisiones, fondos interbancarios, otras obligaciones con el público que no son depósitos y otros. En las empresas de créditos incluyen también los pequeños saldos de depósitos restringidos que registra su balance.</dd>
+          <dt>Patrimonio</dt><dd>Recursos propios: capital, reservas y resultados (patrimonio contable, Glosario SBS).</dd>
+        </dl>
+        <p>Las <b>empresas de créditos</b> no captan depósitos del público: la ley las define como empresas que prestan «con recursos de su propio capital y de otras fuentes que no incluyan depósitos del público» (Ley N.° 26702, art. 282). Los límites de liquidez no les aplican (Res. SBS N.° 4221-2023, art. 45.2), no presentan los anexos de los ratios de liquidez ni del RCL (art. 43.2) y la SBS no publica para ellas ratios de liquidez, RCL ni RFNE. Se fondean sobre todo con adeudos, y también con patrimonio y bonos.</p>
+        <h3>Créditos / depósitos</h3>
+        <div class="formula">Créditos / depósitos = créditos directos ÷ depósitos totales</div>
+        <p>Mide la intermediación: cuánto presta la entidad por cada sol que capta en depósitos. Por debajo de 100%, los depósitos alcanzan para financiar todos los créditos; por encima, el resto se financia con adeudos, bonos o patrimonio, fuentes que pueden ser más caras o menos estables que los depósitos. Es un cálculo propio con los créditos directos del ranking de la SBS y los depósitos del balance. Entre sus indicadores financieros, la SBS publica el indicador inverso (depósitos / créditos) solo para las cajas municipales y rurales, y el cálculo del tablero lo reproduce (diferencia mediana menor a 0.01 pp).</p>
+        <div class="example" id="ex-cd"></div>
+        <h3>Dolarización de los depósitos</h3>
+        <div class="formula">Dolarización = depósitos en moneda extranjera ÷ depósitos totales</div>
+        <p>Los depósitos en dólares se expresan en soles al tipo de cambio contable del balance. Importa para la liquidez porque para devolver depósitos en dólares hacen falta dólares: por eso los ratios de liquidez se miden por moneda.</p>
+        <div class="example" id="ex-dol"></div>
+        <h3>Adeudos / pasivo total</h3>
+        <p>Adeudos y obligaciones financieras como % del pasivo total. Es el indicador que publica la SBS para las cajas municipales, las cajas rurales y las empresas de créditos; el tablero lo calcula para todos los subsistemas con el balance y reproduce el publicado (diferencia mediana menor a 0.01 pp).</p>
+      </section>
+
+      <section id="fsd">
+        <h2>Depositantes, escala de montos y el Fondo de Seguro de Depósitos</h2>
+        <h3>Número de depositantes y depósito promedio</h3>
+        <p>Cada entidad informa cuántas personas naturales y jurídicas tienen depósitos en ella (cuadro «Número de personas por tipo de depósito», que sale del Anexo N.° 13). El tablero usa la columna de depósitos totales, donde una persona con ahorro y CTS en la misma entidad cuenta una vez: por eso es menor que la suma de las columnas de cada tipo de depósito. Pero el total del subsistema es la suma de las entidades: quien tiene cuentas en dos bancos cuenta dos veces. Por eso el número del sistema no es el número de personas con depósitos en el Perú. El depósito promedio (depósitos totales ÷ depositantes) es un cálculo propio y lo elevan los grandes depositantes.</p>
+        <h3>El Fondo de Seguro de Depósitos (FSD)</h3>
+        <p>Si la SBS declara la disolución y liquidación de una entidad (en lenguaje común, si quiebra), el FSD paga a cada depositante cubierto sus depósitos hasta un monto máximo. Son miembros «todas las empresas del sistema financiero autorizadas a captar depósitos del público» (Ley N.° 26702, art. 145): al cierre de 2025, 41 entidades entre bancos, financieras, cajas municipales (con la Caja Municipal de Crédito Popular) y cajas rurales. El FSD respalda únicamente (art. 152):</p>
+        <ul>
+          <li>los depósitos nominativos, bajo cualquier modalidad (vista, ahorro, plazo y CTS), de personas naturales y de personas jurídicas privadas sin fines de lucro, con sus intereses;</li>
+          <li>los depósitos a la vista de las demás personas jurídicas, salvo los de empresas del sistema financiero.</li>
+        </ul>
+        <p>No cubre, entre otros, los depósitos de quienes fueron directores o gerentes de la entidad en los dos años previos a su liquidación, los de personas vinculadas a ella, los de otras empresas del sistema financiero del país o del exterior, ni los instrumentos emitidos al portador (art. 152 y página de cobertura del FSD). El monto máximo es «por persona en cada empresa, comprendidos los intereses» (art. 153): se suman todas las cuentas de la persona en esa entidad, y las cuentas mancomunadas se reparten entre sus titulares. La SBS lo actualiza cada trimestre según el Índice de Precios al Por Mayor (arts. 18 y 153), así que puede subir o bajar: de setiembre a noviembre de 2026 es <b>S/ 123,000</b> (Circular SBS N.° F-618-2026), y de junio a agosto de 2026 fue S/ 122,000 (Circular SBS N.° F-617-2026).</p>
+        <div class="example" id="ex-fsd"></div>
+        <h3>Escala de montos</h3>
+        <p>La SBS publica, por subsistema y no por entidad, cuántos depositantes y cuánto dinero hay en cada tramo de saldo (cuadro «Depósitos según escala de montos», que sale del Anexo N.° 13). Los límites de los tramos son múltiplos del monto máximo de cobertura del FSD que usa cada cuadro (por ejemplo, 0.1, 0.25, 0.5, 1, 2, 4… hasta 100 veces y más). Normalmente es el vigente en ese mes, pero no siempre: en diciembre de 2025, por ejemplo, el cuadro de la banca usa S/ 116,700 y los de las cajas, S/ 120,500. El tablero agrupa los tramos en cuatro: hasta 1 vez la cobertura, de 1 a 10, de 10 a 100 y más de 100 veces, con el bloque «Depósitos totales» del cuadro.</p>
+        <h3>Cómo se estima la parte cubierta</h3>
+        <div class="formula">Depósitos cubiertos ≈ monto de los tramos de hasta 1 vez la cobertura + número de depositantes de los tramos mayores × cobertura</div>
+        <p>Se aplica a las personas naturales y jurídicas sin fines de lucro (bloque «Depósitos totales») y, para las demás personas jurídicas, solo a sus depósitos a la vista. Supone que cada depositante está en el tramo de la suma de sus depósitos en la entidad, como ocurre en el bloque de totales (allí el número de depositantes es menor que la suma de los de cada tipo de depósito). El porcentaje es sobre el total de la escala de montos, que casi coincide con los depósitos totales del balance.</p>
+        <p>Es una <b>estimación propia</b>, no una cifra publicada, y tiene sesgos conocidos. Los tramos no separan algunos depósitos que el FSD no cubre: los de directores, gerentes y personas vinculadas a la entidad, y los depósitos a la vista de empresas del sistema financiero, que quedan dentro del bloque de las demás personas jurídicas. Por eso tiende a sobrestimar la parte cubierta. Además, usa el monto máximo de cada cuadro, que a veces no es el vigente. Como control, para diciembre de 2025 da <span id="ex-cub"></span>; la Memoria 2025 del FSD (p. 19) informa S/ 180,480 millones de depósitos asegurados, 41.4% de los depósitos totales (39.9% en diciembre de 2024, frente a <span id="ex-cub-24"></span> de la estimación). Con las Memorias de 2011 a 2015, que dan entre 32.6% y 36.4% de los depósitos al cierre de cada año (la Memoria 2015 revisó el de 2014 de 34.5% a 36.4%), la diferencia mayor con la estimación es de <span id="ex-cub-hist"></span>. Por tipo de entidad, la Memoria da 37.9% en bancos, 71.9% en cajas municipales y 85.4% en cajas rurales, y la estimación, <span id="ex-cub-sub"></span>. En las financieras no son comparables: el grupo de financieras del FSD suma S/ 9,450 millones de depósitos y el de bancos, S/ 390,196 millones<span id="ex-cub-fin"></span>.</p>
+      </section>
+
+      <section id="calculos">
+        <h2>Cálculos propios y salvedades</h2>
+        <ul>
+          <li><b>Lo que publica la SBS:</b> los activos líquidos, pasivos de corto plazo y ratios de liquidez por entidad y subsistema; el RCL por entidad y subsistema; el RFNE y sus componentes; el balance; los créditos y depósitos del ranking; los depositantes por entidad; la escala de montos por subsistema y la estructura de los adeudos.</li>
+          <li><b>Lo que calcula el tablero:</b> los agregados del sistema; la relación créditos / depósitos; la dolarización; la estructura del fondeo; el peso de los adeudos en los subsistemas que no lo publican; el depósito promedio; la estimación de los depósitos cubiertos por el FSD, y los montos de los adeudos por origen y plazo (% publicado × total).</li>
+          <li><b>Agregados:</b> se suman los montos de las entidades y después se divide (por ejemplo, Σ activos líquidos ÷ Σ pasivos de corto plazo); nunca se promedian ratios. Así se reproducen exactamente los ratios de liquidez y el RFNE publicados de cada subsistema, y los depósitos, adeudos y pasivo más patrimonio de la columna «Total» del balance.</li>
+          <li><b>El sistema</b> son los cinco subsistemas de este tablero (banca múltiple, financieras, cajas municipales, cajas rurales y empresas de créditos); no incluye al Banco de la Nación, Agrobanco, COFIDE ni las cooperativas. En liquidez, RFNE, depósitos y depositantes, son los cuatro que captan depósitos. Un indicador del sistema tiene dato solo si todos sus subsistemas publicaron ese mes.</li>
+          <li><b>Liquidez en dólares del sistema:</b> se suman los activos y pasivos en miles de dólares, tal como los publica la SBS; no hace falta tipo de cambio.</li>
+          <li><b>Ratios no significativos:</b> si la base del ratio (pasivos de corto plazo, depósitos o pasivo total) es menor a 1 millón (de soles, o de dólares en el ratio en moneda extranjera), no se muestra. Por ejemplo, una entidad casi sin pasivos en dólares puede tener un ratio en dólares de millones por ciento.</li>
+          <li><b>RCL:</b> aplicando la fórmula del art. 25 a los montos promedio del trimestre se obtiene el publicado con una diferencia mediana de 0.3 pp en el total; no es exacto porque la SBS publica el promedio de los ratios diarios, que no es igual al ratio de los montos promedio.</li>
+          <li><b>Historia desde 2010:</b> la SBS publica los ratios de liquidez y la escala de montos de las financieras desde octubre de 2010, así que el sistema tiene esos indicadores desde ese mes; la estructura de los adeudos de las financieras empieza en setiembre de 2015, y por eso también la del sistema. Hasta diciembre de 2012 el balance sigue el esquema anterior a la modificación del Manual de Contabilidad (Res. SBS N.° 7036-2012), vigente desde enero de 2013: las partidas del fondeo son las mismas, salvo que en lugar de la línea de provisiones del pasivo aparece «provisiones por créditos contingentes», que aquí va en otros pasivos. El RCL aparece en el boletín en junio de 2024 y el RFNE en diciembre de 2025.</li>
+          <li><b>CTS desde diciembre de 2024:</b> desde ese mes los pasivos de corto plazo incluyen los depósitos CTS de libre disponibilidad. Con los mismos activos líquidos, un denominador mayor da un ratio menor, así que la serie tiene un quiebre en ese mes: compare con cuidado antes y después.</li>
+          <li>Cuando una entidad cambia de subsistema (por ejemplo, una financiera que se convierte en banco), aparece en cada subsistema solo en los meses en que perteneció a él. Los traspasos hacen saltar los totales de los subsistemas.</li>
+          <li>Las cifras son las que publica la SBS en cada cuadro mensual. La SBS a veces corrige meses ya publicados; este tablero usa la última versión descargada.</li>
+        </ul>
+      </section>
+
+      <section id="fuentes">
+        <h2>Fuentes</h2>
+        <ul class="srcs">
+          <li>SBS, Boletín Estadístico del sistema financiero: ratios de liquidez (B-2340, B-3250, C-1244 y C-2249), ratio de cobertura de liquidez (B-230809, B-230810, B-230811 y B-230812), ratio de financiación neta estable (B-234021, B-230213, C-120212 y B-230820), balance (B-2201, B-3101, C-1101, C-2101 y C-4103), ranking de créditos y depósitos (B-2332, B-3243, C-1205, C-2205 y C-4217), número de depositantes (B-2373, B-3232, C-1250 y C-2255), depósitos según escala de montos (B-2321, B-3256, C-1211 y C-2211), adeudos (B-2310, B-3239, C-1219, C-2219 y C-4214) e indicadores financieros (B-2401, B-3301, C-1301, C-2301 y C-4301). <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>Resolución SBS N.° 4221-2023 (20 de diciembre de 2023), Reglamento para la Gestión del Riesgo de Liquidez, vigente desde el 1 de enero de 2024 salvo el RFNE y la inclusión de la CTS de libre disponibilidad, vigentes desde el 1 de diciembre de 2024 (Artículo Cuarto). Texto concordado de la SBS, versión 4.0 (aún no incorpora la Res. SBS 00874-2026): definiciones (art. 2), ratios de liquidez (arts. 17, 20 y 21), RCL (arts. 24 a 31), RFNE (arts. 32 a 35), información a la SBS (art. 43), límites (art. 45), facultades de la SBS (art. 46) y gradualidad del RFNE (Segunda Disposición Complementaria Transitoria). <a href="https://intranet2.sbs.gob.pe/dv_int_cn/2322/v4.0/Adjuntos/4221-2023.r.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>Resolución SBS N.° 00874-2026 (El Peruano, 26 de marzo de 2026): sustituye los numerales 43.2 y 45.2; quita a Agrobanco de las excepciones y mantiene la de las empresas de créditos, a las que los límites no aplican desde el texto original. <a href="https://busquedas.elperuano.pe/api/visor_html/2499213-1" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>Resolución SBS N.° 9075-2012, Reglamento para la Gestión del Riesgo de Liquidez anterior (vigente hasta diciembre de 2023), texto concordado de la SBS, versión 6.0: pasivos de corto plazo sin CTS (art. 19), límites de los ratios de liquidez y cronograma del RCL (art. 30), plazo de adecuación hasta el 1 de octubre de 2013, fecha en que quedaron derogadas, según su Artículo Quinto, las Normas para la Gestión de Tesorería (Res. SBS N.° 472-2001), y vigencia de los anexos desde diciembre de 2013 (Res. SBS N.° 5760-2013, nota al Artículo Quinto). <a href="https://intranet2.sbs.gob.pe/dv_int_cn/671/v6.0/Adjuntos/9075-2012.r.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Informe de Estabilidad del Sistema Financiero, diciembre de 2020 (p. 20): suspensión temporal de los mínimos del RCL el 16 de marzo de 2020. <a href="https://www.sbs.gob.pe/Portals/0/jer/pub_InformeEstabilidad/Informe%20de%20Estabilidad%20Financiera_2020_II.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>Comité de Supervisión Bancaria de Basilea, <i>Basel III: The Liquidity Coverage Ratio and liquidity risk monitoring tools</i> (enero de 2013; párrafos 10, 16, 69 y 75 a 79) <a href="https://www.bis.org/publications/201301-standards-basel-iii-liquidity-coverage-ratio-and-liquidity-risk-monitoring-tools.pdf" target="_blank" rel="noopener">bis.org</a> y <i>Basel III: the net stable funding ratio</i> (octubre de 2014; párrafos 8 y 9) <a href="https://www.bis.org/publications/201410-standards-basel-iii-net-stable-funding-ratio.pdf" target="_blank" rel="noopener">bis.org</a>.</li>
+          <li>Ley N.° 26702, Ley General del Sistema Financiero, texto concordado publicado por el FSD: actualización trimestral por el IPM (art. 18), prelación en la liquidación (art. 117), miembros del FSD (art. 145), depósitos cubiertos (art. 152), monto máximo (art. 153), monto no cubierto (art. 157) y empresas de créditos (art. 282). <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Ley-26702-.pdf" target="_blank" rel="noopener">fsd.org.pe</a></li>
+          <li>Circulares SBS N.° F-618-2026, cobertura de setiembre a noviembre de 2026 <a href="https://busquedas.elperuano.pe/api/visor_html/2550558-1" target="_blank" rel="noopener">elperuano.pe</a>, y F-617-2026, de junio a agosto de 2026 <a href="https://busquedas.elperuano.pe/api/visor_html/2522213-1" target="_blank" rel="noopener">elperuano.pe</a>.</li>
+          <li>Fondo de Seguro de Depósitos: cobertura <a href="https://fsd.org.pe/cobertura/" target="_blank" rel="noopener">fsd.org.pe</a> y Memoria 2025, depósitos asegurados (p. 19) <a href="https://fsd.org.pe/wp-content/uploads/2026/05/Memoria-2025.pdf" target="_blank" rel="noopener">fsd.org.pe</a>; Memorias 2011 a 2015, sección «Depósitos asegurados por el FSD»: <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Memoria-2011-1.pdf" target="_blank" rel="noopener">2011</a>, <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Memoria-2012-1.pdf" target="_blank" rel="noopener">2012</a>, <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Memoria-2013.pdf" target="_blank" rel="noopener">2013</a>, <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Memoria-2014.pdf" target="_blank" rel="noopener">2014</a> y <a href="https://fsd.org.pe/wp-content/uploads/2022/06/Memoria-2015.pdf" target="_blank" rel="noopener">2015</a>.</li>
+          <li>SBS, Glosario de términos e indicadores del sistema financiero (abril de 2011): depósitos totales, depósitos a plazo, CTS, patrimonio contable y ratio de liquidez (promedio mensual de saldos diarios y mínimos de 8% en moneda nacional y 20% en moneda extranjera). <a href="https://www.sbs.gob.pe/app/stats/Glosarios/Glosario(Abril2011).docx" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('liquidez-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('liquidez-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = D.months, N = MONTHS.length, SC = D.scopes;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const f2 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 1) => v == null ? '—' : fx(v, d) + '%';
+const spp = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + ' pp';
+const spct = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + '%';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const idxOf = m => MONTHS.indexOf(m);
+// Trimestre que cierra en el mes i («ene–mar 2026»).
+const qLabel = i => { const m = MONTHS[i], k = +m.slice(5, 7); return MES[k - 3] + '–' + MES[k - 1] + ' ' + m.slice(0, 4); };
+// Montos: los datos vienen en miles de soles (o miles de dólares en ME).
+const money = v => v == null ? '—' : (v < 0 ? '−' : '') + (Math.abs(v) >= 1e6 ? 'S/ ' + f1.format(Math.abs(v) / 1e6) + ' mil mill.' : 'S/ ' + f0.format(Math.abs(v) / 1e3) + ' mill.');
+const usd = v => v == null ? '—' : Math.abs(v) >= 1e6 ? 'US$ ' + f1.format(v / 1e6) + ' mil mill.' : 'US$ ' + f0.format(v / 1e3) + ' mill.';
+const people = v => v == null ? '—' : v >= 1e6 ? f2.format(v / 1e6) + ' millones' : f0.format(v);
+const soles = v => v == null ? '—' : 'S/ ' + f0.format(v);
+
+const SUBS = D.subs;
+const SUB_COLOR = {'banca-multiple': 'var(--s1)', 'empresas-financieras': 'var(--s2)', 'cajas-municipales': 'var(--s3)',
+  'cajas-rurales': 'var(--s4)', 'empresas-credito': 'var(--s5)'};
+const SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+const DEP = new Set(D.dep);
+const EC = 'empresas-credito';
+// u: unidad. good: 'up' si subir es mejor (colorea la variación); dep: solo entidades que captan depósitos.
+const IND = [
+  {k: 'lmn', u: 'pct', l: 'Liquidez MN', name: 'Ratio de liquidez en moneda nacional', lower: 'ratio de liquidez en moneda nacional', good: 'up', dep: true},
+  {k: 'lme', u: 'pct', l: 'Liquidez ME', name: 'Ratio de liquidez en moneda extranjera', lower: 'ratio de liquidez en moneda extranjera', good: 'up', dep: true},
+  {k: 'rcl', u: 'pct', l: 'RCL', name: 'Ratio de cobertura de liquidez', lower: 'ratio de cobertura de liquidez', good: 'up', dep: true, q: true},
+  {k: 'rfne', u: 'pct', l: 'RFNE', name: 'Ratio de financiación neta estable', lower: 'ratio de financiación neta estable', good: 'up', dep: true},
+  {k: 'cd', u: 'pct', l: 'Créditos / depósitos', name: 'Créditos / depósitos', lower: 'relación créditos / depósitos', dep: true},
+  {k: 'dol', u: 'pct', l: 'Dolarización', name: 'Dolarización de los depósitos', lower: 'dolarización de los depósitos', dep: true},
+  {k: 'ade', u: 'pct', l: 'Adeudos', name: 'Adeudos / pasivo total', lower: 'peso de los adeudos en el pasivo'},
+];
+const IND_BY = Object.fromEntries(IND.map(x => [x.k, x]));
+const MIN_BASE = 1000;   // miles: con pasivos (o depósitos) menores a 1 millón el ratio no es significativo
+const LCR0 = idxOf(D.lcrFrom), NSFR0 = idxOf(D.nsfrFrom);
+// Último mes con todo el resumen del sistema (los subsistemas publican a distinto ritmo): mes por defecto.
+const ALL_LAST = D.allHasta && idxOf(D.allHasta) >= 0 ? idxOf(D.allHasta) : N - 1;
+
+// ---------- Estado ----------
+const state = {ind: 'lmn', mi: ALL_LAST, range: '5a', scope: 'sistema', sub: 'banca-multiple', ent: null, scx: 'cd', fview: 'src', dview: 'n'};
+const RANGES = [
+  {id: '3a', label: '3 años', n: 36},
+  {id: '5a', label: '5 años', n: 60},
+  {id: 'todo', label: 'Desde ' + MONTHS[0].slice(0, 4), n: N},
+];
+
+// ---------- Datos ----------
+const isEnt = sc => sc.includes('/');
+const subOf = sc => sc === 'sistema' ? null : isEnt(sc) ? SC[sc].s : sc;
+const takesDeposits = sc => sc === 'sistema' || DEP.has(subOf(sc));
+function get(sc, f, i) {
+  const s = SC[sc];
+  if (!s || i < 0) return null;
+  const a = s.V[f];
+  if (!a) return null;
+  const j = i - s.a;
+  return j < 0 || j >= a.length ? null : a[j];
+}
+const DEP_F = ['dv', 'da', 'dp', 'dc', 'dsf'];
+function sumOf(sc, fs, i) {
+  let t = 0, any = false;
+  for (const f of fs) { const v = get(sc, f, i); if (v != null) { t += v; any = true; } }
+  return any ? t : null;
+}
+const depOf = (sc, i) => sumOf(sc, DEP_F, i);
+const fundOf = (sc, i) => sumOf(sc, DEP_F.concat(['ad', 'va', 'ot', 'pat']), i);
+const ratio = (a, b, min = MIN_BASE) => a == null || b == null || !(b >= min) ? null : 100 * a / b;
+function ind(sc, i, k = state.ind) {
+  if (i < 0 || i >= N) return null;
+  switch (k) {
+    case 'lmn': return ratio(get(sc, 'alN', i), get(sc, 'pcN', i));
+    case 'lme': return ratio(get(sc, 'alE', i), get(sc, 'pcE', i));
+    case 'rcl': return get(sc, 'rcl', i);
+    case 'rcN': return get(sc, 'rcN', i);
+    case 'rcE': return get(sc, 'rcE', i);
+    case 'rfne': return ratio(get(sc, 'fed', i), get(sc, 'fer', i), 1);
+    case 'cd': return ratio(get(sc, 'cr', i), depOf(sc, i));
+    case 'dol': return ratio(get(sc, 'dme', i), depOf(sc, i));
+    case 'ade': return ratio(get(sc, 'ad', i), get(sc, 'pas', i));
+    case 'dep': return depOf(sc, i);
+    case 'nd': return get(sc, 'nd', i);
+    case 'prom': { const d = depOf(sc, i), n = get(sc, 'nd', i); return d != null && n > 0 ? d * 1000 / n : null; }
+    case 'cub': return ratio(get(sc, 'cub', i), sumOf(sc, ['m0', 'm1', 'm2', 'm3'], i));
+  }
+  return null;
+}
+// El RCL es trimestral: el dato vigente en el mes i es el del último trimestre publicado (hasta 6 meses antes).
+function lastQ(sc, i, k = 'rcl', back = 6) {
+  for (let j = i; j >= Math.max(0, i - back); j--) if (get(sc, k, j) != null) return j;
+  return null;
+}
+// Mes con dato para el ámbito sc en el mes i: i si lo tiene; si el ámbito (o, para una entidad, su
+// subsistema) todavía no publica i —no hay dato en i ni después—, su último mes con dato (hasta `back`
+// meses antes). Un hueco en medio de la serie no se rellena: ese dato no existe.
+function fillIdx(sc, i, has, back = 3) {
+  if (i == null || i < 0) return null;
+  if (has(sc, i)) return i;
+  const ref = isEnt(sc) ? SC[sc].s : sc;
+  if (ref !== sc && has(ref, i)) return null;
+  for (let j = i + 1; j < N; j++) if (has(ref, j)) return null;
+  for (let j = i - 1; j >= Math.max(0, i - back); j--) if (has(sc, j)) return j;
+  return null;
+}
+// Índice del mes con el que se lee el indicador en el mes i: el último trimestre en el RCL; en el RFNE,
+// que sale con un mes más de rezago que el resto, el último mes publicado (hasta 2 meses antes); en los
+// demás, el mes i o, si el ámbito aún no lo publica, su último mes con dato.
+const atIdx = (sc, i, k = state.ind) => k === 'rcl' ? lastQ(sc, i) : k === 'rfne' && i >= NSFR0 ? lastQ(sc, i, 'fer', 2)
+  : fillIdx(sc, i, (s, j) => ind(s, j, k) != null);
+// Balance completo (fuentes de fondeo): con patrimonio y, si capta, con depósitos.
+const fundOk = (sc, j) => get(sc, 'pat', j) != null && (!takesDeposits(sc) || depOf(sc, j) != null);
+const fundIdx = (sc, i) => fillIdx(sc, i, (s, j) => fundOk(s, j) && fundOf(s, j) > 0);
+const atLabel = (k, j) => k === 'rcl' ? qLabel(j) : mLabel(MONTHS[j]);
+function valAt(sc, i, k = state.ind) { const j = atIdx(sc, i, k); return j == null ? null : ind(sc, j, k); }
+// Mínimo regulatorio del indicador en el mes (D.lim: [[desde AAAA-MM, valor], ...]); null si no tiene.
+function refOf(k, i) {
+  const L = (D.lim || {})[k];
+  if (!L || i == null) return null;
+  let v = null;
+  for (const [m, x] of L) if (MONTHS[i] >= m) v = x;
+  return v;
+}
+const scopeColor = k => k === 'sistema' ? 'var(--sys)' : SUB_COLOR[k];
+const scopeLabel = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc].l;
+const scopeOf = sc => sc === 'sistema' ? 'del sistema' : (sc === 'banca-multiple' ? 'de la ' : 'de las ') + SUB_BY[sc].l.toLowerCase();
+const fmtInd = (k, v) => k === 'dep' ? money(v) : k === 'nd' ? people(v) : k === 'prom' ? soles(v) : pct(v);
+function deltaTxt(k, d) { return k === 'prom' || k === 'dep' || k === 'nd' ? spct(d) : spp(d); }
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+// Escala del eje según la unidad.
+function axisOf(u, absMax) {
+  if (u === 'pct') return {div: 1, unit: null, tick: t => (t === 0 ? '0' : numTick(t)) + '%'};
+  if (u === 'n') return absMax >= 1e6 ? {div: 1e6, unit: 'Millones de personas', tick: numTick} : {div: 1e3, unit: 'Miles de personas', tick: numTick};
+  if (u === 'soles') return {div: 1e3, unit: 'Miles de S/', tick: numTick};
+  const big = absMax >= 1e6;
+  return {div: big ? 1e6 : 1e3, unit: big ? 'Miles de millones de S/' : 'Millones de S/', tick: t => Math.abs(t) >= 1000 ? f0.format(t) : numTick(t)};
+}
+
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text;
+}
+function visIdx() {
+  const r = RANGES.find(z => z.id === state.range);
+  const out = [];
+  for (let i = Math.max(0, N - r.n); i < N; i++) out.push(i);
+  return out;
+}
+// Hover y teclado compartidos por los gráficos de tiempo: mueve un índice de mes.
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide) {
+  const n = idx.length;
+  let cur = null;
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    show(at(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt);
+  });
+  hit.addEventListener('pointerleave', onHide);
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(at((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+const legendItem = (lg, cls, color, text) => { const s = htmlEl('span', null, lg); const i = htmlEl('i', {cls}, s); if (color) i.style.background = color; s.appendChild(document.createTextNode(text)); return i; };
+// Serie del mínimo regulatorio (escalones rojos punteados).
+const minSeries = k => ({label: 'Mínimo regulatorio', short: 'Mínimo', color: 'var(--bad)', w: 1.5, dash: '5 4', step: true, isMin: true, get: i => refOf(k, i)});
+const hasMin = k => !!(D.lim && D.lim[k]);
+
+// ---------- Gráfico de líneas (cruz y tooltip compartidos por grupo) ----------
+// Una serie con `sparse` (RCL trimestral) une sus puntos aunque haya meses vacíos y los marca con círculos.
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, from.title ? from.title(i) : mLabel(MONTHS[i]), g.charts.flatMap(c => c.rows(i)));
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+let clipSeq = 0;
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const series = cfg.series, fmt = cfg.fmt || pct;
+  const idx = trimIdx(cfg.idx, i => series.some(s => !s.isMin && s.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return null; }
+  let lo = 0, hi = 0;
+  for (const i of idx) for (const s of series) { const v = s.get(i); if (v == null) continue; if (v > hi) hi = v; if (v < lo) lo = v; }
+  const clipped = cfg.clip && (lo < cfg.clip[0] || hi > cfg.clip[1]);
+  if (cfg.clip) { lo = Math.max(lo, cfg.clip[0]); hi = Math.min(hi, cfg.clip[1]); }
+  const ax = axisOf(cfg.u, Math.max(-lo, hi));
+  const compact = !!cfg.compact, narrow = W < 600;
+  const showEnd = cfg.endLabels && !narrow;
+  const m = {l: compact ? 40 : 46, r: showEnd ? 140 : (compact ? 8 : 14), t: (compact ? 8 : 12) + (ax.unit && !compact ? 14 : 0), b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(lo / ax.div * 1.04, hi / ax.div * 1.04, compact ? 3 : 5);
+  const y = v => m.t + (dom.hi - Math.max(lo, Math.min(hi, v)) / ax.div) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, t => m.t + (dom.hi - t) / (dom.hi - dom.lo) * ph, m.l, m.l + pw, ax.tick);
+  if (ax.unit && !compact) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  const pathOf = s => {
+    let d = '', pen = false, py = null;
+    for (const i of idx) {
+      const v = s.get(i);
+      if (v == null) { if (!s.sparse) pen = false; continue; }
+      const xi = x(i), yi = y(v);
+      if (s.step && pen && yi !== py) d += 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + py.toFixed(1) + 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + yi.toFixed(1);
+      d += (pen ? 'L' : 'M') + xi.toFixed(1) + ',' + yi.toFixed(1);
+      pen = true; py = yi;
+    }
+    return d;
+  };
+  for (const s of series) {
+    const a = {d: pathOf(s), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    svgEl('path', a, svg);
+    if (s.sparse) for (const i of idx) { const v = s.get(i); if (v != null) svgEl('circle', {cx: x(i), cy: y(v), r: 3, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 1.5}, svg); }
+  }
+  if (clipped) svgEl('text', {x: m.l + pw, y: m.t + ph - 6, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Escala cortada en ' + cfg.clip.map(v => v + '%').join(' y ');
+  if (showEnd) {
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      for (let j = n - 1; j >= 0; j--) { const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; }
+      return null;
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      e.y = Math.max(m.t, Math.min(m.t + ph, e.y));
+      if (!e.s.isMin && !e.s.sparse) svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: e.s.isMin ? 'minlbl' : 'dval'}, t).textContent = fmt(e.v);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross, title: cfg.title,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] && !s.isMin ? s.get(i) : null;
+        dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      const main = series.filter(s => !s.noTip && !s.isMin).map(s => ({v: s.get(i), label: s.label, color: s.color}))
+        .filter(r => !cfg.skipEmpty || r.v != null)
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      if (!main.length) return [{value: '—', label: cfg.naTip || 'Sin dato en este mes'}];
+      const mins = series.filter(s => s.isMin && s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
+      return main.concat(mins);
+    },
+  };
+  group.charts.push(chart);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => group.show(i, evt, chart), group.hide);
+  return chart;
+}
+
+// ---------- Áreas apiladas al 100% ----------
+function areaChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const layers = cfg.layers;
+  const idx = trimIdx(cfg.idx, i => layers.some(l => l.get(i) != null) && (!cfg.ok || cfg.ok(i)));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  const tot = i => layers.reduce((a, l) => a + Math.max(0, l.get(i) || 0), 0);
+  const has = i => tot(i) > 0 && (!cfg.ok || cfg.ok(i));
+  const narrow = W < 600;
+  const m = {l: 46, r: narrow ? 14 : 150, t: 14, b: 26}, H = cfg.H || 320, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const y = v => m.t + (100 - v) / 100 * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, [0, 25, 50, 75, 100], y, m.l, m.l + pw, t => t + '%');
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  const share = (l, i) => { const T = tot(i); return T > 0 ? 100 * Math.max(0, l.get(i) || 0) / T : 0; };
+  // Bandas: se cortan en los meses sin dato.
+  const segs = [];
+  let cur = [];
+  for (const i of idx) { if (has(i)) cur.push(i); else if (cur.length) { segs.push(cur); cur = []; } }
+  if (cur.length) segs.push(cur);
+  for (const seg of segs) {
+    const cum = seg.map(() => 0);
+    for (const l of layers) {
+      const lo = cum.slice(), up = seg.map((i, j) => (cum[j] += share(l, i)));
+      if (up.every((v, j) => v === lo[j])) continue;
+      let d = 'M' + seg.map((i, j) => x(i).toFixed(1) + ',' + y(up[j]).toFixed(1)).join('L');
+      d += 'L' + seg.map((i, j) => [i, j]).reverse().map(([i, j]) => x(i).toFixed(1) + ',' + y(lo[j]).toFixed(1)).join('L') + 'Z';
+      svgEl('path', {d, fill: l.color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+    }
+  }
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  if (!narrow) {
+    let j = n - 1;
+    while (j > 0 && !has(idx[j])) j--;
+    const i = idx[j], ends = [];
+    let c = 0;
+    for (const l of layers) {
+      const v = share(l, i), a = c; c += v;
+      if (v && y(a) - y(c) >= 13) ends.push({y: (y(a) + y(c)) / 2, v: pct(v, 1), t: l.short});
+    }
+    ends.sort((a, b) => a.y - b.y);
+    for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+    for (const e of ends) {
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = e.v;
+      svgEl('tspan', {}, t).textContent = ' ' + e.t;
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = x(i);
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    if (!has(i)) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: cfg.naTip || 'Sin dato'}]); return; }
+    const T = tot(i);
+    const rows = layers.slice().reverse().filter(l => l.get(i) != null && l.get(i) !== 0)
+      .map(l => ({value: pct(share(l, i), 1), label: l.label + ' · ' + money(l.get(i)), color: l.color, sq: true}));
+    rows.unshift({value: money(T), label: cfg.totalName || 'Total'});
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+}
+
+// ---------- Barras horizontales apiladas al 100% (una fila por ámbito o medida) ----------
+function barStack(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = cfg.rows, layers = cfg.layers, narrow = W < 600;
+  if (!rows.some(r => r.vals)) { emptyMsg(box, cfg.empty); return; }
+  const labW = narrow ? 92 : 150, rowH = cfg.rowH || 34, barH = 20, top = 22;
+  const x0 = labW + 10, x1 = W - 8, H = top + rows.length * rowH + 4;
+  const x = v => x0 + v / 100 * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of [0, 25, 50, 75, 100]) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top - 4, y2: H - 4, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(t), y: top - 9, 'text-anchor': t === 0 ? 'start' : t === 100 ? 'end' : 'middle'}, g).textContent = t + '%';
+  }
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    svgEl('text', {class: 'nm', x: labW, y: yc + (r.sub ? -3 : 4), 'text-anchor': 'end'}, svg).textContent = narrow && r.short ? r.short : r.label;
+    if (r.sub) svgEl('text', {class: 'rs', x: labW, y: yc + 11, 'text-anchor': 'end'}, svg).textContent = r.sub;
+    if (!r.vals) { svgEl('text', {class: 'rs', x: x0 + 4, y: yc + 4}, svg).textContent = r.na || 'sin dato'; return; }
+    const T = r.vals.reduce((a, v) => a + Math.max(0, v || 0), 0);
+    let c = 0;
+    r.vals.forEach((v, j) => {
+      const s = T > 0 ? 100 * Math.max(0, v || 0) / T : 0;
+      if (!s) return;
+      const gs = svgEl('g', {class: 'bar-seg', tabindex: 0, role: 'img', 'aria-label': r.label + ', ' + layers[j].label + ': ' + pct(s, 1)}, svg);
+      const xa = x(c), xb = x(c + s);
+      svgEl('rect', {x: xa, y: yc - barH / 2, width: Math.max(0.5, xb - xa - (xb - xa > 3 ? 2 : 0)), height: barH, rx: 2, fill: layers[j].color}, gs);
+      c += s;
+      const show = evt => showTip(...anchorOf(evt, gs), r.label + (r.sub ? ' · ' + r.sub : ''), [{value: pct(s, 1), label: layers[j].label + (cfg.fmt ? ' · ' + cfg.fmt(v) : ''), color: layers[j].color, sq: true}]
+        .concat(cfg.fmt ? [{value: cfg.fmt(T), label: cfg.totalName || 'Total'}] : []));
+      gs.addEventListener('pointermove', show);
+      gs.addEventListener('pointerleave', hideTip);
+      gs.addEventListener('focus', () => show(null));
+      gs.addEventListener('blur', hideTip);
+    });
+  });
+}
+
+// ---------- Textos dinámicos ----------
+function deltaSpan(parent, k, v, p, suffix) {
+  if (v == null || p == null) { htmlEl('span', {text: 'sin dato de hace 12 meses'}, parent); return; }
+  const d = ['dep', 'nd', 'prom'].includes(k) ? 100 * (v / p - 1) : v - p;
+  const r = Math.abs(d) < 0.05;
+  const good = IND_BY[k] && IND_BY[k].good === 'up';
+  const s = htmlEl('span', {cls: r ? '' : good ? (d > 0 ? 'd-good' : 'd-bad') : 'd-flat'}, parent);
+  s.textContent = r ? '= sin cambio' : (d > 0 ? '▲ ' : '▼ ') + deltaTxt(k, Math.abs(d)).replace(/^\+/, '');
+  parent.appendChild(document.createTextNode(suffix != null ? suffix : ' en 12 meses'));
+}
+function naMsg(sc, k = state.ind, i = state.mi) {
+  const I = IND_BY[k];
+  if (((I && I.dep) || ['dep', 'nd', 'prom', 'cub'].includes(k)) && !takesDeposits(sc)) return 'Las empresas de créditos no captan depósitos del público: no tienen depósitos y la SBS no publica para ellas ratios de liquidez, RCL ni RFNE.';
+  if (k === 'rcl' && sc === 'sistema') return 'El RCL no se suma entre subsistemas: la SBS publica el promedio de los ratios diarios de cada uno. Elija un subsistema.';
+  if (k === 'rcl' && (i == null || i < LCR0)) return 'La SBS publica el RCL desde el trimestre ' + qLabel(LCR0) + '.';
+  if (k === 'rfne' && i < NSFR0) return 'La SBS publica el RFNE en su boletín desde ' + mLabel(D.nsfrFrom) + '.';
+  if (k === 'cub' && sc !== 'sistema' && isEnt(sc)) return 'La escala de montos solo se publica por subsistema.';
+  return null;
+}
+const DESC = {
+  lmn: 'Activos líquidos en soles como % de los pasivos de corto plazo en soles, con promedios mensuales de saldos diarios.',
+  lme: 'Activos líquidos en dólares como % de los pasivos de corto plazo en dólares, con promedios mensuales de saldos diarios.',
+  rcl: 'Activos líquidos de alta calidad más las entradas de efectivo reconocidas (hasta 75% de las salidas), como % de las salidas de efectivo de 30 días en un escenario de estrés. Trimestral: cada punto es el promedio de los ratios diarios del trimestre que cierra ese mes.',
+  rfne: 'Financiación estable disponible como % de la financiación estable requerida, a fin de cada mes.',
+  cd: 'Créditos directos como % de los depósitos totales (del público, de entidades financieras y de organismos internacionales), a fin de mes. Por encima de 100%, la entidad presta más de lo que capta en depósitos.',
+  dol: 'Depósitos en moneda extranjera (valuados en soles) como % de los depósitos totales, a fin de mes.',
+  ade: 'Adeudos y obligaciones financieras (préstamos de otras entidades del país y del exterior) como % del pasivo total, a fin de mes.',
+};
+
+// ---------- Resumen (KPIs) ----------
+function tileSub(d, k, sc, i) {
+  const sub = htmlEl('div', {cls: 'sub'}, d);
+  const j = atIdx(sc, i, k), v = j == null ? null : ind(sc, j, k), p = j == null ? null : ind(sc, j - 12, k);
+  if (v == null) { sub.textContent = naMsg(sc, k, j == null ? null : j) || naMsg(sc, k, i) || '—'; return; }
+  deltaSpan(sub, k, v, p);
+  if ((k === 'rcl' || k === 'rfne') && j !== i) htmlEl('div', {cls: 'sub', text: (k === 'rcl' ? 'Trimestre ' : 'Dato de ') + atLabel(k, j) + ' (el último publicado)'}, d);
+  const r = refOf(k, j);
+  if (r != null) htmlEl('div', {cls: 'sub', text: (k === 'lmn' || k === 'lme' ? 'Mínimo general: ' : 'Mínimo regulatorio: ') + pct(r, 0)}, d);
+}
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.replaceChildren();
+  const sc = state.scope, i = state.mi;
+  const main = IND_BY[state.ind];
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: main.name + ' ' + scopeOf(sc)}, hero);
+  const hv = htmlEl('div', {cls: 'val', text: fmtInd(main.k, valAt(sc, i, main.k))}, hero);
+  const j = atIdx(sc, i, main.k);
+  htmlEl('span', {cls: 'unit', text: j != null ? atLabel(main.k, j) : mLabel(MONTHS[i])}, hv);
+  tileSub(hero, main.k, sc, i);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  htmlEl('div', {cls: 'sub', text: 'Últimos 3 años'}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  for (const o of IND.filter(x => x.k !== main.k)) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: o.name}, d);
+    const ov = htmlEl('div', {cls: 'val', text: fmtInd(o.k, valAt(sc, i, o.k))}, d);
+    // Si el ámbito aún no publica el mes elegido, el valor es del último mes con dato y lo dice.
+    const oj = atIdx(sc, i, o.k);
+    if (oj != null && oj !== i && o.k !== 'rcl' && o.k !== 'rfne') htmlEl('span', {cls: 'unit', text: mLabel(MONTHS[oj])}, ov);
+    tileSub(d, o.k, sc, i);
+  }
+  const idx = [];
+  for (let k = Math.max(0, i - 35); k <= i; k++) idx.push(k);
+  const series = [{label: main.name, color: scopeColor(sc), w: 2, sparse: main.q, get: k => ind(sc, k, main.k)}];
+  if (hasMin(main.k)) series.push(minSeries(main.k));
+  lineChart(spark, {idx, H: 140, compact: true, u: 'pct', fmt: v => pct(v), aria: main.name + ', últimos tres años',
+    empty: naMsg(sc, main.k, j) || undefined, series});
+  const note = document.getElementById('kpi-note');
+  const msg = (sc === EC ? naMsg(sc, 'lmn') + ' Se financian sobre todo con adeudos, y también con patrimonio y valores (ver «Con qué se financian»).'
+    : sc === 'sistema' ? 'El sistema son los cinco subsistemas de este tablero; en liquidez, RFNE y depósitos, los cuatro que captan depósitos (sin las empresas de créditos).' : '');
+  const lag = lagNote(sc, i);
+  const full = [msg, lag].filter(Boolean).join(' ');
+  note.hidden = !full; note.textContent = full;
+}
+// Nota de rezago: qué indicadores del resumen se leen en un mes anterior porque algún subsistema todavía
+// no publica el mes elegido (los cuadros salen a distinto ritmo). El RCL y el RFNE tienen su propio rezago.
+const LAG_FIELDS = {lmn: ['alN', 'pcN'], lme: ['alE', 'pcE'], cd: ['cr'].concat(DEP_F), dol: ['dme'].concat(DEP_F), ade: ['ad', 'pas']};
+const ALL5_F = new Set(['ad', 'va', 'ot', 'pat', 'pas', 'cr']);
+const TABLE_OF = f => f.startsWith('al') || f.startsWith('pc') ? 'ratios de liquidez' : f === 'cr' ? 'créditos' : 'balance';
+const joinY = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+const subName = s => (s === 'banca-multiple' ? 'la ' : 'las ') + SUB_BY[s].l.toLowerCase();
+function pendingField(s, f, i) {
+  if (get(s, f, i) != null) return false;
+  for (let j = i + 1; j < N; j++) if (get(s, f, j) != null) return false;
+  return true;
+}
+function lagNote(sc, i) {
+  if (isEnt(sc)) return '';
+  const keys = Object.keys(LAG_FIELDS).filter(k => !(IND_BY[k].dep && !takesDeposits(sc)));
+  const groups = new Map(), miss = new Map();
+  for (const k of keys) {
+    const j = atIdx(sc, i, k);
+    if (j == null || j >= i) continue;
+    if (!groups.has(j)) groups.set(j, []);
+    groups.get(j).push(IND_BY[k].l.charAt(0).toLowerCase() + IND_BY[k].l.slice(1));
+    for (const f of LAG_FIELDS[k]) {
+      const subs = sc !== 'sistema' ? [sc] : ALL5_F.has(f) ? SUBS.map(s => s.k) : D.dep;
+      for (const s of subs) if (pendingField(s, f, i)) { if (!miss.has(s)) miss.set(s, new Set()); miss.get(s).add(TABLE_OF(f)); }
+    }
+  }
+  if (!groups.size) return '';
+  const nFell = [...groups.values()].reduce((a, g) => a + g.length, 0);
+  const subj = sc === 'sistema' ? 'El sistema llega' : (sc === 'banca-multiple' ? 'La banca múltiple llega' : 'Las ' + SUB_BY[sc].l.toLowerCase() + ' llegan');
+  const when = [...groups.entries()].sort((a, b) => b[0] - a[0])
+    .map(([j, labs]) => 'hasta ' + mLabel(MONTHS[j]) + (nFell === keys.length && groups.size === 1 ? '' : ' en ' + joinY(labs)));
+  let txt = subj + ' ' + joinY(when);
+  const order = SUBS.map(s => s.k).filter(s => miss.has(s));
+  if (order.length) {
+    const plural = sc === 'sistema' ? order.length > 1 || order[0] !== 'banca-multiple' : sc !== 'banca-multiple';
+    const what = s => '(' + [...miss.get(s)].sort().join(' y ') + ')';
+    txt += ': todavía no ' + (plural ? 'publican ' : 'publica ') + mLabel(MONTHS[i]) + ' ' +
+      (sc === 'sistema' ? joinY(order.map(s => subName(s) + ' ' + what(s))) : what(sc));
+  }
+  return txt + '.';
+}
+
+// ---------- Evolución por subsistema ----------
+function evoSeries(k = state.ind) {
+  const I = IND_BY[k];
+  const subs = SUBS.filter(s => !I.dep || DEP.has(s.k));
+  const out = subs.map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, sparse: I.q, get: i => ind(s.k, i, k)}));
+  if (k !== 'rcl') out.unshift({k: 'sistema', label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => ind('sistema', i, k)});
+  return out;
+}
+function renderEvo() {
+  const I = IND_BY[state.ind];
+  document.getElementById('evo-title').textContent = I.name + ' por subsistema';
+  document.getElementById('evo-desc').textContent = DESC[I.k] + (I.k === 'rcl' ? '' : ' La línea gris discontinua es el sistema.');
+  const series = evoSeries();
+  const lg = document.getElementById('evo-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
+  if (hasMin(I.k)) { legendItem(lg, 'ln mindash', null, 'Mínimo regulatorio'); series.push(minSeries(I.k)); }
+  const clip = {lme: [0, 200], rcl: [0, 1000]}[I.k];
+  lineChart(document.getElementById('ch-evo'), {idx: visIdx(), H: 340, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => pct(v), clip,
+    skipEmpty: I.q, title: I.q ? (i => mLabel(MONTHS[i]) + ' · trimestre ' + qLabel(i)) : null,
+    naTip: I.q ? 'El RCL solo tiene dato en el mes de cierre de cada trimestre' : null,
+    aria: I.name + ' por subsistema', empty: naMsg('banca-multiple') || undefined});
+  const msgs = [];
+  if (I.dep) msgs.push('Las empresas de créditos no aparecen: no captan depósitos.');
+  if (I.k === 'rcl') msgs.push('El RCL se publica por trimestre, unos tres meses después de su cierre (último: ' + qLabel(idxOf(D.lcrTo)) + '). No hay RCL del sistema: el publicado es el promedio de los ratios diarios de cada subsistema y no se puede sumar.');
+  if (I.k === 'rfne') msgs.push('El RFNE se publica desde ' + mLabel(D.nsfrFrom) + '; el último dato es de ' + mLabel(D.nsfrTo) + '.');
+  if (I.k === 'lme') msgs.push('Las cajas casi no captan en dólares: con pasivos en dólares tan pequeños, su ratio en moneda extranjera suele ser alto y cambia mucho de un mes a otro.');
+  const note = document.getElementById('evo-note');
+  note.hidden = !msgs.length; note.textContent = msgs.join(' ');
+}
+
+// ---------- Fondeo: estructura en el tiempo y entre subsistemas ----------
+const FVIEWS = [
+  {id: 'src', label: 'Fuentes', name: 'Fuentes de fondeo', of: 'del pasivo más el patrimonio', total: 'Pasivo + patrimonio', layers: [
+    {k: 'dep', label: 'Depósitos totales', short: 'Depósitos', color: 'var(--q6)', get: (sc, i) => depOf(sc, i)},
+    {k: 'ad', label: 'Adeudos y obligaciones financieras', short: 'Adeudos', color: 'var(--q5)', get: (sc, i) => get(sc, 'ad', i)},
+    {k: 'va', label: 'Valores en circulación', short: 'Valores', color: 'var(--q4)', get: (sc, i) => get(sc, 'va', i)},
+    {k: 'ot', label: 'Otros pasivos', short: 'Otros pasivos', color: 'var(--q1)', get: (sc, i) => get(sc, 'ot', i)},
+    {k: 'pat', label: 'Patrimonio', short: 'Patrimonio', color: 'var(--q3)', get: (sc, i) => get(sc, 'pat', i)},
+  ]},
+  {id: 'tip', label: 'Tipo de depósito', name: 'Depósitos por tipo', of: 'de los depósitos totales', total: 'Depósitos totales', dep: true, layers: [
+    {k: 'dv', label: 'A la vista', short: 'Vista', color: 'var(--q6)', get: (sc, i) => get(sc, 'dv', i)},
+    {k: 'da', label: 'De ahorro', short: 'Ahorro', color: 'var(--q5)', get: (sc, i) => get(sc, 'da', i)},
+    {k: 'dp', label: 'A plazo (sin CTS)', short: 'Plazo', color: 'var(--q4)', get: (sc, i) => get(sc, 'dp', i)},
+    {k: 'dc', label: 'CTS', short: 'CTS', color: 'var(--q3)', get: (sc, i) => get(sc, 'dc', i)},
+    {k: 'dsf', label: 'De entidades financieras y organismos internacionales', short: 'Entidades financieras', color: 'var(--q1)', get: (sc, i) => get(sc, 'dsf', i)},
+  ]},
+  {id: 'ade', label: 'Adeudos', name: 'Adeudos por origen y plazo', of: 'de los adeudos', total: 'Adeudos', layers: [
+    {k: 'apc', label: 'Del país, corto plazo', short: 'País, corto', color: 'var(--q6)', get: (sc, i) => get(sc, 'apc', i)},
+    {k: 'apl', label: 'Del país, largo plazo', short: 'País, largo', color: 'var(--q5)', get: (sc, i) => get(sc, 'apl', i)},
+    {k: 'aec', label: 'Del exterior, corto plazo', short: 'Exterior, corto', color: 'var(--q4)', get: (sc, i) => get(sc, 'aec', i)},
+    {k: 'ael', label: 'Del exterior, largo plazo', short: 'Exterior, largo', color: 'var(--q3)', get: (sc, i) => get(sc, 'ael', i)},
+  ]},
+];
+const FV_BY = Object.fromEntries(FVIEWS.map(v => [v.id, v]));
+// Mes con dato de la vista: en las fuentes, el balance completo (un sistema con solo los depósitos no vale).
+const fvOk = (V, sc, j) => V.id === 'src' ? fundOk(sc, j) && fundOf(sc, j) > 0 : V.layers.some(L => (L.get(sc, j) || 0) > 0);
+const fvIdx = (V, sc, i) => fillIdx(sc, i, (s, j) => fvOk(V, s, j));
+const fview = () => FV_BY[state.fview];
+function fonLegend(id, V) {
+  const lg = document.getElementById(id);
+  lg.replaceChildren();
+  for (const L of V.layers) legendItem(lg, 'dot sq', L.color, L.label);
+}
+function fonEmpty(sc, V) {
+  if (V.dep && !takesDeposits(sc)) return 'Las empresas de créditos no captan depósitos.';
+  return 'No hay datos para este ámbito.';
+}
+function renderFon() {
+  const sc = state.scope, V = fview();
+  document.getElementById('fon-title').textContent = V.name + ' · ' + scopeLabel(sc);
+  document.getElementById('fon-desc').textContent = {
+    src: 'Cada capa es una fuente de fondeo como % del pasivo más el patrimonio (el total del balance), a fin de mes. Use el selector «Ámbito» del resumen para cambiar de subsistema.',
+    tip: 'Cada capa es un tipo de depósito como % de los depósitos totales, a fin de mes. Los depósitos a plazo incluyen los depósitos restringidos.',
+    ade: 'Cada capa es un tipo de adeudo según quién presta (instituciones del país o del exterior y organismos internacionales) y su plazo, como % del total de adeudos.',
+  }[V.id];
+  fonLegend('fon-legend', V);
+  areaChart(document.getElementById('ch-fon'), {idx: visIdx(), H: 320, marker: state.mi, totalName: V.total, ok: i => fvOk(V, sc, i),
+    layers: V.layers.map(L => ({...L, get: i => L.get(sc, i)})), empty: fonEmpty(sc, V),
+    aria: V.name + ', ' + scopeLabel(sc)});
+  const i = fundIdx(sc, state.mi), notes = [];
+  if (V.id === 'src') {
+    const T = i == null ? null : fundOf(sc, i), d = depOf(sc, i), a = get(sc, 'ad', i);
+    const subj = {sistema: 'el sistema se financia', 'banca-multiple': 'la banca múltiple se financia', 'empresas-financieras': 'las empresas financieras se financian',
+      'cajas-municipales': 'las cajas municipales se financian', 'cajas-rurales': 'las cajas rurales se financian', [EC]: 'las empresas de créditos se financian'}[sc];
+    if (T) notes.push('En ' + mLabel(MONTHS[i]) + ', ' + subj + ' en ' + (takesDeposits(sc) ? pct(100 * (d || 0) / T, 0) + ' con depósitos y en ' : '') + pct(100 * (a || 0) / T, 0) + ' con adeudos' + (takesDeposits(sc) ? '' : ' (no captan depósitos)') + '.');
+    notes.push('Otros pasivos: cuentas por pagar, intereses por pagar, provisiones, fondos interbancarios, otras obligaciones con el público y otros.');
+  }
+  if (V.id === 'ade') notes.push('La SBS publica la estructura de los adeudos en %; el monto de cada parte es el % por el total de adeudos.');
+  document.getElementById('fon-note').textContent = notes.join(' ');
+}
+function cmpRows(V, i) {
+  return ['sistema'].concat(SUBS.map(s => s.k)).map(sc => {
+    const j = fvIdx(V, sc, i) ?? i;
+    const vals = V.layers.map(L => L.get(sc, j));
+    const ok = vals.some(v => v != null && v > 0) && !(V.dep && !takesDeposits(sc));
+    // Si el ámbito aún no publica el mes elegido, su barra es la de su último mes con dato (`sub` lo dice).
+    return {sc, j, label: scopeLabel(sc), short: sc === 'sistema' ? 'Sistema' : SUB_BY[sc].s, vals: ok ? vals : null,
+      sub: ok && j !== i ? mLabel(MONTHS[j]) : null, na: V.dep && !takesDeposits(sc) ? 'no capta depósitos' : 'sin dato'};
+  });
+}
+function renderCmp() {
+  const V = fview(), i = state.mi;
+  document.getElementById('cmp-title').textContent = V.name + ' por subsistema · ' + mLabel(MONTHS[i]);
+  document.getElementById('cmp-desc').textContent = 'Cada barra suma 100% ' + V.of + ' de su ámbito. Pase el cursor sobre una parte para ver su monto.';
+  fonLegend('cmp-legend', V);
+  barStack(document.getElementById('ch-cmp'), {rows: cmpRows(V, i), layers: V.layers, fmt: money, totalName: V.total,
+    aria: V.name + ' por subsistema en ' + mLabel(MONTHS[i])});
+  const ei = fundIdx(EC, i), ec = ei == null ? null : fundOf(EC, ei), ea = ei == null ? null : get(EC, 'ad', ei);
+  document.getElementById('cmp-note').textContent = (V.id === 'src' && ec ? 'Las empresas de créditos no captan depósitos: se financian con adeudos (' + pct(100 * ea / ec, 0) + ' de su balance), valores y patrimonio. ' : '') +
+    (V.id === 'ade' && SUBS.some(s => get(s.k, 'ad', i) > 0 && get(s.k, 'apc', i) == null) ? 'En este mes no hay estructura de adeudos publicada para algún subsistema; el sistema solo tiene dato cuando están los cinco. ' : '');
+}
+
+// ---------- Depositantes ----------
+const DVIEWS = [
+  {id: 'n', label: 'Número', k: 'nd', u: 'n', name: 'Número de depositantes', fmt: people},
+  {id: 'p', label: 'Depósito promedio', k: 'prom', u: 'soles', name: 'Depósito promedio por depositante', fmt: soles},
+];
+const DV_BY = Object.fromEntries(DVIEWS.map(v => [v.id, v]));
+function dptSeries(V) {
+  const out = SUBS.filter(s => DEP.has(s.k)).map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, get: i => ind(s.k, i, V.k)}));
+  out.unshift({k: 'sistema', label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => ind('sistema', i, V.k)});
+  return out;
+}
+function renderDpt() {
+  const V = DV_BY[state.dview];
+  document.getElementById('dpt-title').textContent = V.name + ' por subsistema';
+  document.getElementById('dpt-desc').textContent = V.id === 'n'
+    ? 'Personas naturales y jurídicas con depósitos, contadas en cada entidad. Una persona con depósitos en dos entidades cuenta dos veces en el subsistema y en el sistema.'
+    : 'Depósitos totales entre el número de depositantes, en soles. Es un promedio y lo elevan los grandes depositantes: no describe el saldo típico (ver la escala de montos abajo).';
+  const series = dptSeries(V);
+  const lg = document.getElementById('dpt-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
+  lineChart(document.getElementById('ch-dpt'), {idx: visIdx(), H: 300, endLabels: true, series, marker: state.mi, u: V.u, fmt: V.fmt, aria: V.name + ' por subsistema'});
+  const i = atIdx('sistema', state.mi, 'nd') ?? state.mi, n = get('sistema', 'nd', i), p = get('sistema', 'nd', i - 12);
+  document.getElementById('dpt-note').textContent = (n ? 'En ' + mLabel(MONTHS[i]) + ' las entidades reportan ' + people(n) + ' de depositantes' + (p ? ' (' + spct(100 * (n / p - 1)) + ' en 12 meses)' : '') + '. ' : '') +
+    'Las empresas de créditos no captan depósitos.';
+}
+
+// ---------- Escala de montos ----------
+// Tramos de menor a mayor saldo: de la rampa ordinal, sin el gris q1 (reservado para «otros»).
+const QCOL = ['var(--q2)', 'var(--q3)', 'var(--q5)', 'var(--q6)'];
+const fsdOf = (sc, i) => sc === 'sistema' ? null : get(sc, 'fsd', i);
+function escLayers(sc, i) {
+  const c = fsdOf(sc, i);
+  const lab = (a, b) => b == null ? 'Más de ' + a + ' veces la cobertura' + (c ? ' (más de ' + soles(a * c) + ')' : '')
+    : a === 0 ? 'Hasta 1 vez la cobertura' + (c ? ' (hasta ' + soles(c) + ')' : '') : 'De ' + a + ' a ' + b + ' veces' + (c ? ' (' + soles(a * c) + ' a ' + soles(b * c) + ')' : '');
+  return [[0, 1], [1, 10], [10, 100], [100, null]].map(([a, b], j) => ({label: lab(a, b), color: QCOL[j]}));
+}
+// Mes de la escala de montos para el ámbito: el elegido o, si aún no se publica, el último con dato.
+const escIdx = (sc, i) => fillIdx(sc, i, (s, j) => [0, 1, 2, 3].some(k => get(s, 'm' + k, j) != null)) ?? i;
+function renderEsc() {
+  const sc = state.scope, i = escIdx(sc, state.mi);
+  document.getElementById('esc-title').textContent = 'Concentración de los depósitos · ' + scopeLabel(sc) + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('esc-desc').textContent = 'Depositantes y monto de sus depósitos según el saldo total de cada depositante en la entidad, en tramos medidos en veces la cobertura del Fondo de Seguro de Depósitos (FSD). Use el selector «Ámbito» del resumen para cambiar de subsistema.';
+  const layers = escLayers(sc, i);
+  const lg = document.getElementById('esc-legend');
+  lg.replaceChildren();
+  layers.forEach(L => legendItem(lg, 'dot sq', L.color, L.label));
+  const nv = [0, 1, 2, 3].map(j => get(sc, 'n' + j, i)), mv = [0, 1, 2, 3].map(j => get(sc, 'm' + j, i));
+  const ok = takesDeposits(sc) && mv.some(v => v != null);
+  barStack(document.getElementById('ch-esc'), {rows: [
+    {label: 'Depositantes', vals: ok ? nv : null, na: naMsg(sc, 'dep') ? 'no capta depósitos' : 'sin dato'},
+    {label: 'Monto depositado', short: 'Monto', vals: ok ? mv : null, na: naMsg(sc, 'dep') ? 'no capta depósitos' : 'sin dato'},
+  ], layers, rowH: 40, aria: 'Depositantes y depósitos por tramo de saldo', empty: naMsg(sc, 'dep')});
+  const co = document.getElementById('esc-callout');
+  if (ok) {
+    const Tn = nv.reduce((a, v) => a + (v || 0), 0), Tm = mv.reduce((a, v) => a + (v || 0), 0);
+    const big = (nv[2] || 0) + (nv[3] || 0), bigm = (mv[2] || 0) + (mv[3] || 0);
+    co.replaceChildren();
+    co.append('El ');
+    htmlEl('b', {text: pct(100 * nv[0] / Tn, 1)}, co);
+    const s0 = 100 * mv[0] / Tm, sb = 100 * big / Tn;
+    co.append(' de los depositantes tiene hasta una vez la cobertura del FSD' + (fsdOf(sc, i) ? ' (' + soles(fsdOf(sc, i)) + ')' : '') + (s0 < 50 ? ', pero junta solo el ' : ' y junta el '));
+    htmlEl('b', {text: pct(s0, 0)}, co);
+    co.append(' del monto. En el otro extremo, ' + (big >= 1e6 ? people(big) + ' de' : f0.format(big)) + ' depositantes con más de 10 veces la cobertura (' + (sb > 0 && sb < 0.01 ? 'menos de 0.01%' : pct(sb, 2)) + ' del total) tienen el ');
+    htmlEl('b', {text: pct(100 * bigm / Tm, 0)}, co);
+    co.append(' de los depósitos.');
+  } else co.textContent = '';
+  document.getElementById('esc-note').textContent = 'La SBS publica la escala de montos solo por subsistema, no por entidad. Cada depositante se cuenta en cada entidad donde tiene depósitos. ' +
+    (sc === 'sistema' ? 'En el sistema se suman los cuatro subsistemas que captan depósitos; los tramos se definen con el monto máximo de cobertura que usa el cuadro de cada subsistema.' : '');
+}
+
+// ---------- Cobertura del FSD ----------
+function fsdSeries() {
+  const out = SUBS.filter(s => DEP.has(s.k)).map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, get: i => ind(s.k, i, 'cub')}));
+  out.unshift({k: 'sistema', label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => ind('sistema', i, 'cub')});
+  return out;
+}
+function renderFsd() {
+  document.getElementById('fsd-desc').textContent = 'Estimación propia (no es una cifra publicada) de la parte de los depósitos que está protegida por el FSD: a cada depositante cubierto se le cuenta su saldo hasta el monto máximo de cobertura que usa el cuadro de la SBS. Tiende a sobrestimar la parte cubierta; ver el cálculo y sus sesgos en «Cómo leer los datos».';
+  const series = fsdSeries();
+  const lg = document.getElementById('fsd-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
+  lineChart(document.getElementById('ch-fsd'), {idx: visIdx(), H: 300, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => pct(v), aria: 'Depósitos dentro de la cobertura del FSD por subsistema'});
+  const i = atIdx('sistema', state.mi, 'cub') ?? state.mi, c = get('banca-multiple', 'fsd', i), v = ind('sistema', i, 'cub');
+  document.getElementById('fsd-note').textContent = (v != null ? 'Según esta estimación, en ' + mLabel(MONTHS[i]) + ' alrededor del ' + pct(v, 0) + ' de los depósitos del sistema estaba dentro de la cobertura' + (c ? ' (cobertura usada en el cuadro de la banca: ' + soles(c) + ')' : '') + '. ' : '') +
+    'En las cajas y las financieras, una parte mayor de los depósitos suele estar dentro de la cobertura que en la banca: sus depósitos se reparten más en saldos pequeños (ver la escala de montos).';
+}
+
+// ---------- Ranking de entidades (mancuerna: hace 12 meses → mes elegido) ----------
+// Las empresas de créditos no captan depósitos: en sus rankings y fichas se muestra el peso de los adeudos.
+const effInd = sub => sub === EC && IND_BY[state.ind].dep ? 'ade' : state.ind;
+const CLAMP = {lmn: [0, 150], lme: [0, 200], rcl: [0, 1000], rfne: [0, 400], cd: [0, 300], dol: [0, 100], ade: [0, 100]};
+// Cada campo se lee en el mes elegido o, si el subsistema aún no lo publica, en su último mes con dato.
+function entRow(k, i) {
+  const fi = fundIdx(k, i);
+  const r = {k, n: SC[k].n, fi, dep: fi == null ? null : depOf(k, fi), fund: fi == null ? null : fundOf(k, fi), nd: valAt(k, i, 'nd')};
+  r.at = {};
+  for (const x of IND) { const j = atIdx(k, i, x.k); r.at[x.k] = j; r[x.k] = j == null ? null : ind(k, j, x.k); }
+  r.prom = valAt(k, i, 'prom');
+  r.qi = atIdx(k, i, 'rcl');
+  r.rcN = r.qi == null ? null : get(k, 'rcN', r.qi); r.rcE = r.qi == null ? null : get(k, 'rcE', r.qi);
+  return r;
+}
+function rankRows() {
+  const sub = state.sub, i = state.mi, k0 = effInd(sub);
+  const out = [];
+  let small = 0;
+  for (const k of D.entities) {
+    if (SC[k].s !== sub) continue;
+    const e = entRow(k, i);
+    if (!(e.fund > 0)) continue;
+    e.v = e[k0];
+    if (e.v == null) {
+      if ((k0 === 'lmn' && get(k, 'pcN', i) != null) || (k0 === 'lme' && get(k, 'pcE', i) != null) || (['cd', 'dol'].includes(k0) && e.dep != null)) small++;
+      continue;
+    }
+    const j = atIdx(k, i, k0);
+    e.p = j == null ? null : ind(k, j - 12, k0);
+    out.push(e);
+  }
+  // Primero las de menor liquidez; en créditos / depósitos, dolarización y adeudos, las de mayor valor.
+  out.sort((a, b) => IND_BY[k0].good === 'up' ? a.v - b.v : b.v - a.v);
+  return {rows: out, small};
+}
+function renderRank() {
+  const sub = state.sub, I = IND_BY[effInd(sub)], i = state.mi, S = SUB_BY[sub];
+  const qi = atIdx(sub, i, I.k);
+  document.getElementById('rank-title').textContent = I.name + ' por entidad · ' + S.l;
+  document.getElementById('rank-desc').textContent = 'Entidades ordenadas de ' + (I.good === 'up' ? 'menor a mayor ' : 'mayor a menor ') + I.lower + ' en ' +
+    (I.q && qi != null ? 'el trimestre ' + qLabel(qi) : mLabel(MONTHS[qi ?? i])) + '. El punto hueco es el valor de 12 meses antes. Haga clic en una entidad para ver su detalle abajo.';
+  const lg = document.getElementById('rank-legend');
+  lg.replaceChildren();
+  const box = document.getElementById('ch-rank');
+  box.replaceChildren();
+  const note = document.getElementById('rank-note');
+  const na = naMsg(sub, I.k, qi == null ? i : qi);
+  if (na) { emptyMsg(box, na); note.textContent = ''; return; }
+  const ref = refOf(I.k, qi);
+  // Con mínimo regulatorio: dentro en azul (up), bajo el mínimo en morado (bad); sin mínimo, el color del subsistema.
+  const okCol = ref != null ? 'var(--up)' : SUB_COLOR[sub];
+  legendItem(lg, 'dot', okCol, qi != null ? atLabel(I.k, qi) : mLabel(MONTHS[i]));
+  legendItem(lg, 'dot hollow', null, '12 meses antes');
+  if (ref != null) { legendItem(lg, 'dot', 'var(--bad)', 'Bajo el mínimo'); legendItem(lg, 'vref min', null, 'Mínimo regulatorio'); }
+  legendItem(lg, 'vref', null, 'Total de ' + S.l.toLowerCase());
+  const {rows, small} = rankRows();
+  const cl = CLAMP[I.k], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
+  const cut = rows.some(r => r.v !== clamp(r.v) || (r.p != null && r.p !== clamp(r.p)));
+  note.textContent = (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de 1 millón en la base del ratio (pasivos de corto plazo o depósitos) y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
+    (sub === EC ? 'A la derecha, el pasivo más patrimonio de la entidad.' : 'A la derecha, los depósitos totales de la entidad.') +
+    (cut ? ' La escala se corta en ' + cl[1] + '%; el número muestra el valor completo.' : '') +
+    (I.k !== state.ind ? ' Las empresas de créditos no captan depósitos: se muestra el peso de los adeudos en su pasivo.' : '') +
+    (I.k === 'lme' ? ' Un ratio en dólares muy alto suele indicar que la entidad casi no tiene pasivos en dólares.' : '');
+  if (!rows.length) { emptyMsg(box, 'No hay entidades con datos para este mes.'); return; }
+  const W = box.clientWidth, narrow = W < 600;
+  const labW = narrow ? 112 : 200, valW = narrow ? 64 : 76, totW = narrow ? 0 : 118, rowH = 28, top = 24;
+  const x0 = labW + 8, x1 = W - valW - totW - 8, H = top + rows.length * rowH + 36;
+  const subV = valAt(sub, i, I.k);
+  const vals = rows.flatMap(r => [r.v, r.p]).filter(v => v != null).map(clamp).concat(subV != null ? [subV] : []).concat(ref != null ? [ref] : []);
+  const dom = niceDomain(0, Math.max(...vals), narrow ? 3 : 5);
+  const x = v => x0 + (clamp(v) - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': I.name + ' por entidad en ' + S.l}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk), x2: x(tk), y1: top - 4, y2: H - 34, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk), y: top - 10, 'text-anchor': 'middle'}, g).textContent = tk + '%';
+  }
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = sub === EC ? 'Pasivo + patr.' : 'Depósitos';
+  if (subV != null) svgEl('line', {x1: x(subV), x2: x(subV), y1: top - 4, y2: H - 34, stroke: 'var(--ink2)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2'}, svg);
+  if (ref != null) svgEl('line', {x1: x(ref), x2: x(ref), y1: top - 4, y2: H - 34, stroke: 'var(--bad)', 'stroke-width': 1.5, 'stroke-dasharray': '4 3'}, svg);
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2, below = ref != null && r.v < ref;
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': r.n + ': ' + pct(r.v) + (r.p != null ? ', 12 meses antes ' + pct(r.p) : '') + (below ? ', bajo el mínimo' : '')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = trunc(r.n, narrow ? 15 : 28);
+    if (r.p != null) {
+      svgEl('line', {x1: x(r.p), x2: x(r.v), y1: yc, y2: yc, stroke: 'var(--axis)', 'stroke-width': 2}, gr);
+      svgEl('circle', {cx: x(r.p), cy: yc, r: 4, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 2}, gr);
+    }
+    svgEl('circle', {cx: x(r.v), cy: yc, r: 5.5, fill: below ? 'var(--bad)' : okCol, stroke: 'var(--surface)', 'stroke-width': 2}, gr);
+    svgEl('text', {class: 'rv' + (below ? ' bad' : ''), x: x1 + 10, y: yc + 4}, gr).textContent = pct(r.v);
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = money(sub === EC ? r.fund : r.dep);
+    const show = evt => {
+      const rowsT = [{value: pct(r.v), label: I.name, color: below ? 'var(--bad)' : okCol, sq: true}];
+      if (r.p != null) rowsT.push({value: pct(r.p), label: '12 meses antes'});
+      if (ref != null) rowsT.push({value: pct(ref, 0), label: 'Mínimo regulatorio'});
+      for (const o of ['lmn', 'lme', 'cd']) if (o !== I.k && r[o] != null) rowsT.push({value: pct(r[o]), label: IND_BY[o].name});
+      if (r.dep != null) rowsT.push({value: money(r.dep), label: 'Depósitos totales'});
+      showTip(...anchorOf(evt, gr), r.n, rowsT);
+    };
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', hideTip);
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', hideTip);
+    gr.addEventListener('click', () => pickEnt(r.k));
+    gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(r.k); } });
+  });
+  const foot = [];
+  if (ref != null) foot.push({x: x(ref), t: 'Mínimo ' + pct(ref, 0), cls: 'minlbl'});
+  if (subV != null) foot.push({x: x(subV), t: 'Subsistema ' + pct(subV), cls: 'lbl'});
+  foot.forEach((f, k) => {
+    const end = f.x > x1 - 110;
+    svgEl('text', {x: f.x + (end ? -4 : 4), y: H - 21 + 13 * k, class: f.cls, 'text-anchor': end ? 'end' : 'start'}, svg).textContent = f.t;
+  });
+}
+function pickEnt(k) {
+  state.ent = k; hideTip(); renderRank(); renderScatter(); fillEntSelect(); renderEnt();
+  if (!document.getElementById('tb-ent').hidden) fillTable('ent');
+  document.getElementById('card-ent').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+}
+
+// ---------- Dispersión: un ratio de liquidez × otro indicador ----------
+const SCX = [
+  {id: 'cd', label: 'Créditos / depósitos', name: 'Créditos / depósitos', clip: [0, 300]},
+  {id: 'dol', label: 'Dolarización', name: 'Dolarización de los depósitos', clip: [0, 100]},
+  {id: 'ade', label: 'Adeudos', name: 'Adeudos / pasivo total', clip: [0, 100]},
+];
+const scY = () => ['lmn', 'lme', 'rcl', 'rfne'].includes(state.ind) ? state.ind : 'lmn';
+function renderScatter() {
+  const sub = state.sub, i = state.mi, S = SUB_BY[sub], X = SCX.find(z => z.id === state.scx), Yk = scY(), Y = IND_BY[Yk];
+  const yClip = CLAMP[Yk][1];
+  document.getElementById('sc-title').textContent = Y.name + ' y ' + X.name.toLowerCase() + ' · ' + S.l;
+  const qi = atIdx(sub, i, Yk), xi = atIdx(sub, i, X.id);
+  const lagged = [[Yk, qi], [X.id, xi]].filter(([k, j]) => j != null && j !== i).map(([k, j]) => IND_BY[k].l + ' de ' + atLabel(k, j));
+  document.getElementById('sc-desc').textContent = 'Cada círculo es una entidad en ' + mLabel(MONTHS[i]) + (lagged.length ? ' (' + lagged.join('; ') + ')' : '') +
+    ': más arriba, ' + (Yk === 'rfne' ? 'más financiación estable' : 'más liquidez') + '; más a la derecha, ' + {cd: 'más créditos por cada sol de depósitos', dol: 'más depósitos en dólares', ade: 'más fondeo con adeudos'}[X.id] +
+    '. El tamaño del círculo son los depósitos totales. ' + (Yk === state.ind ? '' : 'El eje vertical es el ratio de liquidez en MN; elija «Liquidez ME», «RCL» o «RFNE» arriba para cambiarlo. ') + 'Haga clic en una entidad para ver su detalle.';
+  const lg = document.getElementById('sc-legend');
+  lg.replaceChildren();
+  const box = document.getElementById('ch-sc');
+  box.replaceChildren();
+  const na = naMsg(sub, Yk, qi == null ? i : qi);
+  if (na) { emptyMsg(box, na); document.getElementById('sc-note').textContent = ''; return; }
+  const ref = refOf(Yk, qi);
+  const okCol = ref != null ? 'var(--up)' : SUB_COLOR[sub];
+  legendItem(lg, 'dot', okCol, S.l);
+  if (ref != null) { legendItem(lg, 'dot', 'var(--bad)', 'Bajo el mínimo'); legendItem(lg, 'ln mindash', null, 'Mínimo regulatorio'); }
+  legendItem(lg, 'vref', null, 'Total del subsistema');
+  legendItem(lg, 'dot hollow', null, 'Fuera de escala');
+  const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, i)).filter(e => e[Yk] != null && e[X.id] != null && e.dep > 0);
+  document.getElementById('sc-note').textContent = 'Solo entidades con al menos 1 millón en la base de cada ratio. La escala vertical se corta en ' + yClip + '% y la horizontal en ' + X.clip[1] + '%; pase el cursor sobre un círculo hueco para ver su valor.';
+  if (pts.length < 2) { emptyMsg(box, 'No hay suficientes entidades con datos para este mes.'); return; }
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
+  const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const cx = v => Math.max(X.clip[0], Math.min(X.clip[1], v)), cy = v => Math.max(0, Math.min(yClip, v));
+  const sy = valAt(sub, i, Yk), sx = valAt(sub, i, X.id);
+  const xs = pts.map(p => cx(p[X.id])).concat(sx != null ? [sx] : []), ys = pts.map(p => cy(p[Yk])).concat(sy != null ? [sy] : [], ref != null ? [ref] : []);
+  const dx = niceDomain(0, Math.max(...xs), narrow ? 4 : 6), dy = niceDomain(0, Math.max(...ys), 5);
+  const pad = 14;
+  const xr = t => m.l + pad + (t - dx.lo) / (dx.hi - dx.lo) * (pw - 2 * pad), x = v => xr(cx(v));
+  const yr = v => m.t + pad + (dy.hi - v) / (dy.hi - dy.lo) * (ph - pad), y = v => yr(cy(v));
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': Y.name + ' y ' + X.name.toLowerCase() + ' por entidad en ' + S.l}, box);
+  drawYGrid(svg, dy.ticks, yr, m.l, m.l + pw, t => t + '%');
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dx.ticks) {
+    svgEl('line', {x1: xr(tk), x2: xr(tk), y1: m.t, y2: m.t + ph, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: xr(tk), y: m.t + ph + 16, 'text-anchor': 'middle'}, g).textContent = tk + '%';
+  }
+  svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = X.name + ' →';
+  svgEl('text', {x: 0, y: 10, class: 'lbl'}, svg).textContent = '↑ ' + Y.name;
+  if (ref != null) {
+    svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(ref), y2: y(ref), stroke: 'var(--bad)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'}, svg);
+    svgEl('text', {x: m.l + 4, y: y(ref) - 5, class: 'minlbl'}, svg).textContent = 'Mínimo ' + pct(ref, 0);
+  }
+  if (sy != null) svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(sy), y2: y(sy), stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  if (sx != null) svgEl('line', {x1: x(sx), x2: x(sx), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '3 2'}, svg);
+  const maxA = Math.max(...pts.map(p => p.dep)), rad = v => 4 + (narrow ? 13 : 18) * Math.sqrt(v / maxA);
+  const sorted = pts.slice().sort((a, b) => b.dep - a.dep);
+  const labelled = new Set(sorted.slice(0, narrow ? 3 : 5).map(p => p.k).concat(state.ent ? [state.ent] : []));
+  for (const p of sorted) {
+    const out = p[X.id] !== cx(p[X.id]) || p[Yk] !== cy(p[Yk]), below = ref != null && p[Yk] < ref;
+    const col = below ? 'var(--bad)' : okCol;
+    const gp = svgEl('g', {class: 'pt' + (p.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': p.n + ': ' + Y.name.toLowerCase() + ' ' + pct(p[Yk]) + ', ' + X.name.toLowerCase() + ' ' + pct(p[X.id])}, svg);
+    const attrs = {class: 'm', cx: x(p[X.id]), cy: y(p[Yk]), r: rad(p.dep), fill: out ? 'var(--surface)' : col, 'fill-opacity': out ? 1 : 0.75};
+    if (out) attrs.style = 'stroke:' + col;
+    svgEl('circle', attrs, gp);
+    const show = evt => showTip(...anchorOf(evt, gp), p.n, [
+      {value: pct(p[Yk]), label: Y.name, color: col, sq: true},
+      {value: pct(p[X.id]), label: X.name},
+      {value: money(p.dep), label: 'Depósitos totales'}]);
+    gp.addEventListener('pointermove', show);
+    gp.addEventListener('pointerleave', hideTip);
+    gp.addEventListener('focus', () => show(null));
+    gp.addEventListener('blur', hideTip);
+    gp.addEventListener('click', () => pickEnt(p.k));
+    gp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(p.k); } });
+  }
+  const placed = ref != null ? [[m.l, y(ref) - 16, 90, 14]] : [];
+  const order = sorted.filter(p => labelled.has(p.k)).sort((a, b) => (b.k === state.ent) - (a.k === state.ent));
+  for (const p of order) {
+    const px = x(p[X.id]), py = y(p[Yk]), r = rad(p.dep);
+    const n = p.n.length > 18 ? p.n.slice(0, 17) + '…' : p.n, w = n.length * 6.4, h = 14;
+    const cands = [[px + r + 4, py - h / 2, 'start'], [px - r - 4 - w, py - h / 2, 'end'], [px - w / 2, py - r - h - 2, 'middle'], [px - w / 2, py + r + 2, 'middle']];
+    const ok = cands.find(([bx, by]) => bx >= m.l && bx + w <= m.l + pw && by >= m.t && by + h <= m.t + ph &&
+      !placed.some(o => bx < o[0] + o[2] && bx + w > o[0] && by < o[1] + o[3] && by + h > o[1]));
+    if (!ok) continue;
+    const [bx, by, anchor] = ok;
+    placed.push([bx, by, w, h]);
+    const tx2 = anchor === 'start' ? bx : anchor === 'end' ? bx + w : bx + w / 2;
+    svgEl('text', {class: 'ptl', x: tx2, y: by + 11, 'text-anchor': anchor}, svg).textContent = n;
+  }
+}
+
+// ---------- Detalle de una entidad ----------
+function entOptions() {
+  const sub = state.sub, i = state.mi;
+  const list = D.entities.filter(k => SC[k].s === sub).map(k => { const j = fundIdx(k, i); return {k, n: SC[k].n, f: j == null ? null : fundOf(k, j)}; });
+  const active = list.filter(e => e.f > 0).sort((a, b) => (b.f || 0) - (a.f || 0));
+  const gone = list.filter(e => !(e.f > 0)).sort((a, b) => a.n.localeCompare(b.n, 'es'));
+  return {active, gone};
+}
+function spanOf(k) {
+  const s = SC[k];
+  let a = null, b = null;
+  for (let i = s.a; i < N; i++) if (fundOf(k, i) > 0) { if (a == null) a = i; b = i; }
+  return [MONTHS[a ?? s.a], MONTHS[b ?? s.a]];
+}
+function fillEntSelect() {
+  const sel = document.getElementById('f-ent');
+  const {active, gone} = entOptions();
+  if (!state.ent || SC[state.ent].s !== state.sub) state.ent = (active[0] || gone[0] || {}).k || null;
+  sel.replaceChildren();
+  const g1 = htmlEl('optgroup', {label: 'Con datos en ' + mLabel(MONTHS[fundIdx(state.sub, state.mi) ?? state.mi])}, sel);
+  active.forEach(e => htmlEl('option', {value: e.k, text: e.n}, g1));
+  if (gone.length) {
+    const g2 = htmlEl('optgroup', {label: 'Sin datos en ese mes'}, sel);
+    gone.forEach(e => { const [a, b] = spanOf(e.k); htmlEl('option', {value: e.k, text: e.n + ' (' + (idxOf(b) < state.mi ? 'hasta ' + mShort(b) : 'desde ' + mShort(a)) + ')'}, g2); });
+  }
+  if (state.ent) sel.value = state.ent;
+}
+function renderEnt() {
+  const k = state.ent, box = document.getElementById('ch-ent'), stats = document.getElementById('ent-stats');
+  box.replaceChildren(); stats.replaceChildren();
+  document.getElementById('ch-ent-fon').replaceChildren();
+  if (!k) return;
+  const E = SC[k], sub = E.s, i = state.mi, I = IND_BY[effInd(sub)];
+  document.getElementById('ent-title').textContent = E.n;
+  document.getElementById('ent-desc').textContent = I.name + ' de la entidad, frente a su subsistema (' + SUB_BY[sub].l.toLowerCase() + ')' + (I.k === 'rcl' ? '' : ' y al sistema') + '.';
+  const e = entRow(k, i);
+  const chg = o => { const j = atIdx(k, i, o); if (j == null) return ''; const v = ind(k, j, o), p = ind(k, j - 12, o); return v == null || p == null ? '' : spp(v - p) + ' en 12 meses'; };
+  const dep = takesDeposits(k);
+  // Valor leído en un mes anterior porque el subsistema aún no publica el elegido: lleva su mes.
+  const tag = j => j != null && j !== i ? ' · ' + mLabel(MONTHS[j]) : '';
+  const items = [
+    {lab: 'Liquidez MN', val: pct(e.lmn) + tag(e.at.lmn), sub: chg('lmn')},
+    {lab: 'Liquidez ME', val: pct(e.lme) + tag(e.at.lme), sub: chg('lme')},
+    {lab: 'RCL', val: pct(e.rcl), sub: e.qi != null ? 'trimestre ' + qLabel(e.qi) : 'sin dato reciente'},
+    {lab: 'RFNE', val: pct(e.rfne), sub: e.rfne != null ? 'en veces: ' + fx(e.rfne / 100, 2) : ''},
+    {lab: 'Créditos / depósitos', val: pct(e.cd) + tag(e.at.cd), sub: chg('cd')},
+    {lab: 'Dolarización de depósitos', val: pct(e.dol) + tag(e.at.dol), sub: chg('dol')},
+    {lab: 'Depósitos totales', val: money(e.dep) + tag(e.fi), sub: e.nd ? people(e.nd) + ' depositantes' : ''},
+    {lab: 'Adeudos / pasivo', val: pct(e.ade) + tag(e.at.ade), sub: chg('ade')},
+  ];
+  for (const it of items) {
+    const d = htmlEl('div', null, stats);
+    htmlEl('div', {cls: 'lab', text: it.lab}, d);
+    htmlEl('div', {cls: 'val', text: dep || it.lab === 'Adeudos / pasivo' ? it.val : '—'}, d);
+    htmlEl('div', {cls: 'sub', text: dep || it.lab === 'Adeudos / pasivo' ? (it.sub || ' ') : 'no capta depósitos'}, d);
+  }
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, sparse: I.q, get: j => ind(k, j, I.k)}];
+  series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, sparse: I.q, get: j => ind(sub, j, I.k)});
+  if (!I.q) series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2, dash: '5 4', get: j => ind('sistema', j, I.k)});
+  if (hasMin(I.k)) series.push(minSeries(I.k));
+  const lg = document.getElementById('ent-legend');
+  lg.replaceChildren();
+  for (const s of series) {
+    if (s.isMin) { legendItem(lg, 'ln mindash', null, s.label); continue; }
+    legendItem(lg, 'ln' + (s.dash ? ' dash' : ''), s.color, s.label);
+  }
+  lineChart(box, {idx: visIdx(), H: 300, endLabels: true, series, marker: i, u: 'pct', fmt: v => pct(v), clip: [0, CLAMP[I.k][1]], skipEmpty: I.q,
+    aria: I.name + ' de ' + E.n, empty: naMsg(k, I.k) || 'La entidad no tiene datos de este indicador en el periodo.'});
+  const V = FV_BY.src;
+  fonLegend('ent-fon-legend', V);
+  areaChart(document.getElementById('ch-ent-fon'), {idx: visIdx(), H: 260, marker: i, totalName: V.total,
+    layers: V.layers.map(L => ({...L, get: j => L.get(k, j)})), aria: 'Fuentes de fondeo de ' + E.n});
+  const note = document.getElementById('ent-note');
+  const msg = (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. ' : '') +
+    (e.lme == null && get(k, 'pcE', i) != null && dep ? 'Sus pasivos de corto plazo en dólares son menores a 1 millón: el ratio en ME no se muestra. ' : '');
+  note.hidden = !msg; note.textContent = msg;
+}
+
+// ---------- Tablas ----------
+let rankSort = {col: 1, dir: 1};
+const TABLES = {
+  evo() {
+    const k = state.ind, series = evoSeries(), idx = visIdx().slice().reverse();
+    const head = ['Mes'].concat(series.map(s => s.label)).concat(hasMin(k) ? ['Mínimo'] : []);
+    return [head, idx.map(i => [IND_BY[k].q ? qLabel(i) : mLabel(MONTHS[i])].concat(series.map(s => pct(s.get(i)))).concat(hasMin(k) ? [pct(refOf(k, i), 0)] : []))
+      .filter(r => r.slice(1, 1 + series.length).some(c => c !== '—'))];
+  },
+  fon() {
+    const sc = state.scope, V = fview(), idx = visIdx().slice().reverse();
+    return [['Mes', V.total].concat(V.layers.map(L => L.label + ' (%)')),
+      idx.map(i => { const v = V.layers.map(L => L.get(sc, i)), T = v.reduce((a, x) => a + Math.max(0, x || 0), 0); return T > 0 && fvOk(V, sc, i) ? [mLabel(MONTHS[i]), money(T)].concat(v.map(x => pct(100 * Math.max(0, x || 0) / T, 1))) : null; }).filter(Boolean)];
+  },
+  cmp() {
+    const V = fview(), i = state.mi;
+    return [['Ámbito', V.total].concat(V.layers.map(L => L.label + ' (%)')),
+      cmpRows(V, i).map(r => { if (!r.vals) return [r.label, r.na].concat(V.layers.map(() => '—')); const T = r.vals.reduce((a, x) => a + Math.max(0, x || 0), 0); return [r.label + (r.sub ? ' (' + r.sub + ')' : ''), money(T)].concat(r.vals.map(x => pct(100 * Math.max(0, x || 0) / T, 1))); })];
+  },
+  dpt() {
+    const V = DV_BY[state.dview], series = dptSeries(V), idx = visIdx().slice().reverse();
+    return [['Mes'].concat(series.map(s => s.label)), idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => V.fmt(s.get(i))))).filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  esc() {
+    const sc = state.scope, i = escIdx(sc, state.mi), L = escLayers(sc, i);
+    const nv = [0, 1, 2, 3].map(j => get(sc, 'n' + j, i)), mv = [0, 1, 2, 3].map(j => get(sc, 'm' + j, i));
+    const Tn = nv.reduce((a, v) => a + (v || 0), 0), Tm = mv.reduce((a, v) => a + (v || 0), 0);
+    if (!Tn) return [['Tramo'], []];
+    return [['Tramo', 'Depositantes', '% de depositantes', 'Monto', '% del monto'],
+      L.map((l, j) => [l.label, f0.format(nv[j] || 0), pct(100 * (nv[j] || 0) / Tn, 2), money(mv[j] || 0), pct(100 * (mv[j] || 0) / Tm, 1)])
+        .concat([['Total', f0.format(Tn), '100%', money(Tm), '100%']])];
+  },
+  fsd() {
+    const series = fsdSeries(), idx = visIdx().slice().reverse();
+    return [['Mes'].concat(series.map(s => s.label)).concat(['Cobertura (cuadro de la banca)']),
+      idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => pct(s.get(i)))).concat([soles(get('banca-multiple', 'fsd', i))])).filter(r => r[1] !== '—')];
+  },
+  ent() {
+    const k = state.ent;
+    if (!k) return [['Mes'], []];
+    const sub = SC[k].s, idx = visIdx().slice().reverse();
+    return [['Mes', 'Liquidez MN', 'Liquidez ME', 'RCL', 'RFNE', 'Créditos / depósitos', 'Dolarización', 'Adeudos / pasivo', 'Depósitos totales', 'Depositantes', 'Liquidez MN de ' + SUB_BY[sub].s],
+      idx.map(i => fundOf(k, i) == null ? null : [mLabel(MONTHS[i]), pct(ind(k, i, 'lmn')), pct(ind(k, i, 'lme')), pct(ind(k, i, 'rcl')), pct(ind(k, i, 'rfne')),
+        pct(ind(k, i, 'cd')), pct(ind(k, i, 'dol')), pct(ind(k, i, 'ade')), money(depOf(k, i)), people(get(k, 'nd', i)), pct(ind(sub, i, 'lmn'))]).filter(Boolean)];
+  },
+};
+// Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
+// muestra el último valor publicado de la columna, con su mes (nunca un hueco).
+const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));
+const cellText = c => c && typeof c === 'object' ? c.v : c;
+function lagFill(head, rows) {
+  if (head[0] !== 'Mes' || ALL_LAST >= N - 1) return rows;
+  return rows.map(r => {
+    const i = LABEL_IDX.get(r[0]);
+    if (!(i > ALL_LAST)) return r;
+    return r.map((c, j) => {
+      if (j === 0 || cellText(c) !== '—') return c;
+      let src = null;
+      for (const q of rows) {
+        const k = LABEL_IDX.get(q[0]);
+        if (k < i && cellText(q[j]) !== '—' && (!src || k > src.k)) src = {k, q};
+      }
+      if (!src) return c;
+      return {v: cellText(src.q[j]) + ' (' + src.q[0] + ')', cls: 'lag', title: 'Último dato publicado, de ' + src.q[0] + '. ' +
+        (/sistema/i.test(head[j]) ? 'El sistema se calcula solo con los meses en que publicaron los cinco subsistemas.'
+          : 'La SBS todavía no publica ' + r[0] + ' para esta columna.')};
+    });
+  });
+}
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const p = {text: c.v, cls: c.cls || ''};
+  if (c.title) p.title = c.title;
+  return htmlEl('td', p, row);
+}
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  if (key === 'rank') return fillRankTable(wrap);
+  const [head, rows0] = TABLES[key](), rows = lagFill(head, rows0);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+function fillRankTable(wrap) {
+  const {rows} = rankRows();
+  const cols = [
+    {l: 'Entidad', get: r => r.n, fmt: v => v},
+    {l: IND_BY[effInd(state.sub)].name, get: r => r.v, fmt: v => pct(v)},
+    {l: '12 meses antes', get: r => r.p, fmt: v => pct(v)},
+  ].concat(IND.filter(x => x.k !== effInd(state.sub)).map(x => ({l: x.name, get: r => r[x.k], fmt: v => pct(v)})))
+    .concat([{l: 'RCL en MN', get: r => r.rcN, fmt: v => pct(v)}, {l: 'RCL en ME', get: r => r.rcE, fmt: v => pct(v)},
+      {l: 'Depósitos totales', get: r => r.dep, fmt: money}, {l: 'Depositantes', get: r => r.nd, fmt: people}, {l: 'Depósito promedio', get: r => r.prom, fmt: soles}]);
+  const c = cols[rankSort.col] || cols[1];
+  rows.sort((a, b) => {
+    const va = c.get(a), vb = c.get(b);
+    if (va == null) return 1; if (vb == null) return -1;
+    return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * rankSort.dir;
+  });
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  cols.forEach((col, j) => {
+    const th = htmlEl('th', {scope: 'col'}, tr);
+    if (j === rankSort.col) th.setAttribute('aria-sort', rankSort.dir > 0 ? 'ascending' : 'descending');
+    const b = htmlEl('button', {type: 'button', text: col.l + (j === rankSort.col ? (rankSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
+    b.addEventListener('click', () => {
+      rankSort = {col: j, dir: j === rankSort.col ? -rankSort.dir : (j === 0 ? 1 : -1)};
+      fillTable('rank');
+      wrap.querySelectorAll('th button')[j].focus();
+    });
+  });
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); cols.forEach(col => htmlEl('td', {text: col.fmt(col.get(r))}, row)); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+function refreshTables() {
+  for (const k of Object.keys(TABLES).concat(['rank'])) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+}
+
+// ---------- Filtros ----------
+function segment(id, items, get0, set, onlyOwn) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get0() === it.id)}, box);
+    b.dataset.k = it.id;
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      if (onlyOwn) onlyOwn(); else renderVisible();
+    });
+  }
+}
+segment('f-ind', IND.map(x => ({id: x.k, label: x.l, title: x.name})), () => state.ind, v => { state.ind = v; });
+segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+segment('f-scope', [{id: 'sistema', label: 'Sistema'}].concat(SUBS.map(s => ({id: s.k, label: s.s, title: s.l}))), () => state.scope, v => { state.scope = v; });
+segment('f-sub', SUBS.map(s => ({id: s.k, label: s.s, title: s.l})), () => state.sub, v => { state.sub = v; state.ent = null; });
+segment('f-scx', SCX.map(z => ({id: z.id, label: z.label, title: z.name})), () => state.scx, v => { state.scx = v; }, () => { hideTip(); renderScatter(); });
+segment('f-fview', FVIEWS.map(v => ({id: v.id, label: v.label, title: v.name})), () => state.fview, v => { state.fview = v; },
+  () => { hideTip(); renderFon(); renderCmp(); for (const k of ['fon', 'cmp']) if (!document.getElementById('tb-' + k).hidden) fillTable(k); });
+segment('f-dview', DVIEWS.map(v => ({id: v.id, label: v.label, title: v.name})), () => state.dview, v => { state.dview = v; },
+  () => { hideTip(); renderDpt(); if (!document.getElementById('tb-dpt').hidden) fillTable('dpt'); });
+(function fillMonths() {
+  const sel = document.getElementById('f-mes');
+  for (let i = N - 1; i >= 0; i--) htmlEl('option', {value: String(i), text: mLabel(MONTHS[i])}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+})();
+document.getElementById('f-ent').addEventListener('change', e => { state.ent = e.target.value; renderRank(); renderScatter(); renderEnt(); if (!document.getElementById('tb-ent').hidden) fillTable('ent'); });
+
+// ---------- Pestañas ----------
+const TABS = ['sistema', 'entidades', 'metodologia'];
+let tab = 'sistema';
+function renderVisible() {
+  hideTip();
+  if (tab === 'sistema') { renderKpis(); renderEvo(); renderFon(); renderCmp(); renderDpt(); renderEsc(); renderFsd(); }
+  else if (tab === 'entidades') { fillEntSelect(); renderRank(); renderScatter(); renderEnt(); }
+  refreshTables();
+}
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'metodologia';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+// ---------- Ejemplos de «Cómo leer los datos» (salen de los datos del último mes) ----------
+(function examples() {
+  const L = N - 1, ml = mLabel(MONTHS[L]), BM = 'banca-multiple', CM = 'cajas-municipales';
+  const mm = v => f1.format(v / 1e6);   // miles de S/ → miles de millones con un decimal
+  const put = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = {nsfrFrom: mLabel(D.nsfrFrom), nsfrTo: mLabel(D.nsfrTo)}[e.dataset.v] || '—'; });
+  // Ratio de liquidez en MN de la banca, último mes.
+  const a = get(BM, 'alN', L), p = get(BM, 'pcN', L);
+  if (a && p) put('ex-rl', '<b>Ejemplo.</b> En ' + ml + ', la banca múltiple tuvo, en promedio diario, S/ ' + mm(a) + ' mil millones en activos líquidos en soles y S/ ' + mm(p) +
+    ' mil millones en pasivos de corto plazo en soles: ' + mm(a) + ' ÷ ' + mm(p) + ' = <b>' + pct(100 * a / p) + '</b>. Por cada S/ 100 que podría tener que pagar pronto en soles, tenía S/ ' +
+    fx(100 * a / p, 1) + ' en activos líquidos: ' + fx(100 * a / p / 8, 1) + ' veces el mínimo de S/ 8.');
+  // RCL en MN de la banca, último trimestre (montos promedio del trimestre en miles de S/).
+  const X = D.exLcr;
+  if (X) {
+    const m = Math.min(X.E, 0.75 * X.S), pe = 100 * (X.A + m) / X.S, ba = 100 * X.A / (X.S - m), gap = Math.abs(pe - X.R);
+    put('ex-rcl', '<b>Ejemplo.</b> Banca múltiple, moneda nacional, trimestre ' + qLabel(idxOf(X.m)) + ', promedios diarios: activos líquidos de alta calidad S/ ' + mm(X.A) +
+      ' mil millones; flujos salientes S/ ' + mm(X.S) + ' mil millones; flujos entrantes S/ ' + mm(X.E) + ' mil millones. El 75% de las salidas es S/ ' + mm(0.75 * X.S) +
+      ' mil millones, ' + (X.E <= 0.75 * X.S ? 'más que las entradas, así que cuentan todas las entradas' : 'menos que las entradas, así que las entradas se cortan en ese 75%') + ': (' + mm(X.A) + ' + ' + mm(m) + ') ÷ ' + mm(X.S) + ' = <b>' + pct(pe) +
+      '</b>. La SBS publica ' + pct(X.R) + ': la ' + (gap < 2 ? 'pequeña ' : '') + 'diferencia (' + fx(gap, 1) + ' pp) ' + (gap < 2 ? 'se debe a que' : 'se explica en parte porque') + ' el publicado es el promedio de los ratios de cada día, no el ratio de los promedios. Con la fórmula de Basilea, que resta las entradas en el denominador, ' + mm(X.A) + ' ÷ (' + mm(X.S) + ' − ' + mm(m) + ') = ' + pct(ba) + '.');
+  }
+  // RFNE de la banca, último mes publicado.
+  const j = lastQ(BM, L, 'fer', 3);
+  if (j != null) {
+    const fd = get(BM, 'fed', j), fr = get(BM, 'fer', j);
+    put('ex-rfne', '<b>Ejemplo.</b> En ' + mLabel(MONTHS[j]) + ', la banca múltiple tenía S/ ' + mm(fd) + ' mil millones de financiación estable disponible y necesitaba S/ ' + mm(fr) +
+      ' mil millones: ' + mm(fd) + ' ÷ ' + mm(fr) + ' = <b>' + pct(100 * fd / fr) + '</b> (' + fx(fd / fr, 2) + ' veces, como lo publica la SBS), ' + (100 * fd / fr >= refOf('rfne', j) ? 'sobre' : 'bajo') + ' el mínimo de ' + pct(refOf('rfne', j), 0) + ' que rige en ese mes para cada entidad.');
+  }
+  // Créditos / depósitos de las cajas municipales.
+  const c = get(CM, 'cr', L), d = depOf(CM, L);
+  if (c && d) put('ex-cd', '<b>Ejemplo.</b> En ' + ml + ', las cajas municipales tenían S/ ' + mm(c) + ' mil millones en créditos directos y S/ ' + mm(d) + ' mil millones en depósitos: ' +
+    mm(c) + ' ÷ ' + mm(d) + ' = <b>' + pct(100 * c / d) + '</b>. ' + (c > d ? 'Prestan más de lo que captan en depósitos: la diferencia se financia con otras fuentes, como adeudos y patrimonio.' : 'Sus depósitos alcanzan para financiar todos sus créditos.'));
+  // Dolarización de la banca.
+  const me = get(BM, 'dme', L), db = depOf(BM, L);
+  if (me != null && db) put('ex-dol', '<b>Ejemplo.</b> En ' + ml + ', la banca múltiple tenía S/ ' + mm(me) + ' mil millones en depósitos en dólares (valuados en soles) de un total de S/ ' + mm(db) +
+    ' mil millones: ' + mm(me) + ' ÷ ' + mm(db) + ' = <b>' + pct(100 * me / db) + '</b>.');
+  // Cobertura del FSD: una persona con depósitos en dos entidades.
+  const C = get(BM, 'fsd', L);
+  if (C && C > 40000 && C < 160000) put('ex-fsd', '<b>Ejemplo.</b> Con el monto máximo que usa el cuadro de la banca de ' + ml + ' (' + soles(C) + '), una persona con S/ 100,000 en ahorros y S/ 60,000 a plazo en un mismo banco tiene S/ 160,000 en ese banco. Si el banco entrara en liquidación y ese fuera el monto vigente al empezar los pagos (art. 153), el FSD le pagaría ' +
+    soles(C) + '; los ' + soles(160000 - C) + ' restantes no están cubiertos y se cobran en la liquidación como acreencia, después de las obligaciones laborales y hasta donde alcancen los bienes del banco (Ley N.° 26702, arts. 117 y 157). Si además tiene S/ 40,000 en una caja municipal, esos depósitos tienen su propia cobertura: el monto máximo se aplica por separado en cada entidad.');
+  // Control de la estimación de depósitos cubiertos (diciembre de 2025).
+  const k = idxOf('2025-12');
+  if (k >= 0) {
+    const cub = get('sistema', 'cub', k), tot = sumOf('sistema', ['m0', 'm1', 'm2', 'm3'], k);
+    if (cub && tot) put('ex-cub', 'S/ ' + f0.format(cub / 1e3) + ' millones, ' + pct(100 * cub / tot) + ' de los depósitos de la escala de montos');
+    const sh = sc => ind(sc, k, 'cub');
+    put('ex-cub-sub', pct(sh(BM)) + ', ' + pct(sh(CM)) + ' y ' + pct(sh('cajas-rurales')) + ', en el mismo orden');
+    const k24 = idxOf('2024-12');
+    if (k24 >= 0) put('ex-cub-24', pct(ind('sistema', k24, 'cub')));
+    // Depósitos asegurados / depósitos totales según las Memorias 2011-2015 del FSD (p. 9; 2013, p. 10); 2014 con la
+    // cifra revisada de la Memoria 2015 (36.4%; la Memoria 2014 daba 34.5%).
+    const gaps = [['2011-12', 34.3], ['2012-12', 34.8], ['2013-12', 33.2], ['2014-12', 36.4], ['2015-12', 32.6]]
+      .map(([m, f]) => { const j = idxOf(m), e = j >= 0 ? ind('sistema', j, 'cub') : null; return e == null ? null : Math.abs(e - f); })
+      .filter(x => x != null);
+    if (gaps.length) put('ex-cub-hist', fx(Math.max(...gaps), 1) + ' pp');
+    const fin = sumOf('empresas-financieras', ['m0', 'm1', 'm2', 'm3'], k), ban = sumOf(BM, ['m0', 'm1', 'm2', 'm3'], k);
+    if (fin && ban) put('ex-cub-fin', ', mientras que en los cuadros de la SBS las financieras suman S/ ' + f0.format(fin / 1e3) + ' millones y la banca múltiple, S/ ' + f0.format(ban / 1e3) +
+      ' millones. Bancos y financieras juntos casi coinciden (S/ 399,646 millones en el FSD y S/ ' + f0.format((fin + ban) / 1e3) + ' millones en la SBS): la diferencia está en cómo se reparte alguna entidad entre los dos grupos');
+  }
+})();
+
+// ---------- Pie ----------
+document.getElementById('lede').textContent =
+  'Cuántos activos líquidos tienen los bancos, financieras y cajas del Perú frente a lo que podrían tener que pagar pronto a sus depositantes y acreedores, con qué se financian (también las empresas de créditos) y cuántos depositantes tienen. Datos de la SBS de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + '.';
+[
+  'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), Boletín Estadístico. Ratios de liquidez: cuadros B-2340 (banca múltiple), B-3250 (financieras), C-1244 (cajas municipales) y C-2249 (cajas rurales). Ratio de cobertura de liquidez: B-230809, B-230810, B-230811 y B-230812. Ratio de financiación neta estable: B-234021, B-230213, C-120212 y B-230820. Balance: B-2201, B-3101, C-1101, C-2101 y C-4103. Ranking de créditos y depósitos: B-2332, B-3243, C-1205, C-2205 y C-4217. Depositantes: B-2373, B-3232, C-1250 y C-2255. Escala de montos: B-2321, B-3256, C-1211 y C-2211. Adeudos: B-2310, B-3239, C-1219, C-2219 y C-4214. Indicadores financieros: B-2401, B-3301, C-1301, C-2301 y C-4301. Normas y documentos citados: ver «Cómo leer los datos».',
+  'Los agregados del sistema y de los subsistemas, la relación créditos / depósitos, la dolarización, la estructura del fondeo, el depósito promedio y la estimación de los depósitos dentro de la cobertura del FSD son cálculos propios a partir de esos cuadros. El RCL es el publicado por entidad y subsistema (no hay RCL del sistema); el RFNE de entidades y subsistemas coincide con el publicado y el del sistema es cálculo propio. Montos en soles corrientes.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, document.getElementById('foot')));
+
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'sistema', false);
+// Redibuja solo cuando cambia el ancho (el alto cambia con cada redibujo).
+let rt, lastW = 0;
+new ResizeObserver(es => {
+  const w = Math.round(es[0].contentRect.width);
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+}).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

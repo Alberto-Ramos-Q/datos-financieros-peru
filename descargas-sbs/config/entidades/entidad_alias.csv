@@ -1,0 +1,419 @@
+clave,id_entidad,subsistema,desde,hasta,ejemplos
+acceso,acceso-crediticio,,,,Acceso
+acceso crediticio,acceso-crediticio,,,,Acceso Crediticio | Acceso Crediticio*** | Acceso Crediticio2/ | EC Acceso Crediticio | EC Acceso Crediticio** | EDPYME Acceso Crediticio
+acceso crediticio sociedad anonima,acceso-crediticio,,,,Edpyme Acceso Crediticio Sociedad Anónima
+acceso credito vehicular,acceso-crediticio,,,,Acceso Crédito Vehicular
+alfin,alfin-banco,,,,Alfin
+alfin banco,alfin-banco,,,,Alfin Banco | Alfin Banco 1/ | Alfin Banco 2/ | Alfin Banco1/
+alternativa,alternativa,,,,Alternativa | Alternativa*** | EC Alternativa | EC Alternativa** | EDPYME Alternativa
+alternativa empresa de creditos,alternativa,,,,Alternativa Empresa de Créditos
+amerika,amerika-financiera,,,,Amérika
+amerika financiera,amerika-financiera,,,,Amérika Financiera
+amitsui auto finance,mitsui-auto-finance,,,,Amitsui Auto Finance
+azteca,alfin-banco,banca-multiple,,,Azteca (tasas activas)
+banbif,banbif,,,,BanBif
+banco azteca,alfin-banco,,,,Banco Azteca
+banco azteca del peru,alfin-banco,,,,Banco Azteca del Perú S.A.
+banco azteca peru,alfin-banco,,,,B. Azteca Perú
+banco banex,banex,,,,Banco Banex
+banco bbva peru,bbva-peru,,,,B. BBVA Perú | Banco BBVA Perú
+banco bci,bci-peru,,,,Banco BCI
+banco bci peru,bci-peru,,,,B. BCI Perú | B. BCI Perú*** | Banco BCI Perú | Banco BCI Perú* | Banco BCI Perú** | Banco BCI Perú***
+banco btg pactual,banco-btg-pactual-peru,,,,B. BTG Pactual
+banco btg pactual peru,banco-btg-pactual-peru,,,,Banco BTG Pactual Perú
+banco cencosud,crac-cencosud-scotia,,,,Banco Cencosud S.A.
+banco china peru,bank-of-china-peru,,,,B. China Perú
+banco citibank,citibank-peru,,,,B. Citibank
+banco continental,bbva-peru,,,,Banco Continental
+banco de china peru,bank-of-china-peru,,,,Banco de China Perú
+banco de comercio,bancom,,,,B. De Comercio | B. de Comercio | Banco de Comercio
+banco de credito,bcp,,,,Banco de Crédito con Sucursales en el Exterior
+banco de credito bcp,bcp,,,,Banco de Crédito BCP
+banco de credito del peru,bcp,,,,B. De Crédito del Perú (con sucursales en el exterior) | B. de Crédito del Perú (con sucursales en el exterior) | Banco de Crédito del Perú
+banco de credito e inversiones,bci-peru,,,,Banco de Crédito e Inversiones (Perú)
+banco de lima,banco-de-lima-sudameris,,,,Banco de Lima
+banco de lima sudameris,banco-de-lima-sudameris,,,,Banco de Lima Sudameris
+banco del trabajo,santander-consumer,,,,Banco del Trabajo S.A.
+banco deutsche,deutsche-bank-peru,,,,B. Deutsche
+banco efectiva,efectiva,,,,B. Efectiva | B. Efectiva* | B. Efectiva**** | Banco Efectiva | Banco Efectiva*
+banco efectivo,efectiva,,,,Banco Efectivo (errata SBS en B-2336)
+banco falabella,falabella-peru,,,,Banco Falabella
+banco falabella peru,falabella-peru,,,,B. Falabella Perú | Banco Falabella Perú
+banco financiero,pichincha,,,,Banco Financiero
+banco financiero del peru,pichincha,,,,Banco Financiero del Perú
+banco gnb,gnb-peru,,,,B. GNB | Banco GNB
+banco gnb peru,gnb-peru,,,,Banco GNB Perú
+banco hsbc,gnb-peru,,,,Banco HSBC (B-2359 2010-2013)
+banco icbc,icbc-peru,,,,B. ICBC | Banco ICBC
+banco interamericano de finanzas,banbif,,,,B. Interamericano de Finanzas | Banco Interamericano de Finanzas
+banco interbank,interbank,,,,B. Interbank
+banco internacional del peru,interbank,,,,Banco Internacional del Perú S.A.A.
+banco latino,banco-latino,,,,Banco Latino
+banco mibanco,mibanco,,,,B. Mibanco
+banco nbk,nbk-bank,,,,B. NBK
+banco nuevo mundo,banco-nuevo-mundo,,,,Banco Nuevo Mundo
+banco nuevo mundo en liquidacion,banco-nuevo-mundo,,,,Banco Nuevo Mundo en Liquidación
+banco of china,bank-of-china-peru,,,,B. of China
+banco peruano de la construccion,bancom,,,,"Banco Peruano de la Construcción (BANPECO, predecesor)"
+banco pichincha,pichincha,,,,B. Pichincha | B. Pichincha* | Banco Pichincha | Banco Pichincha *
+banco pichincha peru,pichincha,,,,Banco Pichincha Perú
+banco ripley,ripley-peru,,,,B. Ripley | Banco Ripley
+banco ripley peru,ripley-peru,,,,Banco Ripley Perú
+banco santander,santander-peru,,,,Banco Santander
+banco santander central hispano peru,banco-santander-central-hispano-peru,,,,Banco Santander Central Hispano Perú
+banco santander peru,santander-peru,,,,B. Santander Perú | Banco Santander Perú
+banco scotiabank,scotiabank-peru,,,,B. Scotiabank
+banco standard chartered,banco-standard-chartered,,,,Banco Standard Chartered
+banco sudamericano,banco-sudamericano,,,,Banco Sudamericano
+banco sudameris,banco-de-lima-sudameris,,,,Banco Sudameris
+banco wiese,scotiabank-peru,,,,Banco Wiese
+banco wiese ltdo,scotiabank-peru,,,,Banco Wiese Ltdo.
+banco wiese sudameris,scotiabank-peru,,,,Banco Wiese Sudameris
+bancom,bancom,,,,BANCOM
+banex,banex,,,,Banex
+banex en liquidacion,banex,,,,Banex en Liquidación
+bank boston,bankboston-peru,,,,Bank Boston
+bank boston peru,bankboston-peru,,,,Bank Boston Perú
+bank of china,bank-of-china-peru,,,,Bank of China
+bank of china peru,bank-of-china-peru,,,,Bank of China Perú
+bankboston,bankboston-peru,,,,BankBoston
+bankboston peru,bankboston-peru,,,,BankBoston Perú
+bbva,bbva-consumer-finance,empresas-credito,,,EDPYME BBVA (deudores: el prefijo EDPYME se elimina al normalizar)
+bbva,bbva-peru,banca-multiple,,,BBVA
+bbva auto edpyme,bbva-consumer-finance,,,,BBVA Auto Edpyme
+bbva banco continental,bbva-peru,,,,BBVA Banco Continental
+bbva consumer,bbva-consumer-finance,empresas-credito,,,BBVA Consumer (tasas activas)
+bbva consumer finance,bbva-consumer-finance,,,,BBVA Consumer Finance | EDPYME BBVA Consumer Finance
+bbva consumer finance edpyme,bbva-consumer-finance,,,,BBVA Consumer Finance Edpyme
+bbva consumer finance entidad de desarrollo a la pequena y micro empresa edpyme,bbva-consumer-finance,,,,"BBVA Consumer Finance Entidad de Desarrollo a la Pequeña y Micro Empresa, EDPYME, S.A."
+bbva continental,bbva-peru,,,,BBVA Continental
+bbva peru,bbva-peru,,,,BBVA Perú
+bci,bci-peru,banca-multiple,,,BCI (tasas activas)
+bci peru,bci-peru,,,,BCI Perú
+bcp,bcp,,,,BCP
+bif,banbif,,,,BIF
+bnm,banco-nuevo-mundo,,,,BNM
+bsa,banco-sudamericano,,,,BSA
+bsch peru,banco-santander-central-hispano-peru,,,,BSCH Perú
+btg pactual,banco-btg-pactual-peru,,,,BTG Pactual
+btg pactual peru,banco-btg-pactual-peru,,,,BTG Pactual Perú
+c m a c arequipa,cmac-arequipa,,,,C.M.A.C. Arequipa
+c m a c cusco,cmac-cusco,,,,C.M.A.C. Cusco
+c m a c huancayo,cmac-huancayo,,,,C.M.A.C. Huancayo
+c m a c ica,cmac-ica,,,,C.M.A.C. Ica
+c m a c maynas,cmac-maynas,,,,C.M.A.C. Maynas
+c m a c paita,cmac-paita,,,,C.M.A.C. Paita S.A.
+c m a c piura,cmac-piura,,,,C.M.A.C. Piura
+c m a c santa,cmac-del-santa,,,,C.M.A.C. Santa
+c m a c sullana,cmac-sullana,,,,C.M.A.C. Sullana
+c m a c tacna,cmac-tacna,,,,C.M.A.C. Tacna S.A.
+c m a c trujillo,cmac-trujillo,,,,C.M.A.C. Trujillo
+c m c p lima,cmcp-lima,,,,C.M.C.P. Lima
+caja arequipa,cmac-arequipa,,,,Caja Arequipa
+caja cajamarca,caja-cajamarca,,,,Caja Cajamarca
+caja cat,crac-cencosud-scotia,,,,Caja CAT
+caja cat peru,crac-cencosud-scotia,,,,Caja CAT Perú
+caja cencosud,crac-cencosud-scotia,,,,Caja Cencosud
+caja cencosud scotia,crac-cencosud-scotia,,,,Caja Cencosud Scotia
+caja cencosud scotia peru,crac-cencosud-scotia,,,,Caja Cencosud Scotia Perú
+caja centro,crac-del-centro,,,,Caja Centro
+caja chavin,crac-raiz,,,,Caja Chavín
+caja credinka,caja-credinka,,,,Caja Credinka
+caja cusco,cmac-cusco,,,,Caja Cusco
+caja del centro,crac-del-centro,,,,Caja Del Centro
+caja del centro en liquidacion,crac-del-centro,,,,Caja del Centro en Liquidación
+caja del santa,cmac-del-santa,,,,Caja Del Santa
+caja huancayo,cmac-huancayo,,,,Caja Huancayo
+caja ica,cmac-ica,,,,Caja Ica
+caja incasur,crac-incasur,,,,Caja Incasur
+caja libertadores de ayacucho,caja-los-libertadores-de-ayacucho,,,,Caja Libertadores de Ayacucho
+caja los andes,crac-los-andes,,,,Caja Los Andes
+caja los libertadores de ayacucho,caja-los-libertadores-de-ayacucho,,,,Caja Los Libertadores de Ayacucho
+caja luren,caja-senor-de-luren,,,,Caja Luren
+caja maynas,cmac-maynas,,,,Caja Maynas
+caja metropolitana,cmcp-lima,,,,Caja Metropolitana
+caja metropolitana de lima,cmcp-lima,,,,Caja Metropolitana de Lima
+caja municipal arequipa,cmac-arequipa,,,,CMAC Arequipa | CMAC Arequipa**
+caja municipal cusco,cmac-cusco,,,,CMAC Cusco
+caja municipal de arequipa,cmac-arequipa,,,,Caja Municipal de Arequipa
+caja municipal de credito popular de lima,cmcp-lima,,,,Caja Municipal de Crédito Popular de Lima
+caja municipal de credito popular lima,cmcp-lima,,,,CMCP Lima | Caja Municipal de Crédito Popular Lima
+caja municipal del cusco,cmac-cusco,,,,Caja Municipal de Ahorro y Crédito del Cusco S.A.
+caja municipal del santa,cmac-del-santa,,,,CMAC Del Santa
+caja municipal huancayo,cmac-huancayo,,,,CMAC Huancayo
+caja municipal ica,cmac-ica,,,,CMAC Ica
+caja municipal maynas,cmac-maynas,,,,CMAC Maynas
+caja municipal paita,cmac-paita,,,,CMAC Paita
+caja municipal pisco,caja-pisco,,,,Caja Municipal de Ahorro y Crédito de Pisco S.A.
+caja municipal pisco s a en liquidacion,caja-pisco,,,,Caja Municipal de Ahorro y Crédito de Pisco S.A. en Liquidación
+caja municipal piura,cmac-piura,,,,CMAC Piura | CMAC Piura /2 | CMAC Piura 1/ | CMAC Piura 2/ | CMAC Piura** | CMAC Piura*** | CMAC Piura1/ | CMAC Piura2/
+caja municipal santa,cmac-del-santa,,,,Caja Municipal de Ahorro y Crédito de Santa
+caja municipal sullana,cmac-sullana,,,,CMAC Sullana | CMAC Sullana * | CMAC Sullana ** | CMAC Sullana* | CMAC Sullana** | CMAC Sullana1/
+caja municipal sullana s a en liquidacion,cmac-sullana,,,,Caja Municipal de Ahorro y Crédito de Sullana S.A. en Liquidación
+caja municipal tacna,cmac-tacna,,,,CMAC Tacna
+caja municipal trujillo,cmac-trujillo,,,,CMAC Trujillo
+caja nor peru,confianza,,,,Caja Nor Perú
+caja nuestra gente,confianza,,,,Caja Nuestra Gente
+caja paita,cmac-paita,,,,Caja Paita
+caja pisco,caja-pisco,,,,Caja Pisco
+caja piura,cmac-piura,,,,Caja Piura
+caja profinanzas,caja-profinanzas,,,,Caja Profinanzas
+caja prymera,crac-prymera,,,,Caja Prymera
+caja raiz,crac-raiz,,,,Caja Raíz
+caja rural cajamarca,caja-cajamarca,,,,Caja Rural de Ahorro y Crédito Cajamarca S.A.
+caja rural cajasur,caja-rural-del-sur,,,,CRAC Cajasur
+caja rural cat,crac-cencosud-scotia,,,,CRAC CAT
+caja rural cat peru,crac-cencosud-scotia,,,,Caja Rural de Ahorro y Crédito CAT Perú S.A.
+caja rural cencosud scotia,crac-cencosud-scotia,,,,CRAC Cencosud Scotia
+caja rural cencosud scotia peru,crac-cencosud-scotia,,,,Caja Rural de Ahorro y Crédito Cencosud Scotia Perú S.A.
+caja rural censosud scotia,crac-cencosud-scotia,,,,CRAC Censosud Scotia
+caja rural chavin,crac-raiz,,,,Caja Rural de Ahorro y Crédito Chavín S.A.A.
+caja rural credinka,caja-credinka,,,,Caja Rural de Ahorro y Crédito Credinka S.A.
+caja rural cruz de chalpon,caja-sipan,,,,Caja Rural de Ahorro y Crédito Cruz de Chalpón S.A.
+caja rural de la region del sur,caja-rural-del-sur,,,,Caja Rural de Ahorro y Crédito de la Región Del Sur S.A.A.
+caja rural de quillabamba,caja-credinka,,,,Caja Rural de Ahorro y Crédito de Quillabamba
+caja rural del centro,crac-del-centro,,,,CRAC del Centro
+caja rural del centro en liquidacion,crac-del-centro,,,,CRAC Del Centro en Liquidación
+caja rural del sur,caja-rural-del-sur,,,,Caja Rural Del Sur
+caja rural incasur,crac-incasur,,,,CRAC Incasur | CRAC Incasur1/
+caja rural libertadores ayacucho,caja-los-libertadores-de-ayacucho,,,,CRAC Libertadores Ayacucho
+caja rural libertadores de ayacucho,caja-los-libertadores-de-ayacucho,,,,CRAC Libertadores de Ayacucho
+caja rural los andes,crac-los-andes,,,,CRAC Los Andes
+caja rural los aymaras,crac-los-andes,,,,Caja Rural de Ahorro y Crédito Los Aymaras S.A.
+caja rural los libertadores,caja-los-libertadores-de-ayacucho,,,,Caja Rural Los Libertadores
+caja rural los libertadores de ayacucho,caja-los-libertadores-de-ayacucho,,,,Caja Rural de Ahorro y Crédito Los Libertadores de Ayacucho S.A.
+caja rural luren,caja-senor-de-luren,,,,CRAC Luren
+caja rural majes,caja-rural-majes,,,,Caja Rural Majes
+caja rural mantaro,caja-rural-mantaro,,,,Caja Rural Mantaro
+caja rural nor peru,confianza,,,,Caja Rural de Ahorro y Crédito Nor Perú S.A.
+caja rural nuestra gente,confianza,,,,Caja Rural de Ahorro y Crédito Nuestra Gente S.A.A. (vehículo legal absorbente en 2013)
+caja rural profinanzas,caja-profinanzas,,,,Caja Rural de Ahorro y Crédito Profinanzas S.A.
+caja rural promotora de finanzas,caja-profinanzas,,,,Caja Rural de Ahorro y Crédito Promotora de Finanzas
+caja rural prymera,crac-prymera,,,,CRAC Prymera
+caja rural quillabamba,caja-credinka,,,,CRAC Quillabamba
+caja rural quillabamba s a a credinka,caja-credinka,,,,Caja Rural de Ahorro y Crédito Quillabamba S.A.A. - CREDINKA
+caja rural raiz,crac-raiz,,,,CRAC Raíz | CRAC Raíz (*) | CRAC Raíz * | CRAC Raíz ** | CRAC Raíz* | CRAC Raíz**
+caja rural san martin,caja-rural-san-martin,,,,Caja Rural San Martín
+caja rural selva central,caja-selva-central,,,,Caja Rural de Ahorro y Crédito Selva Central
+caja rural selva peruana,caja-rural-selva-peruana,,,,Caja Rural Selva Peruana
+caja rural senor de luren,caja-senor-de-luren,,,,Caja Rural de Ahorro y Crédito Señor de Luren S.A.
+caja rural senor de luren s a en liquidacion,caja-senor-de-luren,,,,Caja Rural de Ahorro y Crédito Señor de Luren S.A. en Liquidación
+caja rural sipan,caja-sipan,,,,Caja Rural de Ahorro y Crédito Sipán S.A.
+caja rural tumbay,caja-rural-tumbay,,,,Caja Rural Tumbay
+caja rural ucayali,caja-rural-ucayali,,,,Caja Rural Ucayali
+caja rural valle del rio apurimac y ene,caja-rural-vrae,,,,CRAC Valle del Río Apurímac y Ene
+caja rural vrae,caja-rural-vrae,,,,Caja Rural VRAE
+caja san martin,caja-rural-san-martin,,,,Caja San Martín
+caja santa,cmac-del-santa,,,,Caja Santa
+caja selva central,caja-selva-central,,,,Caja Selva Central
+caja senor de luren,caja-senor-de-luren,,,,Caja Señor de Luren
+caja sipan,caja-sipan,,,,Caja Sipán
+caja sullana,cmac-sullana,,,,Caja Sullana
+caja sur,caja-rural-del-sur,,,,Caja Sur
+caja tacna,cmac-tacna,,,,Caja Tacna
+caja trujillo,cmac-trujillo,,,,Caja Trujillo
+cajamarca,caja-cajamarca,cajas-rurales,,,Cajamarca (tasas activas)
+cajanuestra gente,confianza,,,,CajaNuestra Gente
+cajasur,caja-rural-del-sur,,,,CajaSur
+cat,crac-cencosud-scotia,,,,CAT (tasas activas: banca 2015-11 → 2019-02 y cajas rurales 2019-03 → 2020-06)
+cencosud scotia,crac-cencosud-scotia,,,,Cencosud Scotia (marca de tarjeta)
+citi peru,citibank-peru,,,,Citi Perú
+citibank,citibank-peru,,,,Citibank | Citibank***
+citibank del peru,citibank-peru,,,,Citibank del Perú
+citibank peru,citibank-peru,,,,Citibank Perú
+cmac a,cmac-arequipa,,,,CMAC-A
+cmcpl,cmcp-lima,,,,CMCPL
+cmpartamos financiera,compartamos,,,,"Cmpartamos Financiera (errata, B-3221 2013-04)"
+cmr,falabella-peru,,,,CMR
+cmr falabella,falabella-peru,,,,CMR Falabella
+comercio,bancom,banca-multiple,,,Comercio (tasas activas)
+compartamos,compartamos,,,,Compartamos
+compartamos banco,compartamos,,,,Compartamos Banco | Compartamos Banco* | Compartamos Banco** | Compartamos Banco***
+compartamos banco peru,compartamos,,,,Compartamos Banco Perú
+compartamos financiera,compartamos,,,,Compartamos Financiera
+confianza,confianza-original,empresas-financieras,,201304,"Confianza (financiera original, absorbida por CRAC Nuestra Gente en 2013-05)"
+confianza,confianza,,201305,,Confianza
+continental,bbva-peru,banca-multiple,,,Continental (tasas activas)
+cra cajamarca,caja-cajamarca,,,,CRA CAJAMARCA
+crear arequipa,compartamos,,,,Edpyme Crear Arequipa
+crear tacna,edpyme-crear-tacna,,,,Edpyme Crear Tacna
+credichavin,crac-raiz,,,,Credichavín
+credicorp,bcp,,,,Credicorp (grupo)
+credijet,edpyme-credijet-del-peru,,,,Credijet
+credijet del peru,edpyme-credijet-del-peru,,,,Edpyme Credijet del Perú
+credinka,credinka,,,,Credinka
+crediraiz,crac-raiz,,,,Crediraiz S.A.A.
+crediscotia,santander-consumer,,,,CrediScotia
+crediscotia financiera,santander-consumer,,,,Crediscotia Financiera
+credito,bcp,banca-multiple,,,Crédito (tasas activas)
+creditos de alcance regional arequipa,compartamos,,,,Edpyme Créditos de Alcance Regional Arequipa S.A.
+credivision,credivision,,,,Credivisión | EDPYME Credivisión
+daewoo,financiera-daewoo,,,,Daewoo
+del centro,crac-del-centro,cajas-rurales,,,Del Centro (tasas activas)
+deutsche,deutsche-bank-peru,banca-multiple,,,Deutsche (tasas activas)
+deutsche bank,deutsche-bank-peru,,,,Deutsche Bank (Perú) S.A.
+deutsche bank peru,deutsche-bank-peru,,,,Deutsche Bank Perú
+edyficar,edyficar,,,,Edyficar
+edyficar peru,edyficar,,,,Edyficar Perú
+efectibank,efectiva,,,,Efectibank
+efectiva,efectiva,,,,Efectiva
+empresa de desarrollo de la pequena y microempresa progreso,edpyme-progreso,,,,Empresa de Desarrollo de la Pequeña y Microempresa Progreso S.A.
+empresa financiera confianza,confianza-original,empresas-financieras,,201304,"Empresa Financiera Confianza (financiera original, absorbida por CRAC Nuestra Gente en 2013-05)"
+empresa financiera confianza,confianza,,201305,,Empresa Financiera Confianza
+empresa financiera edyficar,edyficar,,,,Empresa Financiera Edyficar S.A.
+empresa peruana de soluciones de dinero electronico,edpyme-credijet-del-peru,,,,Empresa Peruana de Soluciones de Dinero Electrónico
+factoring total,factoring-total,,,,Factoring Total
+falabella,falabella-peru,banca-multiple,,,Falabella (tasas activas)
+fin confianza,confianza-original,empresas-financieras,,201304,"Fin. Confianza (financiera original, absorbida por CRAC Nuestra Gente en 2013-05)"
+fin confianza,confianza,,201305,,Fin. Confianza
+fin credinka,credinka,,,,Fin. Credinka
+fin efectiva,efectiva,,,,Fin. Efectiva
+fin oh,infinance-xp,,,,Fin. Oh!
+fin proempresa,proempresa,,,,Fin. ProEmpresa
+finaciera tfc,tfc,,,,Finaciera TFC S.A.
+financ edyficar,edyficar,,,,Financ Edyficar
+financ proempresa,proempresa,,,,FINANC. PROEMPRESA
+financ tfc,tfc,,,,Financ TFC
+financiera amerika,amerika-financiera,,,,Financiera Amérika
+financiera andina,financiera-andina,,,,Financiera Andina
+financiera cmr,falabella-peru,,,,Financiera CMR
+financiera confianza,confianza-original,empresas-financieras,,201304,"Financiera Confianza (financiera original, absorbida por CRAC Nuestra Gente en 2013-05)"
+financiera confianza,confianza,,201305,,Financiera Confianza
+financiera cordillera,ripley-peru,,,,Financiera Cordillera S.A.
+financiera crear,compartamos,,,,Financiera Crear
+financiera crear arequipa,compartamos,,,,Financiera Crear Arequipa
+financiera credinka,credinka,,,,Financiera Credinka
+financiera credinka s a en liquidacion,credinka,,,,Financiera Credinka S.A. en liquidación
+financiera crediscotia,santander-consumer,,,,Financiera Crediscotia S.A.
+financiera daewoo,financiera-daewoo,,,,Financiera Daewoo
+financiera del sur,financiera-del-sur-finsur,,,,Financiera del Sur (Finsur)
+financiera edyficar,edyficar,,,,Financiera Edyficar
+financiera efectiva,efectiva,,,,Financiera Efectiva
+financiera fincoper,fincoper,,,,Financiera Fincoper
+financiera mitsui,mitsui-auto-finance,,,,Financiera Mitsui
+financiera mitsui auto finance peru,mitsui-auto-finance,,,,Financiera Mitsui Auto Finance Perú S.A.
+financiera nueva vision,credinka,,,,Financiera Nueva Visión S.A.
+financiera oh,infinance-xp,,,,Financiera Oh!
+financiera peruinvest,peruinvest,,,,Financiera Peruinvest
+financiera proempresa,proempresa,,,,Financiera Proempresa
+financiera qapac,qapaq,,,,"Financiera Qapac (errata, B-3202 2014-03)"
+financiera qapaq,qapaq,,,,Financiera Qapaq | Financiera Qapaq**
+financiera santander consumer,santander-consumer,,,,Financiera Santander Consumer* | Financiera Santander Consumer** | Financiera Santander Consumer***
+financiera solucion,solucion-financiera-de-credito-del-peru,,,,Financiera Solución
+financiera surgir,surgir,,,,Financiera Surgir | Financiera Surgir* | Financiera Surgir**
+financiera tfc,tfc,,,,Financiera TFC S.A.
+financiera tfc s a en liquidacion,tfc,,,,Financiera TFC S.A. en liquidación
+financiera univerasl,qapaq,,,,"Financiera Univerasl (errata, B-3250 2010-2014)"
+financiera universal,qapaq,,,,Financiera Universal
+financiera uno,infinance-xp,,,,Financiera UNO
+financiero,pichincha,banca-multiple,,,Financiero (tasas activas)
+financira proempresa,proempresa,,,,"Financira Proempresa (errata, B-3266 2013-01)"
+financor,ripley-peru,,,,Financor
+finandina,financiera-andina,,,,Finandina
+fincoper,fincoper,,,,Fincoper
+finsur,financiera-del-sur-finsur,,,,Finsur
+finu,qapaq,,,,FINU
+forum,bbva-consumer-finance,,,,Forum
+forum servicios financieros edpyme,bbva-consumer-finance,,,,Forum Servicios Financieros Edpyme
+forum servicios financieros entidad de desarrollo a la pequena y micro empresa edpyme,bbva-consumer-finance,,,,Forum Servicios Financieros Entidad de Desarrollo a la Pequeña y Micro Empresa - Edpyme
+gmg,edpyme-gmg-servicios-peru,,,,Edpyme GMG
+gmg servicios peru,edpyme-gmg-servicios-peru,,,,Edpyme GMG Servicios Perú
+gmgl,edpyme-gmg-servicios-peru,,,,Edpyme GMGL
+gnb,gnb-peru,banca-multiple,,,GNB (tasas activas)
+gnb peru,gnb-peru,,,,GNB Perú
+hsbc,gnb-peru,,,,HSBC
+hsbc bank peru,gnb-peru,,,,HSBC Bank Perú S.A.
+hsbc peru,gnb-peru,,,,HSBC Perú
+icbc,icbc-peru,,,,ICBC
+icbc bank,icbc-peru,,,,ICBC BANK
+icbc peru,icbc-peru,,,,ICBC Perú
+icbc peru bank,icbc-peru,,,,ICBC Perú Bank
+incasur,crac-incasur,,,,Incasur
+industrial and commercial bank of china,icbc-peru,,,,Industrial and Commercial Bank of China (Perú)
+infinance xp,infinance-xp,,,,InFinance XP | InFinance XP* | InFinance XP2/
+interbank,interbank,,,,Interbank | Interbank (con sucursales en el exterior) | Interbank ** | Interbank**
+interbank peru,interbank,,,,Interbank Perú con Sucursales en el Exterior
+intercorp,interbank,,,,Intercorp (grupo)
+inversiones la cruz,inversiones-la-cruz,,,,EC Inversiones La Cruz | EC Inversiones La Cruz3/ | EC Inversiones La Cruz4/ | EDPYME Inversiones La Cruz | Inversiones La Cruz | Inversiones La Cruz3/ | Inversiones La Cruz² | Inversiones La Cruz³
+la cruz,inversiones-la-cruz,,,,La Cruz
+leasing total,total-servicios-financieros,,,,Leasing Total S.A.
+los andes,crac-los-andes,,,,Los Andes
+maf,mitsui-auto-finance,,,,MAF
+maf peru,mitsui-auto-finance,,,,MAF Perú
+marcimex,edpyme-progreso,,,,Edpyme Marcimex
+mi banco,mibanco,,,,Mi Banco
+mi casita,vivela,,,,Edpyme Mi Casita
+mibanco,mibanco,,,,Mibanco
+mibanco banco de la microempresa,mibanco,,,,"Mibanco, Banco de la Microempresa S.A."
+micasita,vivela,,,,EDPYME Micasita | Micasita
+micasita hipotecaria,vivela,,,,miCasita Hipotecaria
+mitsui,mitsui-auto-finance,,,,Mitsui
+mitsui auto finance,mitsui-auto-finance,,,,Mitsui Auto Finance
+mitsui auto finance peru,mitsui-auto-finance,,,,Mitsui Auto Finance Perú S.A.
+mitsui financiera,mitsui-auto-finance,,,,Mitsui Financiera
+nbk bank,nbk-bank,,,,NBK Bank
+nbk bank en liquidacion,nbk-bank,,,,NBK Bank en Liquidación
+nueva vision,credinka,,,,EDPYME Nueva Visión
+oh,infinance-xp,,,,Oh!
+peruinvest,peruinvest,,,,Peruinvest
+pibank,pichincha,,,,Pibank (marca digital)
+pichincha,pichincha,banca-multiple,,,Pichincha (tasas activas)
+prex,prex-peru-empresa-de-creditos,,,,Prex
+prex peru,prex-peru-empresa-de-creditos,,,,Prex Perú
+prex peru empresa de credito,prex-peru-empresa-de-creditos,,,,Prex Perú Empresa de Crédito S.A.
+prex peru empresa de creditos,prex-peru-empresa-de-creditos,,,,Prex Perú Empresa de Créditos
+pro negocios,edpyme-progreso,,,,Pro Negocios
+productos y mercados agricolas de huaral caja rural de ahorro y credito,crac-prymera,,,,Productos y Mercados Agrícolas de Huaral - Caja Rural de Ahorro y Crédito S.A.
+proempresa,proempresa,,,,ProEmpresa
+profinanzas,caja-profinanzas,,,,Profinanzas
+progreso,edpyme-progreso,,,,Edpyme Progreso
+progreso empresa de creditos,edpyme-progreso,,,,Progreso Empresa de Créditos S.A.
+pronegocios,edpyme-progreso,,,,Edpyme Pronegocios
+prymera,crac-prymera,,,,Prymera
+qapaq,qapaq,,,,Qapaq
+raiz,crac-raiz,cajas-rurales,,,Raíz / Raiz (tasas activas de cajas rurales; 2015-10 → 2016-04 es la CRAC Chavín con el nombre posterior)
+raiz,edpyme-raiz,empresas-credito,,,Edpyme Raíz | Raíz (tasas activas EC 2015-10 → 2016-04)
+ripley,ripley-peru,banca-multiple,,,Ripley (tasas activas)
+santander,santander-consumo,empresas-credito,,,EDPYME Santander | Santander
+santander,santander-peru,banca-multiple,,,Santander (tasas activas de banca)
+santander central hispano peru,banco-santander-central-hispano-peru,,,,Santander Central Hispano Perú
+santander cons bank,santander-consumer,,,,Santander Cons. Bank (tasas activas)
+santander consumer bank,santander-consumer,,,,Santander Consumer Bank | Santander Consumer Bank* | Santander Consumer Bank***
+santander consumer peru,santander-consumo,,,,Santander Consumer Perú
+santander consumo,santander-consumo,,,,EC Santander Consumo | EC Santander Consumo** | Santander Consumo | Santander Consumo*** | Santander Consumo2/
+santander consumo del peru,santander-consumo,,,,Empresa de Créditos Santander Consumo del Perú S.A.
+santander consumo peru,santander-consumo,,,,Empresa de Créditos Santander Consumo Perú
+santander financiamientos,surgir,,,,Santander Financiamientos S.A.
+santander peru,santander-peru,,,,Santander Perú S.A.
+scotiabank,scotiabank-peru,,,,Scotiabank
+scotiabank peru,scotiabank-peru,,,,Scotiabank Perú
+serbanco,serbanco,,,,Serbanco
+serbanco en liquidacion,serbanco,,,,Serbanco en Liquidación
+servicios financieros tota,total-servicios-financieros,,,,Servicios Financieros Tota***
+servicios financieros total,total-servicios-financieros,,,,EDPYME Servicios Financieros TOTAL | EDPYME Servicios Financieros TOTAL* | EDPYME Servicios Financieros Total | EDPYME Servicios Financieros Total** | Servicios Financieros Total
+servicios financieros total edpyme,total-servicios-financieros,,,,Servicios Financieros TOTAL EDPYME
+sip,infinance-xp,,,,Sip
+sipan,caja-sipan,cajas-rurales,,,Sipán (tasas activas)
+solidaridad,solidaridad,,,,Solidaridad
+solidaridad y desarrollo empresarial,solidaridad,,,,Edpyme Solidaridad y Desarrollo Empresarial S.A.C.
+solucion,solucion-financiera-de-credito-del-peru,,,,Solución
+solucion financiera,solucion-financiera-de-credito-del-peru,,,,Solución Financiera
+solucion financiera de credito del peru,solucion-financiera-de-credito-del-peru,,,,Solución Financiera de Crédito del Perú
+standard chartered,banco-standard-chartered,,,,Standard Chartered
+standard chartered bank peru,banco-standard-chartered,,,,Standard Chartered Bank Perú
+surgir,surgir,,,,Surgir
+tfc,tfc,,,,TFC
+total servicios financieros,total-servicios-financieros,,,,EC TOTAL Servicios Financieros | EC TOTAL Servicios Financieros4/ | EC TOTAL Servicios Financieros5/
+total servicios financieros edpyme,total-servicios-financieros,,,,TOTAL Servicios Financieros EDPYME
+total servicios financieros empresa de creditos,total-servicios-financieros,,,,TOTAL Servicios Financieros Empresa de Créditos
+uno,infinance-xp,empresas-financieras,,,Uno (tasas activas)
+vfs peru,volvo-finance,,,,VFS Perú
+visionfund enterprises,credivision,,,,Visionfund Enterprises S.A.
+vivela,vivela,,,,EC Vívela | EC Vívela2/ | EC Vívela3/ | Vívela | Vívela2/ | Vívela² | Vívela¹
+volvo,volvo-finance,,,,Volvo
+volvo finance,volvo-finance,,,,EC Volvo Finance | EC Volvo Finance** | Volvo Finance | Volvo Finance*** | Volvo Finance2/
+volvo finance empresa de creditos,volvo-finance,,,,Volvo Finance Empresa de Créditos S.A.
+volvo financial services,volvo-finance,,,,Volvo Financial Services
+volvo financial services empresa de creditos,volvo-finance,,,,Volvo Financial Services Empresa de Créditos
+volvo leasing peru,volvo-finance,,,,Volvo Leasing Perú S.A.
+wiese sudameris,scotiabank-peru,,,,Wiese Sudameris

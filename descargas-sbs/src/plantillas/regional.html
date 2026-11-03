@@ -1,0 +1,1771 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crédito por departamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas), con la paleta
+   de la SBS: azul #001E6B y gris #B2B4B5. Subsistemas: s1–s5 en orden fijo (validados para daltonismo);
+   el sistema y el Perú, en gris discontinuo. Mapa: rampa de un solo tono del claro al azul SBS en 5 pasos
+   (m0–m4; en oscuro se invierte: más valor, más claro; texto de celda mt0–mt4 con contraste ≥ 4.5:1) y una
+   divergente morado–gris–azul de 7 pasos para el crecimiento (v0–v6), sin rojos ni naranjas. Borde del mapa
+   del color de la superficie; sobre los pasos casi blancos (m0, v3, sin dato), un borde gris (edge-lo). */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a; --s5: #8bb0b2;
+  --sys: #868a93; --c-sub: #6a7ca6;
+  --m0: #e8ecf4; --m1: #b2c1e7; --m2: #7f96d8; --m3: #3d5aa1; --m4: #001e6b;
+  --mt0: #111a30; --mt1: #111a30; --mt2: #111a30; --mt3: #ffffff; --mt4: #ffffff;
+  --v0: #5a2a85; --v1: #876baa; --v2: #b8abce; --v3: #ebedf1; --v4: #95a6c6; --v5: #476399; --v6: #001e6b;
+  --na: #eceef1; --hatch: #c8cbd1; --edge: #ffffff; --edge-lo: #8e99b4;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4; --s5: #356e6e;
+  --sys: #8a8f9c; --c-sub: #6e89cc;
+  --m0: #1b2448; --m1: #344576; --m2: #4f68a8; --m3: #93a4cf; --m4: #dce3f5;
+  --mt0: #e6e9f0; --mt1: #e6e9f0; --mt2: #ffffff; --mt3: #0b1022; --mt4: #0b1022;
+  --v0: #d2b4f0; --v1: #9686b7; --v2: #5e5a82; --v3: #2a3150; --v4: #566081; --v5: #8692b6; --v6: #b9c8ee;
+  --na: #1d2445; --hatch: #3a4466; --edge: #111833; --edge-lo: #646c88;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 32px 0 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 28px; font-family: var(--font-head); }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 6px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; min-width: 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+/* Muestra discontinua con degradado: un borde «dashed» de 16 px se ve continuo en Chromium. */
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.hollow { background: var(--surface); box-shadow: inset 0 0 0 2px var(--muted); }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--ink2) 0 3px, transparent 3px 5px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 32px 0; text-align: center; margin: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+.filters .ind-groups { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.filters .ind-groups .glab { font-size: 12px; color: var(--ink2); }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.lag { color: var(--muted); }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button:hover { color: var(--ink); }
+th[aria-sort] button { color: var(--ink); }
+tr.pick { cursor: pointer; }
+tr.pick:hover td, tr.pick:focus-visible td { background: var(--wash); }
+tr.pick.sel td { font-weight: 600; }
+tr.pick:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* Mapa coroplético + ranking */
+.map-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 8px 24px; align-items: start; margin-top: 8px; }
+.map-box svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.dep { stroke: var(--edge); stroke-width: 0.8; stroke-linejoin: round; cursor: pointer; outline: none; vector-effect: non-scaling-stroke; }
+/* Sobre los pasos casi iguales a la superficie (m0, v3 y sin dato) el borde blanco no se ve: va en gris. */
+.dep[fill="var(--m0)"], .dep[fill="var(--v3)"], .dep[fill^="url("] { stroke: var(--edge-lo); }
+.dep:hover, .dep.hl { stroke: var(--ink); stroke-width: 1.6; }
+.dep:focus-visible { stroke: var(--ink); stroke-width: 2.2; }
+.dep.sel { stroke: var(--ink); stroke-width: 2.2; }
+.inset-frame { fill: none; stroke: var(--ink2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.inset-bg { fill: var(--surface); stroke: var(--axis); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.inset-lab { fill: var(--ink2); }
+.mlab { fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.scale { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0 4px; font-size: 12px; color: var(--ink2); }
+.scale { align-items: flex-end; }
+.scale > span { display: inline-flex; flex-direction: column; gap: 3px; width: 72px; }
+.scale > span.u { width: auto; color: var(--muted); margin-right: 8px; }
+.scale i { display: block; height: 12px; border-radius: 3px; }
+.scale i.na { background: repeating-linear-gradient(135deg, var(--na) 0 3px, var(--hatch) 3px 4px); }
+
+/* Mapa de calor departamento × subsistema */
+.heat-wrap { overflow-x: auto; margin-top: 12px; }
+table.heat { width: 100%; min-width: 520px; border-collapse: separate; border-spacing: 2px; font-size: 13px; }
+table.heat th { position: static; background: none; border: 0; padding: 4px 8px; font-weight: 600; color: var(--ink2); white-space: normal; vertical-align: bottom; text-align: center; font-size: 12.5px; }
+table.heat th:first-child { text-align: left; }
+table.heat td { border: 0; border-radius: 4px; text-align: center; padding: 6px 6px; font-weight: 600; cursor: default; }
+table.heat td.lab { text-align: left; font-weight: 500; color: var(--ink); background: none; padding-left: 0; cursor: pointer; }
+@media (max-width: 480px) { table.heat { min-width: 0; } table.heat .tot { display: none; } table.heat td { padding: 6px 3px; } }
+table.heat td.tot { text-align: right; font-weight: 400; color: var(--ink2); background: none; }
+table.heat td.na { color: var(--muted); font-weight: 400; background: var(--wash); }
+table.heat tr.sel td.lab { font-weight: 600; }
+table.heat td:not(.lab):not(.na):not(.tot):hover, table.heat td:focus-visible { outline: 2px solid var(--ink); outline-offset: -1px; }
+
+.rank-row { cursor: pointer; }
+.rank-row .bg { fill: transparent; }
+.rank-row:hover .bg, .rank-row:focus-visible .bg, .rank-row.hl .bg { fill: var(--wash); }
+.rank-row.sel .bg { fill: var(--wash); }
+.rank-row.sel .nm { font-weight: 600; fill: var(--ink); }
+.rank-row:focus-visible { outline: none; }
+.rank-row:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.rv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rs { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ent-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 4px; }
+.ent-stats div { min-width: 0; }
+.ent-stats .lab { font-size: 12.5px; color: var(--ink2); }
+.ent-stats .val { font-size: 20px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.ent-stats .sub { font-size: 12px; color: var(--ink2); }
+.sub-h { margin: 18px 0 0; font-size: 14px; font-weight: 600; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, th button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 18px 0 6px; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 16px; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .ent-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .map-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 26px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .scale > span { width: auto; min-width: 0; flex: 1 1 0; font-size: 11px; }
+  .scale > span.u { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Crédito por departamento en el Perú</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto crédito registran en cada departamento del Perú las oficinas de los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos, mes a mes.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-deptos" aria-controls="tab-deptos" aria-selected="true">Departamentos</button>
+    <button type="button" role="tab" id="tabbtn-entidades" aria-controls="tab-entidades" aria-selected="false" tabindex="-1">Entidades</button>
+    <button type="button" role="tab" id="tabbtn-metodologia" aria-controls="tab-metodologia" aria-selected="false" tabindex="-1">Cómo leer los datos</button>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtros">
+    <div class="f" id="f-ind-wrap"><span class="lab">Indicador</span>
+      <div class="ind-groups">
+        <span class="glab" id="lab-tam">Tamaño</span><div class="seg" id="f-ind-tam" role="group" aria-labelledby="lab-tam"></div>
+        <span class="glab" id="lab-din">Cambio</span><div class="seg" id="f-ind-din" role="group" aria-labelledby="lab-din"></div>
+        <span class="glab" id="lab-est">Estructura</span><div class="seg" id="f-ind-est" role="group" aria-labelledby="lab-est"></div>
+      </div>
+    </div>
+    <div class="f"><span class="lab" id="lab-scope">Ámbito</span><div class="seg" id="f-scope" role="group" aria-labelledby="lab-scope"></div></div>
+    <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+    <div class="f"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+  </div>
+
+  <!-- ===================== Departamentos ===================== -->
+  <div id="tab-deptos" role="tabpanel" aria-labelledby="tabbtn-deptos">
+    <div class="section-title">Resumen</div>
+    <section class="kpis" id="kpis" aria-label="Indicadores del mes seleccionado"></section>
+
+    <div class="section-title">Mapa</div>
+    <figure class="card" id="card-map">
+      <div class="card-head">
+        <div>
+          <h2 id="map-title">Crédito por departamento</h2>
+          <p id="map-desc"></p>
+        </div>
+        <button class="btn" data-table="map">Ver tabla</button>
+      </div>
+      <div class="scale" id="map-scale" aria-hidden="true"></div>
+      <div class="map-grid">
+        <div class="chart map-box" id="ch-map"></div>
+        <div class="chart" id="ch-rank"></div>
+      </div>
+      <p class="note" id="map-note"></p>
+      <div class="table-wrap" id="tb-map" hidden></div>
+    </figure>
+
+    <div class="section-title">Lima y el resto del país</div>
+    <figure class="card" id="card-lc">
+      <div class="card-head">
+        <div>
+          <h2 id="lc-title">Participación de Lima y Callao en el crédito</h2>
+          <p id="lc-desc"></p>
+        </div>
+        <button class="btn" data-table="lc">Ver tabla</button>
+      </div>
+      <div class="legend" id="lc-legend"></div>
+      <div class="chart" id="ch-lc"></div>
+      <p class="note" id="lc-note"></p>
+      <div class="table-wrap" id="tb-lc" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-gr">
+      <div class="card-head">
+        <div>
+          <h2 id="gr-title">Crecimiento anual: Lima y Callao frente al resto del país</h2>
+          <p id="gr-desc"></p>
+        </div>
+        <button class="btn" data-table="gr">Ver tabla</button>
+      </div>
+      <div class="legend" id="gr-legend"></div>
+      <div class="chart" id="ch-gr"></div>
+      <p class="note" id="gr-note"></p>
+      <div class="table-wrap" id="tb-gr" hidden></div>
+    </figure>
+
+    <div class="section-title">Por departamento</div>
+    <figure class="card" id="card-dep">
+      <div class="card-head">
+        <div>
+          <h2 id="dep-title">Departamento</h2>
+          <p id="dep-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-dep" style="margin:0">Departamento</label>
+          <select class="btn" id="f-dep"></select>
+          <button class="btn" data-table="dep">Ver tabla</button>
+        </div>
+      </div>
+      <div class="ent-stats" id="dep-stats"></div>
+      <h3 class="sub-h" id="dep-stack-title">Saldo por subsistema</h3>
+      <div class="legend" id="dep-stack-legend"></div>
+      <div class="chart" id="ch-dep-stack"></div>
+      <h3 class="sub-h" id="dep-line-title"></h3>
+      <div class="legend" id="dep-line-legend"></div>
+      <div class="chart" id="ch-dep-line"></div>
+      <p class="note" id="dep-note"></p>
+      <div class="table-wrap" id="tb-dep" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-depent">
+      <div class="card-head">
+        <div>
+          <h2 id="depent-title">Quién presta en el departamento</h2>
+          <p id="depent-desc"></p>
+        </div>
+        <button class="btn" data-table="depent">Ver tabla</button>
+      </div>
+      <div class="legend" id="depent-legend"></div>
+      <div class="chart" id="ch-depent"></div>
+      <p class="note" id="depent-note"></p>
+      <div class="table-wrap" id="tb-depent" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-heat">
+      <div class="card-head">
+        <div>
+          <h2 id="heat-title">Peso de cada subsistema en cada departamento</h2>
+          <p id="heat-desc"></p>
+        </div>
+      </div>
+      <div class="scale" id="heat-scale" aria-hidden="true"></div>
+      <div class="heat-wrap" id="heat"></div>
+      <p class="note" id="heat-note"></p>
+    </figure>
+  </div>
+
+  <!-- ===================== Entidades ===================== -->
+  <div id="tab-entidades" role="tabpanel" aria-labelledby="tabbtn-entidades" hidden>
+    <figure class="card" id="card-emap" style="margin-top:12px">
+      <div class="card-head">
+        <div>
+          <h2 id="emap-title">Entidad</h2>
+          <p id="emap-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-ent" style="margin:0">Entidad</label>
+          <select class="btn" id="f-ent"></select>
+          <button class="btn" data-table="emap">Ver tabla</button>
+        </div>
+      </div>
+      <div class="filters" style="margin-top:12px" role="group" aria-label="Qué muestra el mapa de la entidad">
+        <div class="f"><span class="lab" id="lab-emode">El mapa muestra</span><div class="seg" id="f-emode" role="group" aria-labelledby="lab-emode"></div></div>
+      </div>
+      <div class="ent-stats" id="ent-stats"></div>
+      <div class="scale" id="emap-scale" aria-hidden="true"></div>
+      <div class="map-grid">
+        <div class="chart map-box" id="ch-emap"></div>
+        <div class="chart" id="ch-erank"></div>
+      </div>
+      <p class="note" id="emap-note"></p>
+      <div class="table-wrap" id="tb-emap" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-elc">
+      <div class="card-head">
+        <div>
+          <h2 id="elc-title">Lima y Callao en la cartera de la entidad</h2>
+          <p id="elc-desc"></p>
+        </div>
+        <button class="btn" data-table="elc">Ver tabla</button>
+      </div>
+      <div class="legend" id="elc-legend"></div>
+      <div class="chart" id="ch-elc"></div>
+      <p class="note" id="elc-note" hidden></p>
+      <div class="table-wrap" id="tb-elc" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-etab">
+      <div class="card-head">
+        <div>
+          <h2 id="etab-title">Departamento principal de cada entidad</h2>
+          <p id="etab-desc"></p>
+        </div>
+      </div>
+      <div class="table-wrap" id="tb-etab" style="max-height:560px"></div>
+      <p class="note" id="etab-note"></p>
+    </figure>
+  </div>
+
+  <!-- ===================== Metodología ===================== -->
+  <div id="tab-metodologia" role="tabpanel" aria-labelledby="tabbtn-metodologia" hidden>
+    <div class="edu">
+      <section id="m-origen">
+        <h2>De dónde sale el crédito por departamento</h2>
+        <p>Cada mes, la SBS publica en su Boletín Estadístico, para cada tipo de empresa, el cuadro «Estructura de los créditos directos por departamento». Cada fila es una entidad: trae el porcentaje de sus <b>créditos directos</b> que está en cada departamento (la fila suma 100) y, en la última columna, el total de sus créditos directos en miles de soles.</p>
+        <p>Según el glosario de la SBS, los créditos directos son la suma de los créditos vigentes, refinanciados, reestructurados, vencidos y en cobranza judicial; los créditos en moneda extranjera se pasan a soles con el tipo de cambio contable de fin de periodo. No incluyen los créditos indirectos (avales, cartas fianza, cartas de crédito y aceptaciones bancarias), que son operaciones fuera de balance, ni los créditos castigados, que ya se retiraron del balance.</p>
+        <p>Por departamento, estos cuadros dan porcentajes, no montos. El monto de cada entidad en cada departamento es un cálculo de este tablero:</p>
+        <div class="formula">Crédito de una entidad en un departamento = porcentaje del departamento × créditos directos totales de la entidad ÷ 100</div>
+        <p>El crédito de un subsistema o del sistema en un departamento es la suma de sus entidades. En cada subsistema y mes, la suma de las entidades coincide con la fila de total que publica la SBS, salvo diferencias de redondeo de menos de S/ 3 mil. Las excepciones son octubre de 2023 y, por departamento, las cajas rurales de julio a octubre de 2010 (ver «Antes de comparar»).</p>
+        <h3>El departamento es el de la oficina</h3>
+        <p>Según la nota al pie de los cuadros, la información sale del Anexo N.° 10 del Manual de Contabilidad de la SBS, que la nota de banca múltiple y empresas financieras llama «Depósitos y Colocaciones por Oficina» y la de cajas municipales, cajas rurales y empresas de créditos, «Depósitos, Colocaciones y Personal por Oficinas». En ese anexo, cada entidad informa, oficina por oficina, la ubicación de la oficina (país, departamento, provincia y distrito) y sus depósitos, colocaciones y personal. Por eso el departamento de estos cuadros es el de la <b>oficina</b>. El anexo no pide la ubicación del deudor ni dice con qué criterio se asigna cada crédito a una oficina. Desde la información de setiembre de 2025, los establecimientos de operaciones básicas (EOB) se informan sumados a la oficina más cercana.</p>
+        <p>De ahí se desprende algo que la SBS no dice de forma explícita y que conviene leer como interpretación: el crédito registrado en un departamento no tiene por qué ser el crédito de los deudores que viven o producen ahí. Por ejemplo, si una empresa que opera en Arequipa se financia en una oficina de Lima, ese crédito cuenta en Lima. Estos cuadros no permiten medir cuánto pesa ese efecto.</p>
+        <h3>Sistema, subsistemas y «Lima»</h3>
+        <p>El <b>sistema</b> en este tablero son los cinco grupos de empresas de operaciones múltiples cuyos cuadros por departamento publica la SBS, cada uno un <b>subsistema</b>: banca múltiple, empresas financieras, cajas municipales, cajas rurales de ahorro y crédito y empresas de créditos. El cuadro de cajas municipales incluye a las cajas municipales de ahorro y crédito y a la Caja Municipal de Crédito Popular de Lima. Hasta febrero de 2022, el cuadro de empresas de créditos se titulaba «… y Entidad de Desarrollo a la Pequeña y Micro Empresa» (EDPYME); según su nota al pie, el Decreto Legislativo N.° 1531 (marzo de 2022) creó la «empresa de créditos», y desde entonces las referencias a las EDPYME se entienden hechas a ella. El sistema de este tablero no incluye al Banco de la Nación, Agrobanco ni COFIDE, ni a las cooperativas de ahorro y crédito.</p>
+        <p>En los cuadros de la SBS y en este tablero, <b>Lima</b> es todo el departamento de Lima, sin el Callao: la provincia de Lima, donde está la capital, y las demás provincias del departamento. Estos cuadros no separan Lima Metropolitana del resto del departamento. La <b>Provincia Constitucional del Callao</b> tiene su propia columna, y «Lima y Callao» es la suma de las dos.</p>
+      </section>
+
+      <section id="m-exterior">
+        <h2>Sucursales en el exterior</h2>
+        <p>El cuadro de la banca múltiple tiene una columna «Sucursales en el Exterior», y el total de créditos de los bancos que la usan la incluye. Este tablero la deja fuera: el total del Perú es la suma de los 24 departamentos y la Provincia Constitucional del Callao. Así, el total de cada subsistema coincide, salvo redondeos, con el del ranking de créditos de la SBS, con las excepciones de 2010 a 2015 que se listan en «Antes de comparar». En cambio, es algo menor que el total del cuadro de créditos por tipo y situación, que sí incluye el exterior y es el que usa el tablero de colocaciones y morosidad. En el sistema, desde 2015 la diferencia va de 0.1% a 0.6% según el mes. Antes era mayor porque el exterior pesaba más: en noviembre de 2010, la columna del exterior era 6.0% del crédito de la banca múltiple y la diferencia en el sistema llegaba a 5.3%. <span id="ext-txt"></span></p>
+      </section>
+
+      <section id="m-indicadores">
+        <h2>Indicadores</h2>
+        <dl class="defs">
+          <dt>Ámbito</dt><dd>El sistema o uno de sus cinco subsistemas. Cada indicador se calcula con el crédito del ámbito elegido.</dd>
+          <dt>Saldo</dt><dd>Créditos directos registrados en oficinas del departamento al cierre del mes, en soles corrientes. Los créditos en dólares están pasados a soles con el tipo de cambio contable de fin de mes, así que su valor en soles sube o baja con el tipo de cambio.</dd>
+          <dt>Participación</dt><dd>Saldo del departamento ÷ saldo del Perú (sin el exterior), en el ámbito elegido. Los 25 departamentos suman 100%.</dd>
+          <dt>Por habitante</dt><dd>Saldo del departamento ÷ población estimada del departamento al 30 de junio de ese año (INEI), en soles por persona. Incluye los créditos a empresas, así que no es la deuda promedio de una persona. Además, el saldo es el de las oficinas del departamento y la población es la que vive en él: el cociente sale más alto donde se registran créditos de deudores de otros departamentos.</dd>
+          <dt>Sobre el VAB</dt><dd>Saldo del departamento ÷ valor agregado bruto (VAB) del departamento a precios corrientes del mismo año (INEI), en %. Para los meses de <span data-v="vabNext"></span> en adelante se usa el VAB de <span data-v="vabLast"></span>, el último publicado. No es el crédito sobre el PBI: ver «Población y VAB por departamento».</dd>
+          <dt>Crecimiento anual</dt><dd>Variación del saldo frente al mismo mes del año anterior, en %. Es <b>nominal</b>: no descuenta la inflación ni el efecto del tipo de cambio. Los cuadros por departamento no separan los créditos en soles y en dólares, así que con ellos no se puede calcular el crecimiento a tipo de cambio constante. La SBS sí publica esa separación en otros cuadros que este tablero no usa, como «Créditos directos y depósitos por zona geográfica» (B-2314 en la banca múltiple). No se calcula si el saldo de hace 12 meses era menor a S/ 1 millón.</dd>
+          <dt>Peso de las cajas o del subsistema</dt><dd>Con el ámbito «Sistema», es el saldo de las cajas municipales y rurales ÷ el saldo del sistema en el departamento. Con un subsistema, es su saldo ÷ el saldo del sistema en el departamento.</dd>
+          <dt>Concentración (IHH)</dt><dd>Índice de Herfindahl-Hirschman: la suma de los cuadrados de la participación (en %) de cada entidad del ámbito en el saldo del departamento. Va de casi 0 (muchas entidades pequeñas) a 10&nbsp;000 (una sola entidad); con <i>n</i> entidades del mismo tamaño vale 10&nbsp;000 ÷ <i>n</i> (2&nbsp;000 con cinco). Cada entidad cuenta por separado, aunque pertenezca al mismo grupo económico que otra.</dd>
+        </dl>
+        <p>No confunda <b>participación</b> con <b>peso</b>: la participación reparte el crédito del Perú entre departamentos; el peso reparte el crédito de un departamento entre subsistemas.</p>
+        <p>Los indicadores de un grupo de departamentos («Lima y Callao», «resto del país», «Perú») se calculan sumando saldos, poblaciones o VAB antes de dividir.</p>
+        <p>Colores del mapa. En saldo, participación, por habitante, sobre el VAB, peso y concentración, los cortes son los quintiles de los departamentos con valor mayor que cero en el último mes publicado, redondeados a dos cifras: en ese mes, cada color agrupa a cerca de un quinto de esos departamentos. Los cortes no cambian al elegir otro mes, para que un color signifique siempre el mismo rango; por eso, en los meses antiguos, el saldo (que crece en soles corrientes) se ve más claro. Cada ámbito tiene sus propios cortes. El crecimiento usa cortes fijos en ±1%, ±5% y ±10%. El rayado indica que no hay dato o que el ámbito no tiene créditos en el departamento.</p>
+      </section>
+
+      <section id="m-externos">
+        <h2>Población y VAB por departamento</h2>
+        <p>La población es la estimada al 30 de junio de cada año por el INEI (Estimaciones y Proyecciones de Población Departamental, Boletín Especial N.° 25). El INEI advierte que las proyecciones de 2026 son provisionales hasta que se disponga de los resultados definitivos del censo de población y vivienda de 2025.</p>
+        <p>El cuadro de PBI por departamento del INEI da, para cada departamento, el <b>valor agregado bruto</b> (VAB). Los impuestos a los productos y los derechos de importación, que completan el PBI, solo se suman en el total del país. Por eso este tablero habla de crédito sobre el VAB y no sobre el PBI. Entre 2010 y 2025, el VAB del país fue entre 91% y 93% de su PBI a precios corrientes, así que el crédito sobre el VAB del Perú sale entre 8% y 10% más alto que el crédito sobre el PBI (si el VAB es 93% del PBI, el primero es 1 ÷ 0.93 ≈ 1.08 veces el segundo).</p>
+        <p>En ese cuadro, la fila «Lima» incluye al Callao y se desglosa en «Prov. Const. del Callao», «Provincia de Lima» y «Región Lima». Aquí, el VAB de Lima es la suma de Provincia de Lima y Región Lima, sin el Callao, para que coincida con la columna «Lima» de la SBS y con la población del departamento de Lima del INEI, que también deja aparte al Callao. Las cifras de <span data-v="vabPrel"></span> son preliminares y las de <span data-v="vabEst"></span>, estimadas.</p>
+        <p>El crédito es un saldo al cierre de un mes y el VAB es el valor agregado de todo un año. El cociente sirve para comparar departamentos y años; no es una tasa ni dice qué parte de la producción se financia con crédito.</p>
+      </section>
+
+      <section id="m-trampas">
+        <h2>Antes de comparar</h2>
+        <ul>
+          <li><b>Octubre de 2023, Mibanco.</b> El cuadro de la banca de ese mes trae a Mibanco sin datos (con «-» en toda la fila), y el total de la banca no lo incluye. Este tablero lo completa: toma sus créditos directos del ranking de créditos de la SBS de ese mes (cuadro B-2332: S/ 13,348 millones) y los reparte con el promedio de su distribución por departamento de setiembre y noviembre de 2023. Es una estimación: afecta a todos los indicadores de la banca y del sistema en ese mes y al crecimiento anual de octubre de 2024.</li>
+          <li><b>Julio a octubre de 2010, cajas rurales.</b> En esos meses, la fila de total del cuadro reparte el crédito de las cajas rurales entre Junín y Lima de otra forma que sus entidades: le asigna a Junín entre S/ 27 y S/ 30 millones más que la suma de las entidades, y a Lima lo mismo menos. El total de las cajas rurales sí coincide. Este tablero usa las filas de las entidades, como en el resto de la serie. La diferencia está en Caja Profinanzas. Con las filas de las entidades, el crédito de las cajas rurales en Junín sube de S/ 44 millones a S/ 77 millones entre octubre y noviembre de 2010, y el de Lima baja, lo que apunta a una reasignación entre oficinas más que a créditos nuevos.</li>
+          <li><b>Enero a mayo de 2013.</b> Desde enero de 2013, la Resolución SBS N.° 7036-2012 dispuso presentar los créditos netos de los ingresos no devengados por arrendamiento financiero y lease-back. El balance y el ranking de créditos lo aplican desde enero, pero este cuadro recién desde junio. Por eso, de enero a mayo, su total es mayor que el del ranking: 1.9% en la banca múltiple, 0.6% en las empresas financieras en enero y febrero (menos de 0.1% de marzo a mayo) y 0.1% en las cajas municipales. El crecimiento anual de enero a mayo de 2013 compara cifras sin netear con cifras sin netear; el de junio de 2013 a mayo de 2014 sale más bajo, porque compara cifras netas con cifras sin netear (en la banca, unos 2 puntos).</li>
+          <li><b>Otras diferencias con el ranking de créditos.</b> En noviembre de 2014, CMAC Sullana tiene en este cuadro S/ 55 millones más (3.6%) que en el ranking. De setiembre de 2014 a febrero de 2015, CRAC Del Centro, cuyo funcionamiento la SBS autorizó en julio de 2014 y que inició operaciones el 1 de setiembre de 2014, tiene aquí un saldo de entre S/ 0.4 y S/ 4.5 millones y cero en el ranking. En noviembre de 2010 no se puede comparar el total de las cajas rurales, porque el ranking de ese mes trae montos inválidos.</li>
+          <li><b>Las empresas de créditos</b> solo listan los departamentos donde alguna de ellas tiene créditos. En los demás departamentos su saldo es cero.</li>
+          <li><b>Traspasos entre subsistemas.</b> Cuando una entidad pasa de un subsistema a otro (por ejemplo, en 2013, la caja rural Nuestra Gente pasó a ser Financiera Confianza y dos EDPYME se convirtieron en financieras en 2012 y 2013; en 2015, Financiera Edyficar traspasó su negocio a Mibanco por escisión, y entre 2025 y 2026, tres financieras se convirtieron en bancos), el saldo de los dos subsistemas salta en esos departamentos sin que se hayan dado créditos nuevos. El sistema no cambia por esos traspasos.</li>
+          <li><b>Departamento de la oficina, no del deudor.</b> Ver arriba: el crédito de Lima puede incluir préstamos a empresas y personas de otros departamentos registrados en oficinas de Lima. Por eso, un cambio en la participación de un departamento no prueba que el crédito a sus habitantes haya crecido más o menos.</li>
+          <li><b>Soles corrientes.</b> Los saldos no descuentan la inflación ni el efecto del tipo de cambio.</li>
+          <li><b>Datos con otra fecha.</b> En algunos meses, la nota al pie del cuadro advierte que la información de una entidad corresponde a una fecha anterior (por ejemplo, una entidad en liquidación) o que la entidad corrigió su Anexo N.° 10. Por ejemplo, de enero a abril de 2014, las cifras de CMAC Pisco son las de diciembre de 2013. Este tablero usa las cifras tal como vienen en la versión más reciente descargada de cada cuadro.</li>
+        </ul>
+        <h3>Lo que estos cuadros no traen</h3>
+        <p>Los cuadros por departamento de la SBS solo traen la distribución del crédito directo: no traen la morosidad, el tipo de crédito ni el número de deudores por departamento. Tampoco los traen los otros cuadros geográficos del Boletín Estadístico, como «Créditos directos y depósitos por zona geográfica» y «Créditos directos y depósitos por oficinas» (B-2314 y B-2358 en la banca múltiple), que dan los saldos de créditos directos y de depósitos, en soles y en dólares, por distrito o por oficina. Por eso este tablero no muestra la mora ni los deudores por departamento. Para la mora por entidad y por tipo de crédito, vea el tablero de colocaciones y morosidad.</p>
+      </section>
+
+      <section id="m-fuentes">
+        <h2>Fuentes</h2>
+        <ul class="srcs">
+          <li>SBS, Boletín Estadístico del sistema financiero: «Estructura de los créditos directos por departamento», cuadros B-2349 (banca múltiple), B-3228 (empresas financieras), C-1223 (cajas municipales), C-2223 (cajas rurales) y C-4219 (empresas de créditos). <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Boletín Estadístico: «Ranking de créditos, depósitos y patrimonio» de la banca múltiple (cuadro B-2332) de octubre de 2023, para completar a Mibanco. <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2023/Octubre/B-2332-oc2023.XLS" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, Manual de contabilidad para las empresas del sistema financiero, información complementaria: Anexo N.° 10 «Depósitos, colocaciones y personal por oficinas» (versión anterior y versión vigente desde la información de setiembre de 2025). <a href="https://www.sbs.gob.pe/normativa-y-estandares/normativa/normativa-sbs/plan-de-cuentas/planes-de-cuenta-del-sistema-financiero/informacion-complementaria-de-manual-de-contabilidad" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, glosario «Términos e indicadores del sistema financiero»: créditos directos, créditos indirectos, créditos castigados y tipo de cambio contable. <a href="https://www.sbs.gob.pe/app/stats/Glosarios/Glosario(Abril2011).docx" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>INEI, Población estimada al 30 de junio, por años calendario y sexo, según departamento, 2000-2026 (Estimaciones y Proyecciones de Población Departamental, Boletín Especial N.° 25). <a href="https://www.inei.gob.pe/media/MenuRecursivo/indices_tematicos/proy_03_4.xlsx" target="_blank" rel="noopener">inei.gob.pe</a></li>
+          <li>INEI, Perú: Producto Bruto Interno por años, según departamentos, 2007-2025, cuadro N.° 4 (valores a precios corrientes, miles de soles). <a href="https://www.inei.gob.pe/media/MenuRecursivo/indices_tematicos/pbi_peru_17.xlsx" target="_blank" rel="noopener">inei.gob.pe</a></li>
+          <li>Límites departamentales: INEI (2007), publicados en el repositorio juaneladio/peru-geojson con licencia Mozilla Public License 2.0; simplificados y proyectados para este mapa. <a href="https://github.com/juaneladio/peru-geojson" target="_blank" rel="noopener">github.com</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('regional-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('regional-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = D.months, N = MONTHS.length, AGG = D.agg, ENT = D.ent;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 1) => v == null ? '—' : fx(v, d) + '%';
+const spct = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + '%';
+const spp = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + ' pp';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const idxOf = m => MONTHS.indexOf(m);
+// Montos: los datos vienen en miles de soles.
+const money = v => v == null ? '—' : v >= 1e6 ? 'S/ ' + f1.format(v / 1e6) + ' mil mill.' : v >= 1e3 ? 'S/ ' + f0.format(v / 1e3) + ' mill.' : v > 0 ? 'S/ ' + fx(v / 1e3, 1) + ' mill.' : 'S/ 0';
+const soles = v => v == null ? '—' : 'S/ ' + f0.format(v);
+const pctS = v => v == null ? '—' : pct(v, Math.abs(v) < 1 && v !== 0 ? 2 : 1);
+
+const SUBS = D.subs;
+const SUB_COLOR = {'banca-multiple': 'var(--s1)', 'empresas-financieras': 'var(--s2)', 'cajas-municipales': 'var(--s3)',
+  'cajas-rurales': 'var(--s4)', 'empresas-credito': 'var(--s5)'};
+const SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+const DEPTS = D.depts, DK = DEPTS.map(d => d.k);
+const DEP_BY = Object.fromEntries(DEPTS.map(d => [d.k, d]));
+const LC = ['lima', 'callao'];
+const GROUPS = {_peru: DK, _lc: LC, _resto: DK.filter(k => !LC.includes(k))};
+const GROUP_NAME = {_peru: 'Perú', _lc: 'Lima y Callao', _resto: 'Resto del país'};
+const members = k => GROUPS[k] || [k];
+const depName = k => GROUP_NAME[k] || DEP_BY[k].l;
+const MIN_TOT = 1000;   // miles de S/: no se calcula el crecimiento sobre una base menor a S/ 1 millón
+const CAJAS = ['cajas-municipales', 'cajas-rurales'];
+
+// Indicadores. u: unidad; g: grupo del selector; ref: muestra la línea del Perú en el ranking.
+const IND = [
+  {k: 'sal', g: 'tam', l: 'Saldo', name: 'Saldo de créditos', lower: 'saldo'},
+  {k: 'par', g: 'tam', l: 'Participación', name: 'Participación en el Perú', lower: 'participación en el Perú'},
+  {k: 'pc', g: 'tam', l: 'Por habitante', name: 'Crédito por habitante', lower: 'crédito por habitante', ref: true},
+  {k: 'pbi', g: 'tam', l: 'Sobre el VAB', name: 'Crédito sobre el VAB', lower: 'crédito sobre el VAB', ref: true},
+  {k: 'cre', g: 'din', l: 'Crecimiento anual', name: 'Crecimiento anual nominal', lower: 'crecimiento anual', ref: true},
+  {k: 'peso', g: 'est', l: 'Peso de las cajas', name: 'Peso de las cajas', lower: 'peso', ref: true},
+  {k: 'hhi', g: 'est', l: 'Concentración', name: 'Concentración (IHH)', lower: 'concentración', ref: true},
+];
+const IND_BY = Object.fromEntries(IND.map(x => [x.k, x]));
+
+// ---------- Estado ----------
+// Los subsistemas no publican todos el mismo mes: el sistema llega hasta el último mes con los cinco
+// (D.allHasta) y la página abre ahí. Si el ámbito no tiene el mes elegido, se usa su último mes y se dice.
+const ALL_LAST = idxOf(D.allHasta);
+const LAST = Object.fromEntries(Object.entries(D.scopeHasta).map(([k, m]) => [k, idxOf(m)]));
+const effIdx = (sc, i) => Math.min(i, LAST[sc]);
+// Entidad cuyo subsistema todavía no publica el mes elegido: su último mes. Si dejó de existir antes, no.
+function entIdx(k, i) {
+  const E = ENT[k], last = E.a + E.T.length - 1;
+  return i > last && last === LAST[E.s] ? last : i;
+}
+const monthTag = (j, i) => j < i ? ' · ' + mLabel(MONTHS[j]) : '';
+const subArt = s => (s === 'banca-multiple' ? 'la ' : 'las ') + SUB_BY[s].l.toLowerCase();
+const listY = a => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+// Nota cuando el ámbito se muestra en un mes anterior al elegido (j < i).
+function lagNote(sc, i, j) {
+  if (j >= i) return '';
+  const miss = (sc === 'sistema' ? SUBS.map(s => s.k) : [sc]).filter(s => LAST[s] < i);
+  if (!miss.length) return '';
+  const pl = miss.length > 1 || miss[0] !== 'banca-multiple';
+  const who = listY(miss.map(subArt)) + ' todavía no ' + (pl ? 'publican ' : 'publica ') + mLabel(MONTHS[i]);
+  if (sc === 'sistema') return 'El sistema llega hasta ' + mLabel(MONTHS[j]) + ': ' + who + '.';
+  return who[0].toUpperCase() + who.slice(1) + ': se muestra ' + mLabel(MONTHS[j]) + ', su último mes publicado.';
+}
+const state = {ind: 'sal', scope: 'sistema', mi: ALL_LAST, range: '5a', dep: 'arequipa', ent: null, emode: 'dist', hl: null};
+const RANGES = [
+  {id: '3a', label: '3 años', n: 36},
+  {id: '5a', label: '5 años', n: 60},
+  {id: 'todo', label: 'Desde ' + MONTHS[0].slice(0, 4), n: N},
+];
+
+// ---------- Datos ----------
+// Saldo (miles de S/) de un ámbito en un departamento o grupo de departamentos.
+function amt(scope, dep, i) {
+  if (i < 0 || i >= N) return null;
+  const A = AGG[scope];
+  let s = 0;
+  for (const d of members(dep)) { const v = A[d][i]; if (v == null) return null; s += v; }
+  return s;
+}
+const yearOf = i => +MONTHS[i].slice(0, 4);
+function popOf(dep, i) {
+  const P = D.pop, j = Math.max(0, Math.min(P.v.lima.length - 1, yearOf(i) - P.y0));
+  return members(dep).reduce((a, d) => a + P.v[d][j], 0);
+}
+const VAB_LAST = D.vab.y0 + D.vab.v.lima.length - 1;
+function vabOf(dep, i) {
+  const V = D.vab, j = Math.max(0, Math.min(V.v.lima.length - 1, yearOf(i) - V.y0));
+  return {v: members(dep).reduce((a, d) => a + V.v[d][j], 0), y: V.y0 + j};
+}
+function growth(scope, dep, i) {
+  if (i < 12) return null;
+  const a = amt(scope, dep, i), b = amt(scope, dep, i - 12);
+  return a == null || b == null || b < MIN_TOT ? null : 100 * (a / b - 1);
+}
+// Monto de una entidad en un departamento o grupo (null fuera de su periodo).
+function entAmt(k, dep, i) {
+  const e = ENT[k], j = i - e.a;
+  if (j < 0 || j >= e.T.length || e.T[j] == null) return null;
+  let s = 0;
+  for (const d of members(dep)) { const a = e.D[d]; if (a && a[j] != null) s += a[j]; }
+  return s;
+}
+const entPeru = (k, i) => entAmt(k, '_peru', i);
+const entExt = (k, i) => { const e = ENT[k], j = i - e.a; return e.D.exterior && j >= 0 && j < e.T.length ? e.D.exterior[j] || 0 : 0; };
+const inScope = (k, scope) => scope === 'sistema' || ENT[k].s === scope;
+const hhiCache = new Map();
+function hhi(scope, dep, i) {
+  const key = scope + '|' + dep + '|' + i;
+  if (hhiCache.has(key)) return hhiCache.get(key);
+  let tot = 0, n = 0;
+  const xs = [];
+  for (const k of D.entities) {
+    if (!inScope(k, scope)) continue;
+    const v = entAmt(k, dep, i);
+    if (v > 0) { xs.push(v); tot += v; n++; }
+  }
+  const out = tot > 0 ? {h: xs.reduce((a, v) => a + (100 * v / tot) ** 2, 0), n} : null;
+  hhiCache.set(key, out);
+  return out;
+}
+function pesoOf(scope, dep, i) {
+  const all = amt('sistema', dep, i);
+  if (!(all > 0)) return null;
+  if (scope === 'sistema') return 100 * CAJAS.reduce((a, s) => a + (amt(s, dep, i) || 0), 0) / all;
+  const v = amt(scope, dep, i);
+  return v == null ? null : 100 * v / all;
+}
+function val(k, scope, dep, i) {
+  if (i < 0 || i >= N) return null;
+  if (k === 'cre') return growth(scope, dep, i);
+  if (k === 'peso') return pesoOf(scope, dep, i);
+  const a = amt(scope, dep, i);
+  if (a == null) return null;
+  if (k === 'sal') return a;
+  if (!(a > 0)) return null;
+  if (k === 'par') { const p = amt(scope, '_peru', i); return p > 0 ? 100 * a / p : null; }
+  if (k === 'pc') return 1000 * a / popOf(dep, i);
+  if (k === 'pbi') return 100 * a / vabOf(dep, i).v;
+  if (k === 'hhi') { const h = hhi(scope, dep, i); return h ? h.h : null; }
+  return null;
+}
+const fmtInd = (k, v) => k === 'sal' ? money(v) : k === 'pc' ? soles(v) : k === 'cre' ? spct(v) : k === 'hhi' ? (v == null ? '—' : f0.format(v)) : k === 'par' ? pctS(v) : pct(v);
+const fmtChg = (k, v, p) => v == null || p == null ? null : k === 'sal' || k === 'pc' ? (p ? spct(100 * (v / p - 1)) : null) : k === 'hhi' ? (v - p > 0 ? '+' : v - p < 0 ? '−' : '') + f0.format(Math.abs(v - p)) : spp(v - p);
+const scopeLabel = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc].l;
+const scopeLower = sc => sc === 'sistema' ? 'el sistema' : SUB_BY[sc].l.toLowerCase();
+const deSc = sc => sc === 'sistema' ? 'del sistema' : 'de ' + SUB_BY[sc].l.toLowerCase();
+const scopeColor = sc => sc === 'sistema' ? 'var(--sys)' : SUB_COLOR[sc];
+function indName(k = state.ind) {
+  if (k === 'peso') return state.scope === 'sistema' ? 'Peso de las cajas municipales y rurales' : 'Peso de ' + SUB_BY[state.scope].l.toLowerCase();
+  return IND_BY[k].name;
+}
+function descOf(k) {
+  const sc = scopeLower(state.scope), dsc = deSc(state.scope);
+  if (k === 'sal') return 'Saldo de créditos directos ' + dsc + ' registrado en oficinas de cada departamento al cierre del mes, en soles corrientes.';
+  if (k === 'par') return 'Porcentaje del crédito ' + dsc + ' en el Perú que está registrado en cada departamento.';
+  if (k === 'pc') return 'Saldo de créditos ' + dsc + ' en el departamento entre su población estimada de ese año, en soles por persona.';
+  if (k === 'pbi') return 'Saldo de créditos ' + dsc + ' en el departamento como % de su valor agregado bruto anual a precios corrientes.';
+  if (k === 'cre') return 'Variación del saldo ' + dsc + ' frente al mismo mes del año anterior, en soles corrientes (incluye el efecto del tipo de cambio).';
+  if (k === 'peso') return state.scope === 'sistema' ? 'Porcentaje del crédito del sistema en el departamento que dan las cajas municipales y rurales.'
+    : 'Porcentaje del crédito del sistema en el departamento que corresponde al subsistema ' + sc + '.';
+  return 'Índice de Herfindahl-Hirschman de las entidades ' + dsc + ' en el departamento: de casi 0 (muchas entidades pequeñas) a 10\u00a0000 (una sola).';
+}
+const impAt = i => D.imp.filter(x => idxOf(x.m) === i);
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+// u: money (miles de S/), soles, pct, num
+function axisOf(u, absMax) {
+  if (u === 'money') {
+    const big = absMax >= 1e6;
+    return {div: big ? 1e6 : 1e3, unit: big ? 'Miles de millones de S/' : 'Millones de S/', tick: t => Math.abs(t) >= 1000 ? f0.format(t) : numTick(t)};
+  }
+  if (u === 'soles') return {div: 1, unit: 'Soles por habitante', tick: t => f0.format(t)};
+  if (u === 'num') return {div: 1, unit: null, tick: t => f0.format(t)};
+  return {div: 1, unit: null, tick: t => (t === 0 ? '0' : numTick(t)) + '%'};
+}
+const unitOf = k => k === 'sal' ? 'money' : k === 'pc' ? 'soles' : k === 'hhi' ? 'num' : 'pct';
+
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text;
+}
+function visIdx() {
+  const r = RANGES.find(z => z.id === state.range);
+  const out = [];
+  for (let i = Math.max(0, N - r.n); i < N; i++) out.push(i);
+  return out;
+}
+// Hover y teclado compartidos por los gráficos de tiempo: mueve un índice de mes.
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide) {
+  const n = idx.length;
+  let cur = null;
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    show(at(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt);
+  });
+  hit.addEventListener('pointerleave', onHide);
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(at((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+
+// ---------- Gráfico de líneas ----------
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const series = cfg.series, fmt = cfg.fmt || pct;
+  const idx = trimIdx(cfg.idx, i => series.some(s => s.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return null; }
+  let lo = 0, hi = 0;
+  for (const i of idx) for (const s of series) { const v = s.get(i); if (v == null) continue; if (v > hi) hi = v; if (v < lo) lo = v; }
+  const clipped = cfg.clip && (lo < cfg.clip[0] || hi > cfg.clip[1]);
+  if (cfg.clip) { lo = Math.max(lo, cfg.clip[0]); hi = Math.min(hi, cfg.clip[1]); }
+  if (cfg.fit) {
+    let a = Infinity, b = -Infinity;
+    for (const i of idx) for (const s of series) { const v = s.get(i); if (v != null) { a = Math.min(a, v); b = Math.max(b, v); } }
+    const pad = Math.max((b - a) * 0.6, Math.abs(b) * 0.01); lo = a - pad; hi = b + pad;
+  }
+  const ax = axisOf(cfg.u, Math.max(-lo, hi));
+  const narrow = W < 600, hasUnit = !!ax.unit;
+  const showEnd = cfg.endLabels && !narrow;
+  const m = {l: 50, r: showEnd ? (cfg.u === 'money' ? 170 : 140) : 14, t: 12 + (hasUnit ? 14 : 0), b: 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = cfg.fit ? niceDomain(lo / ax.div, hi / ax.div, 3) : niceDomain(lo / ax.div * 1.04, hi / ax.div * 1.04, 5);
+  const y = v => m.t + (dom.hi - v / ax.div) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, t => y(t * ax.div), m.l, m.l + pw, ax.tick);
+  if (hasUnit) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  const pathOf = s => {
+    let d = '', pen = false;
+    for (const i of idx) {
+      const v = s.get(i);
+      if (v == null) { pen = false; continue; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1);
+      pen = true;
+    }
+    return d;
+  };
+  let clipId = null;
+  if (clipped) {
+    clipId = 'clip' + Math.random().toString(36).slice(2, 8);
+    svgEl('rect', {x: m.l - 4, y: m.t, width: pw + 8, height: ph}, svgEl('clipPath', {id: clipId}, svgEl('defs', {}, svg)));
+  }
+  for (const s of series) {
+    const a = {d: pathOf(s), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    if (clipId) a['clip-path'] = 'url(#' + clipId + ')';
+    svgEl('path', a, svg);
+  }
+  if (showEnd) {
+    const ends = series.map(s => {
+      for (let j = n - 1; j >= 0; j--) { const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; }
+      return null;
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      if (y(e.v) < m.t || y(e.v) > m.t + ph) continue;
+      svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = fmt(e.v);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    series.forEach((s, j) => {
+      const v = s.get(i);
+      dots[j].setAttribute('visibility', v == null || y(v) < m.t || y(v) > m.t + ph ? 'hidden' : 'visible');
+      if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+    });
+    const rows = series.map(s => ({v: s.get(i), label: s.label, color: s.color}))
+      .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); });
+  return true;
+}
+
+// ---------- Áreas apiladas: saldo por subsistema ----------
+function stackChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const layers = cfg.layers;
+  const idx = trimIdx(cfg.idx, i => layers.some(l => l.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  const tot = i => layers.reduce((a, l) => a + (l.get(i) || 0), 0);
+  const hi = Math.max(...idx.map(tot));
+  const ax = axisOf('money', hi), narrow = W < 600;
+  const m = {l: 50, r: narrow ? 14 : 150, t: 26, b: 26}, H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(0, hi / ax.div * 1.04, 5);
+  const y = v => m.t + (dom.hi - v / ax.div) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, t => y(t * ax.div), m.l, m.l + pw, ax.tick);
+  svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  const cum = idx.map(() => 0);
+  const bands = layers.map(l => {
+    const lo = cum.slice(), up = idx.map((i, j) => (cum[j] += l.get(i) || 0));
+    return {l, lo, up};
+  });
+  for (const b of bands) {
+    let d = 'M' + idx.map((i, j) => x(i).toFixed(1) + ',' + y(b.up[j]).toFixed(1)).join('L');
+    d += 'L' + idx.map((i, j) => [i, j]).reverse().map(([i, j]) => x(i).toFixed(1) + ',' + y(b.lo[j]).toFixed(1)).join('L') + 'Z';
+    svgEl('path', {d, fill: b.l.color, 'fill-opacity': 0.9, stroke: 'var(--surface)', 'stroke-width': 1.5, 'stroke-linejoin': 'round'}, svg);
+  }
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  if (!narrow) {
+    const j = n - 1, ends = [{y: y(cum[j]) - 2, v: money(cum[j]), t: 'Total'}];
+    for (const b of bands) {
+      if (y(b.lo[j]) - y(b.up[j]) >= 13) ends.push({y: (y(b.lo[j]) + y(b.up[j])) / 2, v: pct(100 * (b.up[j] - b.lo[j]) / cum[j], 1), t: b.l.short});
+    }
+    for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+    for (const e of ends) {
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = e.v;
+      svgEl('tspan', {}, t).textContent = ' ' + e.t;
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = x(i);
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    const T = tot(i);
+    const rows = layers.slice().reverse().filter(l => l.get(i) != null)
+      .map(l => ({value: money(l.get(i)), label: l.label + ' · ' + pct(T ? 100 * l.get(i) / T : null, 1), color: l.color, sq: true}));
+    rows.unshift({value: money(T), label: 'Total'});
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+}
+
+// ---------- Escalas de color del mapa ----------
+// Cortes: quintiles del último mes para el ámbito (fijos al cambiar de mes), redondeados a 2 cifras.
+const nice2 = v => { if (!(v > 0)) return v; const mag = 10 ** (Math.floor(Math.log10(v)) - 1); return Math.round(v / mag) * mag; };
+const breakCache = new Map();
+function seqBreaks(key, values) {
+  if (breakCache.has(key)) return breakCache.get(key);
+  const xs = values.filter(v => v != null && v > 0).sort((a, b) => a - b);
+  let br = [];
+  if (xs.length >= 5) {
+    for (const q of [0.2, 0.4, 0.6, 0.8]) {
+      const p = q * (xs.length - 1), lo = Math.floor(p), v = xs[lo] + (xs[Math.min(xs.length - 1, lo + 1)] - xs[lo]) * (p - lo);
+      const b = nice2(v);
+      if (!br.length || b > br[br.length - 1]) br.push(b);
+    }
+  }
+  breakCache.set(key, br);
+  return br;
+}
+const DIV_BINS = [-10, -5, -1, 1, 5, 10];
+const binOf = (v, bins) => { let b = 0; while (b < bins.length && v >= bins[b]) b++; return b; };
+function colorScale(k, scope, getLast) {
+  if (k === 'cre') return {div: true, bins: DIV_BINS, color: v => `var(--v${binOf(v, DIV_BINS)})`};
+  const br = seqBreaks(k + '|' + scope + '|' + (state.tab === 'entidades' ? state.ent + state.emode : ''), DK.map(getLast));
+  // Con menos cortes, se reparten los pasos de la rampa para mantener el contraste.
+  const steps = br.length >= 4 ? [0, 1, 2, 3, 4] : br.length === 3 ? [0, 1, 3, 4] : br.length === 2 ? [0, 2, 4] : br.length === 1 ? [1, 3] : [2];
+  return {div: false, bins: br, steps, color: v => `var(--m${steps[binOf(v, br)]})`};
+}
+function drawScale(boxId, sc, fmtB, naLabel) {
+  const box = document.getElementById(boxId);
+  box.replaceChildren();
+  const B = sc.bins;
+  if (!sc.div && fmtB.unit) htmlEl('span', {cls: 'u', text: fmtB.unit}, box);
+  if (sc.div) {
+    const sg = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+    const labels = ['< ' + sg(B[0]) + '%'].concat(B.slice(0, -1).map((b, k) => sg(b) + ' a ' + sg(B[k + 1]) + '%'), ['≥ ' + sg(B[B.length - 1]) + '%']);
+    labels.forEach((l, k) => { const s = htmlEl('span', null, box); htmlEl('i', null, s).style.background = `var(--v${k})`; s.appendChild(document.createTextNode(l)); });
+  } else {
+    const labels = B.length ? ['< ' + fmtB(B[0])].concat(B.slice(0, -1).map((b, k) => (fmtB.unit ? fmtB(b) : fmtB(b).replace(/%$/, '')) + '–' + fmtB(B[k + 1])), ['≥ ' + fmtB(B[B.length - 1])]) : ['Todos'];
+    labels.forEach((l, k) => { const s = htmlEl('span', null, box); htmlEl('i', null, s).style.background = `var(--m${sc.steps[k]})`; s.appendChild(document.createTextNode(l)); });
+  }
+  const s = htmlEl('span', null, box); htmlEl('i', {cls: 'na'}, s); s.appendChild(document.createTextNode(naLabel || 'Sin dato'));
+}
+// Formato de los cortes de la leyenda; .unit va una sola vez delante.
+function fmtBreak(k, bins) {
+  const tag = (f, unit) => Object.assign(f, {unit});
+  const num = v => String(+v.toPrecision(2));
+  if (k === 'sal') { const big = bins.some(b => b >= 1e6); return tag(v => num(big ? v / 1e6 : v / 1e3), big ? 'Miles de millones de S/' : 'Millones de S/'); }
+  if (k === 'pc') return tag(v => f0.format(v), 'Soles por habitante');
+  if (k === 'hhi') return tag(v => f0.format(v), 'IHH');
+  return tag(v => num(v) + '%', null);
+}
+
+// ---------- Mapa coroplético ----------
+const G = D.geo;
+let mapSeq = 0;
+// cfg: value(dep) → número|null; color(v); tip(dep) → filas; title(dep); sel; onPick(dep); aria
+function drawMap(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const maxH = Math.min(720, Math.max(420, innerHeight * 0.85));
+  const w = Math.min(W, maxH * G.w / G.h), h = w * G.h / G.w;
+  const id = 'm' + (++mapSeq);
+  const svg = svgEl('svg', {viewBox: `0 0 ${G.w} ${G.h}`, width: w, height: h, role: 'group', 'aria-label': cfg.aria}, box);
+  const defs = svgEl('defs', {}, svg);
+  const pat = svgEl('pattern', {id: id + 'na', width: 8, height: 8, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)'}, defs);
+  svgEl('rect', {width: 8, height: 8, fill: 'var(--na)'}, pat);
+  svgEl('line', {x1: 0, y1: 0, x2: 0, y2: 8, stroke: 'var(--hatch)', 'stroke-width': 2}, pat);
+  const fillOf = d => { const v = cfg.value(d); return v == null ? `url(#${id}na)` : cfg.color(v); };
+  const nodes = {};
+  const bind = (p, d) => {
+    const show = evt => { highlight(d, true); showTip(...anchorOf(evt, p), depName(d), cfg.tip(d)); };
+    p.addEventListener('pointermove', show);
+    p.addEventListener('pointerleave', () => { hideTip(); highlight(null); });
+    p.addEventListener('focus', () => show(null));
+    p.addEventListener('blur', () => { hideTip(); highlight(null); });
+    p.addEventListener('click', () => cfg.onPick(d));
+    p.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cfg.onPick(d); } });
+  };
+  // El departamento elegido va al final para que su borde no quede tapado.
+  const order = DK.slice().sort((a, b) => (a === cfg.sel) - (b === cfg.sel));
+  for (const d of order) {
+    const v = cfg.value(d);
+    const p = svgEl('path', {d: G.paths[d], class: 'dep' + (d === cfg.sel ? ' sel' : ''), fill: fillOf(d), 'fill-rule': 'evenodd', tabindex: 0, role: 'button',
+      'data-dep': d, 'aria-label': depName(d) + ': ' + cfg.fmt(v)}, svg);
+    bind(p, d);
+    nodes[d] = p;
+  }
+  // Recuadro ampliado de Lima y Callao, en el mar frente a la costa sur.
+  const [fx0, fy0] = G.focus, Z = 6, span = 26, box0 = {x: 30, y: 1110, s: span * 2 * Z};
+  svgEl('rect', {class: 'inset-frame', x: fx0 - span, y: fy0 - span, width: span * 2, height: span * 2}, svg);
+  svgEl('line', {x1: fx0 - span, y1: fy0 + span, x2: box0.x + box0.s / 2, y2: box0.y, stroke: 'var(--ink2)', 'stroke-width': 1, 'vector-effect': 'non-scaling-stroke', 'stroke-dasharray': '4 3'}, svg);
+  svgEl('rect', {class: 'inset-bg', x: box0.x, y: box0.y, width: box0.s, height: box0.s}, svg);
+  const cp = svgEl('clipPath', {id: id + 'clip'}, defs);
+  svgEl('rect', {x: box0.x, y: box0.y, width: box0.s, height: box0.s}, cp);
+  const gi = svgEl('g', {'clip-path': `url(#${id}clip)`, 'aria-hidden': 'true'}, svg);
+  const gz = svgEl('g', {transform: `translate(${box0.x + box0.s / 2} ${box0.y + box0.s / 2}) scale(${Z}) translate(${-fx0} ${-fy0})`}, gi);
+  for (const d of ['lima', 'callao']) {
+    const p = svgEl('path', {d: G.paths[d], class: 'dep' + (d === cfg.sel ? ' sel' : ''), fill: fillOf(d), 'fill-rule': 'evenodd', 'data-dep': d}, gz);
+    const show = evt => { highlight(d, true); showTip(...anchorOf(evt, p), depName(d), cfg.tip(d)); };
+    p.addEventListener('pointermove', show);
+    p.addEventListener('pointerleave', () => { hideTip(); highlight(null); });
+    p.addEventListener('click', () => cfg.onPick(d));
+  }
+  svgEl('rect', {class: 'inset-frame', x: box0.x, y: box0.y, width: box0.s, height: box0.s}, svg);
+  const fs = 11.5 * G.w / w;
+  svgEl('text', {class: 'inset-lab', x: box0.x, y: box0.y + box0.s + fs * 1.3, style: `font-size:${fs}px`}, svg).textContent = 'Lima y Callao (ampliado)';
+  // Rótulos dentro del recuadro: el Callao queda en el centro; su nombre va a la izquierda, en el mar.
+  const lab = (t, x, y, a) => { svgEl('text', {class: 'mlab', x, y, style: `font-size:${fs}px;stroke-width:${3 * G.w / w}px`, 'text-anchor': a}, svg).textContent = t; };
+  lab('Callao', box0.x + box0.s / 2 - 14, box0.y + box0.s / 2 + fs * 0.35, 'end');
+  lab('Lima', box0.x + box0.s * 0.78, box0.y + box0.s * 0.22, 'middle');
+}
+function highlight(d, on) {
+  state.hl = on ? d : null;
+  document.querySelectorAll('.dep.hl, .rank-row.hl').forEach(e => e.classList.remove('hl'));
+  if (!on || !d) return;
+  document.querySelectorAll(`.dep[data-dep="${d}"], .rank-row[data-dep="${d}"]`).forEach(e => e.classList.add('hl'));
+}
+
+// ---------- Ranking de departamentos (barras horizontales; punto hueco = hace 12 meses) ----------
+// rows: [{k, v, p, extra}] ya ordenadas; cfg: fmt, u, ref, color, sel, onPick, tip, aria, clamp
+function rankChart(box, rows, cfg) {
+  box.replaceChildren();
+  if (!rows.length) { emptyMsg(box, cfg.empty); return; }
+  const W = box.clientWidth, narrow = W < 420;
+  const labW = cfg.labW ? (narrow ? Math.min(cfg.labW, 120) : cfg.labW) : (narrow ? 92 : 104), maxCh = Math.floor(labW / 6.6), valW = cfg.u === 'money' ? (narrow ? 96 : 110) : 66, rowH = rows.length > 18 ? 22 : 26, top = 24;
+  const x0 = labW + 8, x1 = W - valW - 6, H = top + rows.length * rowH + 8;
+  const vals = rows.flatMap(r => [r.v, r.p]).filter(v => v != null).concat(cfg.ref != null ? [cfg.ref] : []);
+  // Corte de escala: si el primero es más de 3 veces el segundo (Lima en saldo), se corta.
+  const sorted = rows.map(r => r.v).filter(v => v != null).sort((a, b) => b - a);
+  let cap = Infinity;
+  if (cfg.clampTop && sorted.length > 2 && sorted[0] > 3 * sorted[1]) cap = sorted[1] * 1.25;
+  const lo = Math.min(0, ...vals), hi = Math.min(cap, Math.max(0, ...vals));
+  const ax = axisOf(cfg.u, Math.max(Math.abs(lo), hi));
+  const dom = niceDomain(lo / ax.div, hi / ax.div, narrow ? 3 : 4);
+  const cl = v => Math.min(v, dom.hi * ax.div);
+  const x = v => x0 + (cl(v) / ax.div - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'group', 'aria-label': cfg.aria}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk * ax.div), x2: x(tk * ax.div), y1: top - 4, y2: H - 4, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk * ax.div), y: top - 10, 'text-anchor': 'middle'}, g).textContent = ax.tick(tk);
+  }
+  if (ax.unit) svgEl('text', {x: labW, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = ax.div === 1e6 ? 'Mil mill. S/' : ax.div === 1e3 ? 'Mill. S/' : 'S/';
+  if (cfg.ref != null) svgEl('line', {x1: x(cfg.ref), x2: x(cfg.ref), y1: top - 4, y2: H - 4, stroke: 'var(--ink2)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2'}, svg);
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2;
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === cfg.sel ? ' sel' : ''), tabindex: 0, role: 'button', 'data-dep': r.dep || '',
+      'aria-label': r.n + ': ' + cfg.fmt(r.v)}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = r.n.length > maxCh ? r.n.slice(0, maxCh - 1) + '…' : r.n;
+    if (r.v != null) {
+      const a = x(Math.min(0, r.v)), b = x(Math.max(0, r.v)), bh = Math.max(6, rowH - 10);
+      svgEl('rect', {x: a, y: yc - bh / 2, width: Math.max(1, b - a), height: bh, rx: 2, fill: r.color || cfg.color}, gr);
+      if (r.v > cap) {   // marca de corte
+        const bx = x1 - 14;
+        svgEl('path', {d: `M${bx},${yc - bh / 2 - 2}l4,${bh + 4}M${bx + 5},${yc - bh / 2 - 2}l4,${bh + 4}`, stroke: 'var(--surface)', 'stroke-width': 3}, gr);
+      }
+    }
+    if (r.p != null) svgEl('circle', {cx: x(r.p), cy: yc, r: 3.5, fill: 'var(--surface)', stroke: 'var(--ink2)', 'stroke-width': 1.5}, gr);
+    svgEl('text', {class: 'rv', x: x1 + 6, y: yc + 4}, gr).textContent = cfg.fmt(r.v);
+    const show = evt => { if (r.dep) highlight(r.dep, true); showTip(...anchorOf(evt, gr), r.n, cfg.tip(r)); };
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', () => { hideTip(); highlight(null); });
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', () => { hideTip(); highlight(null); });
+    if (cfg.onPick) {
+      gr.addEventListener('click', () => cfg.onPick(r.k));
+      gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cfg.onPick(r.k); } });
+    }
+  });
+  if (cfg.ref != null) {
+    const lx = x(cfg.ref);
+    svgEl('text', {x: lx + 4, y: H - 8 + 14, class: 'lbl', 'text-anchor': lx > x1 - 60 ? 'end' : 'start'}, svg).textContent = 'Perú ' + cfg.fmt(cfg.ref);
+    svg.setAttribute('height', H + 14);
+  }
+}
+
+// ---------- Resumen (KPIs) ----------
+function tile(box, lab, val, subs, hero) {
+  const d = htmlEl('div', {cls: 'tile' + (hero ? ' hero' : '')}, box);
+  htmlEl('div', {cls: 'lab', text: lab}, d);
+  const v = htmlEl('div', {cls: 'val', text: val}, d);
+  for (const s of subs) if (s) htmlEl('div', {cls: 'sub', text: s}, d);
+  return {d, v};
+}
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.replaceChildren();
+  // i: último mes del ámbito (≤ mes elegido); ip: mes del peso, que se calcula sobre el sistema.
+  const sc = state.scope, i = effIdx(sc, state.mi), M = mShort(MONTHS[i]), ip = effIdx('sistema', i);
+  const tg = monthTag(i, state.mi), tgp = monthTag(ip, state.mi);
+  const per = amt(sc, '_peru', i), per0 = amt(sc, '_peru', i - 12);
+  const ex = D.ext[sc][i];
+  const h = tile(box, 'Crédito en el Perú · ' + scopeLabel(sc), money(per), [
+    per0 ? spct(100 * (per / per0 - 1)) + ' nominal en 12 meses' : 'Sin dato de hace 12 meses',
+    ex > 0 ? 'Sin contar ' + money(ex) + ' en sucursales en el exterior' : null], true);
+  htmlEl('span', {cls: 'unit', text: mLabel(MONTHS[i])}, h.v);
+  const sp = htmlEl('div', {cls: 'spark'}, h.d);
+  htmlEl('div', {cls: 'sub', text: 'Participación de Lima y Callao, últimos 3 años'}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  const lc = val('par', sc, '_lc', i), lc0 = val('par', sc, '_lc', i - 12);
+  tile(box, 'Lima y Callao' + tg, pct(lc), [lc0 != null ? spp(lc - lc0) + ' frente a ' + mShort(MONTHS[i - 12]) : null, 'del crédito ' + deSc(sc) + ' en el Perú']);
+  const gr = growth(sc, '_resto', i), gl = growth(sc, '_lc', i);
+  tile(box, 'Crecimiento anual del resto del país' + tg, spct(gr), ['Lima y Callao: ' + spct(gl), 'Nominal, ' + M]);
+  const pcs = DK.map(d => ({d, v: val('pc', sc, d, i)})).filter(x => x.v != null).sort((a, b) => b.v - a.v);
+  tile(box, 'Crédito por habitante en el Perú' + tg, soles(val('pc', sc, '_peru', i)), pcs.length ? ['Más alto: ' + depName(pcs[0].d) + ' (' + soles(pcs[0].v) + ')',
+    'Más bajo: ' + depName(pcs[pcs.length - 1].d) + ' (' + soles(pcs[pcs.length - 1].v) + ')'] : []);
+  const grs = DK.map(d => ({d, v: growth(sc, d, i)})).filter(x => x.v != null).sort((a, b) => b.v - a.v);
+  tile(box, 'Departamento que más crece' + tg, grs.length ? depName(grs[0].d) : '—', grs.length ? [spct(grs[0].v) + ' nominal en 12 meses',
+    'El que menos: ' + depName(grs[grs.length - 1].d) + ' (' + spct(grs[grs.length - 1].v) + ')'] : ['Sin dato de hace 12 meses']);
+  const ps = DK.map(d => ({d, v: pesoOf(sc, d, ip)})).filter(x => x.v != null).sort((a, b) => b.v - a.v);
+  tile(box, (sc === 'sistema' ? 'Donde más pesan las cajas' : 'Donde más pesa ' + SUB_BY[sc].s) + tgp, ps.length ? depName(ps[0].d) : '—',
+    ps.length ? [pct(ps[0].v) + ' del crédito del departamento', 'En el Perú: ' + pct(pesoOf(sc, '_peru', ip))] : []);
+  const pb = val('pbi', sc, '_peru', i);
+  tile(box, 'Crédito sobre el VAB del Perú' + tg, pct(pb), ['VAB de ' + vabOf('_peru', i).y + ' a precios corrientes (no es el PBI)', 'Lima y Callao: ' + pct(val('pbi', sc, '_lc', i))]);
+  const idx = [];
+  for (let k = Math.max(0, i - 35); k <= i; k++) idx.push(k);
+  lineChart(spark, {idx, H: 130, fit: true, u: 'pct', fmt: v => pct(v), aria: 'Participación de Lima y Callao, últimos tres años',
+    series: [{label: 'Lima y Callao', color: scopeColor(sc), w: 2, get: k => val('par', sc, '_lc', k)}]});
+}
+
+// ---------- Mapa y ranking de departamentos ----------
+function pickDep(d) {
+  state.dep = d; hideTip();
+  document.getElementById('f-dep').value = d;
+  renderMap(); renderDep(); renderDepEnt(); renderHeat();
+  refreshTables();
+  document.getElementById('card-dep').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+}
+function depTip(d, i = state.mi) {
+  const sc = state.scope, k = state.ind;
+  const rows = [{value: fmtInd(k, val(k, sc, d, i)), label: indName(k), color: scopeColor(sc), sq: true}];
+  if (k !== 'sal') rows.push({value: money(amt(sc, d, i)), label: 'Saldo · ' + scopeLabel(sc)});
+  if (k !== 'par') rows.push({value: pctS(val('par', sc, d, i)), label: 'del Perú'});
+  if (k !== 'cre') rows.push({value: spct(growth(sc, d, i)), label: 'Crecimiento anual'});
+  if (k !== 'pc') rows.push({value: soles(val('pc', sc, d, i)), label: 'Por habitante'});
+  if (k === 'hhi') { const h = hhi(sc, d, i); rows.push({value: h ? String(h.n) : '0', label: 'Entidades con créditos'}); }
+  const p = val(k, sc, d, i - 12), c = fmtChg(k, val(k, sc, d, i), p);
+  if (c) rows.push({value: c, label: 'cambio en 12 meses'});
+  return rows;
+}
+function renderMap() {
+  // i: último mes con dato del ámbito (el peso necesita también el del sistema); ref: mes de los cortes.
+  const sc = state.scope, k = state.ind, I = IND_BY[k], peso = k === 'peso';
+  const i = peso ? effIdx('sistema', effIdx(sc, state.mi)) : effIdx(sc, state.mi), ref = peso ? Math.min(LAST[sc], LAST.sistema) : LAST[sc];
+  document.getElementById('map-title').textContent = indName(k) + ' · ' + scopeLabel(sc) + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('map-desc').textContent = descOf(k) + ' Pase el cursor o use el teclado sobre un departamento; haga clic para ver su ficha abajo.';
+  const cs = colorScale(k, sc, d => val(k, sc, d, ref));
+  drawScale('map-scale', cs, fmtBreak(k, cs.bins), k === 'cre' ? 'Sin dato' : 'Sin créditos');
+  // Sin créditos (saldo o peso = 0) va rayado, igual que en la leyenda; los quintiles ya excluyen los ceros.
+  const mapVal = d => { const v = val(k, sc, d, i); return (k === 'sal' || k === 'peso') && v === 0 ? null : v; };
+  drawMap(document.getElementById('ch-map'), {value: mapVal, color: cs.color, fmt: v => fmtInd(k, v), tip: d => depTip(d, i),
+    sel: state.dep, onPick: pickDep, aria: 'Mapa: ' + indName(k) + ' por departamento'});
+  const rows = DK.map(d => ({k: d, dep: d, n: depName(d), v: val(k, sc, d, i), p: val(k, sc, d, i - 12)}))
+    .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity));
+  rankChart(document.getElementById('ch-rank'), rows, {fmt: v => fmtInd(k, v), u: unitOf(k), color: scopeColor(sc), sel: state.dep, onPick: pickDep,
+    ref: I.ref ? val(k, sc, '_peru', i) : null, clampTop: k === 'sal' || k === 'par' || k === 'pbi' || k === 'pc',
+    tip: r => depTip(r.k, i), aria: 'Ranking de departamentos: ' + indName(k), empty: 'No hay datos para esta combinación.'});
+  const notes = [];
+  const lag = lagNote(peso && LAST.sistema < effIdx(sc, state.mi) ? 'sistema' : sc, state.mi, i);
+  if (lag) notes.push(lag);
+  const top2 = rows.map(r => r.v).filter(v => v != null).sort((a, b) => b - a);
+  const cut = (k === 'sal' || k === 'par' || k === 'pc' || k === 'pbi') && top2.length > 2 && top2[0] > 3 * top2[1];
+  notes.push('Las barras ordenan los departamentos de mayor a menor' + (i >= 12 ? '; el punto hueco es el valor de ' + mLabel(MONTHS[i - 12]) + '.' : '. Aún no hay valor de hace 12 meses: la serie empieza en ' + mLabel(MONTHS[0]) + '.') +
+    (cut ? ' La barra de ' + rows[0].n + ' es más de tres veces la del segundo: se corta (marca blanca) y el número muestra el valor completo.' : '') +
+    (I.ref ? ' La línea punteada es el Perú.' : ''));
+  if (k !== 'cre') notes.push('Colores: quintiles de ' + mLabel(MONTHS[ref]) + ' en ' + scopeLower(sc) + ', fijos para comparar meses.');
+  if (k === 'cre') notes.push('Crecimiento nominal: incluye la inflación y el efecto del tipo de cambio sobre los créditos en dólares. No se calcula (rayado) si el saldo de hace 12 meses era menor a S/ 1 millón.');
+  if (k === 'pbi') notes.push('VAB de ' + vabOf('_peru', i).y + (yearOf(i) > VAB_LAST ? ' (el último publicado)' : '') + '.');
+  if (k === 'hhi' && sc === 'sistema') notes.push('En el sistema, el índice incluye a todas las entidades de los cinco subsistemas.');
+  const imp = impAt(i).concat(k === 'cre' ? impAt(i - 12) : []);
+  if (imp.length && (sc === 'sistema' || sc === 'banca-multiple')) notes.push('Octubre de 2023: Mibanco no viene en el cuadro de la SBS; se estima con su saldo del ranking de créditos y su distribución promedio de setiembre y noviembre (ver «Cómo leer los datos»).');
+  if (sc === 'empresas-credito') notes.push('Las empresas de créditos solo registran créditos en algunos departamentos; en los demás su saldo es cero y aparecen rayados.');
+  document.getElementById('map-note').textContent = notes.join(' ');
+}
+
+// ---------- Lima y Callao en el tiempo ----------
+function renderLc() {
+  document.getElementById('lc-desc').textContent = 'Porcentaje del crédito de cada subsistema en el Perú (sin el exterior) que está registrado en oficinas de Lima y el Callao. La línea gris discontinua es el sistema. Una línea que baja indica que el crédito registrado fuera de Lima y el Callao crece más (o cae menos) que el registrado en ellos.';
+  const series = [{k: 'sistema', label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => val('par', 'sistema', '_lc', i)}]
+    .concat(SUBS.map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2, get: i => val('par', s.k, '_lc', i)})));
+  legendLines('lc-legend', series);
+  lineChart(document.getElementById('ch-lc'), {idx: visIdx(), H: 320, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => pct(v),
+    aria: 'Participación de Lima y Callao en el crédito por subsistema'});
+  const i = effIdx('sistema', state.mi), a = val('par', 'sistema', '_lc', i), b = val('par', 'sistema', '_lc', 0), lag = lagNote('sistema', state.mi, i);
+  document.getElementById('lc-note').textContent = 'En ' + mLabel(MONTHS[i]) + ', Lima y Callao concentran ' + pct(a) + ' del crédito del sistema (' + pct(b) + ' en ' + mLabel(MONTHS[0]) +
+    '). Ese porcentaje puede incluir créditos a deudores de otros departamentos registrados en oficinas de Lima y el Callao.' + (lag ? ' ' + lag : '');
+}
+function legendLines(id, series) {
+  const lg = document.getElementById(id);
+  lg.replaceChildren();
+  for (const s of series) {
+    const sp = htmlEl('span', null, lg);
+    const ln = htmlEl('i', {cls: 'ln' + (s.dash ? ' dash' : '')}, sp);
+    if (!s.dash) ln.style.background = s.color;
+    if (s.w >= 3) ln.style.height = '3px';
+    sp.appendChild(document.createTextNode(s.label));
+  }
+}
+function grSeries() {
+  const sc = state.scope;
+  return [
+    {label: 'Lima y Callao', color: 'var(--s1)', w: 2.5, get: i => growth(sc, '_lc', i)},
+    {label: 'Resto del país', color: 'var(--s2)', w: 2.5, get: i => growth(sc, '_resto', i)},
+    {label: 'Perú', color: 'var(--sys)', w: 2, dash: '5 4', get: i => growth(sc, '_peru', i)},
+  ];
+}
+function renderGr() {
+  const sc = state.scope;
+  document.getElementById('gr-title').textContent = 'Crecimiento anual: Lima y Callao frente al resto del país · ' + scopeLabel(sc);
+  document.getElementById('gr-desc').textContent = 'Variación nominal del saldo frente al mismo mes del año anterior. Cuando la línea del resto del país va por encima de la de Lima y Callao, la participación de Lima y Callao es menor que hace 12 meses.';
+  const series = grSeries();
+  legendLines('gr-legend', series);
+  lineChart(document.getElementById('ch-gr'), {idx: visIdx(), H: 300, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => spct(v), clip: [-50, 100],
+    aria: 'Crecimiento anual de Lima y Callao y del resto del país, ' + scopeLabel(sc)});
+  document.getElementById('gr-note').textContent = 'En soles corrientes: incluye la inflación y el efecto del tipo de cambio sobre los créditos en dólares.' +
+    (sc !== 'sistema' ? ' En un subsistema, el crecimiento salta cuando una entidad entra o sale de él. Si un valor pasa de −50% o de +100%, la línea se corta en el borde del gráfico.' : '');
+}
+
+// ---------- Ficha del departamento ----------
+function renderDep() {
+  // i: último mes con dato del ámbito; is: el del sistema (peso de las cajas).
+  const d = state.dep, sc = state.scope, i = effIdx(sc, state.mi), k = state.ind, is = effIdx('sistema', i);
+  document.getElementById('dep-title').textContent = depName(d);
+  document.getElementById('dep-desc').textContent = 'Crédito registrado en oficinas de ' + depName(d) + ' en ' + mLabel(MONTHS[i]) + '. ' +
+    (sc === 'sistema' ? 'Las cifras son del sistema.' : 'Las cifras son ' + deSc(sc) + ', salvo el peso de las cajas y el gráfico por subsistema, que son del sistema.');
+  const st = document.getElementById('dep-stats');
+  st.replaceChildren();
+  const h = hhi(sc, d, i), c = (kk, v, p) => fmtChg(kk, v, p);
+  const items = [
+    {lab: 'Saldo', val: money(amt(sc, d, i)), sub: (c('sal', amt(sc, d, i), amt(sc, d, i - 12)) || '—') + ' en 12 meses'},
+    {lab: 'Participación en el Perú', val: pctS(val('par', sc, d, i)), sub: 'puesto ' + (DK.map(x => amt(sc, x, i) || 0).filter(v => v > (amt(sc, d, i) || 0)).length + 1) + ' de 25'},
+    {lab: 'Por habitante', val: soles(val('pc', sc, d, i)), sub: 'Perú: ' + soles(val('pc', sc, '_peru', i))},
+    {lab: 'Sobre el VAB', val: pct(val('pbi', sc, d, i)), sub: 'VAB ' + vabOf(d, i).y + ' · Perú: ' + pct(val('pbi', sc, '_peru', i))},
+    {lab: 'Peso de las cajas' + monthTag(is, i), val: pct(pesoOf('sistema', d, is)), sub: 'Perú: ' + pct(pesoOf('sistema', '_peru', is))},
+    {lab: 'Entidades con créditos', val: h ? String(h.n) : '0', sub: scopeLabel(sc)},
+    {lab: 'Concentración (IHH)', val: h ? f0.format(h.h) : '—', sub: 'Perú: ' + (hhi(sc, '_peru', i) ? f0.format(hhi(sc, '_peru', i).h) : '—')},
+    {lab: 'Población', val: f0.format(popOf(d, i)), sub: 'estimada al 30 de junio de ' + Math.min(yearOf(i), D.pop.y0 + D.pop.v.lima.length - 1)},
+  ];
+  for (const it of items) {
+    const e = htmlEl('div', null, st);
+    htmlEl('div', {cls: 'lab', text: it.lab}, e);
+    htmlEl('div', {cls: 'val', text: it.val}, e);
+    htmlEl('div', {cls: 'sub', text: it.sub || ' '}, e);
+  }
+  const layers = SUBS.map(s => ({label: s.l, short: s.s, color: SUB_COLOR[s.k], get: j => amt(s.k, d, j)}));
+  const lg = document.getElementById('dep-stack-legend');
+  lg.replaceChildren();
+  for (const l of layers) { const s = htmlEl('span', null, lg); const q = htmlEl('i', {cls: 'dot'}, s); q.style.background = l.color; q.style.borderRadius = '2px'; s.appendChild(document.createTextNode(l.label)); }
+  document.getElementById('dep-stack-title').textContent = 'Saldo por subsistema en ' + depName(d) + ' (sistema)';
+  // El apilado suma los cinco subsistemas (es el sistema): termina en el último mes del sistema.
+  stackChart(document.getElementById('ch-dep-stack'), {idx: visIdx().filter(j => j <= LAST.sistema), H: 300, marker: is, layers, aria: 'Saldo de créditos por subsistema en ' + depName(d)});
+  const lk = k === 'sal' ? 'par' : k;
+  document.getElementById('dep-line-title').textContent = indName(lk) + ' · ' + depName(d) + (IND_BY[lk].ref ? ' frente al Perú' : '') + ' · ' + scopeLabel(sc);
+  // Con el sistema, el departamento va en azul para no confundirse con la referencia gris del Perú.
+  const series = [{label: depName(d), color: sc === 'sistema' ? 'var(--s1)' : scopeColor(sc), w: 2.5, get: j => val(lk, sc, d, j)}];
+  if (IND_BY[lk].ref) series.push({label: 'Perú', color: 'var(--sys)', w: 2, dash: '5 4', get: j => val(lk, sc, '_peru', j)});
+  legendLines('dep-line-legend', series);
+  lineChart(document.getElementById('ch-dep-line'), {idx: visIdx(), H: 260, endLabels: true, series, marker: i, u: unitOf(lk), fmt: v => fmtInd(lk, v),
+    clip: lk === 'cre' ? [-50, 100] : null, aria: indName(lk) + ' en ' + depName(d), empty: 'Sin datos ' + deSc(sc) + ' en ' + depName(d) + '.'});
+  // Ámbito atrasado: su nota; si no, y el sistema lo está (peso de las cajas, apilado): la del sistema.
+  const lag = i < state.mi ? lagNote(sc, state.mi, i) : lagNote('sistema', state.mi, is);
+  document.getElementById('dep-note').textContent = [k === 'sal' ? 'Con el indicador «Saldo», el segundo gráfico muestra la participación del departamento en el Perú. Elija otro indicador arriba para verlo aquí.' : '', lag].filter(Boolean).join(' ');
+}
+
+// ---------- Quién presta en el departamento ----------
+function depEntRows(d, i, sc) {
+  const tot = amt(sc, d, i);
+  const out = [];
+  for (const k of D.entities) {
+    if (!inScope(k, sc)) continue;
+    const v = entAmt(k, d, i);
+    if (!(v > 0)) continue;
+    const ep = entPeru(k, i);
+    out.push({k, n: ENT[k].n, s: ENT[k].s, v, sh: tot ? 100 * v / tot : null, own: ep ? 100 * v / ep : null});
+  }
+  return out.sort((a, b) => b.v - a.v);
+}
+function renderDepEnt() {
+  const d = state.dep, sc = state.scope, i = effIdx(sc, state.mi);
+  document.getElementById('depent-title').textContent = 'Quién presta en ' + depName(d) + ' · ' + scopeLabel(sc) + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('depent-desc').textContent = 'Entidades con más saldo en oficinas de ' + depName(d) + ', con su participación en el crédito ' +
+    deSc(sc) + ' en el departamento. Haga clic en una entidad para ver su mapa.';
+  const rows = depEntRows(d, i, sc);
+  const TOP = 12, top = rows.slice(0, TOP), rest = rows.slice(TOP);
+  const lg = document.getElementById('depent-legend');
+  lg.replaceChildren();
+  for (const s of SUBS) if (top.some(r => r.s === s.k)) { const sp = htmlEl('span', null, lg); const q = htmlEl('i', {cls: 'dot'}, sp); q.style.background = SUB_COLOR[s.k]; q.style.borderRadius = '2px'; sp.appendChild(document.createTextNode(s.l)); }
+  const rr = top.map(r => ({k: r.k, n: r.n, v: r.sh, color: SUB_COLOR[r.s], r}));
+  rankChart(document.getElementById('ch-depent'), rr, {labW: 190, fmt: v => pctS(v), u: 'pct', color: 'var(--sys)', onPick: k => pickEnt(k, true),
+    tip: x => [{value: money(x.r.v), label: 'Saldo en ' + depName(d), color: SUB_COLOR[x.r.s], sq: true}, {value: pctS(x.r.sh), label: 'del crédito ' + (sc === 'sistema' ? 'del sistema' : 'de ' + SUB_BY[sc].s) + ' en el departamento'},
+      {value: pctS(x.r.own), label: 'de la cartera de la entidad en el Perú'}, {value: SUB_BY[x.r.s].l, label: ''}],
+    aria: 'Entidades con más crédito en ' + depName(d), empty: 'No hay entidades ' + deSc(sc) + ' con créditos en ' + depName(d) + '.'});
+  document.getElementById('depent-note').textContent = rows.length ? rows.length + (rows.length === 1 ? ' entidad tiene' : ' entidades tienen') + ' créditos en el departamento' +
+    (rest.length ? '; las ' + rest.length + ' que no se muestran suman ' + pctS(rest.reduce((a, r) => a + r.sh, 0)) + '.' : '.') + (i < state.mi ? ' ' + lagNote(sc, state.mi, i) : '') : '';
+}
+
+// ---------- Mapa de calor: peso de cada subsistema por departamento ----------
+const HEAT_BINS = [5, 15, 30, 50];
+function renderHeat() {
+  const i = effIdx('sistema', state.mi);
+  document.getElementById('heat-title').textContent = 'Peso de cada subsistema en cada departamento · ' + mLabel(MONTHS[i]);
+  document.getElementById('heat-desc').textContent = 'Cada celda es el % del crédito del sistema en el departamento (fila) que da el subsistema (columna); cada fila suma 100%. Los departamentos van ordenados de menor a mayor peso de la banca. Haga clic en un departamento para ver su ficha.';
+  const sb = document.getElementById('heat-scale');
+  sb.replaceChildren();
+  ['< 5%', '5 a 15%', '15 a 30%', '30 a 50%', '≥ 50%'].forEach((l, k) => { const s = htmlEl('span', null, sb); htmlEl('i', null, s).style.background = `var(--m${k})`; s.appendChild(document.createTextNode(l)); });
+  const box = document.getElementById('heat');
+  box.replaceChildren();
+  const t = htmlEl('table', {cls: 'heat'}, box);
+  const hr = htmlEl('tr', null, htmlEl('thead', null, t));
+  htmlEl('th', {text: 'Departamento', scope: 'col'}, hr);
+  SUBS.forEach(s => htmlEl('th', {text: s.s, scope: 'col', title: s.l}, hr));
+  htmlEl('th', {text: 'Saldo del sistema', scope: 'col', cls: 'tot'}, hr);
+  const tb = htmlEl('tbody', null, t);
+  const order = DK.concat(['_peru']).map(d => ({d, b: pesoBank(d, i)})).filter(x => x.b != null);
+  const rows = order.filter(x => x.d !== '_peru').sort((a, b) => a.b - b.b).concat(order.filter(x => x.d === '_peru'));
+  for (const {d} of rows) {
+    const tr = htmlEl('tr', {cls: d === state.dep ? 'sel' : ''}, tb);
+    const lab = htmlEl('td', {cls: 'lab', text: depName(d)}, tr);
+    if (d === '_peru') lab.style.fontWeight = '650';
+    else {
+      lab.tabIndex = 0; lab.setAttribute('role', 'button');
+      lab.addEventListener('click', () => pickDep(d));
+      lab.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickDep(d); } });
+    }
+    const all = amt('sistema', d, i);
+    for (const s of SUBS) {
+      const v = amt(s.k, d, i), td = htmlEl('td', null, tr);
+      if (!(v > 0) || !(all > 0)) { td.className = 'na'; td.textContent = '—'; continue; }
+      const sh = 100 * v / all, b = binOf(sh, HEAT_BINS);
+      td.style.background = `var(--m${b})`; td.style.color = `var(--mt${b})`;
+      td.textContent = sh < 0.05 ? '<0.1' : fx(sh, sh < 10 ? 1 : 0);
+      td.tabIndex = 0;
+      const show = evt => showTip(...anchorOf(evt, td), s.l + ' · ' + depName(d) + ' · ' + mLabel(MONTHS[i]),
+        [{value: pct(sh), label: 'del crédito del sistema en el departamento', color: SUB_COLOR[s.k], sq: true}, {value: money(v), label: 'Saldo'}]);
+      td.addEventListener('pointermove', show);
+      td.addEventListener('focus', () => show(null));
+      td.addEventListener('pointerleave', hideTip);
+      td.addEventListener('blur', hideTip);
+    }
+    htmlEl('td', {cls: 'tot', text: money(all)}, tr);
+  }
+  const lag = lagNote('sistema', state.mi, i);
+  document.getElementById('heat-note').textContent = '«—»: el subsistema no tiene créditos en el departamento. La última fila es el Perú (sin el exterior).' + (lag ? ' ' + lag : '');
+}
+function pesoBank(d, i) { const a = amt('sistema', d, i), b = amt('banca-multiple', d, i); return a > 0 && b != null ? 100 * b / a : null; }
+
+// ---------- Entidades ----------
+function entList() {
+  const i = state.mi;
+  const list = D.entities.filter(k => inScope(k, state.scope)).map(k => ({k, n: ENT[k].n, s: ENT[k].s, v: entPeru(k, entIdx(k, i))}));
+  return list;
+}
+function fillEntSelect() {
+  const sel = document.getElementById('f-ent');
+  const list = entList();
+  const active = list.filter(e => e.v != null).sort((a, b) => b.v - a.v);
+  const gone = list.filter(e => e.v == null).sort((a, b) => a.n.localeCompare(b.n, 'es'));
+  if (!state.ent || !list.some(e => e.k === state.ent)) state.ent = (active[0] || gone[0] || {}).k || null;
+  sel.replaceChildren();
+  const groups = state.scope === 'sistema' ? SUBS.map(s => ({l: s.l, xs: active.filter(e => e.s === s.k)})) : [{l: 'Con datos en ' + mLabel(MONTHS[effIdx(state.scope, state.mi)]), xs: active}];
+  for (const g of groups) { if (!g.xs.length) continue; const og = htmlEl('optgroup', {label: g.l}, sel); g.xs.forEach(e => htmlEl('option', {value: e.k, text: e.n}, og)); }
+  if (gone.length) {
+    const og = htmlEl('optgroup', {label: 'Sin datos en ' + mLabel(MONTHS[state.mi])}, sel);
+    gone.forEach(e => { const E = ENT[e.k], last = MONTHS[E.a + E.T.length - 1]; htmlEl('option', {value: e.k, text: e.n + ' (' + (idxOf(last) < state.mi ? 'hasta ' + mShort(last) : 'desde ' + mShort(MONTHS[E.a])) + ')'}, og); });
+  }
+  if (state.ent) sel.value = state.ent;
+}
+function pickEnt(k, jump) {
+  state.ent = k; hideTip();
+  if (jump) { if (!inScope(k, state.scope)) { state.scope = 'sistema'; syncScope(); } showTab('entidades', true); window.scrollTo({top: 0}); return; }
+  fillEntSelect(); renderEnt(); refreshTables();
+}
+// Valor del mapa de la entidad: % de su cartera (dist) o % del crédito del sistema en el departamento (mkt).
+function entVal(k, d, i, mode = state.emode) {
+  const v = entAmt(k, d, i);
+  if (v == null) return null;
+  if (!(v > 0)) return null;
+  if (mode === 'dist') { const p = entPeru(k, i); return p > 0 ? 100 * v / p : null; }
+  const all = amt('sistema', d, i);
+  return all > 0 ? 100 * v / all : null;
+}
+function entSummary(k, i) {
+  const p = entPeru(k, i);
+  if (!(p > 0)) return null;
+  const ds = DK.map(d => ({d, v: entAmt(k, d, i) || 0})).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+  return {tot: p, ext: entExt(k, i), n: ds.length, top: ds[0], topSh: 100 * ds[0].v / p, out: 100 * (1 - (entAmt(k, '_lc', i) || 0) / p)};
+}
+function renderEnt() {
+  const k = state.ent;
+  const box = document.getElementById('ch-emap'), st = document.getElementById('ent-stats');
+  if (!k) { box.replaceChildren(); st.replaceChildren(); return; }
+  // ie: último mes de la entidad si su subsistema todavía no publica el mes elegido; is: el del sistema
+  // (participación en el departamento y referencia del sistema); i: el mes de la ficha según el modo.
+  const E = ENT[k], S = SUB_BY[E.s], mode = state.emode, ie = entIdx(k, state.mi), is = effIdx('sistema', ie);
+  const i = mode === 'mkt' ? is : ie;
+  document.getElementById('emap-title').textContent = E.n + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('emap-desc').textContent = mode === 'dist'
+    ? 'Qué porcentaje de la cartera de la entidad en el Perú está registrado en cada departamento.'
+    : 'Qué porcentaje del crédito del sistema registrado en cada departamento corresponde a esta entidad (su participación en el departamento).';
+  const sm = entSummary(k, i);
+  st.replaceChildren();
+  const items = sm ? [
+    {lab: 'Créditos en el Perú', val: money(sm.tot), sub: S.l},
+    {lab: 'Departamento principal', val: depName(sm.top.d), sub: pct(sm.topSh) + ' de su cartera'},
+    {lab: 'Fuera de Lima y Callao', val: pct(sm.out), sub: 'de su cartera; sistema: ' + pct(100 - val('par', 'sistema', '_lc', is)) + monthTag(is, i)},
+    {lab: 'Departamentos con créditos', val: String(sm.n), sub: sm.ext > 0 ? 'y ' + money(sm.ext) + ' en el exterior' : 'de 25'},
+  ] : [{lab: 'Sin datos', val: '—', sub: 'La entidad no tiene datos en ' + mLabel(MONTHS[i])}];
+  for (const it of items) { const e = htmlEl('div', null, st); htmlEl('div', {cls: 'lab', text: it.lab}, e); htmlEl('div', {cls: 'val', text: it.val}, e); htmlEl('div', {cls: 'sub', text: it.sub}, e); }
+  // Cortes: último mes de la entidad (en «participación», también con dato del sistema).
+  const lastI = mode === 'mkt' ? Math.min(N - 1, E.a + E.T.length - 1, LAST.sistema) : Math.min(N - 1, E.a + E.T.length - 1);
+  const cs = colorScale(mode, 'ent', d => entVal(k, d, lastI));
+  drawScale('emap-scale', cs, fmtBreak('par', cs.bins), 'Sin créditos');
+  const tipE = d => {
+    const v = entAmt(k, d, i);
+    return [{value: pctS(entVal(k, d, i, 'dist')), label: 'de la cartera de la entidad', color: SUB_COLOR[E.s], sq: true},
+      {value: pctS(entVal(k, d, is, 'mkt')), label: 'del crédito del sistema en el departamento' + monthTag(is, i)},
+      {value: money(v), label: 'Saldo'}];
+  };
+  drawMap(box, {value: d => entVal(k, d, i), color: cs.color, fmt: v => pctS(v), tip: tipE, sel: null,
+    onPick: d => { state.dep = d; document.getElementById('f-dep').value = d; showTab('deptos', true); document.getElementById('card-dep').scrollIntoView({block: 'start'}); },
+    aria: 'Mapa de ' + E.n});
+  const rows = DK.map(d => ({k: d, dep: d, n: depName(d), v: entVal(k, d, i), p: entVal(k, d, i - 12)})).filter(r => r.v != null).sort((a, b) => b.v - a.v);
+  rankChart(document.getElementById('ch-erank'), rows, {fmt: v => pctS(v), u: 'pct', color: SUB_COLOR[E.s], tip: r => tipE(r.k),
+    clampTop: mode === 'dist', aria: 'Departamentos de ' + E.n, empty: 'La entidad no tiene datos en ' + mLabel(MONTHS[i]) + '.'});
+  const notes = ['El punto hueco es el valor de hace 12 meses. Colores: quintiles de los departamentos de esta entidad en ' + mLabel(MONTHS[lastI]) + ', su último mes con datos. Haga clic en un departamento del mapa para ver su ficha.'];
+  if (D.imp.some(x => x.k === k && idxOf(x.m) === i)) notes.push('Octubre de 2023: la SBS no publicó la distribución de esta entidad; se estima con su saldo del ranking de créditos y su distribución promedio de setiembre y noviembre.');
+  if (E.o) notes.push('Esta entidad aparece también en ' + E.o.map(o => SUB_BY[ENT[o].s].l.toLowerCase()).join(' y ') + ' en otros meses.');
+  const lag = ie < state.mi ? lagNote(E.s, state.mi, ie) : lagNote('sistema', state.mi, mode === 'mkt' ? is : state.mi);
+  if (lag) notes.push(lag);
+  document.getElementById('emap-note').textContent = notes.join(' ');
+  renderElc();
+}
+function renderElc() {
+  const k = state.ent;
+  if (!k) return;
+  const E = ENT[k];
+  document.getElementById('elc-title').textContent = 'Lima y Callao en la cartera de ' + E.n;
+  document.getElementById('elc-desc').textContent = 'Porcentaje de los créditos en el Perú registrado en oficinas de Lima y el Callao: la entidad, su subsistema y el sistema.';
+  const series = [
+    {label: E.n, color: 'var(--s1)', w: 2.5, get: i => { const p = entPeru(k, i); return p > 0 ? 100 * entAmt(k, '_lc', i) / p : null; }},
+    {label: SUB_BY[E.s].l, color: 'var(--c-sub)', w: 2, get: i => val('par', E.s, '_lc', i)},
+    {label: 'Sistema', color: 'var(--sys)', w: 2, dash: '5 4', get: i => val('par', 'sistema', '_lc', i)},
+  ];
+  legendLines('elc-legend', series);
+  lineChart(document.getElementById('ch-elc'), {idx: visIdx(), H: 280, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => pct(v), aria: 'Lima y Callao en la cartera de ' + E.n});
+}
+let etSort = {col: 2, dir: -1};
+function renderEtab() {
+  const i = state.mi, sc = state.scope;
+  document.getElementById('etab-title').textContent = 'Departamento principal de cada entidad · ' + scopeLabel(sc) + ' · ' + mLabel(MONTHS[i]);
+  document.getElementById('etab-desc').textContent = 'Para cada entidad, el departamento donde tiene más créditos y cuánto de su cartera está fuera de Lima y el Callao. Haga clic en una fila para ver su mapa arriba; los encabezados ordenan la tabla.';
+  // Entidades de un subsistema que todavía no publica el mes: su último mes, marcado en el saldo.
+  const rows = D.entities.filter(k => inScope(k, sc)).map(k => { const j = entIdx(k, i); return {k, j, E: ENT[k], sm: entSummary(k, j)}; }).filter(r => r.sm);
+  const cols = [
+    {l: 'Entidad', get: r => r.E.n, fmt: v => v},
+    {l: 'Subsistema', get: r => SUB_BY[r.E.s].s, fmt: v => v},
+    {l: 'Créditos en el Perú', get: r => r.sm.tot, fmt: (v, r) => money(v) + (r ? monthTag(r.j, i) : '')},
+    {l: 'Departamento principal', get: r => depName(r.sm.top.d), fmt: v => v},
+    {l: '% de su cartera ahí', get: r => r.sm.topSh, fmt: v => pct(v)},
+    {l: 'Fuera de Lima y Callao', get: r => r.sm.out, fmt: v => pct(v)},
+    {l: 'Departamentos', get: r => r.sm.n, fmt: v => String(v)},
+  ];
+  const c = cols[etSort.col];
+  rows.sort((a, b) => { const va = c.get(a), vb = c.get(b); return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * etSort.dir; });
+  const wrap = document.getElementById('tb-etab');
+  wrap.replaceChildren();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  cols.forEach((col, j) => {
+    const th = htmlEl('th', {scope: 'col'}, tr);
+    if (j === 1 || j === 3) th.style.textAlign = 'left';
+    if (j === etSort.col) th.setAttribute('aria-sort', etSort.dir > 0 ? 'ascending' : 'descending');
+    const b = htmlEl('button', {type: 'button', text: col.l + (j === etSort.col ? (etSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
+    b.addEventListener('click', () => { etSort = {col: j, dir: j === etSort.col ? -etSort.dir : (typeof col.get(rows[0] || {E: {n: ''}, sm: {top: {d: 'lima'}}}) === 'string' ? 1 : -1)}; renderEtab(); wrap.querySelectorAll('th button')[j].focus(); });
+  });
+  rows.forEach(r => {
+    const row = htmlEl('tr', {cls: 'pick' + (r.k === state.ent ? ' sel' : ''), tabindex: 0}, tb);
+    cols.forEach(col => { const td = htmlEl('td', {text: col.fmt(col.get(r), r)}, row); if (typeof col.get(r) === 'string') td.style.textAlign = 'left'; });
+    const go = () => { state.ent = r.k; fillEntSelect(); renderEnt(); renderEtab(); refreshTables(); document.getElementById('card-emap').scrollIntoView({block: 'start'}); };
+    row.addEventListener('click', go);
+    row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  const lagS = [...new Set(rows.filter(r => r.j < i).map(r => r.E.s))];
+  const lag = lagS.length ? listY(lagS.map(subArt)) + ' todavía no ' + (lagS.length > 1 || lagS[0] !== 'banca-multiple' ? 'publican ' : 'publica ') + mLabel(MONTHS[i]) +
+    ': sus entidades van con ' + mLabel(MONTHS[Math.max(...rows.filter(r => r.j < i).map(r => r.j))]) + '.' : '';
+  document.getElementById('etab-note').textContent = 'Créditos en el Perú: sin las sucursales en el exterior. ' + rows.length + ' entidades con datos en el mes.' + (lag ? ' ' + lag[0].toUpperCase() + lag.slice(1) : '');
+}
+
+// ---------- Tablas ----------
+let mapSort = {col: 1, dir: -1};
+const TABLES = {
+  lc() {
+    const idx = visIdx().slice().reverse();
+    return [['Mes', 'Sistema'].concat(SUBS.map(s => s.s)), idx.map(i => [mLabel(MONTHS[i]), pct(val('par', 'sistema', '_lc', i))].concat(SUBS.map(s => pct(val('par', s.k, '_lc', i)))))];
+  },
+  gr() {
+    const idx = visIdx().slice().reverse(), S = grSeries();
+    return [['Mes'].concat(S.map(s => s.label)), idx.map(i => [mLabel(MONTHS[i])].concat(S.map(s => spct(s.get(i))))).filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  dep() {
+    const d = state.dep, idx = visIdx().slice().reverse();
+    return [['Mes'].concat(SUBS.map(s => s.s), ['Sistema', 'Crecimiento anual del sistema']),
+      idx.map(i => [mLabel(MONTHS[i])].concat(SUBS.map(s => money(amt(s.k, d, i))), [money(amt('sistema', d, i)), spct(growth('sistema', d, i))]))];
+  },
+  depent() {
+    const rows = depEntRows(state.dep, effIdx(state.scope, state.mi), state.scope);
+    return [['Entidad', 'Subsistema', 'Saldo en el departamento', '% del departamento', '% de la cartera de la entidad'],
+      rows.map(r => [r.n, SUB_BY[r.s].s, money(r.v), pctS(r.sh), pctS(r.own)])];
+  },
+  emap() {
+    const k = state.ent;
+    if (!k) return [['Departamento'], []];
+    const i = entIdx(k, state.mi), is = effIdx('sistema', i);
+    const rows = DK.map(d => ({d, v: entAmt(k, d, i)})).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
+    return [['Departamento', 'Saldo' + monthTag(i, state.mi), '% de su cartera', '% del sistema en el departamento' + monthTag(is, i), '% de su cartera hace 12 meses'],
+      rows.map(r => [depName(r.d), money(r.v), pctS(entVal(k, r.d, i, 'dist')), pctS(entVal(k, r.d, is, 'mkt')), pctS(entVal(k, r.d, i - 12, 'dist'))])];
+  },
+  elc() {
+    const k = state.ent;
+    if (!k) return [['Mes'], []];
+    const E = ENT[k], idx = visIdx().slice().reverse();
+    return [['Mes', 'Créditos en el Perú', 'Lima y Callao (%)', 'Lima y Callao en ' + SUB_BY[E.s].s + ' (%)'],
+      idx.map(i => { const p = entPeru(k, i); return p == null ? null : [mLabel(MONTHS[i]), money(p), pct(p > 0 ? 100 * entAmt(k, '_lc', i) / p : null), pct(val('par', E.s, '_lc', i))]; }).filter(Boolean)];
+  },
+};
+// Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
+// muestra el último valor publicado de la columna, con su mes (nunca un hueco).
+const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));
+const cellText = c => c && typeof c === 'object' ? c.v : c;
+function lagFill(head, rows) {
+  if (head[0] !== 'Mes' || ALL_LAST >= N - 1) return rows;
+  return rows.map(r => {
+    const i = LABEL_IDX.get(r[0]);
+    if (!(i > ALL_LAST)) return r;
+    return r.map((c, j) => {
+      if (j === 0 || cellText(c) !== '—') return c;
+      let src = null;
+      for (const q of rows) {
+        const k = LABEL_IDX.get(q[0]);
+        if (k < i && cellText(q[j]) !== '—' && (!src || k > src.k)) src = {k, q};
+      }
+      if (!src) return c;
+      return {v: cellText(src.q[j]) + ' (' + src.q[0] + ')', cls: 'lag', title: 'Último dato publicado, de ' + src.q[0] + '. ' +
+        (/sistema/i.test(head[j]) ? 'El sistema se calcula solo con los meses en que publicaron los cinco subsistemas.'
+          : 'La SBS todavía no publica ' + r[0] + ' para esta columna.')};
+    });
+  });
+}
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const p = {text: c.v, cls: c.cls || ''};
+  if (c.title) p.title = c.title;
+  return htmlEl('td', p, row);
+}
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  if (key === 'map') return fillMapTable(wrap);
+  const [head, rows0] = TABLES[key](), rows = lagFill(head, rows0);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+function fillMapTable(wrap) {
+  // Igual que el mapa: último mes con dato del ámbito; el peso, el último con dato del sistema.
+  const sc = state.scope, i = effIdx(sc, state.mi), ip = effIdx('sistema', i);
+  const rows = DK.concat(['_lc', '_resto', '_peru']).map(d => ({d, n: depName(d), sal: amt(sc, d, i), par: val('par', sc, d, i), cre: growth(sc, d, i), pc: val('pc', sc, d, i),
+    pbi: val('pbi', sc, d, i), peso: pesoOf(sc, d, ip), hhi: val('hhi', sc, d, i), ne: (hhi(sc, d, i) || {n: 0}).n}));
+  const cols = [
+    {l: 'Departamento', get: r => r.n, fmt: v => v},
+    {l: 'Saldo' + monthTag(i, state.mi), get: r => r.sal, fmt: money},
+    {l: 'Participación', get: r => r.par, fmt: pctS},
+    {l: 'Crecimiento anual', get: r => r.cre, fmt: v => spct(v)},
+    {l: 'Por habitante', get: r => r.pc, fmt: soles},
+    {l: 'Sobre el VAB', get: r => r.pbi, fmt: v => pct(v)},
+    {l: (sc === 'sistema' ? 'Peso de las cajas' : 'Peso de ' + SUB_BY[sc].s) + monthTag(ip, i), get: r => r.peso, fmt: v => pct(v)},
+    {l: 'Concentración (IHH)', get: r => r.hhi, fmt: v => v == null ? '—' : f0.format(v)},
+    {l: 'Entidades', get: r => r.ne, fmt: v => String(v)},
+  ];
+  const c = cols[mapSort.col], deps = rows.filter(r => !r.d.startsWith('_')), groups = rows.filter(r => r.d.startsWith('_'));
+  deps.sort((a, b) => { const va = c.get(a), vb = c.get(b); if (va == null) return 1; if (vb == null) return -1; return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * mapSort.dir; });
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  cols.forEach((col, j) => {
+    const th = htmlEl('th', {scope: 'col'}, tr);
+    if (j === mapSort.col) th.setAttribute('aria-sort', mapSort.dir > 0 ? 'ascending' : 'descending');
+    const b = htmlEl('button', {type: 'button', text: col.l + (j === mapSort.col ? (mapSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
+    b.addEventListener('click', () => { mapSort = {col: j, dir: j === mapSort.col ? -mapSort.dir : (j === 0 ? 1 : -1)}; fillTable('map'); wrap.querySelectorAll('th button')[j].focus(); });
+  });
+  deps.concat(groups).forEach(r => {
+    const row = htmlEl('tr', null, tb);
+    cols.forEach(col => { const td = htmlEl('td', {text: col.fmt(col.get(r))}, row); if (r.d.startsWith('_')) td.style.fontWeight = '620'; });
+  });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+function refreshTables() {
+  for (const k of ['map', 'lc', 'gr', 'dep', 'depent', 'emap', 'elc']) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+}
+
+// ---------- Filtros ----------
+function segment(id, items, get, set, after) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get() === it.id)}, box);
+    b.dataset.k = it.id;
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      if (after) after(); else box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      renderVisible();
+    });
+  }
+}
+const syncInd = () => document.querySelectorAll('#f-ind-tam button, #f-ind-din button, #f-ind-est button')
+  .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === state.ind)));
+for (const grp of ['tam', 'din', 'est']) {
+  segment('f-ind-' + grp, IND.filter(x => x.g === grp).map(x => ({id: x.k, label: x.l, title: x.name})), () => state.ind, v => { state.ind = v; }, syncInd);
+}
+const pesoBtn = () => document.querySelector('#f-ind-est button[data-k="peso"]');
+function syncScope() {
+  document.querySelectorAll('#f-scope button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === state.scope)));
+  pesoBtn().textContent = state.scope === 'sistema' ? 'Peso de las cajas' : 'Peso de ' + SUB_BY[state.scope].s;
+}
+segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+segment('f-scope', [{id: 'sistema', label: 'Sistema'}].concat(SUBS.map(s => ({id: s.k, label: s.s, title: s.l}))), () => state.scope, v => { state.scope = v; }, syncScope);
+segment('f-emode', [{id: 'dist', label: 'Su cartera por departamento'}, {id: 'mkt', label: 'Su participación en cada departamento'}], () => state.emode, v => { state.emode = v; });
+(function fillMonths() {
+  const sel = document.getElementById('f-mes');
+  for (let i = N - 1; i >= 0; i--) htmlEl('option', {value: String(i), text: mLabel(MONTHS[i])}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+})();
+(function fillDeps() {
+  const sel = document.getElementById('f-dep');
+  DEPTS.forEach(d => htmlEl('option', {value: d.k, text: d.l}, sel));
+  sel.value = state.dep;
+  sel.addEventListener('change', () => { state.dep = sel.value; renderMap(); renderDep(); renderDepEnt(); renderHeat(); refreshTables(); });
+})();
+document.getElementById('f-ent').addEventListener('change', e => { state.ent = e.target.value; renderEnt(); renderEtab(); refreshTables(); });
+
+// ---------- Pestañas ----------
+const TABS = ['deptos', 'entidades', 'metodologia'];
+state.tab = 'deptos';
+function renderVisible() {
+  hideTip();
+  syncScope();
+  if (state.tab === 'deptos') { renderKpis(); renderMap(); renderLc(); renderGr(); renderDep(); renderDepEnt(); renderHeat(); }
+  else if (state.tab === 'entidades') { fillEntSelect(); renderEnt(); renderEtab(); }
+  refreshTables();
+}
+function showTab(id, fromUser) {
+  state.tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'metodologia';
+  document.getElementById('f-ind-wrap').hidden = id === 'entidades';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+// ---------- Textos de metodología y pie ----------
+(function methodTexts() {
+  const st = D.vab.estado, ys = Object.keys(st).map(Number).sort();
+  const list = a => a.length <= 1 ? (a[0] || '—') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+  const vv = {vabLast: String(VAB_LAST), vabNext: 'enero de ' + (VAB_LAST + 1), vabPrel: list(ys.filter(y => st[y] === 'preliminar')), vabEst: list(ys.filter(y => st[y] === 'estimada'))};
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = vv[e.dataset.v] || '—'; });
+  const i = N - 1, ex = D.ext['banca-multiple'][i], tot = amt('banca-multiple', '_peru', i) + ex;
+  const span = x => x.desde === MONTHS[0] && x.hasta === D.hasta ? 'toda la serie' : x.desde === MONTHS[0] ? 'hasta ' + mLabel(x.hasta)
+    : x.hasta === D.hasta ? 'desde ' + mLabel(x.desde) : 'de ' + mLabel(x.desde) + ' a ' + mLabel(x.hasta);
+  const who = D.extInfo.map(x => x.n + ' (' + span(x) + ')');
+  document.getElementById('ext-txt').textContent = (who.length ? 'Han tenido créditos en esa columna: ' + list(who) + '. ' : '') +
+    (ex > 0 ? 'En ' + mLabel(MONTHS[i]) + ', esa columna suma ' + money(ex) + ', ' + pct(100 * ex / tot, 2) + ' del crédito de la banca múltiple.' : 'En ' + mLabel(MONTHS[i]) + ' esa columna no tiene créditos.');
+})();
+document.getElementById('lede').textContent =
+  'Cuánto crédito registran en cada departamento del Perú las oficinas de los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos, mes a mes. Datos de la SBS de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + '.';
+[
+  'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), Boletín Estadístico. Estructura de los créditos directos por departamento: cuadros B-2349 (banca múltiple), B-3228 (financieras), C-1223 (cajas municipales), C-2223 (cajas rurales) y C-4219 (empresas de créditos). Población y VAB por departamento: INEI. Límites departamentales: INEI (2007), vía juaneladio/peru-geojson (licencia MPL-2.0).',
+  'Los montos por departamento, los agregados, los indicadores y la imputación de Mibanco en octubre de 2023 son cálculos propios a partir de esos cuadros. Montos en soles corrientes.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, document.getElementById('foot')));
+
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'deptos', false);
+let rt, lastW = 0;
+new ResizeObserver(es => {
+  const w = Math.round(es[0].contentRect.width);
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+}).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

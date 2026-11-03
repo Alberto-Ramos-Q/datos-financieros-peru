@@ -1,0 +1,132 @@
+subsistema,tema,codigo,fuente,desde,hasta,activo,titulo_sbs
+banca-multiple,estados-financieros,B-2201,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas
+banca-multiple,indicadores-financieros,B-2401,boletin,201007,,1,Indicadores Financieros
+banca-multiple,creditos-tipo-situacion,B-2334,boletin,201007,,1,Créditos Directos según Tipo de Crédito y Situación
+banca-multiple,creditos-tipo-modalidad-moneda,B-2359,boletin,201007,,1,"Créditos Directos por Tipo, Modalidad y Moneda"
+banca-multiple,categoria-riesgo-deudor,B-2309,boletin,201007,,1,Estructura de Créditos Directos e Indirectos según Categoría de Riesgo del Deudor
+banca-multiple,categoria-riesgo-deudor-tipo-credito,B-230802,boletin,201007,,1,Estructura de Créditos Directos e Indirectos por Tipo de Crédito y Categoría de Riesgo del Deudor
+banca-multiple,morosidad-dias-incumplimiento,B-220512,boletin,201007,,1,Ratios de Morosidad según días de incumplimiento
+banca-multiple,castigos-tipo-credito,B-2369,boletin,201007,,1,Flujo de Créditos Castigados por Tipo de Crédito
+empresas-financieras,estados-financieros,B-3101,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas
+empresas-financieras,indicadores-financieros,B-3301,boletin,201007,,1,Indicadores Financieros
+empresas-financieras,creditos-tipo-situacion,B-3220,boletin,201007,,1,Créditos Directos según Tipo de Crédito y Situación
+empresas-financieras,creditos-tipo-modalidad-moneda,B-3272,boletin,201509,,1,"Créditos Directos por Tipo, Modalidad y Moneda"
+empresas-financieras,categoria-riesgo-deudor,B-3205,boletin,201007,,1,Estructura de Créditos Directos e Indirectos según Categoría de Riesgo del Deudor
+empresas-financieras,morosidad-dias-incumplimiento,B-3230,boletin,201007,,1,Ratios de Morosidad Según Días de Incumplimiento
+empresas-financieras,castigos-tipo-credito,B-3234,boletin,201007,,1,Flujo de Créditos Castigados por Tipo de Crédito
+cajas-municipales,estados-financieros,C-1101,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas
+cajas-municipales,indicadores-financieros,C-1301,boletin,201007,,1,Indicadores Financieros
+cajas-municipales,creditos-tipo-situacion,C-1228,boletin,201007,,1,Créditos Directos según Tipo de Crédito y Situación
+cajas-municipales,creditos-tipo-modalidad-moneda,C-1261,boletin,201509,,1,"Créditos Directos por Tipo, Modalidad y Moneda"
+cajas-municipales,categoria-riesgo-deudor,C-120201,boletin,201007,,1,Estructura de Créditos Directos y Contingentes según Categoría de Riesgo del Deudor
+cajas-municipales,morosidad-dias-incumplimiento,C-1230,boletin,201007,,1,Ratios de Morosidad según días de incumplimiento
+cajas-municipales,castigos-tipo-credito,C-1253,boletin,201007,,1,Flujo de Créditos Castigados por tipo de Crédito
+cajas-rurales,estados-financieros,C-2101,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas
+cajas-rurales,indicadores-financieros,C-2301,boletin,201007,,1,Indicadores Financieros
+cajas-rurales,creditos-tipo-situacion,C-2228,boletin,201007,,1,Créditos Directos según Tipo de Crédito y Situación
+cajas-rurales,castigos-tipo-credito,C-2258,boletin,201007,,1,Flujo de Créditos Castigados por tipo de Crédito
+empresas-credito,estados-financieros,C-4103,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas
+empresas-credito,indicadores-financieros,C-4301,boletin,201007,,1,Indicadores Financieros
+empresas-credito,creditos-tipo-situacion,C-4223,boletin,201007,,1,Créditos Directos según Tipo de Crédito y Situación
+cajas-rurales,morosidad-dias-incumplimiento,C-2230,boletin,201007,,1,Ratios de Morosidad según días de incumplimiento
+empresas-credito,morosidad-dias-incumplimiento,C-4225,boletin,201007,,1,Ratios de Morosidad según días de incumplimiento
+cajas-rurales,categoria-riesgo-deudor,C-220201,boletin,201007,,1,Estructura de Créditos Directos y Contingentes según Categoría de Riesgo del Deudor
+empresas-credito,categoria-riesgo-deudor,C-4201,boletin,201007,,1,Estructura de Créditos Directos y Contingentes según Categoría de Riesgo del Deudor
+empresas-financieras,categoria-riesgo-deudor-tipo-credito,B-3271,boletin,201007,,1,Estructura de Créditos Directos e Indirectos por Tipo de Crédito y Categoría de Riesgo del Deudor
+cajas-municipales,categoria-riesgo-deudor-tipo-credito,C-1233,boletin,201007,,1,Estructura de Créditos Directos y Contingentes por Tipo de Crédito y Categoría de Riesgo del Deudor
+cajas-rurales,categoria-riesgo-deudor-tipo-credito,C-2233,boletin,201007,,1,Estructura de Créditos Directos y Contingentes por Tipo de Crédito y Categoría de Riesgo del Deudor
+empresas-credito,categoria-riesgo-deudor-tipo-credito,C-4227,boletin,201007,,1,Estructura de Créditos Directos y Contingentes por Tipo de Crédito y Categoría de Riesgo del Deudor
+empresas-credito,castigos-tipo-credito,C-4242,boletin,201007,,1,Flujo de Créditos Castigados por tipo de Crédito
+cajas-rurales,creditos-tipo-modalidad-moneda,C-2264,boletin,201509,,1,"Créditos Directos por Tipo, Modalidad y Moneda"
+empresas-credito,creditos-tipo-modalidad-moneda,C-4253,boletin,201509,,1,"Créditos Directos por Tipo, Modalidad y Moneda"
+banca-multiple,morosidad-tipo-credito-modalidad,B-2362,boletin,201007,,1,Morosidad por tipo de crédito y modalidad
+empresas-financieras,morosidad-tipo-credito-modalidad,B-3257,boletin,201010,,1,Morosidad por Tipo de Crédito y Modalidad
+cajas-municipales,morosidad-tipo-credito-modalidad,C-1242,boletin,201007,,1,Morosidad por tipo de crédito y modalidad
+cajas-rurales,morosidad-tipo-credito-modalidad,C-2247,boletin,201007,,1,Morosidad por tipo de crédito y modalidad
+empresas-credito,morosidad-tipo-credito-modalidad,C-4234,boletin,201007,,1,Morosidad por tipo de crédito y modalidad
+banca-multiple,ratio-capital-global,B-2402,boletin,201007,,1,Requerimiento de Patrimonio Efectivo y Ratio de Capital Global
+empresas-financieras,ratio-capital-global,B-3302,boletin,201007,,1,Requerimiento de Patrimonio Efectivo y Ratio de Capital Global
+cajas-municipales,ratio-capital-global,C-1252,boletin,201007,,1,Requerimiento de patrimonio efectivo y ratio de capital global
+cajas-rurales,ratio-capital-global,C-2257,boletin,201007,,1,Requerimiento de patrimonio efectivo y ratio de capital global
+empresas-credito,ratio-capital-global,C-4241,boletin,201007,,1,Requerimiento de patrimonio efectivo y ratio de capital global
+banca-multiple,ratios-liquidez,B-2340,boletin,201007,,1,Ratios de Liquidez
+empresas-financieras,ratios-liquidez,B-3250,boletin,201010,,1,Ratio de Liquidez
+cajas-municipales,ratios-liquidez,C-1244,boletin,201007,,1,Ratios de Liquidez
+cajas-rurales,ratios-liquidez,C-2249,boletin,201007,,1,Ratios de Liquidez
+banca-multiple,depositos-escala-montos,B-2321,boletin,201007,,1,Depósitos según Escala de Montos
+empresas-financieras,depositos-escala-montos,B-3256,boletin,201010,,1,Depósitos según Escala de Montos
+cajas-municipales,depositos-escala-montos,C-1211,boletin,201007,,1,Depósitos según Escala de Montos
+cajas-rurales,depositos-escala-montos,C-2211,boletin,201007,,1,Depósitos según Escala de Montos
+banca-multiple,depositos-tipo-plazo,B-220513,boletin,201007,,1,Depósitos del Público por Tipo de Depósito y Plazo
+empresas-financieras,depositos-tipo-plazo,B-3251,boletin,201509,,1,Depósitos del Público por Tipo de Depósito y Plazo
+banca-multiple,adeudos-obligaciones-financieras,B-2310,boletin,201007,,1,Estructura de los Adeudos y Obligaciones Financieras
+empresas-financieras,adeudos-obligaciones-financieras,B-3239,boletin,201509,,1,Estructura de los Adeudos y Obligaciones Financieras
+cajas-municipales,adeudos-obligaciones-financieras,C-1219,boletin,201007,,1,Estructura de los Adeudos y Obligaciones Financieras
+cajas-rurales,adeudos-obligaciones-financieras,C-2219,boletin,201007,,1,Estructura de los Adeudos y Obligaciones Financieras
+empresas-credito,adeudos-obligaciones-financieras,C-4214,boletin,201007,,1,Estructura de los Adeudos y Obligaciones Financieras
+banca-multiple,posicion-global-moneda-extranjera,B-2368,boletin,201007,,1,Posición Global en Moneda Extranjera
+empresas-financieras,posicion-global-moneda-extranjera,B-3266,boletin,201105,,1,Posición Global en Moneda Extranjera
+cajas-municipales,posicion-global-moneda-extranjera,C-1260,boletin,201407,,1,Posición Global en Moneda Extranjera
+cajas-rurales,posicion-global-moneda-extranjera,C-2370,boletin,201407,,1,Posición Global en Moneda Extranjera
+empresas-credito,posicion-global-moneda-extranjera,C-4252,boletin,201407,,1,Posición Global en Moneda Extranjera
+banca-multiple,ranking-creditos-depositos-patrimonio,B-2332,boletin,201007,,1,"Ranking de Créditos, Depósitos y Patrimonio"
+empresas-financieras,ranking-creditos-depositos-patrimonio,B-3243,boletin,201007,,1,"Ranking de Créditos, Depósitos y Patrimonio"
+cajas-municipales,ranking-creditos-depositos-patrimonio,C-1205,boletin,201007,,1,"Ranking de Créditos, Depósitos y Patrimonio"
+cajas-rurales,ranking-creditos-depositos-patrimonio,C-2205,boletin,201007,,1,"Ranking de Créditos, Depósitos y Patrimonio"
+empresas-credito,ranking-creditos-depositos-patrimonio,C-4217,boletin,201007,,1,Ranking de Créditos y Patrimonio
+banca-multiple,ratio-cobertura-liquidez,B-230809,boletin,202406,,1,Ratio de Cobertura de Liquidez
+empresas-financieras,ratio-cobertura-liquidez,B-230810,boletin,202406,,1,Ratio de Cobertura de Liquidez
+cajas-municipales,ratio-cobertura-liquidez,B-230811,boletin,202406,,1,Ratio de Cobertura de Liquidez
+cajas-rurales,ratio-cobertura-liquidez,B-230812,boletin,202406,,1,Ratio de Cobertura de Liquidez
+banca-multiple,ratio-financiacion-neta-estable,B-234021,boletin,202512,,1,Ratio de Financiación Neta Estable
+empresas-financieras,ratio-financiacion-neta-estable,B-230213,boletin,202512,,1,Ratio de Financiación Neta Estable
+cajas-municipales,ratio-financiacion-neta-estable,C-120212,boletin,202512,,1,Ratio de Financiación Neta Estable
+cajas-rurales,ratio-financiacion-neta-estable,B-230820,boletin,202512,,1,Ratio de Financiación Neta Estable
+banca-multiple,depositantes-tipo-deposito,B-2373,boletin,201007,,1,Número de Depositantes por Tipo de Depósito
+empresas-financieras,depositantes-tipo-deposito,B-3232,boletin,201007,,1,Número de Depositantes por Tipo de Depósito
+cajas-municipales,depositantes-tipo-deposito,C-1250,boletin,201007,,1,Número de Depositantes por Tipo de Depósito
+cajas-rurales,depositantes-tipo-deposito,C-2255,boletin,201007,,1,Número de Depositantes por Tipo de Depósito
+banca-multiple,requerimiento-patrimonio-riesgo-mercado,B-2337,boletin,201007,,1,Requerimiento de Patrimonio Efectivo por Riesgo de Mercado
+empresas-financieras,requerimiento-patrimonio-riesgo-mercado,B-3265,boletin,201105,,1,Requerimiento de Patrimonio Efectivo por Riesgo de Mercado
+cajas-municipales,requerimiento-patrimonio-riesgo-mercado,C-1259,boletin,201407,,1,Requerimiento de Patrimonio Efectivo por Riesgo de Mercado
+cajas-rurales,requerimiento-patrimonio-riesgo-mercado,R-2369,boletin,201407,,1,Requerimiento de Patrimonio Efectivo por Riesgo de Mercado
+empresas-credito,requerimiento-patrimonio-riesgo-mercado,C-4251,boletin,201407,,1,Requerimiento de Patrimonio Efectivo por Riesgo de Mercado
+banca-multiple,estructura-patrimonio-efectivo,B-2370,boletin,201007,,1,Estructura del Patrimonio Efectivo
+empresas-financieras,estructura-patrimonio-efectivo,B-3252,boletin,201010,,1,Estructura del Patrimonio Efectivo
+cajas-municipales,estructura-patrimonio-efectivo,C-1257,boletin,201007,,1,Estructura del Patrimonio Efectivo
+cajas-rurales,estructura-patrimonio-efectivo,C-2262,boletin,201007,,1,Estructura del Patrimonio Efectivo
+empresas-credito,estructura-patrimonio-efectivo,C-4246,boletin,201007,,1,Estructura del Patrimonio Efectivo
+banca-multiple,creditos-sector-economico,B-2336,boletin,201007,,1,Créditos a Actividades Empresariales por Sector Económico
+empresas-financieras,creditos-sector-economico,B-3221,boletin,201007,,1,Créditos a Actividades Empresariales por Sector Económico
+cajas-municipales,creditos-sector-economico,C-1216,boletin,201007,,1,Créditos a Actividades Empresariales por Sector Económico
+cajas-rurales,creditos-sector-economico,C-2216,boletin,201007,,1,Créditos a Actividades Empresariales por Sector Económico
+empresas-credito,creditos-sector-economico,C-4210,boletin,201007,,1,Créditos a Actividades Empresariales por Sector Económico
+banca-multiple,ganancias-valor-patrimonial-riesgo,B-2379,boletin,202504,,1,Ganancias en Riesgo y Valor Patrimonial en Riesgo
+empresas-financieras,ganancias-valor-patrimonial-riesgo,B-3267,boletin,202504,,1,Ganancias en Riesgo y Valor Patrimonial en Riesgo
+cajas-municipales,ganancias-valor-patrimonial-riesgo,C-1262,boletin,202504,,1,Ganancias en Riesgo y Valor Patrimonial en Riesgo
+cajas-rurales,ganancias-valor-patrimonial-riesgo,C-2371,boletin,202504,,1,Ganancias en Riesgo y Valor Patrimonial en Riesgo
+empresas-credito,ganancias-valor-patrimonial-riesgo,C-4254,boletin,202504,,1,Ganancias en Riesgo y Valor Patrimonial en Riesgo
+banca-multiple,deudores-tipo-credito,B-230803,boletin,201012,,1,Número de Deudores según Tipo de Crédito
+empresas-financieras,deudores-tipo-credito,B-3218,boletin,201012,,1,Número de Deudores según Tipo de Crédito
+cajas-municipales,deudores-tipo-credito,C-1231,boletin,201012,,1,Número de Deudores según Tipo de Crédito
+cajas-rurales,deudores-tipo-credito,C-2231,boletin,201012,,1,Número de Deudores según Tipo de Crédito
+empresas-credito,deudores-tipo-credito,C-4226,boletin,201012,,1,Número de Deudores según Tipo de Crédito
+banca-multiple,creditos-departamento,B-2349,boletin,201007,,1,Estructura de los Créditos Directos por Departamento
+empresas-financieras,creditos-departamento,B-3228,boletin,201007,,1,Estructura de los Créditos Directos por Departamento
+cajas-municipales,creditos-departamento,C-1223,boletin,201007,,1,Estructura de los Créditos Directos por Departamento
+cajas-rurales,creditos-departamento,C-2223,boletin,201007,,1,Estructura de los Créditos Directos por Departamento
+empresas-credito,creditos-departamento,C-4219,boletin,201007,,1,Estructura de los Créditos Directos por Departamento
+banca-multiple,tarjetas-credito-tipo,B-2363,boletin,201007,,1,Número de Tarjetas de Crédito por Tipo
+empresas-financieras,tarjetas-credito-tipo,B-3242,boletin,201007,,1,Número de Tarjetas de Crédito por Tipo
+cajas-municipales,tarjetas-credito-tipo,C-1235,boletin,201007,,1,Número de tarjetas de crédito y débito
+cajas-rurales,tarjetas-credito-tipo,C-2240,boletin,201007,,1,Número de tarjetas de crédito y débito
+empresas-credito,tarjetas-credito-tipo,C-4229,boletin,201007,,1,Número de tarjetas de crédito y débito
+banca-multiple,personal-categoria-laboral,B-2305,boletin,201007,,1,Número de Personal
+empresas-financieras,personal-categoria-laboral,B-3202,boletin,201007,,1,Número de Personal
+cajas-municipales,personal-categoria-laboral,C-1202,boletin,201007,,1,Número de Personal
+cajas-rurales,personal-categoria-laboral,C-2202,boletin,201007,,1,Número de Personal
+empresas-credito,personal-categoria-laboral,C-4206,boletin,201007,,1,Número de Personal
+empresas-financieras,creditos-tipo-modalidad-porcentaje,B-3235,boletin,201010,201508,1,Estructura de Créditos Directos por Tipo y Modalidad
+cajas-municipales,creditos-tipo-modalidad-porcentaje,C-1243,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad
+cajas-rurales,creditos-tipo-modalidad-porcentaje,C-2248,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad
+empresas-credito,creditos-tipo-modalidad-porcentaje,C-4235,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad

@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservas internacionales del Perú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que la serie de tableros de la SBS, con su paleta: azul #001E6B y gris #B2B4B5.
+   Composiciones (de qué están hechas, de quién son, portafolio): rampa ordinal del gris SBS al azul
+   SBS (q1–q6, validada en claro y en oscuro) en el orden del cuadro, con 2 px de separación entre capas.
+   Compras y ventas del BCRP: extremos de la divergente morado ↔ azul (compra azul, venta morado), sin
+   rojos; el sentido de la barra y el signo van siempre escritos. Series únicas (tipo de cambio,
+   reservas / PBI) en azul SBS. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --q1: #b2b4b5; --q2: #8e99b4; --q3: #6a7ca6; --q4: #475d96; --q5: #243f82; --q6: #001e6b;
+  --buy: #001e6b; --sell: #5a2a85; --line: #001e6b; --up: #001e6b;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --q1: #4a5573; --q2: #4f68a8; --q3: #6e89cc; --q4: #93aae0; --q5: #b9c8ee; --q6: #dce3f5;
+  --buy: #b9c8ee; --sell: #d2b4f0; --line: #ced8ec; --up: #9fb2e6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 36px 0 12px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile.hero { border-top: 3px solid var(--accent); }
+.tile .val { font-size: 30px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .delta { color: var(--up); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin-top: 12px; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.panel-title { margin: 14px 0 2px; font-size: 13px; color: var(--ink2); font-weight: 600; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 4px; }
+.filters .lab { font-size: 13px; color: var(--ink2); margin-right: 4px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+
+.table-wrap { max-height: 420px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dlbl strong, .dval { font-weight: 600; fill: var(--ink); }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.col-hit { fill: transparent; }
+.col-hit:hover, .col-hit:focus-visible { fill: var(--wash); outline: none; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; }
+code { font-size: 12px; }
+
+/* Portafolio (Memoria del BCRP) */
+.port { display: grid; gap: 18px; margin-top: 14px; }
+.prow h3 { font-size: 13.5px; font-weight: 600; margin: 0 0 6px; }
+.prow .note { margin: 6px 0 0; }
+.pbar { display: flex; gap: 2px; height: 22px; }
+.pbar .pseg { height: 100%; min-width: 2px; }
+.pbar .pseg:first-child { border-radius: 4px 0 0 4px; }
+.pbar .pseg:last-child { border-radius: 0 4px 4px 0; }
+.pleg { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 8px; font-size: 13px; color: var(--ink2); }
+.pleg span { display: inline-flex; align-items: center; gap: 6px; }
+.pleg b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Pestañas */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 24px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, .theme button:focus-visible, .toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña educativa */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; text-wrap: balance; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 20px 0 6px; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 4px; }
+.toc a { font-size: 13px; color: var(--ink2); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+.toc a:hover { color: var(--ink); background: var(--wash); }
+.n { font-weight: 600; font-variant-numeric: tabular-nums; }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 6px; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.box { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.box h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; }
+.box p:last-child { margin-bottom: 0; }
+
+.cascade { display: grid; gap: 6px; margin: 16px 0 8px; font-size: 13.5px; }
+.crow { display: grid; grid-template-columns: minmax(140px, 250px) 1fr 76px; grid-template-areas: "l t v"; gap: 12px; align-items: center; }
+.crow .l { grid-area: l; } .crow .track { grid-area: t; } .crow .v { grid-area: v; }
+.cascade .track { position: relative; height: 18px; }
+.cascade .bar { position: absolute; top: 2px; height: 14px; border-radius: 4px; min-width: 2px; }
+.cascade .v { text-align: right; font-variant-numeric: tabular-nums; }
+.cascade .total { font-weight: 600; }
+
+.inds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0 6px; }
+.ind { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.ind .lab { font-size: 13px; color: var(--ink2); }
+.ind .val { font-size: 28px; font-weight: 600; margin: 4px 0 2px; }
+.ind .val small { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.ind .ref { font-size: 13px; color: var(--ink2); }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 9px; margin-top: 8px; border: 1px solid var(--border); color: var(--ink2); }
+.chip.good { color: var(--up); }
+.chip svg { width: 12px; height: 12px; }
+
+.parts { display: grid; gap: 10px; margin-top: 12px; }
+.part { display: grid; grid-template-columns: 210px 1fr; gap: 6px 18px; padding: 12px 0; border-top: 1px solid var(--grid); }
+.part:first-child { border-top: 0; }
+.part .name { font-weight: 600; }
+.part .amt { font-size: 13px; color: var(--ink2); font-variant-numeric: tabular-nums; }
+.part p { margin: 0; color: var(--ink2); }
+
+.lit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.lit .box p { color: var(--ink2); font-size: 14px; }
+.refs { margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--muted); }
+.refs li { margin: 3px 0; }
+.refs i { color: var(--ink2); }
+.refs a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.refs a:hover { color: var(--ink); }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .tile.hero { grid-column: 1 / -1; }
+  .two, .lit, .inds { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .defs, .part { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .crow { grid-template-columns: 1fr auto; grid-template-areas: "l v" "t t"; gap: 2px 12px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 24px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Economía peruana · Series del BCRP</p>
+      <h1>Reservas internacionales del Perú</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto tiene el BCRP, de qué están hechas, de quién son y cuánto compra y vende en el mercado cambiario.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-tablero" aria-controls="tab-tablero" aria-selected="true">Tablero</button>
+    <button type="button" role="tab" id="tabbtn-aprende" aria-controls="tab-aprende" aria-selected="false" tabindex="-1">Aprende sobre las reservas</button>
+  </div>
+
+  <div id="tab-tablero" role="tabpanel" aria-labelledby="tabbtn-tablero">
+  <section class="kpis" id="kpis" aria-label="Indicadores principales"></section>
+
+  <div class="section-title">Compras y ventas del BCRP</div>
+  <figure class="card" style="margin:0" id="card-anual">
+    <div class="card-head">
+      <div>
+        <h2>Cuánto compra y cuánto vende el BCRP cada año</h2>
+        <p>Operaciones en la mesa de negociación (spot), en millones de US$. Las compras suben y las ventas bajan desde la línea cero. Con sus compras el BCRP acumula reservas y frena la caída del dólar; con sus ventas frena su subida.</p>
+      </div>
+      <button class="btn" data-table="anual">Ver tabla</button>
+    </div>
+    <div class="legend"><span><i class="sw" style="background:var(--buy)"></i>Compras</span><span><i class="sw" style="background:var(--sell)"></i>Ventas</span></div>
+    <div class="chart" id="ch-anual"></div>
+    <div class="table-wrap" id="tb-anual" hidden></div>
+    <p class="note" id="note-anual"></p>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-comp">
+    <div class="card-head">
+      <div>
+        <h2 id="comp-title">De qué están hechas las reservas</h2>
+        <p id="comp-sub"></p>
+      </div>
+      <button class="btn" data-table="comp">Ver tabla</button>
+    </div>
+    <div class="chart" id="ch-comp"></div>
+    <div class="table-wrap" id="tb-comp" hidden></div>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-port">
+    <div class="card-head">
+      <div>
+        <h2 id="port-title">Cómo se invierten las reservas</h2>
+        <p id="port-sub"></p>
+      </div>
+      <button class="btn" data-table="port">Ver tabla</button>
+    </div>
+    <div class="port" id="ch-port"></div>
+    <div class="table-wrap" id="tb-port" hidden></div>
+  </figure>
+
+  <div class="section-title">Evolución mensual</div>
+  <div class="filters" role="group" aria-label="Periodo">
+    <span class="lab">Periodo</span>
+    <div class="seg" id="range"></div>
+  </div>
+
+  <figure class="card" style="margin:8px 0 0" id="card-own">
+    <div class="card-head">
+      <div>
+        <h2>De quién son las reservas</h2>
+        <p>RIN al cierre de cada mes, en millones de US$. Solo la <b>posición de cambio</b> es del BCRP. El resto son dólares que bancos y Estado depositan en el BCRP y que pueden retirar, por eso la RIN salta al cierre de cada mes.</p>
+      </div>
+      <button class="btn" data-table="own">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--q6)"></i>Del BCRP (posición de cambio)</span>
+      <span><i class="sw" style="background:var(--q4)"></i>Depósitos de bancos y financieras</span>
+      <span><i class="sw" style="background:var(--q2)"></i>Depósitos del sector público y otros</span>
+    </div>
+    <div class="chart" id="ch-own"></div>
+    <div class="table-wrap" id="tb-own" hidden></div>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-comph">
+    <div class="card-head">
+      <div>
+        <h2>Cómo ha cambiado la composición de las reservas brutas</h2>
+        <p>Participación de cada tipo de activo internacional en el total, al cierre de cada mes. El peso del oro sube y baja también con su precio, no solo con compras o ventas.</p>
+      </div>
+      <button class="btn" data-table="comph">Ver tabla</button>
+    </div>
+    <div class="legend" id="lg-comph"></div>
+    <div class="chart" id="ch-comph"></div>
+    <div class="table-wrap" id="tb-comph" hidden></div>
+  </figure>
+
+  <figure class="card" style="margin:12px 0 0" id="card-mon">
+    <div class="card-head">
+      <div>
+        <h2>Intervención mensual y tipo de cambio</h2>
+        <p>Millones de US$ por mes. Los tres paneles comparten el eje del tiempo; al pasar el cursor por uno se leen los tres.</p>
+      </div>
+      <button class="btn" data-table="mon">Ver tabla</button>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--buy)"></i>El BCRP compra dólares (o vencen swaps)</span>
+      <span><i class="sw" style="background:var(--sell)"></i>El BCRP vende dólares (o coloca swaps)</span>
+    </div>
+    <div class="panel-title">Compras netas en mesa (spot)</div>
+    <div class="chart" id="ch-net"></div>
+    <div class="panel-title">Swaps cambiarios venta: colocación neta</div>
+    <div class="chart" id="ch-swap"></div>
+    <div class="panel-title">Tipo de cambio interbancario (S/ por US$, promedio del mes)</div>
+    <div class="chart" id="ch-tc"></div>
+    <div class="table-wrap" id="tb-mon" hidden></div>
+    <p class="note" id="note-mon"></p>
+  </figure>
+
+  </div>
+
+  <div id="tab-aprende" role="tabpanel" aria-labelledby="tabbtn-aprende" hidden>
+    <nav class="toc" aria-label="Contenido">
+      <a href="#que-son">Qué son</a>
+      <a href="#por-que">Por qué compra y vende</a>
+      <a href="#nuestro-nivel">Qué implica nuestro nivel</a>
+      <a href="#composicion">De qué están hechas</a>
+      <a href="#literatura">Qué dice la literatura</a>
+      <a href="#glosario">Glosario</a>
+    </nav>
+
+    <div class="edu">
+      <section id="que-son">
+        <div class="kicker">1 · Conceptos</div>
+        <h2>¿Qué son las reservas internacionales?</h2>
+        <p>Son los activos en moneda extranjera que el BCRP puede usar de inmediato: depósitos y bonos en el exterior, oro y aportes a organismos internacionales. La Constitución (art. 84) le encarga administrar las reservas internacionales a su cargo y le fija una sola finalidad: preservar la estabilidad monetaria.</p>
+        <p>Hay tres cifras que suelen confundirse. Esta es la cuenta para <span data-v="comp_m"></span>, en millones de US$:</p>
+        <div class="cascade" id="cascade" role="img" aria-label="Cuenta desde las reservas brutas hasta la posición de cambio"></div>
+        <dl class="defs">
+          <dt>Reservas brutas</dt>
+          <dd>Los activos externos que el BCRP controla y puede usar de inmediato: divisas, depósitos y valores en el exterior, oro, DEG y aportes a organismos internacionales. El BCRP los llama <em>activos de reserva</em>.</dd>
+          <dt>Reservas internacionales netas (RIN)</dt>
+          <dd>Las brutas menos los pasivos de reserva, es decir, las obligaciones del BCRP con entidades del exterior. Es la cifra que se publica con más frecuencia.</dd>
+          <dt>Posición de cambio</dt>
+          <dd>La RIN menos lo que el BCRP debe en moneda extranjera a residentes, sobre todo los depósitos de bancos y financieras (principalmente encaje) y del sector público. Son los recursos propios del BCRP: la parte con la que puede intervenir sin comprometer fondos de terceros. Hoy es el <span class="n" data-v="pos_pct"></span> de la RIN.</dd>
+        </dl>
+        <p>Como los bancos mueven sus depósitos en el BCRP según sus necesidades de liquidez, la RIN sube y baja de un día a otro sin que el BCRP haya comprado o vendido nada. Para seguir la intervención conviene mirar la posición de cambio.</p>
+      </section>
+
+      <section id="por-que">
+        <div class="kicker">2 · Intervención cambiaria</div>
+        <h2>¿Por qué compra y vende dólares el BCRP?</h2>
+        <p>Desde 2002 el BCRP aplica un esquema de metas explícitas de inflación: mueve su tasa de referencia para que la inflación se mantenga en 2%, dentro de un rango de 1% a 3%, meta vigente desde febrero de 2007 (entre 2002 y 2006 fue 2.5%, con un punto de tolerancia). El tipo de cambio es flexible y lo fija el mercado. El BCRP no defiende un nivel, pero interviene para reducir la volatilidad excesiva. El BCRP llama a esto flotación administrada; el FMI clasifica el régimen del Perú como flotante.</p>
+
+        <h3>La razón de fondo: la dolarización</h3>
+        <p>Muchas familias y empresas peruanas tienen deudas en dólares y ganan en soles. Si el dólar sube de golpe, esas deudas crecen en soles, aumenta la morosidad y el problema pasa a los bancos. En <span data-v="dol_max_m"></span> el <span class="n" data-v="dol_max"></span> del crédito al sector privado estaba en dólares; en <span data-v="dol_m"></span> es el <span class="n" data-v="dol_cred"></span>, y el <span class="n" data-v="dol_liq"></span> de la liquidez sigue en dólares. Ese mecanismo se conoce como <em>riesgo cambiario crediticio</em>. Por eso los bancos centrales de economías dolarizadas evitan los saltos bruscos del tipo de cambio, una conducta que la literatura llama <em>miedo a flotar</em>.</p>
+
+        <div class="two">
+          <div class="box">
+            <h3><i class="sw" style="background:var(--buy)"></i>Cuándo compra</h3>
+            <p>Cuando entran muchos dólares y el sol se aprecia demasiado rápido. Al comprar, suma reservas. En 2012 compró <span class="n" data-v="c2012"></span> millones de US$ netos, su récord, en un año de fuertes entradas de capitales de largo plazo y de desdolarización de depósitos. Desde fines de 2025 volvió a comprar: términos de intercambio en máximos históricos trajeron una oleada de dólares que presionaba al sol al alza. En <span data-v="anio"></span> lleva <span class="n" data-v="c_anio"></span>.</p>
+          </div>
+          <div class="box">
+            <h3><i class="sw" style="background:var(--sell)"></i>Cuándo vende</h3>
+            <p>Cuando salen capitales o hay incertidumbre y el dólar sube rápido. Al vender, usa reservas. Vendió <span class="n" data-v="v2015"></span> millones en 2015, con la caída de los precios de las materias primas y el inicio de las alzas de tasas de la Reserva Federal, y <span class="n" data-v="v2021"></span> millones en 2021, ante la incertidumbre política del periodo electoral, que llevó el tipo de cambio a su nivel más alto desde 2002. En ambos casos el objetivo declarado fue reducir la volatilidad.</p>
+          </div>
+        </div>
+
+        <h3>Los instrumentos</h3>
+        <dl class="defs">
+          <dt>Compra y venta en la mesa de negociación</dt>
+          <dd>Compras y ventas de dólares al contado (spot) con las entidades financieras autorizadas, sobre todo bancos. Cambian las reservas de inmediato. Las operaciones con el sector público se registran aparte.</dd>
+          <dt>Swaps cambiarios</dt>
+          <dd>Derivados que se liquidan en soles. En un swap cambiario venta, el BCRP paga una tasa fija en dólares más la variación del tipo de cambio y recibe una tasa variable en soles: equivale a una venta de dólares a futuro, sin usar reservas ni afectar la liquidez de la banca. Se crearon en setiembre de 2014 y desde entonces reemplazan a los CDR como principal derivado de intervención. En los datos, la primera colocación es de <span data-v="swap_first"></span>.</dd>
+          <dt>CDR BCRP</dt>
+          <dd>Certificados de Depósito Reajustables del BCRP: certificados en soles cuyo valor se reajusta según el tipo de cambio. Dan cobertura frente a una subida del dólar sin que el BCRP venda dólares, aunque a diferencia de los swaps retiran soles del mercado.</dd>
+          <dt>Encaje en moneda extranjera</dt>
+          <dd>Porcentaje de los depósitos en moneda extranjera que los bancos deben mantener como reserva, en efectivo en sus bóvedas o depositado en el BCRP, con un mínimo obligatorio en el BCRP. Encarece la intermediación en dólares y forma un colchón de liquidez. La parte depositada en el BCRP está dentro de la RIN pero no de la posición de cambio.</dd>
+        </dl>
+
+        <h3>La esterilización</h3>
+        <p>Cuando el BCRP compra dólares paga con soles, y esos soles nuevos podrían bajar las tasas de interés por debajo de la tasa de referencia. Para evitarlo, los retira emitiendo certificados de depósito (CD BCRP) y otros valores o captando depósitos a plazo. Si la tasa que paga en soles supera lo que rinden las reservas en dólares, la esterilización tiene un costo para el BCRP. Cuando vende dólares ocurre lo contrario: recibe soles y los retira del mercado.</p>
+      </section>
+
+      <section id="nuestro-nivel">
+        <div class="kicker">3 · Suficiencia</div>
+        <h2>¿Qué implica tener reservas como las nuestras?</h2>
+        <p>No existe un nivel óptimo único. Se compara contra referencias que miden distintos riesgos: no poder pagar deuda de corto plazo, no poder pagar importaciones o una salida de depósitos. <span data-v="suf_resumen"></span></p>
+        <p>La evaluación oficial más completa es la del FMI. En su consulta del Artículo IV de 2026 estimó que, a fines de 2025, las reservas brutas (US$ 90,300 millones, 27% del PBI) equivalían a cerca de 268% de su métrica ARA, muy por encima del rango de 100% a 150% que considera adecuado, y calificó la cobertura de sólida y adecuada.</p>
+        <div class="inds" id="inds"></div>
+        <h3>Reservas como porcentaje del PBI</h3>
+        <p style="color:var(--ink2);font-size:13.5px">Activos de reserva del BCRP según la posición de activos y pasivos externos, trimestral.</p>
+        <div class="chart" id="ch-pbi"></div>
+
+        <div class="two" style="margin-top:16px">
+          <div class="box">
+            <h3>Beneficios</h3>
+            <p><b>Seguro.</b> Permiten enfrentar una salida de capitales o una caída del precio de los metales sin saltos bruscos del tipo de cambio, que sigue siendo flexible y es el principal mecanismo de ajuste.</p>
+            <p><b>Respaldo a un sistema en parte dolarizado.</b> Si hay retiros de depósitos en dólares, el BCRP puede proveer dólares vendiéndolos, liberando encajes o prestándolos a los bancos, como hizo en la crisis de 2008.</p>
+            <p><b>Credibilidad.</b> Las calificadoras las incorporan en su evaluación de liquidez externa, y la evidencia asocia más reservas con primas de riesgo soberano más bajas.</p>
+          </div>
+          <div class="box">
+            <h3>Costos</h3>
+            <p><b>Costo de oportunidad.</b> Se invierten en activos seguros que rinden poco frente a lo que el país paga por endeudarse o lo que rendiría invertir ese dinero.</p>
+            <p><b>Costo de esterilización.</b> Mantener reservas altas obliga a sostener certificados y depósitos que pagan intereses en soles.</p>
+            <p><b>Riesgo de valuación.</b> Cambios en el precio del oro, en las tasas de interés o entre monedas mueven el valor de las reservas y el patrimonio del BCRP. Por ley (art. 89 de su Ley Orgánica), ese efecto se registra en cuentas patrimoniales y no en la utilidad del año.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="composicion">
+        <div class="kicker">4 · Portafolio</div>
+        <h2>¿De qué están hechas las reservas?</h2>
+        <p>Su Ley Orgánica (art. 71) le pide administrarlas con criterios de seguridad, liquidez y rentabilidad. En la práctica, el BCRP prioriza preservar el capital y garantizar la liquidez, y solo después busca rendimiento. No invierte en deuda de empresas privadas. Composición a <span data-v="comp_m"></span>, en millones de US$:</p>
+        <div class="parts">
+          <div class="part">
+            <div><div class="name">Valores (bonos)</div><div class="amt" data-v="p_valores"></div></div>
+            <p>Principalmente deuda soberana (sobre todo del Tesoro de EE. UU.), de organismos supranacionales y de entidades públicas extranjeras, con calificación de A+ o más. Son el grueso del portafolio porque se venden rápido en mercados profundos y pagan intereses. Una parte la administran gestores externos bajo mandato del BCRP.</p>
+          </div>
+          <div class="part">
+            <div><div class="name">Depósitos en el exterior</div><div class="amt" data-v="p_depositos"></div></div>
+            <p>Depósitos en bancos del exterior de primer nivel y en otros bancos centrales, el BIS y el FMI (incluidas las tenencias de DEG). Junto con los valores de corto plazo, forman la parte de disponibilidad inmediata.</p>
+          </div>
+          <div class="part">
+            <div><div class="name">Oro y plata</div><div class="amt" data-v="p_oro"></div></div>
+            <p>Unos <span class="n" data-v="oro_moz"></span> millones de onzas troy (alrededor de <span class="n" data-v="oro_t"></span> toneladas), valorizadas a <span class="n" data-v="oro_precio"></span> US$ por onza en <span data-v="oro_m"></span>. Según los estados financieros de 2024, cerca de la mitad está en la bóveda del BCRP en monedas conmemorativas y la otra mitad en barras en bancos de primera línea del exterior. El oro no depende de que nadie pague y diversifica el portafolio, pero rinde poco y su precio es volátil, así que su peso en las reservas sube y baja con la cotización.</p>
+          </div>
+          <div class="part">
+            <div><div class="name">Aportes a FMI, BIS y FLAR</div><div class="amt" data-v="p_fmi_bis_flar"></div></div>
+            <p>La parte de la cuota del Perú en el FMI pagada en DEG (tramo de reserva), las acciones del BCRP en el Banco de Pagos Internacionales (BIS), del que es miembro desde 2011, y el capital pagado al Fondo Latinoamericano de Reservas (FLAR), que presta o garantiza créditos a los bancos centrales de sus países miembros.</p>
+          </div>
+          <div class="part">
+            <div><div class="name">Otros</div><div class="amt" data-v="p_otros"></div></div>
+            <p>Partidas menores que no entran en las categorías anteriores.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="literatura">
+        <div class="kicker">5 · Investigación</div>
+        <h2>Qué dice la literatura</h2>
+        <p>Las preguntas de fondo son tres: cuántas reservas conviene tener, por qué los países emergentes acumulan tantas y si la intervención cambiaria funciona.</p>
+        <div class="lit">
+          <div class="box">
+            <h3>Reglas de suficiencia</h3>
+            <p>La regla Greenspan–Guidotti, propuesta por Pablo Guidotti y difundida por Alan Greenspan en 1999, pide que las reservas cubran toda la deuda externa que vence en los próximos 12 meses (por plazo residual), suponiendo que no se renueva. La regla tradicional, usada por bancos centrales y por el FMI, pedía tres meses de importaciones; servía cuando los choques venían de la cuenta corriente.</p>
+            <p>Para riesgos de fuga de depósitos se usa una fracción del dinero amplio: Wijnholds y Kapteyn propusieron sumar a la deuda de corto plazo entre 5% y 10% de M2 en regímenes flotantes y entre 10% y 20% en regímenes fijos, ajustado por riesgo país. El FMI combina hoy estos riesgos en una sola métrica (ARA), que pondera exportaciones, dinero amplio, deuda de corto plazo y otros pasivos externos, y considera adecuadas reservas entre 100% y 150% de esa métrica.</p>
+            <ol class="refs">
+              <li>Greenspan, A. (1999, 29 de abril). <i>Currency reserves and debt</i> [Discurso]. World Bank Conference on Recent Trends in Reserves Management, Washington, D.C. <a href="https://www.federalreserve.gov/boarddocs/speeches/1999/19990429.htm">federalreserve.gov</a></li>
+              <li>de Beaufort Wijnholds, J. O. y Kapteyn, A. (2001). <i>Reserve adequacy in emerging market economies</i> (IMF Working Paper 01/143). <a href="https://doi.org/10.5089/9781451856347.001">doi:10.5089/9781451856347.001</a></li>
+              <li>FMI (2011). <i>Assessing reserve adequacy</i> (IMF Policy Paper, 14 de febrero). <a href="https://doi.org/10.5089/9781498339360.007">doi:10.5089/9781498339360.007</a></li>
+              <li>FMI (2016). <i>Guidance note on the assessment of reserve adequacy and related considerations</i> (IMF Policy Paper, junio). <a href="https://doi.org/10.5089/9781498345644.007">doi:10.5089/9781498345644.007</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Autoaseguramiento</h3>
+            <p>Después de las crisis de los noventa, los emergentes acumularon reservas como un seguro propio frente a frenazos de capitales y fuga de capitales; la evidencia da poco peso al motivo mercantilista. El nivel óptimo depende de la probabilidad y el tamaño de esas crisis y de su costo en producto, frente al costo de oportunidad de mantener las reservas y el grado de aversión al riesgo.</p>
+            <ol class="refs">
+              <li>Aizenman, J. y Lee, J. (2007). International reserves: Precautionary versus mercantilist views, theory and evidence. <i>Open Economies Review, 18</i>(2), 191–214. <a href="https://doi.org/10.1007/s11079-007-9030-z">doi:10.1007/s11079-007-9030-z</a></li>
+              <li>Jeanne, O. y Rancière, R. (2011). The optimal level of international reserves for emerging market countries: A new formula and some applications. <i>The Economic Journal, 121</i>(555), 905–930. <a href="https://doi.org/10.1111/j.1468-0297.2011.02435.x">doi:10.1111/j.1468-0297.2011.02435.x</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Estabilidad financiera y dolarización</h3>
+            <p>Las reservas no solo cubren la balanza de pagos: también respaldan al sistema bancario, y su nivel aumenta con el tamaño del sistema financiero. En economías con depósitos en dólares se suma la necesidad de cubrir retiros en esa moneda. Como el banco central no puede emitir dólares, necesita reservas para darles liquidez en dólares a los bancos.</p>
+            <ol class="refs">
+              <li>Obstfeld, M., Shambaugh, J. C. y Taylor, A. M. (2010). Financial stability, the trilemma, and international reserves. <i>American Economic Journal: Macroeconomics, 2</i>(2), 57–94. <a href="https://doi.org/10.1257/mac.2.2.57">doi:10.1257/mac.2.2.57</a></li>
+              <li>Levy Yeyati, E. (2006). <i>Liquidity insurance in a financially dollarized economy</i> (NBER Working Paper 12345). <a href="https://doi.org/10.3386/w12345">doi:10.3386/w12345</a></li>
+              <li>Armas, A., Ize, A. y Levy Yeyati, E. (Eds.). (2006). <i>Financial dollarization: The policy agenda</i>. International Monetary Fund; Palgrave Macmillan. <a href="https://doi.org/10.5089/9781403987594.071">doi:10.5089/9781403987594.071</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Miedo a flotar</h3>
+            <p>Muchos países que dicen tener tipo de cambio flexible intervienen con frecuencia, porque la deuda en dólares y el traspaso del tipo de cambio a la inflación hacen costosa la volatilidad. El Perú ha sido estudiado como un caso de esta conducta, aunque el BCRP afirma que solo busca reducir la volatilidad. En el Perú se ha estimado a partir de qué depreciación crece el riesgo cambiario crediticio de la banca.</p>
+            <ol class="refs">
+              <li>Calvo, G. A. y Reinhart, C. M. (2002). Fear of floating. <i>The Quarterly Journal of Economics, 117</i>(2), 379–408. <a href="https://doi.org/10.1162/003355302753650274">doi:10.1162/003355302753650274</a></li>
+              <li>Morón, E. y Castro, J. F. (2000). <i>Uncovering central bank's monetary policy objectives: Going beyond fear of floating</i> (documento de trabajo). Universidad del Pacífico. <a href="https://econwpa.ub.uni-muenchen.de/econ-wp/mac/papers/0205/0205002.pdf">PDF</a></li>
+              <li>Azabache, P. (2009). Efectos no-lineales de las variaciones del tipo de cambio sobre el riesgo cambiario-crediticio: evidencia empírica para Perú. <i>Revista Estudios Económicos, 18</i>, 41–59. BCRP. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/18/Estudios-Economicos-18-2.pdf">PDF</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>¿Funciona la intervención?</h3>
+            <p>La evidencia entre países indica que la intervención suaviza la trayectoria del tipo de cambio y reduce la apreciación ante entradas de capital. Para mover el nivel en un régimen flexible se necesitan montos grandes y una intervención pública y bien comunicada.</p>
+            <p>Para el Perú, la evidencia indica que la intervención suaviza la volatilidad, sobre todo en episodios de tensión, con efectos asimétricos: es más eficaz para frenar una subida del dólar que para evitar su caída, o viceversa según el periodo y el método.</p>
+            <ol class="refs">
+              <li>Blanchard, O., Adler, G. y de Carvalho Filho, I. (2015). <i>Can foreign exchange intervention stem exchange rate pressures from global capital flow shocks?</i> (NBER Working Paper 21427). <a href="https://doi.org/10.3386/w21427">doi:10.3386/w21427</a></li>
+              <li>Fratzscher, M., Gloede, O., Menkhoff, L., Sarno, L. y Stöhr, T. (2019). When is foreign exchange intervention effective? Evidence from 33 countries. <i>American Economic Journal: Macroeconomics, 11</i>(1), 132–156. <a href="https://doi.org/10.1257/mac.20150317">doi:10.1257/mac.20150317</a></li>
+              <li>Humala, A. y Rodríguez, G. (2010). Foreign exchange intervention and exchange rate volatility in Peru. <i>Applied Economics Letters, 17</i>(15), 1485–1491. <a href="https://doi.org/10.1080/13504850903049643">doi:10.1080/13504850903049643</a></li>
+              <li>Lahura, E. y Vega, M. (2013). <i>Asymmetric effects of FOREX intervention using intraday data: Evidence from Peru</i> (BIS Working Papers 430). <a href="https://www.bis.org/publ/work430.pdf">bis.org</a></li>
+              <li>Tashu, M. (2014). <i>Motives and effectiveness of forex interventions: Evidence from Peru</i> (IMF Working Paper 14/217). Fondo Monetario Internacional. <a href="https://doi.org/10.5089/9781484340189.001">doi:10.5089/9781484340189.001</a></li>
+              <li>Durán-Vanegas, J. D. (2016). Un análisis de la efectividad de las intervenciones cambiarias en el Perú. <i>Revista Estudios Económicos, 31</i>, 45–57. BCRP. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/31/ree-31-durand.pdf">PDF</a></li>
+              <li>Rossini, R., Quispe, Z. y Serrano, E. (2013). Foreign exchange intervention in Peru. En <i>Market volatility and foreign exchange intervention in EMEs: What has changed?</i> (BIS Papers 73, pp. 243–262). Bank for International Settlements. <a href="https://www.bis.org/publ/bppdf/bispap73r.pdf">bis.org</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Fuentes oficiales de esta guía</h3>
+            <p>Los conceptos, instrumentos y episodios de las secciones 1 a 4 se basan en estos documentos.</p>
+            <ol class="refs">
+              <li>Constitución Política del Perú (1993), art. 84.</li>
+              <li>Ley Orgánica del BCRP (Decreto Ley 26123), arts. 71, 72 y 89. <a href="https://www.bcrp.gob.pe/docs/Transparencia/Normas-Legales/Ley-Organica-BCRP.pdf">bcrp.gob.pe</a></li>
+              <li>BCRP. <i>Memoria</i> 2012, 2015, 2021, 2024 y 2025 (§ Administración de las reservas internacionales y estados financieros). <a href="https://www.bcrp.gob.pe/publicaciones/memoria-anual.html">bcrp.gob.pe</a></li>
+              <li>BCRP (2025). <i>Reporte de Inflación, diciembre 2025</i>, Recuadro 7. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2025/diciembre/reporte-de-inflacion-diciembre-2025.pdf">bcrp.gob.pe</a></li>
+              <li>BCRP (2014). <i>Circular 031-2014-BCRP</i> (swaps cambiarios). <a href="https://www.bcrp.gob.pe/docs/Transparencia/Normas-Legales/Circulares/2014/circular-031-2014-bcrp.pdf">bcrp.gob.pe</a></li>
+              <li>BCRP. <i>Glosario de términos económicos</i>. <a href="https://www.bcrp.gob.pe/publicaciones/glosario.html">bcrp.gob.pe</a></li>
+              <li>FMI (2026). <i>Peru: 2026 Article IV consultation</i> (IMF Country Report 26/113). <a href="https://www.imf.org/-/media/files/publications/cr/2026/english/1perea2026001.pdf">imf.org</a></li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>Reservas y costo del financiamiento</h3>
+            <p>Las reservas cubren el riesgo de no poder refinanciar la deuda. Por eso las calificadoras las incluyen en su medida de liquidez externa, y la evidencia empírica encuentra que más reservas se asocian con primas de riesgo soberano más bajas.</p>
+            <ol class="refs">
+              <li>Bianchi, J., Hatchondo, J. C. y Martinez, L. (2018). International reserves and rollover risk. <i>American Economic Review, 108</i>(9), 2629–2670. <a href="https://doi.org/10.1257/aer.20140443">doi:10.1257/aer.20140443</a></li>
+              <li>Gümüş, İ. (2016). The relationship between sovereign spreads and international reserves: Does the exchange rate regime matter? <i>Emerging Markets Finance and Trade, 52</i>(3), 658–673. <a href="https://doi.org/10.1080/1540496X.2014.998534">doi:10.1080/1540496X.2014.998534</a></li>
+              <li>S&amp;P Global Ratings (2017, 18 de diciembre). <i>Sovereign rating methodology</i>.</li>
+            </ol>
+          </div>
+          <div class="box">
+            <h3>El costo de acumular</h3>
+            <p>Mantener reservas tiene un costo social: la diferencia entre lo que el sector privado paga por endeudarse a corto plazo en el exterior y lo que rinden las reservas. Rodrik lo estimó cerca de 1% del PBI de los países en desarrollo a mediados de los 2000, aplicando un diferencial de 5 puntos a las reservas que exceden tres meses de importaciones.</p>
+            <p>Esterilizar las entradas de capital tiene además un costo cuasifiscal: el banco central puede pagar por sus instrumentos de esterilización más de lo que rinden las reservas, y esa carga puede volverse difícil de sostener.</p>
+            <ol class="refs">
+              <li>Rodrik, D. (2006). The social cost of foreign exchange reserves. <i>International Economic Journal, 20</i>(3), 253–266. <a href="https://doi.org/10.1080/10168730600879331">doi:10.1080/10168730600879331</a></li>
+              <li>Calvo, G. A. (1991). The perils of sterilization. <i>IMF Staff Papers, 38</i>(4), 921–926. <a href="https://doi.org/10.2307/3867130">doi:10.2307/3867130</a></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="glosario">
+        <div class="kicker">6 · Referencia</div>
+        <h2>Glosario</h2>
+        <dl class="defs">
+          <dt>Tipo de cambio interbancario</dt><dd>Precio del dólar en soles en las operaciones entre bancos. Es el referente del mercado.</dd>
+          <dt>Apreciación / depreciación</dt><dd>El sol se aprecia cuando el dólar baja (se necesitan menos soles por dólar) y se deprecia cuando el dólar sube.</dd>
+          <dt>Mesa de negociación</dt><dd>El canal por el que el BCRP compra y vende dólares a las entidades financieras autorizadas.</dd>
+          <dt>Compras netas</dt><dd>Compras menos ventas de dólares en un periodo.</dd>
+          <dt>Tasa de referencia</dt><dd>Tasa que el BCRP fija como referencia para la tasa interbancaria a un día. Es su principal instrumento contra la inflación.</dd>
+          <dt>Dolarización financiera</dt><dd>Proporción del crédito o de los depósitos en dólares dentro del sistema financiero.</dd>
+          <dt>Descalce cambiario</dt><dd>Tener deudas en una moneda e ingresos en otra.</dd>
+          <dt>Esterilización</dt><dd>Retirar o inyectar soles para compensar el efecto de comprar o vender dólares sobre la liquidez.</dd>
+          <dt>CD BCRP</dt><dd>Certificados de depósito en soles que el BCRP emite para retirar liquidez.</dd>
+          <dt>DEG</dt><dd>Derechos especiales de giro: activo de reserva creado por el FMI. Su valor se basa en una canasta de cinco monedas: dólar, euro, renminbi chino, yen y libra esterlina.</dd>
+          <dt>BIS</dt><dd>Banco de Pagos Internacionales, el banco de los bancos centrales, con sede en Basilea.</dd>
+          <dt>FLAR</dt><dd>Fondo Latinoamericano de Reservas. Presta o garantiza créditos a los bancos centrales de sus países miembros, entre ellos el Perú.</dd>
+          <dt>Onza troy</dt><dd>Unidad de peso de metales preciosos: 31.1034768 gramos.</dd>
+        </dl>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('reservas-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('reservas-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f3 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+const fmt = v => v == null ? '—' : f0.format(v);
+const sgn = v => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + f0.format(Math.abs(v));
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (hi === lo) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+// Barra con extremo de dato redondeado (4px) y base recta.
+function barPath(x, w, y0, y1) {
+  const h = Math.abs(y1 - y0);
+  if (h < 0.5) return '';
+  const r = Math.min(w >= 8 ? 4 : w >= 4 ? 1.5 : 0, w / 2, h);
+  if (y1 < y0) return `M${x},${y0}V${y1 + r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 + r}V${y0}Z`;
+  return `M${x},${y0}V${y1 - r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 - r}V${y0}Z`;
+}
+
+// ---------- Tooltip (valores primero, etiqueta después; texto con textContent) ----------
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k'}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+
+// ---------- Ejes de tiempo mensuales ----------
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 ? m.slice(0, 4) : mLabel(m)}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, dom, y, x0, x1, fmtTick) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    const tx = svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g);
+    tx.textContent = fmtTick(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    const tx = svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g);
+    tx.textContent = t.text;
+  }
+}
+
+// ---------- Estado: periodo ----------
+const LAST_M = D.mon[D.mon.length - 1].m;
+function shiftYears(m, k) { return (+m.slice(0, 4) - k) + m.slice(4); }
+const RANGES = [
+  {id: 'todo', label: 'Todo', start: null},
+  {id: '2008', label: 'Desde 2008', start: '2008-01'},
+  {id: '10a', label: '10 años', start: shiftYears(LAST_M, 10)},
+  {id: '5a', label: '5 años', start: shiftYears(LAST_M, 5)},
+  {id: '2a', label: '2 años', start: shiftYears(LAST_M, 2)},
+];
+let range = RANGES[1];
+const inRange = m => !range.start || m >= range.start;
+
+// ---------- KPIs ----------
+function renderKpis() {
+  const k = D.kpi, box = document.getElementById('kpis');
+  const tiles = [
+    {hero: true, lab: 'Reservas internacionales netas', val: fmt(k.rin), unit: 'millones de US$',
+     sub: [['delta', (k.rin_var_anio >= 0 ? '▲ ' : '▼ ') + sgn(k.rin_var_anio)], ['', ' desde el cierre de ' + k.rin_prev_f.slice(0, 4) + ' · al ' + dLabel(k.rin_f)]]},
+    {lab: 'Del BCRP (posición de cambio)', val: fmt(k.propias), unit: 'US$ MM',
+     sub: [['', k.propias_pct.toFixed(0) + '% de la RIN · al ' + dLabel(k.propias_f)]]},
+    {lab: 'Compras del BCRP en ' + k.ytd_anio, val: fmt(k.compras_ytd), unit: 'US$ MM',
+     sub: [['', k.dias_compra + ' días con compras, ' + (k.ventas_ytd ? fmt(k.ventas_ytd) + ' en ventas (' + k.dias_venta + ' días)' : 'ninguno con ventas') + ' · al ' + dLabel(k.ytd_f)]]},
+    {lab: 'Tipo de cambio interbancario', val: f3.format(k.tc), unit: 'S/ por US$',
+     sub: [['', 'venta · al ' + dLabel(k.tc_f)]]},
+  ];
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: t.val}, d);
+    htmlEl('span', {cls: 'unit', text: t.unit}, v);
+    const s = htmlEl('div', {cls: 'sub'}, d);
+    for (const [c, txt] of t.sub) htmlEl('span', {cls: c, text: txt}, s);
+  }
+}
+
+// ---------- Compras y ventas por año ----------
+function renderAnual() {
+  const box = document.getElementById('ch-anual');
+  box.replaceChildren();
+  const data = D.anual, W = box.clientWidth, H = 300;
+  const m = {l: 52, r: 8, t: 22, b: 28}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const hi = Math.max(...data.map(d => d.compras)), lo = -Math.max(...data.map(d => d.ventas));
+  const dom = niceDomain(lo, hi, 5);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const slot = pw / data.length, bw = Math.min(24, Math.max(2, slot - 2));
+  const x = i => m.l + i * slot + slot / 2;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Compras y ventas anuales del BCRP en la mesa de negociación'}, box);
+  drawYGrid(svg, dom, y, m.l, W - m.r, t => t === 0 ? '0' : (t < 0 ? '−' : '') + f0.format(Math.abs(t)));
+  const step = [1, 2, 4, 5].find(s => data.length / s <= pw / 44) || 5;
+  drawXTicks(svg, data.map((d, i) => ({i, d})).filter(o => o.d.y % step === 0).map(o => ({i: o.i, text: String(o.d.y)})), x, H - 8);
+  const iMaxC = data.reduce((a, d, i) => d.compras > data[a].compras ? i : a, 0);
+  const iMaxV = data.reduce((a, d, i) => d.ventas > data[a].ventas ? i : a, 0);
+  data.forEach((d, i) => {
+    const bx = x(i) - bw / 2;
+    if (d.compras) svgEl('path', {d: barPath(bx, bw, y(0), y(d.compras)), fill: 'var(--buy)'}, svg);
+    if (d.ventas) svgEl('path', {d: barPath(bx, bw, y(0), y(-d.ventas)), fill: 'var(--sell)'}, svg);
+    const hit = svgEl('rect', {class: 'col-hit', x: m.l + i * slot, y: m.t, width: slot, height: ph, tabindex: 0,
+      'aria-label': `${d.y}: compras ${fmt(d.compras)}, ventas ${fmt(d.ventas)}`}, svg);
+    const show = evt => {
+      const [cx, cy] = anchorOf(evt, hit);
+      showTip(cx, cy, d.y + (d.p ? ' (hasta ' + dLabel(D.hasta) + ')' : ''), [
+        {value: fmt(d.compras), label: 'Compras', color: 'var(--buy)'},
+        {value: fmt(d.ventas), label: 'Ventas', color: 'var(--sell)'},
+        {value: sgn(d.compras - d.ventas), label: 'Neto'}]);
+    };
+    hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+  });
+  // Etiquetas selectivas: récord de compras, récord de ventas y el año en curso.
+  const label = (i, v, above) => {
+    const tx = svgEl('text', {x: x(i), y: above ? y(v) - 6 : y(v) + 15, 'text-anchor': i > data.length - 3 ? 'end' : 'middle', class: 'dlbl'}, svg);
+    tx.textContent = (above ? '' : '−') + fmt(Math.abs(v)) + ' (' + data[i].y + (data[i].p ? '*' : '') + ')';
+    if (i > data.length - 3) tx.setAttribute('x', x(i) + bw / 2);
+  };
+  label(iMaxC, data[iMaxC].compras, true);
+  label(iMaxV, -data[iMaxV].ventas, false);
+  const last = data.length - 1;
+  if (last !== iMaxC && data[last].compras >= data[last].ventas && data[last].compras > 0) label(last, data[last].compras, true);
+  else if (last !== iMaxV && data[last].ventas > 0) label(last, -data[last].ventas, false);
+
+  const tc = data.reduce((a, d) => a + d.compras, 0), tv = data.reduce((a, d) => a + d.ventas, 0);
+  document.getElementById('note-anual').textContent =
+    `${data[0].y}–${data[last].y}: compras por ${fmt(tc)} y ventas por ${fmt(tv)} millones de US$ (neto ${sgn(tc - tv)}). ` +
+    `* ${data[last].y} va hasta el ${dLabel(D.hasta)}.`;
+}
+
+// ---------- Composición de los activos ----------
+// Cada componente conserva su color en la foto del mes y en la evolución. Rampa ordinal del azul SBS
+// (abajo) al gris SBS («Otros», arriba) en el orden del cuadro; las capas se separan con 2 px.
+const COMP_LAYERS = [
+  {k: 'valores', label: 'Valores (bonos)', color: 'var(--q6)'},
+  {k: 'depositos', label: 'Depósitos en el exterior', color: 'var(--q5)'},
+  {k: 'fmi_bis_flar', label: 'Aportes a FMI, BIS y FLAR', color: 'var(--q4)'},
+  {k: 'oro_plata', label: 'Oro y plata', color: 'var(--q3)'},
+  {k: 'otros', label: 'Otros', color: 'var(--q1)'},
+];
+const COMP_COLOR = Object.fromEntries(COMP_LAYERS.map(L => [L.k, L.color]));
+
+function renderCompHist() {
+  const box = document.getElementById('ch-comph');
+  box.replaceChildren();
+  const data = D.comp.hist.filter(d => inRange(d.m)), n = data.length;
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 240 : 300;
+  if (!W || n < 2) return;
+  const m = {l: 44, r: narrow ? 10 : 170, t: 10, b: 28}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const x = i => m.l + i * pw / (n - 1), y = v => m.t + (100 - v) / 100 * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Participación de cada activo en las reservas brutas, mensual'}, box);
+  drawYGrid(svg, {ticks: [0, 25, 50, 75, 100]}, y, m.l, m.l + pw, t => t + '%');
+  drawXTicks(svg, timeTicks(data.map(d => d.m), pw), x, H - 8);
+  const share = (d, k) => 100 * d[k] / d.total;
+  const cum = data.map(() => 0), tops = [];
+  COMP_LAYERS.forEach((L, j) => {
+    const lo = cum.slice(), hi = data.map((d, i) => (cum[i] += share(d, L.k)));
+    tops.push(hi);
+    const up = hi.map((v, i) => `${x(i)},${y(v)}`), down = lo.map((v, i) => `${x(i)},${y(v)}`).reverse();
+    svgEl('path', {d: 'M' + up.join('L') + 'L' + down.join('L') + 'Z', fill: L.color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+  });
+  if (!narrow) {
+    const li = n - 1, last = data[li];
+    let base = 0;
+    COMP_LAYERS.forEach((L, j) => {
+      const top = tops[j][li];
+      if (y(base) - y(top) >= 28) {
+        const mid = (y(base) + y(top)) / 2;
+        const t = svgEl('text', {x: x(li) + 10, y: mid - 2, class: 'dlbl'}, svg); t.textContent = L.label;
+        const v = svgEl('text', {x: x(li) + 10, y: mid + 13, class: 'dlbl'}, svg);
+        const s = svgEl('tspan', {class: 'dval'}, v); s.textContent = share(last, L.k).toFixed(1) + '%';
+      }
+      base = top;
+    });
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': 'Composición de las reservas brutas; use las flechas para recorrer los meses'}, svg);
+  let cur = n - 1;
+  const show = (i, evt) => {
+    cur = Math.max(0, Math.min(n - 1, i));
+    const d = data[cur];
+    cross.setAttribute('x1', x(cur)); cross.setAttribute('x2', x(cur)); cross.setAttribute('visibility', 'visible');
+    const [cx, cy] = anchorOf(evt, cross);
+    showTip(cx, cy, mLabel(d.m) + ' · total ' + fmt(d.total), COMP_LAYERS.slice().reverse().map(L =>
+      ({value: share(d, L.k).toFixed(1) + '%', label: L.label + ' (' + fmt(d[L.k]) + ')', color: L.color})));
+  };
+  const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); };
+  hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(Math.round((evt.clientX - r.left - m.l) / pw * (n - 1)), evt); });
+  hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+  hit.addEventListener('focus', () => show(cur));
+  hit.addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); show(cur + (e.key === 'ArrowRight' ? 1 : -1)); } });
+}
+(() => {
+  const lg = document.getElementById('lg-comph');
+  for (const L of COMP_LAYERS) {
+    const s = htmlEl('span', null, lg), sw = htmlEl('i', {cls: 'sw'}, s);
+    sw.style.background = L.color;
+    s.appendChild(document.createTextNode(L.label));
+  }
+})();
+
+// ---------- Cómo se invierten (Memoria del BCRP, dato anual) ----------
+const PORT_ROWS = [
+  {k: 'moneda', title: 'Moneda', colors: ['var(--q6)', 'var(--q4)', 'var(--q2)'],
+   note: 'Exposición efectiva de la posición de cambio, después de coberturas.'},
+  {k: 'calificacion', title: 'Calificación crediticia', colors: ['var(--q6)', 'var(--q4)', 'var(--q2)'],
+   note: 'Del portafolio de inversiones. La caída de AAA en 2025 refleja la rebaja de la deuda de EE. UU. por Moody\'s en mayo de 2025.'},
+  {k: 'plazo', title: 'Plazo al vencimiento', colors: ['var(--q2)', 'var(--q4)', 'var(--q6)'],
+   note: 'Del portafolio de inversiones.'},
+];
+function renderPort() {
+  const P = D.port, box = document.getElementById('ch-port');
+  box.replaceChildren();
+  const corte = mLabel(P.corte);
+  document.getElementById('port-title').textContent = 'Cómo se invierten las reservas (' + corte + ')';
+  const dur = P.duracion && P.duracion[0];
+  document.getElementById('port-sub').textContent =
+    'Datos anuales de la ' + P.fuente + ', que no se publican en las series mensuales.' +
+    (dur ? ' Duración promedio del portafolio: ' + dur.v.toFixed(2) + ' años.' : '');
+  for (const R of PORT_ROWS) {
+    const items = P[R.k] || [];
+    const row = htmlEl('div', {cls: 'prow'}, box);
+    htmlEl('h3', {text: R.title}, row);
+    const bar = htmlEl('div', {cls: 'pbar', role: 'img', 'aria-label': R.title + ': ' + items.map(i => i.label + ' ' + i.v + '%').join(', ')}, row);
+    const leg = htmlEl('div', {cls: 'pleg'}, row);
+    items.forEach((it, j) => {
+      const seg = htmlEl('div', {cls: 'pseg'}, bar);
+      seg.style.flex = String(it.v);
+      seg.style.background = R.colors[j];
+      const show = evt => { const [cx, cy] = anchorOf(evt, seg); showTip(cx, cy, R.title, [{value: it.v + '%', label: it.label, color: R.colors[j]}]); };
+      seg.addEventListener('pointermove', show); seg.addEventListener('pointerleave', hideTip);
+      const s = htmlEl('span', null, leg), sw = htmlEl('i', {cls: 'sw'}, s);
+      sw.style.background = R.colors[j];
+      s.appendChild(document.createTextNode(it.label + ' '));
+      htmlEl('b', {text: it.v + '%'}, s);
+    });
+    htmlEl('p', {cls: 'note', text: R.note}, row);
+  }
+}
+
+function renderComp() {
+  const c = D.comp, box = document.getElementById('ch-comp');
+  box.replaceChildren();
+  document.getElementById('comp-title').textContent = 'De qué están hechas las reservas brutas (' + mLabel(c.m) + ')';
+  document.getElementById('comp-sub').textContent =
+    `Activos internacionales del BCRP, en millones de US$: ${fmt(c.brutas)} en reservas brutas, menos ${fmt(c.oblig)} de pasivos de reserva (obligaciones con el exterior), da la RIN de ${fmt(c.rin)}.`;
+  const W = box.clientWidth, narrow = W < 560, rowH = 34, labW = narrow ? 0 : 190;
+  const H = c.items.length * (narrow ? rowH + 16 : rowH) + 8;
+  const valW = 118, pw = W - labW - valW;
+  const max = Math.max(...c.items.map(d => d.v));
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Composición de las reservas internacionales'}, box);
+  c.items.forEach((d, i) => {
+    const top = 4 + i * (narrow ? rowH + 16 : rowH), by = top + (narrow ? 18 : 6), bh = 20;
+    const lab = svgEl('text', {x: narrow ? 0 : labW - 12, y: narrow ? top + 12 : by + 14, 'text-anchor': narrow ? 'start' : 'end', class: 'dlbl'}, svg);
+    lab.textContent = d.label;
+    const w = Math.max(2, d.v / max * pw);
+    svgEl('path', {d: `M${labW},${by}H${labW + w - Math.min(4, w / 2)}Q${labW + w},${by} ${labW + w},${by + Math.min(4, w / 2)}V${by + bh - Math.min(4, w / 2)}Q${labW + w},${by + bh} ${labW + w - Math.min(4, w / 2)},${by + bh}H${labW}Z`, fill: COMP_COLOR[d.k]}, svg);
+    const val = svgEl('text', {x: labW + w + 8, y: by + 14, class: 'dlbl'}, svg);
+    const s1 = svgEl('tspan', {class: 'dval'}, val); s1.textContent = fmt(d.v);
+    const s2 = svgEl('tspan', {}, val); s2.textContent = '  ' + (100 * d.v / c.total).toFixed(1) + '%';
+    const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: narrow ? rowH + 16 : rowH, tabindex: 0,
+      'aria-label': `${d.label}: ${fmt(d.v)}`}, svg);
+    const show = evt => {
+      const [cx, cy] = anchorOf(evt, hit);
+      showTip(cx, cy, d.label, [{value: fmt(d.v), label: 'millones de US$', color: COMP_COLOR[d.k]},
+        {value: (100 * d.v / c.total).toFixed(1) + '%', label: 'del total'}]);
+    };
+    hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+  });
+}
+
+// ---------- De quién son las reservas (área apilada) ----------
+const LAYERS = [
+  {k: 'propias', label: 'Del BCRP', color: 'var(--q6)'},
+  {k: 'bancos', label: 'Bancos y financieras', color: 'var(--q4)'},
+  {k: 'publico', label: 'Sector público y otros', color: 'var(--q2)'},
+];
+function renderOwn() {
+  const box = document.getElementById('ch-own');
+  box.replaceChildren();
+  const data = D.own.filter(d => inRange(d.m)), n = data.length;
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 260 : 330;
+  const m = {l: 56, r: narrow ? 10 : 150, t: 14, b: 28}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dom = niceDomain(0, Math.max(...data.map(d => d.rin)), 5);
+  const x = i => m.l + (n === 1 ? pw / 2 : i * pw / (n - 1));
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'RIN por dueño, al cierre de cada mes'}, box);
+  drawYGrid(svg, dom, y, m.l, m.l + pw, t => f0.format(t));
+  drawXTicks(svg, timeTicks(data.map(d => d.m), pw), x, H - 8);
+
+  const cum = data.map(() => 0), tops = [];
+  for (const L of LAYERS) {
+    const lo = cum.slice(), hi = data.map((d, i) => (cum[i] += d[L.k]));
+    tops.push(hi);
+    const up = hi.map((v, i) => `${x(i)},${y(v)}`), down = lo.map((v, i) => `${x(i)},${y(v)}`).reverse();
+    svgEl('path', {d: 'M' + up.join('L') + 'L' + down.join('L') + 'Z', fill: L.color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+  }
+  // Etiquetas directas al final de cada capa (solo si la capa tiene alto suficiente).
+  if (!narrow) {
+    const li = n - 1, last = data[li];
+    let base = 0;
+    LAYERS.forEach((L, j) => {
+      const top = tops[j][li], mid = (y(base) + y(top)) / 2;
+      if (y(base) - y(top) >= 28) {
+        const t = svgEl('text', {x: x(li) + 10, y: mid - 2, class: 'dlbl'}, svg);
+        t.textContent = L.label;
+        const v = svgEl('text', {x: x(li) + 10, y: mid + 13, class: 'dlbl'}, svg);
+        const s = svgEl('tspan', {class: 'dval'}, v); s.textContent = fmt(last[L.k]);
+        const p = svgEl('tspan', {}, v); p.textContent = '  ' + (100 * last[L.k] / last.rin).toFixed(0) + '%';
+      }
+      base = top;
+    });
+    const t = svgEl('text', {x: x(li) + 10, y: y(last.rin) - 6, class: 'dlbl'}, svg);
+    const s = svgEl('tspan', {class: 'dval'}, t); s.textContent = 'RIN ' + fmt(last.rin);
+  }
+
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = LAYERS.map(L => svgEl('circle', {r: 4, fill: L.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': 'Gráfico de la RIN por dueño; use las flechas para recorrer los meses'}, svg);
+  let cur = n - 1;
+  const show = (i, evt) => {
+    cur = Math.max(0, Math.min(n - 1, i));
+    const d = data[cur];
+    cross.setAttribute('x1', x(cur)); cross.setAttribute('x2', x(cur)); cross.setAttribute('visibility', 'visible');
+    dots.forEach((c, j) => { c.setAttribute('cx', x(cur)); c.setAttribute('cy', y(tops[j][cur])); c.setAttribute('visibility', 'visible'); });
+    const [cx, cy] = anchorOf(evt, cross);
+    showTip(cx, cy, dLabel(d.f), [
+      {value: fmt(d.rin), label: 'RIN total'},
+      ...LAYERS.map(L => ({value: fmt(d[L.k]), label: L.label + ' (' + (100 * d[L.k] / d.rin).toFixed(0) + '%)', color: L.color}))]);
+  };
+  const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); };
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    show(Math.round((evt.clientX - r.left - m.l) / pw * (n - 1)), evt);
+  });
+  hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+  hit.addEventListener('focus', () => show(cur));
+  hit.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); show(cur + (e.key === 'ArrowRight' ? 1 : -1)); }
+  });
+}
+
+// ---------- Intervención mensual: tres paneles con el mismo eje de tiempo ----------
+const PANELS = [
+  {id: 'ch-net', k: 'net', h: 190, label: 'Compras netas spot', color: v => v >= 0 ? 'var(--buy)' : 'var(--sell)'},
+  {id: 'ch-swap', k: 'swap', h: 150, label: 'Swaps venta (neto)', color: v => v > 0 ? 'var(--sell)' : 'var(--buy)'},
+  {id: 'ch-tc', k: 'tc', h: 150, label: 'Tipo de cambio', line: true},
+];
+function renderMon() {
+  const data = D.mon.filter(d => inRange(d.m)), n = data.length;
+  const crosses = [], hits = [];
+  let cur = n - 1, geo;
+  const show = (i, evt) => {
+    cur = Math.max(0, Math.min(n - 1, i));
+    const d = data[cur];
+    crosses.forEach(c => { c.setAttribute('x1', geo.x(cur)); c.setAttribute('x2', geo.x(cur)); c.setAttribute('visibility', 'visible'); });
+    const [cx, cy] = anchorOf(evt, crosses[0]);
+    showTip(cx, cy, mLabel(d.m) + (d.p ? ' (hasta ' + dLabel(D.hasta) + ')' : ''), [
+      {value: sgn(d.net), label: 'Compras netas spot', color: d.net == null || d.net === 0 ? 'var(--muted)' : PANELS[0].color(d.net)},
+      {value: d.swap == null ? 'sin dato' : sgn(d.swap), label: 'Swaps venta (neto)', color: d.swap == null || d.swap === 0 ? 'var(--muted)' : PANELS[1].color(d.swap)},
+      {value: d.tc == null ? '—' : f3.format(d.tc), label: 'S/ por US$', color: 'var(--line)'}]);
+  };
+  const hide = () => { hideTip(); crosses.forEach(c => c.setAttribute('visibility', 'hidden')); };
+
+  for (const P of PANELS) {
+    const box = document.getElementById(P.id);
+    box.replaceChildren();
+    const W = box.clientWidth, H = P.h, m = {l: 56, r: 12, t: 10, b: 24}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const vals = data.map(d => d[P.k]).filter(v => v != null);
+    // En barras se deja ~20% de aire arriba y abajo para que las etiquetas de extremos no pisen el eje.
+    const dom = P.line ? niceDomain(Math.min(...vals), Math.max(...vals), 4)
+                       : niceDomain(1.2 * Math.min(0, ...vals), 1.2 * Math.max(0, ...vals), 4);
+    const slot = pw / n;
+    const x = i => m.l + (i + 0.5) * slot;
+    const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+    geo = {x};
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': P.label + ' por mes'}, box);
+    drawYGrid(svg, dom, y, m.l, m.l + pw, t => P.line ? t.toFixed(2) : t === 0 ? '0' : (t < 0 ? '−' : '') + f0.format(Math.abs(t)));
+    drawXTicks(svg, timeTicks(data.map(d => d.m), pw), x, H - 6);
+    if (P.line) {
+      let dStr = '', pen = false;
+      data.forEach((d, i) => { if (d.tc == null) { pen = false; return; } dStr += (pen ? 'L' : 'M') + x(i) + ',' + y(d.tc); pen = true; });
+      svgEl('path', {d: dStr, fill: 'none', stroke: 'var(--line)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+      const li = data.map(d => d.tc != null).lastIndexOf(true);
+      if (li >= 0) {
+        svgEl('circle', {cx: x(li), cy: y(data[li].tc), r: 4, fill: 'var(--line)', stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+        const t = svgEl('text', {x: x(li) - 8, y: y(data[li].tc) - 9, 'text-anchor': 'end', class: 'dlbl'}, svg);
+        const s = svgEl('tspan', {class: 'dval'}, t); s.textContent = f3.format(data[li].tc);
+      }
+    } else {
+      const bw = slot >= 6 ? Math.min(24, slot - 2) : Math.max(1, slot * 0.8);
+      data.forEach((d, i) => {
+        const v = d[P.k];
+        if (!v) return;
+        svgEl('path', {d: barPath(x(i) - bw / 2, bw, y(0), y(v)), fill: P.color(v)}, svg);
+      });
+      // Etiquetas selectivas: el máximo y el mínimo del periodo visible.
+      const idx = data.map((d, i) => i).filter(i => data[i][P.k] != null);
+      const iMax = idx.reduce((a, i) => data[i][P.k] > data[a][P.k] ? i : a, idx[0]);
+      const iMin = idx.reduce((a, i) => data[i][P.k] < data[a][P.k] ? i : a, idx[0]);
+      for (const [i, above] of [[iMax, true], [iMin, false]]) {
+        const v = data[i][P.k];
+        if (!v || (above && v <= 0) || (!above && v >= 0)) continue;
+        const anchor = x(i) < m.l + 60 ? 'start' : x(i) > m.l + pw - 60 ? 'end' : 'middle';
+        const t = svgEl('text', {x: x(i), y: above ? y(v) - 5 : y(v) + 14, 'text-anchor': anchor, class: 'dlbl'}, svg);
+        const s = svgEl('tspan', {class: 'dval'}, t); s.textContent = sgn(v);
+        const s2 = svgEl('tspan', {}, t); s2.textContent = ' ' + mLabel(data[i].m);
+      }
+      if (P.k === 'swap' && data[0].m < '2008-01') {
+        const firstData = data.findIndex(d => d.swap != null);
+        const t = svgEl('text', {x: firstData > 0 ? (m.l + x(firstData)) / 2 : m.l + pw / 2, y: m.t + ph / 2, 'text-anchor': 'middle', class: 'lbl'}, svg);
+        t.textContent = 'sin dato antes de 2008';
+      }
+    }
+    crosses.push(svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg));
+    const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+      'aria-label': P.label + '; use las flechas para recorrer los meses'}, svg);
+    hit.addEventListener('pointermove', evt => {
+      const r = svg.getBoundingClientRect();
+      show(Math.floor((evt.clientX - r.left - m.l) / slot), evt);
+    });
+    hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+    hit.addEventListener('focus', () => show(cur));
+    hit.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); show(cur + (e.key === 'ArrowRight' ? 1 : -1)); }
+    });
+    hits.push(hit);
+  }
+}
+
+// ---------- Tablas (equivalente accesible de cada gráfico) ----------
+const TABLES = {
+  anual: () => [['Año', 'Compras', 'Ventas', 'Neto'],
+    D.anual.map(d => [d.y + (d.p ? '*' : ''), fmt(d.compras), fmt(d.ventas), sgn(d.compras - d.ventas)])],
+  comp: () => [['Activo', 'Millones de US$', '% del total'],
+    D.comp.items.map(d => [d.label, fmt(d.v), (100 * d.v / D.comp.total).toFixed(1) + '%'])
+      .concat([['Total', fmt(D.comp.total), '100.0%']])],
+  own: () => [['Fecha', 'RIN', 'Del BCRP', 'Bancos y financieras', 'Sector público y otros', '% del BCRP'],
+    D.own.filter(d => inRange(d.m)).slice().reverse().map(d => [dLabel(d.f), fmt(d.rin), fmt(d.propias), fmt(d.bancos), fmt(d.publico), (100 * d.propias / d.rin).toFixed(1) + '%'])],
+  port: () => [['Dimensión', 'Categoría', 'Valor'],
+    PORT_ROWS.flatMap(R => (D.port[R.k] || []).map(i => [R.title, i.label, i.v + '%']))
+      .concat((D.port.duracion || []).map(i => ['Duración', i.label, i.v.toFixed(2) + ' años']))],
+  comph: () => [['Mes', ...COMP_LAYERS.map(L => L.label), 'Total (US$ MM)'],
+    D.comp.hist.filter(d => inRange(d.m)).slice().reverse().map(d => [mLabel(d.m),
+      ...COMP_LAYERS.map(L => (100 * d[L.k] / d.total).toFixed(1) + '%'), fmt(d.total)])],
+  mon: () => [['Mes', 'Compras netas spot', 'Swaps venta (neto)', 'TC promedio'],
+    D.mon.filter(d => inRange(d.m)).slice().reverse().map(d => [mLabel(d.m) + (d.p ? '*' : ''), sgn(d.net), d.swap == null ? '—' : sgn(d.swap), d.tc == null ? '—' : f3.format(d.tc)])],
+};
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  const [head, rows] = TABLES[key]();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+
+// ---------- Filtro de periodo ----------
+const seg = document.getElementById('range');
+for (const r of RANGES) {
+  const b = htmlEl('button', {type: 'button', text: r.label, 'aria-pressed': String(r === range)}, seg);
+  b.addEventListener('click', () => {
+    range = r;
+    seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    renderTimed();
+    for (const k of ['own', 'comph', 'mon']) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+  });
+}
+
+function renderTimed() { renderOwn(); renderCompHist(); renderMon(); }
+function renderAll() { renderAnual(); renderComp(); renderPort(); renderTimed(); }
+
+// ---------- Pestaña educativa ----------
+const E = D.edu;
+const ownAtComp = D.own.find(d => d.m === D.comp.m) || D.own[D.own.length - 1];
+const compBy = Object.fromEntries(D.comp.items.map(d => [d.k, d]));
+const anualBy = Object.fromEntries(D.anual.map(d => [d.y, d]));
+const pct1 = v => v.toFixed(1) + '%';
+const INDS = [
+  {lab: 'RIN / deuda externa de corto plazo', val: E.rin_std.toFixed(1), unit: 'veces', min: 1, x: E.rin_std, pos: E.pos_std,
+   posTxt: E.pos_std.toFixed(1) + ' veces', ref: 'Referencia: al menos 1 vez (regla Greenspan–Guidotti). Deuda de corto plazo de ' + fmt(E.std) + ' millones de US$, ' + E.std_q + '. Es por plazo original: no incluye las cuotas de deuda de largo plazo que vencen en 12 meses, así que sobreestima la cobertura frente a la regla estricta.'},
+  {lab: 'Meses de importaciones que cubre la RIN', val: E.rin_imp.toFixed(1), unit: 'meses', min: 3, x: E.rin_imp, pos: E.pos_imp,
+   posTxt: E.pos_imp.toFixed(1) + ' meses', ref: 'Regla tradicional: al menos 3 meses. Importaciones promedio de ' + fmt(E.imp_avg) + ' millones de US$ al mes (12 meses a ' + mLabel(E.imp_m) + ').'},
+  {lab: 'RIN / liquidez total del sistema', val: E.rin_liq.toFixed(1), unit: '%', min: 20, x: E.rin_liq, pos: E.pos_liq,
+   posTxt: pct1(E.pos_liq), ref: 'Umbral tradicional: 20% del dinero amplio, el extremo superior del rango (el FMI considera más típico cerca de 5%). Liquidez de ' + fmt(E.liq_usd) + ' millones de US$, ' + mLabel(E.liq_m) + '.'},
+  {lab: 'Reservas como % del PBI', val: E.pct_pbi[E.pct_pbi.length - 1].v.toFixed(1), unit: '% del PBI', min: null,
+   ref: 'No hay un umbral único; sirve para comparar en el tiempo y entre países. Dato del ' + E.pct_pbi[E.pct_pbi.length - 1].q + '.'},
+];
+const allPass = INDS.every(i => i.min == null || (i.x >= i.min && i.pos >= i.min));
+const V = {
+  comp_m: mLabel(D.comp.m), pos_pct: (100 * ownAtComp.propias / ownAtComp.rin).toFixed(0) + '%',
+  dol_max: pct1(E.dol_cred_max), dol_max_m: mLabel(E.dol_cred_max_m), dol_m: mLabel(E.dol_m),
+  dol_cred: pct1(E.dol_cred), dol_liq: pct1(E.dol_liq),
+  c2012: anualBy[2012] ? fmt(anualBy[2012].compras - anualBy[2012].ventas) : '—', v2015: fmt(anualBy[2015] && anualBy[2015].ventas),
+  v2021: fmt(anualBy[2021] && anualBy[2021].ventas),
+  anio: String(D.anual[D.anual.length - 1].y), c_anio: fmt(D.anual[D.anual.length - 1].compras) + ' millones',
+  swap_first: (D.mon.find(d => d.swap) || {m: null}).m ? mLabel(D.mon.find(d => d.swap).m) : '—',
+  suf_resumen: allPass
+    ? 'Hoy el Perú supera todas las referencias con holgura, aun si se cuenta solo la posición de cambio.'
+    : 'Hoy alguna de las referencias no se cumple: revise los indicadores de abajo.',
+  oro_moz: E.oro_moz.toFixed(2), oro_t: E.oro_t.toFixed(1), oro_precio: fmt(E.oro_precio), oro_m: mLabel(E.oro_m),
+};
+for (const k of ['valores', 'depositos', 'oro_plata', 'fmi_bis_flar', 'otros']) {
+  const it = compBy[k];
+  V['p_' + (k === 'oro_plata' ? 'oro' : k)] = it ? fmt(it.v) + ' · ' + (100 * it.v / D.comp.total).toFixed(1) + '% del total' : '—';
+}
+function fillEduText() {
+  document.querySelectorAll('[data-v]').forEach(e => { e.textContent = V[e.dataset.v] ?? '—'; });
+}
+
+function renderCascade() {
+  const box = document.getElementById('cascade');
+  box.replaceChildren();
+  const c = D.comp, o = ownAtComp, max = c.brutas;
+  const rows = [
+    {l: 'Reservas brutas', a: 0, b: c.brutas, v: fmt(c.brutas), color: 'var(--line)', total: true},
+    {l: '− Pasivos de reserva (obligaciones con el exterior)', a: c.rin, b: c.brutas, v: '−' + fmt(c.oblig), color: 'var(--muted)'},
+    {l: '= RIN', a: 0, b: o.rin, v: fmt(o.rin), color: 'var(--line)', total: true},
+    {l: '− Depósitos de bancos y financieras', a: o.rin - o.bancos, b: o.rin, v: '−' + fmt(o.bancos), color: 'var(--q4)'},
+    {l: '− Depósitos del sector público y otros', a: o.propias, b: o.propias + o.publico, v: '−' + fmt(o.publico), color: 'var(--q2)'},
+    {l: '= Posición de cambio (del BCRP)', a: 0, b: o.propias, v: fmt(o.propias), color: 'var(--q6)', total: true},
+  ];
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'crow'}, box);
+    htmlEl('div', {cls: 'l' + (r.total ? ' total' : ''), text: r.l}, row);
+    const tr = htmlEl('div', {cls: 'track'}, row);
+    const bar = htmlEl('div', {cls: 'bar'}, tr);
+    bar.style.left = (100 * r.a / max) + '%';
+    bar.style.width = (100 * (r.b - r.a) / max) + '%';
+    bar.style.background = r.color;
+    htmlEl('div', {cls: 'v' + (r.total ? ' total' : ''), text: r.v}, row);
+  }
+}
+
+const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.2 4.7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ALERT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.5v4M6 9h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+function renderInds() {
+  const box = document.getElementById('inds');
+  box.replaceChildren();
+  for (const i of INDS) {
+    const d = htmlEl('div', {cls: 'ind'}, box);
+    htmlEl('div', {cls: 'lab', text: i.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: i.val}, d);
+    htmlEl('small', {text: i.unit}, v);
+    htmlEl('div', {cls: 'ref', text: i.ref}, d);
+    if (i.min != null) {
+      htmlEl('div', {cls: 'ref', text: 'Solo con la posición de cambio: ' + i.posTxt + '.'}, d);
+      const ok = i.x >= i.min && i.pos >= i.min;
+      const chip = htmlEl('span', {cls: 'chip' + (ok ? ' good' : '')}, d);
+      chip.innerHTML = ok ? CHECK : ALERT;   // íconos fijos; el texto va con textContent
+      chip.appendChild(document.createTextNode(ok ? 'Por encima de la referencia' : 'Por debajo de la referencia'));
+    }
+  }
+}
+
+function renderPbi() {
+  const box = document.getElementById('ch-pbi');
+  box.replaceChildren();
+  const data = E.pct_pbi, n = data.length, W = box.clientWidth, H = 220;
+  if (!W) return;
+  const m = {l: 44, r: 16, t: 22, b: 26}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const vals = data.map(d => d.v);
+  const dom = niceDomain(Math.floor(Math.min(...vals) - 2), Math.ceil(Math.max(...vals) + 2), 4);
+  const x = i => m.l + i * pw / (n - 1), y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Reservas como porcentaje del PBI, trimestral'}, box);
+  drawYGrid(svg, dom, y, m.l, m.l + pw, t => t + '%');
+  const maxTicks = Math.max(2, Math.floor(pw / 56));
+  const yrs = data.map((d, i) => ({i, y: d.q.slice(3)})).filter(o => data[o.i].q.startsWith('T1'));
+  const step = [1, 2, 3, 5].find(s => yrs.length / s <= maxTicks) || 5;
+  drawXTicks(svg, yrs.filter(o => +o.y % step === 0).map(o => ({i: o.i, text: o.y})), x, H - 6);
+  svgEl('path', {d: 'M' + data.map((d, i) => x(i) + ',' + y(d.v)).join('L'), fill: 'none', stroke: 'var(--line)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+  const iMax = vals.indexOf(Math.max(...vals));
+  for (const [i, anchor] of [[iMax, iMax < 3 ? 'start' : 'middle'], [n - 1, 'end']]) {
+    svgEl('circle', {cx: x(i), cy: y(data[i].v), r: 4, fill: 'var(--line)', stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+    // El último punto se etiqueta debajo si la línea llega desde arriba, para no pisarla.
+    const below = i === n - 1 && n > 1 && data[n - 2].v >= data[i].v;
+    const t = svgEl('text', {x: x(i), y: y(data[i].v) + (below ? 20 : -10), 'text-anchor': anchor, class: 'dlbl'}, svg);
+    const s = svgEl('tspan', {class: 'dval'}, t); s.textContent = data[i].v.toFixed(1) + '%';
+    const s2 = svgEl('tspan', {}, t); s2.textContent = ' ' + data[i].q;
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dot = svgEl('circle', {r: 4, fill: 'var(--line)', stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': 'Reservas como % del PBI; use las flechas para recorrer los trimestres'}, svg);
+  let cur = n - 1;
+  const show = (i, evt) => {
+    cur = Math.max(0, Math.min(n - 1, i));
+    cross.setAttribute('x1', x(cur)); cross.setAttribute('x2', x(cur)); cross.setAttribute('visibility', 'visible');
+    dot.setAttribute('cx', x(cur)); dot.setAttribute('cy', y(data[cur].v)); dot.setAttribute('visibility', 'visible');
+    const [cx, cy] = anchorOf(evt, cross);
+    showTip(cx, cy, data[cur].q, [{value: data[cur].v.toFixed(1) + '%', label: 'del PBI', color: 'var(--line)'}]);
+  };
+  const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); };
+  hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(Math.round((evt.clientX - r.left - m.l) / pw * (n - 1)), evt); });
+  hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+  hit.addEventListener('focus', () => show(cur));
+  hit.addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); show(cur + (e.key === 'ArrowRight' ? 1 : -1)); } });
+}
+function renderEdu() { renderCascade(); renderInds(); renderPbi(); }
+
+// ---------- Pestañas ----------
+const TABS = ['tablero', 'aprende'];
+let tab = 'tablero';
+function renderVisible() { if (tab === 'tablero') renderAll(); else renderEdu(); }
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  hideTip();
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+document.querySelectorAll('.toc a').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector(a.getAttribute('href')).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}));
+
+document.getElementById('lede').textContent =
+  'Cuánto tiene el BCRP, de qué están hechas las reservas, de quién son y cuánto compra y vende en el mercado cambiario. Datos al ' + dLabel(D.hasta) + '.';
+const swapFrom = D.mon.find(d => d.swap != null), swapFirst = D.mon.find(d => d.swap);
+document.getElementById('note-mon').textContent =
+  'Un swap cambiario venta equivale a que el BCRP ofrezca dólares a futuro sin gastar reservas hoy; se usa cuando el dólar sube. ' +
+  'La serie de swaps empieza en ' + mLabel(swapFrom.m) + (swapFirst ? ' y el primer mes con operaciones es ' + mLabel(swapFirst.m) : '') + '.';
+const foot = document.getElementById('foot');
+[
+  'Fuente: BCRPData (Banco Central de Reserva del Perú). Series: RIN y posición de cambio diarias (PD04650MD, PD04649MD), depósitos del sistema financiero y del sector público (PD04651MD, PD04655MD), compras y ventas en mesa (PN01034MM, PN01035MM, PN01033MM; PD04659MD para el mes en curso), swaps cambiarios venta (PN09506TM), liquidez internacional (PN06473IM–PN06480IM) y tipo de cambio interbancario (PN01207PM, PD04638PD).',
+  '"Sector público y otros" es la RIN menos la posición de cambio y los depósitos del sistema financiero: incluye depósitos del Tesoro y otras obligaciones menores.',
+  'Indicadores de suficiencia: elaboración propia con importaciones (PN38718BM), liquidez total (PN00193MM), deuda externa de corto plazo (PN39323BQ) y activos de reserva como % del PBI (PN39331BQ).',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, foot));
+
+renderKpis();
+fillEduText();
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'tablero', false);
+let rt;
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+</script>
+</body>
+</html>
