@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableros del sistema financiero peruano</title>
+<meta name="description" content="Tableros con datos públicos de la SBS y el BCRP: indicadores por entidad, morosidad, solvencia, rentabilidad, liquidez, tasas, crédito por departamento, estados financieros, reservas, inflación y transmisión de la política monetaria.">
+<meta name="author" content="Elisban Alberto Ramos Quispe">
+<style>
+  :root {
+    --brand: #001E6B; --gray: #B2B4B5;
+    --bg: #ffffff; --surface: #f4f5f7; --ink: #1a1d24; --muted: #5b6270; --line: #dfe1e5; --link: #001E6B;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1420; --surface: #171e2e; --ink: #e8eaef; --muted: #a3a9b6; --line: #2a3346; --link: #9db4ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 16px 48px; }
+  header { border-bottom: 3px solid var(--brand); padding-bottom: 16px; margin-bottom: 24px;
+           display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+  h1 { margin: 0 0 6px; font-size: 1.7rem; color: var(--ink); }
+  .sub { margin: 0; color: var(--muted); }
+  button { background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+           border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; font-size: .9rem; white-space: nowrap; }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+       margin: 28px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  a.card { display: block; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--brand);
+           border-radius: 6px; padding: 14px 16px; color: inherit; text-decoration: none; }
+  a.card:hover { border-color: var(--gray); border-left-color: var(--brand); }
+  a.card b { display: block; color: var(--link); margin-bottom: 4px; }
+  a.card span { color: var(--muted); font-size: .92rem; }
+  footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+  footer a { color: var(--link); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Tableros del sistema financiero peruano</h1>
+      <p class="sub">Con datos públicos de la SBS y el BCRP · Boletín Estadístico de la SBS a set-2026</p>
+    </div>
+    <button id="theme" type="button" aria-label="Cambiar entre tema claro y oscuro">Tema oscuro</button>
+  </header>
+
+  <h2>Sistema financiero (SBS)</h2>
+  <div class="grid">
+    <a class="card" href="https://claude.ai/artifact/RpcG5c5WpCXR6GU5Sa3Kjv"><b>Indicadores del sistema financiero</b><span>Solvencia, calidad de cartera, rentabilidad, liquidez y clasificaciones de riesgo por entidad.</span></a>
+    <a class="card" href="https://claude.ai/artifact/PPHFdmX2ewtASRK5NBCKtJ"><b>Colocaciones y morosidad</b><span>Mora por subsistema, entidad y tipo de crédito, y qué explica el crecimiento de las colocaciones.</span></a>
+    <a class="card" href="https://claude.ai/artifact/Wgh9bQ9743msqWJYiJyXkh"><b>Solvencia</b><span>Ratio de capital global, patrimonio efectivo y requerimientos por riesgo.</span></a>
+    <a class="card" href="https://claude.ai/artifact/8uLaNXUKjjGpVZA6GFVDt8"><b>Rentabilidad</b><span>ROE, ROA, márgenes y eficiencia por subsistema y entidad.</span></a>
+    <a class="card" href="https://claude.ai/artifact/UDrKKLp8y6dbsm662HL5nx"><b>Liquidez y fondeo</b><span>Ratios de liquidez, cobertura de liquidez, fondeo y depósitos cubiertos por el Fondo de Seguro de Depósitos.</span></a>
+    <a class="card" href="https://claude.ai/artifact/1qMDzGVELB7cUY7ynZg6xC"><b>Tasas activas</b><span>Tasas de interés por tipo de crédito y entidad.</span></a>
+    <a class="card" href="https://claude.ai/artifact/BZcFnUBFmQD8yNq4dRTJKN"><b>Crédito por departamento</b><span>Crédito por departamento y entidad; peso de Lima y Callao y crecimiento frente al resto del país.</span></a>
+    <a class="card" href="https://claude.ai/artifact/U83h9yYdcUvwwQyU2dEsBJ"><b>Estados financieros</b><span>Balance y estado de resultados por subsistema y entidad.</span></a>
+  </div>
+
+  <h2>Macroeconomía (BCRP)</h2>
+  <div class="grid">
+    <a class="card" href="https://claude.ai/artifact/SZvCtanbmzDDNEaAQUDrZD"><b>Reservas internacionales</b><span>Cuánto compra y vende el BCRP, de qué están hechas las reservas, cómo se invierten y de quién son.</span></a>
+    <a class="card" href="https://claude.ai/artifact/VJnqVL64dBJqQ5P4GuwtE3"><b>Inflación</b><span>Inflación total y subyacente, componentes y comparación con la meta.</span></a>
+    <a class="card" href="https://claude.ai/artifact/BibvFC8kvmrnD8qGhXPhUc"><b>Transmisión de la política monetaria</b><span>Cómo pasa la tasa de referencia a las tasas del mercado.</span></a>
+  </div>
+
+  <footer>
+    Elaboración propia con datos públicos de la SBS y el BCRP. No es una publicación de esas instituciones.
+    Datos, código y metodología en
+    <a href="https://github.com/Alberto-Ramos-Q/datos-financieros-peru">github.com/Alberto-Ramos-Q/datos-financieros-peru</a>.
+    <br>Elisban Alberto Ramos Quispe · <a href="https://www.linkedin.com/in/alberto-ramos-q/">LinkedIn</a> ·
+    <a href="https://github.com/Alberto-Ramos-Q">GitHub</a>
+  </footer>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('theme');
+  function set(t) { if (t === 'dark') root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+                    btn.textContent = t === 'dark' ? 'Tema claro' : 'Tema oscuro'; }
+  var saved = null; try { saved = localStorage.getItem('tema'); } catch (e) {}
+  set(saved === 'dark' ? 'dark' : 'light');
+  btn.addEventListener('click', function () {
+    var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; set(t);
+    try { localStorage.setItem('tema', t); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
