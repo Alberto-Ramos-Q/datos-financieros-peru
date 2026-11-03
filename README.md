@@ -15,11 +15,20 @@ oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de n
 | Tablero | Qué muestra |
 |---|---|
 | [Indicadores del sistema financiero](https://claude.ai/artifact/RpcG5c5WpCXR6GU5Sa3Kjv) | Solvencia, calidad de cartera, rentabilidad, liquidez y clasificaciones de riesgo por entidad. |
+| [Colocaciones y morosidad](https://claude.ai/artifact/PPHFdmX2ewtASRK5NBCKtJ) | Mora por subsistema, entidad y tipo de crédito, y qué explica el crecimiento de las colocaciones. |
+| [Solvencia](https://claude.ai/artifact/Wgh9bQ9743msqWJYiJyXkh) | Ratio de capital global, patrimonio efectivo y requerimientos por riesgo. |
+| [Rentabilidad](https://claude.ai/artifact/8uLaNXUKjjGpVZA6GFVDt8) | ROE, ROA, márgenes y eficiencia por subsistema y entidad. |
+| [Liquidez y fondeo](https://claude.ai/artifact/UDrKKLp8y6dbsm662HL5nx) | Ratios de liquidez, cobertura de liquidez, fondeo y depósitos cubiertos por el Fondo de Seguro de Depósitos. |
+| [Tasas activas](https://claude.ai/artifact/1qMDzGVELB7cUY7ynZg6xC) | Tasas de interés por tipo de crédito y entidad. |
+| [Crédito por departamento](https://claude.ai/artifact/BZcFnUBFmQD8yNq4dRTJKN) | Crédito por departamento y entidad; peso de Lima y Callao y crecimiento frente al resto del país. |
+| [Estados financieros](https://claude.ai/artifact/U83h9yYdcUvwwQyU2dEsBJ) | Balance y estado de resultados por subsistema y entidad. |
+| [Reservas internacionales](https://claude.ai/artifact/SZvCtanbmzDDNEaAQUDrZD) | Cuánto compra y vende el BCRP, de qué están hechas las reservas, cómo se invierten y de quién son. |
+| [Inflación](https://claude.ai/artifact/VJnqVL64dBJqQ5P4GuwtE3) | Inflación total y subyacente, componentes y comparación con la meta. |
+| [Transmisión de la política monetaria](https://claude.ai/artifact/BibvFC8kvmrnD8qGhXPhUc) | Cómo pasa la tasa de referencia a las tasas del mercado. |
 
-El tablero en línea muestra la versión más reciente publicada. La versión de cada corte, junto con los demás
-tableros (morosidad, solvencia, rentabilidad, liquidez, tasas, crédito por departamento, estados financieros,
-reservas, inflación y transmisión de la política monetaria), se puede descargar en [Releases](../../releases)
-(`tableros_<corte>.zip`): son archivos HTML que se abren con doble clic.
+Los tableros en línea muestran la versión más reciente publicada. La versión de cada corte se puede descargar
+en [Releases](../../releases) (`tableros_<corte>.zip`): son archivos HTML que se abren con doble clic, sin
+conexión.
 
 ### 2. Usar los datos sin correr nada
 
