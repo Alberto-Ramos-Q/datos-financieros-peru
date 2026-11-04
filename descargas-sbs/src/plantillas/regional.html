@@ -475,6 +475,7 @@ footer p { margin: 4px 0; max-width: 90ch; }
         <h2>Antes de comparar</h2>
         <ul>
           <li><b>Octubre de 2023, Mibanco.</b> El cuadro de la banca de ese mes trae a Mibanco sin datos (con «-» en toda la fila), y el total de la banca no lo incluye. Este tablero lo completa: toma sus créditos directos del ranking de créditos de la SBS de ese mes (cuadro B-2332: S/ 13,348 millones) y los reparte con el promedio de su distribución por departamento de setiembre y noviembre de 2023. Es una estimación: afecta a todos los indicadores de la banca y del sistema en ese mes y al crecimiento anual de octubre de 2024.</li>
+          <li><b>Cifras repetidas de otro mes.</b> En nueve entidad-mes la SBS repite en este cuadro (y en casi todos los del boletín) las cifras del mes anterior, con una nota al pie «La información de … corresponde al …»: CMAC Pisco de enero a abril de 2014 (cifras de diciembre de 2013), CRAC Señor de Luren en mayo de 2015 (de abril), CRAC Chavín —luego Raíz— en marzo y abril de 2016 (de febrero), Financiera TFC en noviembre de 2019 (de octubre) y CMAC Sullana en junio de 2024 (de mayo). Esas entidades no tienen dato propio ese mes: su ficha, su mapa y las tablas muestran su último dato válido, con su mes, y no figuran en «Quién presta». Los saldos de los subsistemas y del sistema se dejan como los publica la SBS, que suma esas cifras en su total. La concentración (IHH) y el número de entidades de su subsistema y del sistema quedan sin dato ese mes (se muestra el último mes válido), salvo con CMAC Pisco, que pesaba 0.4% de las cajas municipales: ahí se calculan sin ella.</li>
           <li><b>Julio a octubre de 2010, cajas rurales.</b> En esos meses, la fila de total del cuadro reparte el crédito de las cajas rurales entre Junín y Lima de otra forma que sus entidades: le asigna a Junín entre S/ 27 y S/ 30 millones más que la suma de las entidades, y a Lima lo mismo menos. El total de las cajas rurales sí coincide. Este tablero usa las filas de las entidades, como en el resto de la serie. La diferencia está en Caja Profinanzas. Con las filas de las entidades, el crédito de las cajas rurales en Junín sube de S/ 44 millones a S/ 77 millones entre octubre y noviembre de 2010, y el de Lima baja, lo que apunta a una reasignación entre oficinas más que a créditos nuevos.</li>
           <li><b>Enero a mayo de 2013.</b> Desde enero de 2013, la Resolución SBS N.° 7036-2012 dispuso presentar los créditos netos de los ingresos no devengados por arrendamiento financiero y lease-back. El balance y el ranking de créditos lo aplican desde enero, pero este cuadro recién desde junio. Por eso, de enero a mayo, su total es mayor que el del ranking: 1.9% en la banca múltiple, 0.6% en las empresas financieras en enero y febrero (menos de 0.1% de marzo a mayo) y 0.1% en las cajas municipales. El crecimiento anual de enero a mayo de 2013 compara cifras sin netear con cifras sin netear; el de junio de 2013 a mayo de 2014 sale más bajo, porque compara cifras netas con cifras sin netear (en la banca, unos 2 puntos).</li>
           <li><b>Otras diferencias con el ranking de créditos.</b> En noviembre de 2014, CMAC Sullana tiene en este cuadro S/ 55 millones más (3.6%) que en el ranking. De setiembre de 2014 a febrero de 2015, CRAC Del Centro, cuyo funcionamiento la SBS autorizó en julio de 2014 y que inició operaciones el 1 de setiembre de 2014, tiene aquí un saldo de entre S/ 0.4 y S/ 4.5 millones y cero en el ranking. En noviembre de 2010 no se puede comparar el total de las cajas rurales, porque el ranking de ese mes trae montos inválidos.</li>
@@ -575,10 +576,31 @@ const ALL_LAST = idxOf(D.allHasta);
 const LAST = Object.fromEntries(Object.entries(D.scopeHasta).map(([k, m]) => [k, idxOf(m)]));
 const effIdx = (sc, i) => Math.min(i, LAST[sc]);
 // Entidad cuyo subsistema todavía no publica el mes elegido: su último mes. Si dejó de existir antes, no.
+// Si la SBS repitió ese mes las cifras de otro (D.rep), su último mes válido (hasta 3 meses antes).
 function entIdx(k, i) {
   const E = ENT[k], last = E.a + E.T.length - 1;
+  if (repAt(k, i)) { for (let j = i - 1; j >= Math.max(0, i - 3, E.a); j--) if (j <= last && E.T[j - E.a] != null) return j; return i; }
   return i > last && last === LAST[E.s] ? last : i;
 }
+// Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): D.rep = [[mes, entidad, mes repetido, alcance, motivo, acción]].
+// Ese mes la entidad queda sin dato (los agregados son los publicados, que las suman). Fichas y tablas muestran su último dato
+// válido con su mes; los gráficos, el hueco con el motivo. Acción «blank_month»: la entidad pesa y el IHH y el número de
+// entidades de su subsistema y del sistema quedan sin dato ese mes; «drop_entity» (Pisco): se calculan sin ella.
+const REP_L = D.rep || [];
+const REP = new Map(REP_L.map(r => [r[1] + '|' + r[0], r]));
+const repAt = (k, i) => k == null || i == null || i < 0 || i >= N ? null : REP.get(k + '|' + MONTHS[i]) || null;
+const repName = r => ENT[r[1]] ? ENT[r[1]].n : r[1];
+const repText = r => 'en ' + mShort(r[0]) + ' la SBS repitió las cifras de ' + mShort(r[2]) + ' de ' + repName(r) + ' (' + r[4] + ')';
+const repSub = r => r[1].split('/')[0];
+const repIn = (scope, i) => i < 0 || i >= N ? [] : REP_L.filter(r => r[0] === MONTHS[i] && (scope === 'sistema' || repSub(r) === scope));
+const repBlank = (scope, i) => repIn(scope, i).filter(r => r[5] === 'blank_month');
+// Mes con el que se lee el IHH del ámbito en el mes i: i, o el último sin entidades repetidas que pesan (hasta 3 antes).
+function hhiIdx(scope, i) {
+  for (let j = i; j >= Math.max(0, i - 3); j--) if (!repBlank(scope, j).length) return j;
+  return null;
+}
+const hhiNote = (scope, i, j) => j != null && j >= i ? '' : 'Concentración (IHH) y número de entidades ' +
+  (j == null ? 'sin dato' : 'de ' + mLabel(MONTHS[j])) + ': ' + repBlank(scope, i).map(repText).join('; ') + '.';
 const monthTag = (j, i) => j < i ? ' · ' + mLabel(MONTHS[j]) : '';
 const subArt = s => (s === 'banca-multiple' ? 'la ' : 'las ') + SUB_BY[s].l.toLowerCase();
 const listY = a => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
@@ -638,6 +660,7 @@ const hhiCache = new Map();
 function hhi(scope, dep, i) {
   const key = scope + '|' + dep + '|' + i;
   if (hhiCache.has(key)) return hhiCache.get(key);
+  if (repBlank(scope, i).length) { hhiCache.set(key, null); return null; }
   let tot = 0, n = 0;
   const xs = [];
   for (const k of D.entities) {
@@ -888,8 +911,9 @@ function lineChart(box, cfg) {
       dots[j].setAttribute('visibility', v == null || y(v) < m.t || y(v) > m.t + ph ? 'hidden' : 'visible');
       if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
     });
-    const rows = series.map(s => ({v: s.get(i), label: s.label, color: s.color}))
-      .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+    const rows = series.map(s => { const v = s.get(i); return {v, label: s.label, color: s.color, na: v == null && s.na ? s.na(i) : null}; })
+      .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity))
+      .map(r => r.na ? {value: 'sin dato', label: r.label + ': ' + r.na, color: r.color} : {value: fmt(r.v), label: r.label, color: r.color});
     showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
   }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); });
   return true;
@@ -1199,7 +1223,9 @@ function depTip(d, i = state.mi) {
 function renderMap() {
   // i: último mes con dato del ámbito (el peso necesita también el del sistema); ref: mes de los cortes.
   const sc = state.scope, k = state.ind, I = IND_BY[k], peso = k === 'peso';
-  const i = peso ? effIdx('sistema', effIdx(sc, state.mi)) : effIdx(sc, state.mi), ref = peso ? Math.min(LAST[sc], LAST.sistema) : LAST[sc];
+  const i0 = peso ? effIdx('sistema', effIdx(sc, state.mi)) : effIdx(sc, state.mi), ref = peso ? Math.min(LAST[sc], LAST.sistema) : LAST[sc];
+  // IHH en un mes en que una entidad que pesa repitió las cifras de otro: el último mes válido, con nota.
+  const hj = k === 'hhi' ? hhiIdx(sc, i0) : i0, i = hj == null ? i0 : hj;
   document.getElementById('map-title').textContent = indName(k) + ' · ' + scopeLabel(sc) + ' · ' + mLabel(MONTHS[i]);
   document.getElementById('map-desc').textContent = descOf(k) + ' Pase el cursor o use el teclado sobre un departamento; haga clic para ver su ficha abajo.';
   const cs = colorScale(k, sc, d => val(k, sc, d, ref));
@@ -1214,8 +1240,9 @@ function renderMap() {
     ref: I.ref ? val(k, sc, '_peru', i) : null, clampTop: k === 'sal' || k === 'par' || k === 'pbi' || k === 'pc',
     tip: r => depTip(r.k, i), aria: 'Ranking de departamentos: ' + indName(k), empty: 'No hay datos para esta combinación.'});
   const notes = [];
-  const lag = lagNote(peso && LAST.sistema < effIdx(sc, state.mi) ? 'sistema' : sc, state.mi, i);
+  const lag = lagNote(peso && LAST.sistema < effIdx(sc, state.mi) ? 'sistema' : sc, state.mi, i0);
   if (lag) notes.push(lag);
+  if (k === 'hhi') { const hn = hhiNote(sc, i0, hj); if (hn) notes.push(hn); }
   const top2 = rows.map(r => r.v).filter(v => v != null).sort((a, b) => b - a);
   const cut = (k === 'sal' || k === 'par' || k === 'pc' || k === 'pbi') && top2.length > 2 && top2[0] > 3 * top2[1];
   notes.push('Las barras ordenan los departamentos de mayor a menor' + (i >= 12 ? '; el punto hueco es el valor de ' + mLabel(MONTHS[i - 12]) + '.' : '. Aún no hay valor de hace 12 meses: la serie empieza en ' + mLabel(MONTHS[0]) + '.') +
@@ -1283,15 +1310,15 @@ function renderDep() {
     (sc === 'sistema' ? 'Las cifras son del sistema.' : 'Las cifras son ' + deSc(sc) + ', salvo el peso de las cajas y el gráfico por subsistema, que son del sistema.');
   const st = document.getElementById('dep-stats');
   st.replaceChildren();
-  const h = hhi(sc, d, i), c = (kk, v, p) => fmtChg(kk, v, p);
+  const hj = hhiIdx(sc, i), h = hj == null ? null : hhi(sc, d, hj), hp = hj == null ? null : hhi(sc, '_peru', hj), c = (kk, v, p) => fmtChg(kk, v, p);
   const items = [
     {lab: 'Saldo', val: money(amt(sc, d, i)), sub: (c('sal', amt(sc, d, i), amt(sc, d, i - 12)) || '—') + ' en 12 meses'},
     {lab: 'Participación en el Perú', val: pctS(val('par', sc, d, i)), sub: 'puesto ' + (DK.map(x => amt(sc, x, i) || 0).filter(v => v > (amt(sc, d, i) || 0)).length + 1) + ' de 25'},
     {lab: 'Por habitante', val: soles(val('pc', sc, d, i)), sub: 'Perú: ' + soles(val('pc', sc, '_peru', i))},
     {lab: 'Sobre el VAB', val: pct(val('pbi', sc, d, i)), sub: 'VAB ' + vabOf(d, i).y + ' · Perú: ' + pct(val('pbi', sc, '_peru', i))},
     {lab: 'Peso de las cajas' + monthTag(is, i), val: pct(pesoOf('sistema', d, is)), sub: 'Perú: ' + pct(pesoOf('sistema', '_peru', is))},
-    {lab: 'Entidades con créditos', val: h ? String(h.n) : '0', sub: scopeLabel(sc)},
-    {lab: 'Concentración (IHH)', val: h ? f0.format(h.h) : '—', sub: 'Perú: ' + (hhi(sc, '_peru', i) ? f0.format(hhi(sc, '_peru', i).h) : '—')},
+    {lab: 'Entidades con créditos' + (hj == null ? '' : monthTag(hj, i)), val: h ? String(h.n) : hj == null ? '—' : '0', sub: scopeLabel(sc)},
+    {lab: 'Concentración (IHH)' + (hj == null ? '' : monthTag(hj, i)), val: h ? f0.format(h.h) : '—', sub: 'Perú: ' + (hp ? f0.format(hp.h) : '—')},
     {lab: 'Población', val: f0.format(popOf(d, i)), sub: 'estimada al 30 de junio de ' + Math.min(yearOf(i), D.pop.y0 + D.pop.v.lima.length - 1)},
   ];
   for (const it of items) {
@@ -1310,14 +1337,16 @@ function renderDep() {
   const lk = k === 'sal' ? 'par' : k;
   document.getElementById('dep-line-title').textContent = indName(lk) + ' · ' + depName(d) + (IND_BY[lk].ref ? ' frente al Perú' : '') + ' · ' + scopeLabel(sc);
   // Con el sistema, el departamento va en azul para no confundirse con la referencia gris del Perú.
-  const series = [{label: depName(d), color: sc === 'sistema' ? 'var(--s1)' : scopeColor(sc), w: 2.5, get: j => val(lk, sc, d, j)}];
-  if (IND_BY[lk].ref) series.push({label: 'Perú', color: 'var(--sys)', w: 2, dash: '5 4', get: j => val(lk, sc, '_peru', j)});
+  // Hueco del IHH en los meses con una entidad repetida que pesa: el tooltip da el motivo.
+  const naH = lk === 'hhi' ? j => { const b = repBlank(sc, j); return b.length ? b.map(repText).join('; ') : null; } : null;
+  const series = [{label: depName(d), color: sc === 'sistema' ? 'var(--s1)' : scopeColor(sc), w: 2.5, get: j => val(lk, sc, d, j), na: naH}];
+  if (IND_BY[lk].ref) series.push({label: 'Perú', color: 'var(--sys)', w: 2, dash: '5 4', get: j => val(lk, sc, '_peru', j), na: naH});
   legendLines('dep-line-legend', series);
   lineChart(document.getElementById('ch-dep-line'), {idx: visIdx(), H: 260, endLabels: true, series, marker: i, u: unitOf(lk), fmt: v => fmtInd(lk, v),
     clip: lk === 'cre' ? [-50, 100] : null, aria: indName(lk) + ' en ' + depName(d), empty: 'Sin datos ' + deSc(sc) + ' en ' + depName(d) + '.'});
   // Ámbito atrasado: su nota; si no, y el sistema lo está (peso de las cajas, apilado): la del sistema.
   const lag = i < state.mi ? lagNote(sc, state.mi, i) : lagNote('sistema', state.mi, is);
-  document.getElementById('dep-note').textContent = [k === 'sal' ? 'Con el indicador «Saldo», el segundo gráfico muestra la participación del departamento en el Perú. Elija otro indicador arriba para verlo aquí.' : '', lag].filter(Boolean).join(' ');
+  document.getElementById('dep-note').textContent = [k === 'sal' ? 'Con el indicador «Saldo», el segundo gráfico muestra la participación del departamento en el Perú. Elija otro indicador arriba para verlo aquí.' : '', lag, hhiNote(sc, i, hj)].filter(Boolean).join(' ');
 }
 
 // ---------- Quién presta en el departamento ----------
@@ -1348,8 +1377,12 @@ function renderDepEnt() {
     tip: x => [{value: money(x.r.v), label: 'Saldo en ' + depName(d), color: SUB_COLOR[x.r.s], sq: true}, {value: pctS(x.r.sh), label: 'del crédito ' + (sc === 'sistema' ? 'del sistema' : 'de ' + SUB_BY[sc].s) + ' en el departamento'},
       {value: pctS(x.r.own), label: 'de la cartera de la entidad en el Perú'}, {value: SUB_BY[x.r.s].l, label: ''}],
     aria: 'Entidades con más crédito en ' + depName(d), empty: 'No hay entidades ' + deSc(sc) + ' con créditos en ' + depName(d) + '.'});
-  document.getElementById('depent-note').textContent = rows.length ? rows.length + (rows.length === 1 ? ' entidad tiene' : ' entidades tienen') + ' créditos en el departamento' +
-    (rest.length ? '; las ' + rest.length + ' que no se muestran suman ' + pctS(rest.reduce((a, r) => a + r.sh, 0)) + '.' : '.') + (i < state.mi ? ' ' + lagNote(sc, state.mi, i) : '') : '';
+  // Entidades que ese mes repitieron las cifras de otro: no figuran (su saldo está en el total del departamento).
+  const gone = repIn(sc, i).filter(r => ENT[r[1]] && entAmt(r[1], d, entIdx(r[1], i)) > 0);
+  const repN = gone.length ? ' No figura' + (gone.length > 1 ? 'n ' : ' ') + listY(gone.map(repName)) + ': ' + gone.map(repText).join('; ') +
+    '. Su saldo sí está en el total del departamento (la SBS lo suma), así que las participaciones de las demás suman menos de 100%.' : '';
+  document.getElementById('depent-note').textContent = (rows.length ? rows.length + (rows.length === 1 ? ' entidad tiene' : ' entidades tienen') + ' créditos en el departamento' +
+    (rest.length ? '; las ' + rest.length + ' que no se muestran suman ' + pctS(rest.reduce((a, r) => a + r.sh, 0)) + '.' : '.') + (i < state.mi ? ' ' + lagNote(sc, state.mi, i) : '') : '') + repN;
 }
 
 // ---------- Mapa de calor: peso de cada subsistema por departamento ----------
@@ -1483,8 +1516,10 @@ function renderEnt() {
   const notes = ['El punto hueco es el valor de hace 12 meses. Colores: quintiles de los departamentos de esta entidad en ' + mLabel(MONTHS[lastI]) + ', su último mes con datos. Haga clic en un departamento del mapa para ver su ficha.'];
   if (D.imp.some(x => x.k === k && idxOf(x.m) === i)) notes.push('Octubre de 2023: la SBS no publicó la distribución de esta entidad; se estima con su saldo del ranking de créditos y su distribución promedio de setiembre y noviembre.');
   if (E.o) notes.push('Esta entidad aparece también en ' + E.o.map(o => SUB_BY[ENT[o].s].l.toLowerCase()).join(' y ') + ' en otros meses.');
-  const lag = ie < state.mi ? lagNote(E.s, state.mi, ie) : lagNote('sistema', state.mi, mode === 'mkt' ? is : state.mi);
+  const rp = repAt(k, state.mi);
+  const lag = rp ? '' : ie < state.mi ? lagNote(E.s, state.mi, ie) : lagNote('sistema', state.mi, mode === 'mkt' ? is : state.mi);
   if (lag) notes.push(lag);
+  if (rp) notes.push('Sin dato propio de ' + mLabel(MONTHS[state.mi]) + ': ' + repText(rp) + '. ' + (ie < state.mi ? 'La ficha y el mapa muestran ' + mLabel(MONTHS[ie]) + ', su último dato válido; en el gráfico de abajo ese mes queda como un hueco.' : 'No hay un dato válido en los tres meses anteriores.'));
   document.getElementById('emap-note').textContent = notes.join(' ');
   renderElc();
 }
@@ -1495,7 +1530,8 @@ function renderElc() {
   document.getElementById('elc-title').textContent = 'Lima y Callao en la cartera de ' + E.n;
   document.getElementById('elc-desc').textContent = 'Porcentaje de los créditos en el Perú registrado en oficinas de Lima y el Callao: la entidad, su subsistema y el sistema.';
   const series = [
-    {label: E.n, color: 'var(--s1)', w: 2.5, get: i => { const p = entPeru(k, i); return p > 0 ? 100 * entAmt(k, '_lc', i) / p : null; }},
+    {label: E.n, color: 'var(--s1)', w: 2.5, get: i => { const p = entPeru(k, i); return p > 0 ? 100 * entAmt(k, '_lc', i) / p : null; },
+      na: i => { const r = repAt(k, i); return r ? repText(r) : null; }},
     {label: SUB_BY[E.s].l, color: 'var(--c-sub)', w: 2, get: i => val('par', E.s, '_lc', i)},
     {label: 'Sistema', color: 'var(--sys)', w: 2, dash: '5 4', get: i => val('par', 'sistema', '_lc', i)},
   ];
@@ -1537,10 +1573,13 @@ function renderEtab() {
     row.addEventListener('click', go);
     row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
-  const lagS = [...new Set(rows.filter(r => r.j < i).map(r => r.E.s))];
+  const lagR = rows.filter(r => r.j < i && !repAt(r.k, i)), lagS = [...new Set(lagR.map(r => r.E.s))];
   const lag = lagS.length ? listY(lagS.map(subArt)) + ' todavía no ' + (lagS.length > 1 || lagS[0] !== 'banca-multiple' ? 'publican ' : 'publica ') + mLabel(MONTHS[i]) +
-    ': sus entidades van con ' + mLabel(MONTHS[Math.max(...rows.filter(r => r.j < i).map(r => r.j))]) + '.' : '';
-  document.getElementById('etab-note').textContent = 'Créditos en el Perú: sin las sucursales en el exterior. ' + rows.length + ' entidades con datos en el mes.' + (lag ? ' ' + lag[0].toUpperCase() + lag.slice(1) : '');
+    ': sus entidades van con ' + mLabel(MONTHS[Math.max(...lagR.map(r => r.j))]) + '.' : '';
+  const reps = rows.filter(r => repAt(r.k, i));
+  const repN = reps.length ? ' ' + reps.map(r => repName(repAt(r.k, i)) + ' va con ' + mLabel(MONTHS[r.j]) + ', su último dato válido: ' + repText(repAt(r.k, i))).join('; ') + '.' : '';
+  document.getElementById('etab-note').textContent = 'Créditos en el Perú: sin las sucursales en el exterior. ' + rows.length + ' entidades con datos en el mes.' +
+    (lag ? ' ' + lag[0].toUpperCase() + lag.slice(1) : '') + repN;
 }
 
 // ---------- Tablas ----------
@@ -1569,7 +1608,8 @@ const TABLES = {
     if (!k) return [['Departamento'], []];
     const i = entIdx(k, state.mi), is = effIdx('sistema', i);
     const rows = DK.map(d => ({d, v: entAmt(k, d, i)})).filter(r => r.v > 0).sort((a, b) => b.v - a.v);
-    return [['Departamento', 'Saldo' + monthTag(i, state.mi), '% de su cartera', '% del sistema en el departamento' + monthTag(is, i), '% de su cartera hace 12 meses'],
+    const rp = repAt(k, state.mi), tag = rp && i < state.mi ? ' (último dato válido: en ' + mShort(rp[0]) + ' la SBS repitió las cifras de ' + mShort(rp[2]) + ')' : '';
+    return [['Departamento', 'Saldo' + monthTag(i, state.mi) + tag, '% de su cartera', '% del sistema en el departamento' + monthTag(is, i), '% de su cartera hace 12 meses'],
       rows.map(r => [depName(r.d), money(r.v), pctS(entVal(k, r.d, i, 'dist')), pctS(entVal(k, r.d, is, 'mkt')), pctS(entVal(k, r.d, i - 12, 'dist'))])];
   },
   elc() {
@@ -1577,7 +1617,13 @@ const TABLES = {
     if (!k) return [['Mes'], []];
     const E = ENT[k], idx = visIdx().slice().reverse();
     return [['Mes', 'Créditos en el Perú', 'Lima y Callao (%)', 'Lima y Callao en ' + SUB_BY[E.s].s + ' (%)'],
-      idx.map(i => { const p = entPeru(k, i); return p == null ? null : [mLabel(MONTHS[i]), money(p), pct(p > 0 ? 100 * entAmt(k, '_lc', i) / p : null), pct(val('par', E.s, '_lc', i))]; }).filter(Boolean)];
+      idx.map(i => {
+        // Mes en que la SBS repitió las cifras de otro: el último dato válido, con su mes y el motivo (regla «sin huecos»).
+        const r = repAt(k, i), j = r ? entIdx(k, i) : i, p = entPeru(k, j);
+        if (p == null) return r ? [mLabel(MONTHS[i]), {v: '—', title: 'Sin dato: ' + repText(r) + '.'}, '—', pct(val('par', E.s, '_lc', i))] : null;
+        const c = s => r ? {v: s + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(r) + '.'} : s;
+        return [mLabel(MONTHS[i]), c(money(p)), c(pct(p > 0 ? 100 * entAmt(k, '_lc', j) / p : null)), pct(val('par', E.s, '_lc', i))];
+      }).filter(Boolean)];
   },
 };
 // Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
@@ -1620,9 +1666,11 @@ function fillTable(key) {
 }
 function fillMapTable(wrap) {
   // Igual que el mapa: último mes con dato del ámbito; el peso, el último con dato del sistema.
-  const sc = state.scope, i = effIdx(sc, state.mi), ip = effIdx('sistema', i);
+  const sc = state.scope, i = effIdx(sc, state.mi), ip = effIdx('sistema', i), hj = hhiIdx(sc, i);
+  // IHH y número de entidades: el último mes válido si ese mes una entidad que pesa repitió las cifras de otro.
   const rows = DK.concat(['_lc', '_resto', '_peru']).map(d => ({d, n: depName(d), sal: amt(sc, d, i), par: val('par', sc, d, i), cre: growth(sc, d, i), pc: val('pc', sc, d, i),
-    pbi: val('pbi', sc, d, i), peso: pesoOf(sc, d, ip), hhi: val('hhi', sc, d, i), ne: (hhi(sc, d, i) || {n: 0}).n}));
+    pbi: val('pbi', sc, d, i), peso: pesoOf(sc, d, ip), hhi: hj == null ? null : val('hhi', sc, d, hj), ne: hj == null ? null : (hhi(sc, d, hj) || {n: 0}).n}));
+  const hTag = hj == null || hj >= i ? '' : ' (' + mLabel(MONTHS[hj]) + ')';
   const cols = [
     {l: 'Departamento', get: r => r.n, fmt: v => v},
     {l: 'Saldo' + monthTag(i, state.mi), get: r => r.sal, fmt: money},
@@ -1631,8 +1679,8 @@ function fillMapTable(wrap) {
     {l: 'Por habitante', get: r => r.pc, fmt: soles},
     {l: 'Sobre el VAB', get: r => r.pbi, fmt: v => pct(v)},
     {l: (sc === 'sistema' ? 'Peso de las cajas' : 'Peso de ' + SUB_BY[sc].s) + monthTag(ip, i), get: r => r.peso, fmt: v => pct(v)},
-    {l: 'Concentración (IHH)', get: r => r.hhi, fmt: v => v == null ? '—' : f0.format(v)},
-    {l: 'Entidades', get: r => r.ne, fmt: v => String(v)},
+    {l: 'Concentración (IHH)' + hTag, get: r => r.hhi, fmt: v => v == null ? '—' : f0.format(v)},
+    {l: 'Entidades' + hTag, get: r => r.ne, fmt: v => v == null ? '—' : String(v)},
   ];
   const c = cols[mapSort.col], deps = rows.filter(r => !r.d.startsWith('_')), groups = rows.filter(r => r.d.startsWith('_'));
   deps.sort((a, b) => { const va = c.get(a), vb = c.get(b); if (va == null) return 1; if (vb == null) return -1; return (typeof va === 'string' ? va.localeCompare(vb, 'es') : va - vb) * mapSort.dir; });
@@ -1640,6 +1688,7 @@ function fillMapTable(wrap) {
   cols.forEach((col, j) => {
     const th = htmlEl('th', {scope: 'col'}, tr);
     if (j === mapSort.col) th.setAttribute('aria-sort', mapSort.dir > 0 ? 'ascending' : 'descending');
+    if (j >= 7 && (hj == null || hj < i)) th.title = hhiNote(sc, i, hj);
     const b = htmlEl('button', {type: 'button', text: col.l + (j === mapSort.col ? (mapSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
     b.addEventListener('click', () => { mapSort = {col: j, dir: j === mapSort.col ? -mapSort.dir : (j === 0 ? 1 : -1)}; fillTable('map'); wrap.querySelectorAll('th button')[j].focus(); });
   });

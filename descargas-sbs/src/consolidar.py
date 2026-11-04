@@ -11,11 +11,19 @@ Parte de `data/processed/boletin/<tema>.parquet` (salida de `leer_boletin.py`) y
 El maestro tiene más de 10 millones de filas: no cabe en Excel, se usa desde Power BI o pandas.
 El panel sí cabe; el Excel trae además una hoja «diccionario» con la definición de cada columna.
 
+Cifras repetidas de otro mes (2026-11-03): en las entidad-mes de `errores_origen.RANKING_REPEATS` la SBS publica
+las cifras de un mes anterior (en 8 de ellas en casi todos los cuadros; en CMAC Sullana 2014-11, solo en el
+ranking). El maestro queda tal como lo publica la SBS; en el panel, `anular_repeticiones` deja vacías las celdas de
+esas entidad-mes que vienen de un tema repetido (también las calculadas con él) y la columna `repite_periodo` dice qué
+mes repite la SBS. Las filas del total (`_total`) no cambian: la SBS suma las cifras repetidas en sus totales.
+
 Uso:
-    python consolidar.py
+    python consolidar.py                      # escribe en data/processed
+    python consolidar.py --salida C:/tmp/x    # escribe el maestro y el panel en otra carpeta (para comparar)
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -24,10 +32,16 @@ import pandas as pd
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_DIR / "src"))
 from entidades import Maestro  # noqa: E402
+from errores_origen import RANKING_TEMA, full_row_repeat_keys, repeats_tema, source_repeats  # noqa: E402
 
 TEMAS_DIR = PROJECT_DIR / "data" / "processed" / "boletin"
 OUT_DIR = PROJECT_DIR / "data" / "processed"
 PANEL_CSV = PROJECT_DIR / "config" / "panel.csv"
+# Entidades estatales (p=12), aparte: ver `consolidar_estatales`.
+TEMAS_DIR_ESTATALES = PROJECT_DIR / "data" / "processed" / "boletin_estatales"
+PANEL_ESTATALES_CSV = PROJECT_DIR / "config" / "panel_estatales.csv"
+ENTIDADES_PANEL_ESTATAL = ["banco-de-la-nacion", "agrobanco"]
+ENTIDADES_ESTATALES = {"banco-de-la-nacion", "agrobanco", "cofide", "fondo-mivivienda"}
 SERIES_CSV = PROJECT_DIR / "config" / "series.csv"
 
 CLAVE = ["periodo", "subsistema", "id_entidad"]
@@ -244,6 +258,73 @@ def sustituir_posicion_global(panel: pd.DataFrame, maestro_df: pd.DataFrame) -> 
     panel["posicion_global_me_pe_origen"] = pd.Series("indicador", index=panel.index).where(usar)
 
 
+def temas_de_columnas(definicion: pd.DataFrame) -> dict[str, set[str]]:
+    """Temas del boletín de los que sale cada columna del panel (para saber qué celdas anular en una entidad-mes
+    con cifras repetidas). Las derivadas heredan los de su numerador y denominador."""
+    temas = {r.columna: {r.tema} for r in definicion.itertuples()}
+    for col, (_, _, _, tema) in CALCULADOS.items():
+        temas[col] = {tema}
+    # Rellenos de `armar_panel`: PE desde la estructura del PE; depósito promedio con depósitos del ranking.
+    temas.setdefault("patrimonio_efectivo", set()).add("estructura-patrimonio-efectivo")
+    temas["deposito_promedio_depositante"] = temas["deposito_promedio_depositante"] | {RANKING_TEMA}
+    for col, (num, den, _, _) in DERIVADAS.items():
+        temas[col] = temas.get(num, set()) | temas.get(den, set())
+    return temas
+
+
+def anular_repeticiones(panel: pd.DataFrame, definicion: pd.DataFrame, car_publicada: pd.Series | None) -> None:
+    """Deja vacías (NaN) las celdas de las entidad-mes de `errores_origen.RANKING_REPEATS` que vienen de un tema en
+    que la SBS repite las cifras de otro mes, y agrega `repite_periodo` (AAAAMM del mes repetido; vacío en el resto).
+
+    Una celda se anula si alguno de sus temas de origen está repetido (`temas_de_columnas`). Casos especiales:
+    `cartera_alto_riesgo` publicada (indicadores) o calculada (créditos por situación), según de dónde salió; y el
+    sustituto de `posicion_global_me_pe` antes de 2015 (indicadores). Las filas `_total` no se tocan: la SBS suma
+    las cifras repetidas en sus totales (y el total del ranking es la suma de lo publicado). `panel` va indexado por
+    CLAVE y se modifica en el sitio.
+    """
+    temas = temas_de_columnas(definicion)
+    panel["repite_periodo"] = pd.array([pd.NA] * len(panel), dtype="Int64")
+    n_celdas = 0
+    for key, r in source_repeats().items():
+        if key not in panel.index:
+            continue
+        panel.loc[key, "repite_periodo"] = r["same_as"]
+        cols = []
+        for col in panel.columns:
+            if col == "cartera_alto_riesgo" and car_publicada is not None:
+                origen = "indicadores-financieros" if car_publicada.get(key, False) else "creditos-tipo-situacion"
+                rep = repeats_tema(r, origen)
+            elif (col == "posicion_global_me_pe" and "posicion_global_me_pe_origen" in panel.columns
+                  and panel.at[key, "posicion_global_me_pe_origen"] == "indicador"):
+                rep = repeats_tema(r, "indicadores-financieros")
+            else:
+                rep = any(repeats_tema(r, t) for t in temas.get(col, ()))
+            if rep and pd.notna(panel.at[key, col]):
+                cols.append(col)
+        panel.loc[key, cols] = float("nan")
+        if "posicion_global_me_pe" in cols:
+            panel.loc[key, "posicion_global_me_pe_origen"] = None
+        n_celdas += len(cols)
+    print(f"  Cifras repetidas de otro mes: {int(panel['repite_periodo'].notna().sum())} entidad-mes "
+          f"({len(full_row_repeat_keys())} con casi toda la fila), {n_celdas} celdas vacías (errores_origen.RANKING_REPEATS)")
+
+
+def avisar_filas_repetidas(panel: pd.DataFrame) -> None:
+    """Aviso para las próximas actualizaciones: entidad con el balance (activo, patrimonio, disponible y utilidad
+    acumulada) idéntico al del mes anterior que no está en `RANKING_REPEATS`."""
+    cols = ["activo_total", "patrimonio", "disponible", "utilidad_neta_acumulada"]
+    p = panel[cols].drop(index=ID_TOTAL, level="id_entidad").reset_index().sort_values(["subsistema", "id_entidad", "periodo"])
+    mes = p["periodo"] // 100 * 12 + p["periodo"] % 100
+    g = [p["subsistema"], p["id_entidad"]]
+    seguido = (mes - mes.groupby(g).shift()) == 1
+    igual = pd.concat([p[c].eq(p[c].groupby(g).shift()) for c in cols], axis=1).all(axis=1) & (p["activo_total"] > 0)
+    conocidas = set(source_repeats())
+    for r in p[seguido & igual].itertuples(index=False):
+        if (r.periodo, r.subsistema, r.id_entidad) not in conocidas:
+            print(f"  AVISO: {r.subsistema} {r.periodo} {r.id_entidad}: balance idéntico al del mes anterior: revisar las "
+                  f"notas al pie («La información de ... corresponde al ...») y agregarlo a errores_origen.RANKING_REPEATS")
+
+
 def armar_panel(maestro_df: pd.DataFrame, definicion: pd.DataFrame) -> pd.DataFrame:
     filtro = definicion[["columna", "tema", "variable", "apertura"]]
     # Se filtra antes del merge: el maestro tiene más de 10 millones de filas con columnas categóricas.
@@ -286,6 +367,7 @@ def armar_panel(maestro_df: pd.DataFrame, definicion: pd.DataFrame) -> pd.DataFr
     for col, (num, den, _, _) in DERIVADAS.items():
         panel[col] = (panel[num] / panel[den].where(panel[den] != 0) * 100).round(4)
     sustituir_posicion_global(panel, maestro_df)
+    car_publicada = panel["cartera_alto_riesgo"].notna() if "cartera_alto_riesgo" in panel.columns else None
     if "cartera_alto_riesgo" in panel.columns:  # publicada solo por cajas y EC
         panel["cartera_alto_riesgo"] = panel["cartera_alto_riesgo"].fillna(calc["cartera_alto_riesgo"])
     for col in CALCULADOS:  # vacía si su tema aún no tiene datos
@@ -294,6 +376,8 @@ def armar_panel(maestro_df: pd.DataFrame, definicion: pd.DataFrame) -> pd.DataFr
         panel["deposito_promedio_depositante"] = (
             panel["depositos_totales"] * 1000 / panel["numero_depositantes"].where(panel["numero_depositantes"] > 0)
         ).round(2)
+    anular_repeticiones(panel, definicion, car_publicada)
+    avisar_filas_repetidas(panel)
     panel = panel.reset_index()
 
     nombre = (largo.drop_duplicates(CLAVE).set_index(CLAVE)["nombre_entidad"].astype(str))
@@ -340,6 +424,12 @@ def diccionario(panel: pd.DataFrame, definicion: pd.DataFrame, maestro_df: pd.Da
                       "unidad": "texto", "tema_sbs": "indicadores-financieros",
                       "cuadros_sbs": codigos.get("indicadores-financieros", ""),
                       "variable_origen": "posicion_global_me_patrimonio_efectivo (sustituto)"})
+    filas.append({"columna": "repite_periodo", "pilar": "calidad",
+                  "descripcion": "AAAAMM del mes cuyas cifras repite la SBS en esta entidad-mes (nota «La información de ... "
+                                 "corresponde al ...»; lista y evidencia en src/errores_origen.py, RANKING_REPEATS). Las "
+                                 "celdas que vienen de un cuadro repetido quedan vacías: en 8 entidad-mes casi toda la fila, "
+                                 "en CMAC Sullana 2014-11 solo las del ranking. Vacía = cifras del mes",
+                  "unidad": "AAAAMM", "variable_origen": "errores_origen.RANKING_REPEATS"})
     dic = pd.DataFrame(filas)
     con_dato = panel[~panel.es_total]
     for f in dic.itertuples():
@@ -370,21 +460,108 @@ def escribir_excel(panel: pd.DataFrame, dic: pd.DataFrame, ruta: Path) -> None:
             hoja_d.column_dimensions[letra].width = ancho
 
 
+def consolidar_estatales(out_dir: Path) -> None:
+    """Maestro y panel de las entidades estatales (p=12), aparte del panel principal (2026-11-03).
+
+    Parte de `data/processed/boletin_estatales/<tema>.parquet` (`leer_boletin.py` escribe ahí los temas
+    `estatales-*`) y escribe:
+        boletin_maestro_estatales.parquet  todos los temas estatales, incluidos COFIDE, Fondo MiVivienda y
+                                           los totales que publica la SBS («Total Entidades Estatales»)
+        panel_estatales_mes.parquet        una fila por mes × entidad, SOLO Banco de la Nación y Agrobanco
+                                           (decisión del usuario: el mismo criterio de la Carpeta SIF, que no
+                                           incluye a COFIDE ni al Fondo), columnas de `config/panel_estatales.csv`
+    No toca `boletin_maestro.parquet` ni `panel_entidad_mes.parquet`: los tableros, la alerta temprana y las
+    tesis no ven estas entidades. No hay fila «_total»: el consolidado de la SBS incluye a COFIDE y al Fondo.
+    `creditos_directos` y `depositos_totales` se calculan del balance con la fórmula del ranking B-2332
+    (vigentes + refinanciados y reestructurados + atrasados; obligaciones con el público − otras obligaciones +
+    depósitos del sistema financiero), que reproduce el ranking de la banca con 0,0000 % de diferencia
+    (docs/cobertura_sbs_p12_p14.md § 4).
+    """
+    rutas = sorted(TEMAS_DIR_ESTATALES.glob("*.parquet"))
+    if not rutas:
+        print("Estatales: no hay temas en data/processed/boletin_estatales (se omite)")
+        return
+    print("Maestro estatal:")
+    partes = []
+    for ruta in rutas:
+        df = pd.read_parquet(ruta)
+        df["apertura"] = df["apertura"].fillna("")
+        partes.append(df)
+        print(f"  {ruta.stem}: {len(df):,} filas")
+    m = pd.concat(partes, ignore_index=True)
+    # Resguardo: el maestro resuelve alias sin subsistema en cualquier subsistema (p. ej. B-5216 2019-06 trae
+    # por error cajeros de financieras). Ninguna fila estatal puede ser de otra entidad.
+    ajenas = set(m.id_entidad.dropna().unique()) - ENTIDADES_ESTATALES
+    if ajenas:
+        raise ValueError(f"entidades no estatales en boletin_estatales: {sorted(ajenas)}")
+    maestro = Maestro()
+    pares = m.loc[~m.es_total, ["id_entidad", "periodo"]].drop_duplicates().dropna()
+    nombre = {}
+    for i, p in zip(pares.id_entidad, pares.periodo):
+        v = maestro.vigencia(i, int(p))
+        nombre[(i, p)] = v["nombre"] if v else maestro.entidades[i]["nombre_actual"]
+    m.insert(7, "nombre_entidad", [("Total entidades estatales" if t else nombre.get((i, p)))
+                                   for i, p, t in zip(m.id_entidad, m.periodo, m.es_total)])
+    m = m.astype({c: "category" for c in ["subsistema", "tema", "codigo", "hoja", "entidad_original",
+                                          "id_entidad", "nombre_entidad", "variable", "apertura", "unidad"]})
+    ruta = out_dir / "boletin_maestro_estatales.parquet"
+    m.to_parquet(ruta, index=False)
+    print(f"  -> {ruta.name}: {len(m):,} filas")
+
+    print("Panel estatal:")
+    definicion = pd.read_csv(PANEL_ESTATALES_CSV, dtype=str).fillna("")
+    filtro = definicion[["columna", "tema", "variable", "apertura"]]
+    sel = m[m.id_entidad.isin(ENTIDADES_PANEL_ESTATAL) & ~m.es_total]
+    sel = sel.astype({"tema": str, "variable": str, "apertura": str, "subsistema": str,
+                      "id_entidad": str, "nombre_entidad": str})
+    largo = sel.merge(filtro, on=["tema", "variable", "apertura"], how="inner")
+    conflicto = largo.groupby(CLAVE + ["columna"]).valor.nunique()
+    conflicto = conflicto[conflicto > 1]
+    if len(conflicto):
+        print(f"  AVISO: {len(conflicto)} celdas con más de un valor distinto; se toma el primero")
+        print(conflicto.head(10).to_string())
+    panel = largo.pivot_table(index=CLAVE, columns="columna", values="valor", aggfunc="first")
+    panel = panel.reindex(columns=list(definicion.columna))
+    # Fórmula del ranking; un componente vacío deja vacío el resultado (no se rellena con cero).
+    panel["creditos_directos"] = (panel["creditos_vigentes"] + panel["creditos_refinanciados_reestructurados"]
+                                  + panel["creditos_atrasados"])
+    panel["depositos_totales"] = (panel["obligaciones_publico"] - panel["otras_obligaciones"]
+                                  + panel["depositos_sistema_financiero"])
+    panel["disponible_activo"] = (panel["disponible"] / panel["activo_total"].where(panel["activo_total"] != 0)
+                                  * 100).round(4)
+    panel["creditos_depositos"] = (panel["creditos_directos"]
+                                   / panel["depositos_totales"].where(panel["depositos_totales"] != 0) * 100).round(4)
+    panel = panel.reset_index()
+    nombres_panel = largo.drop_duplicates(CLAVE).set_index(CLAVE)["nombre_entidad"]
+    panel.insert(3, "nombre_entidad", panel.set_index(CLAVE).index.map(nombres_panel))
+    panel.insert(1, "fecha", pd.to_datetime(panel.periodo.astype(str), format="%Y%m") + pd.offsets.MonthEnd(0))
+    panel = panel.sort_values(["id_entidad", "periodo"]).reset_index(drop=True)
+    panel.to_parquet(out_dir / "panel_estatales_mes.parquet", index=False)
+    print(f"  -> panel_estatales_mes.parquet: {len(panel):,} filas × {panel.shape[1]} columnas, "
+          f"entidades {sorted(panel.id_entidad.unique())}, {panel.periodo.min()}-{panel.periodo.max()}")
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--salida", type=Path, default=OUT_DIR,
+                    help="carpeta del maestro y del panel (por defecto data/processed)")
+    out_dir = ap.parse_args().salida
+    out_dir.mkdir(parents=True, exist_ok=True)
     print("Maestro:")
     maestro_df = cargar_temas()
     maestro_df.insert(7, "nombre_entidad", nombres(maestro_df, Maestro()))
-    ruta = OUT_DIR / "boletin_maestro.parquet"
+    ruta = out_dir / "boletin_maestro.parquet"
     maestro_df.to_parquet(ruta, index=False)
     print(f"  -> {ruta.name}: {len(maestro_df):,} filas, {ruta.stat().st_size / 1e6:.0f} MB")
 
     print("Panel:")
     definicion = pd.read_csv(PANEL_CSV, dtype=str).fillna("")
     panel = armar_panel(maestro_df, definicion)
-    panel.to_parquet(OUT_DIR / "panel_entidad_mes.parquet", index=False)
-    escribir_excel(panel, diccionario(panel, definicion, maestro_df), OUT_DIR / "panel_entidad_mes.xlsx")
+    panel.to_parquet(out_dir / "panel_entidad_mes.parquet", index=False)
+    escribir_excel(panel, diccionario(panel, definicion, maestro_df), out_dir / "panel_entidad_mes.xlsx")
     print(f"  -> panel_entidad_mes.parquet / .xlsx: {len(panel):,} filas × {panel.shape[1]} columnas, "
           f"{panel.id_entidad.nunique() - 1} entidades, {panel.periodo.min()}-{panel.periodo.max()}")
+    consolidar_estatales(out_dir)
     return 0
 
 

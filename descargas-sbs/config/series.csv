@@ -130,3 +130,18 @@ empresas-financieras,creditos-tipo-modalidad-porcentaje,B-3235,boletin,201010,20
 cajas-municipales,creditos-tipo-modalidad-porcentaje,C-1243,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad
 cajas-rurales,creditos-tipo-modalidad-porcentaje,C-2248,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad
 empresas-credito,creditos-tipo-modalidad-porcentaje,C-4235,boletin,201007,201508,1,Créditos Directos por Tipo y Modalidad
+entidades-estatales,estatales-estados-financieros,B-5102,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas del Banco de la Nación
+entidades-estatales,estatales-estados-financieros,B-5103,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas de Cofide
+entidades-estatales,estatales-estados-financieros,B-5104,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas de Agrobanco
+entidades-estatales,estatales-estados-financieros,B-5105,boletin,201007,,1,Balance General y Estado de Ganancias y Pérdidas de Fondo MiVivienda
+entidades-estatales,estatales-indicadores-financieros,E-5201,boletin,201007,,1,Indicadores de las Entidades Estatales
+entidades-estatales,estatales-ratio-capital-global,E-5204,boletin,201601,,1,Requerimiento de Patrimonio Efectivo y Ratio de Capital Global
+entidades-estatales,estatales-creditos-consumo-situacion,E-5203,boletin,201007,,1,Créditos de consumo según situación
+entidades-estatales,estatales-creditos-tipo-situacion,E-5205,boletin,201701,,1,Créditos directos según tipo de crédito y situación
+entidades-estatales,estatales-categoria-riesgo-deudor,E-5206,boletin,201701,,1,Estructura de Créditos Directos e Indirectos según Categoría de Riesgo del Deudor
+entidades-estatales,estatales-ratio-cobertura-liquidez,R-0001,boletin,202406,,1,Ratio de cobertura de liquidez
+entidades-estatales,estatales-ratio-financiacion-neta-estable,R-0010,boletin,202512,,1,Ratio de Financiación Neta Estable
+entidades-estatales,estatales-fideicomisos,E-5202,boletin,201007,,1,Estructura de Fideicomisos y Comisiones de Confianza
+entidades-estatales,estatales-estructura-patrimonio-efectivo,E-5302,boletin,202306,,1,Estructura del Patrimonio Efectivo
+entidades-estatales,estatales-creditos-depositos-oficinas,B-5215,boletin,201101,,1,Créditos Directos y Depósitos por Oficinas
+entidades-estatales,estatales-cajeros-corresponsales,B-5216,boletin,201303,,1,Cajeros Automáticos y Corresponsales

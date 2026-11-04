@@ -901,3 +901,669 @@ PN00548MM,mensual,credito-liquidez,credito_hipotecario_mn_var12m,1,"Crédito al 
 PN00549MM,mensual,credito-liquidez,credito_empresas_me_var12m,1,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - A Empresas"
 PN00550MM,mensual,credito-liquidez,credito_consumo_me_var12m,1,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Consumo"
 PN00551MM,mensual,credito-liquidez,credito_hipotecario_me_var12m,1,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Hipotecario"
+PN02206FM,mensual,fiscal,spnf_ing_corr_no_trib,1,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos No Tributarios
+PN02207FM,mensual,fiscal,spnf_gnf,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General
+PN02208FM,mensual,fiscal,spnf_gnf_corriente,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Corriente
+PN02209FM,mensual,fiscal,spnf_gnf_capital,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital
+PN02210FM,mensual,fiscal,spnf_gnf_capital_fbk,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital
+PN02211FM,mensual,fiscal,spnf_gnf_capital_fbk_gn,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobierno Nacional
+PN02212FM,mensual,fiscal,spnf_gnf_capital_fbk_gr,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Regionales
+PN02213FM,mensual,fiscal,spnf_gnf_capital_fbk_gl,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Locales
+PN02214FM,mensual,fiscal,spnf_gnf_capital_otros,1,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Otros Gastos de Capital
+PN02215FM,mensual,fiscal,spnf_otros,1,Operaciones del sector público no financiero (millones S/) - Otros
+PN02217FM,mensual,fiscal,spnf_intereses,1,Operaciones del sector público no financiero (millones S/) - Intereses
+PN39524FM,mensual,fiscal,spnf_res_econ_12m_pct_pbi,1,Operaciones del sector público no financiero (millones S/) - Resultado económico (Acumulado 12 meses - Porcentaje del PBI)
+PN38656FM,mensual,fiscal,spnf_res_prim_real,1,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Primario
+PN38657FM,mensual,fiscal,spnf_intereses_real,1,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Intereses
+PN38658FM,mensual,fiscal,spnf_res_econ_real,1,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Económico
+PN03081FQ,trimestral,fiscal,spnf_ing_corr_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General
+PN03082FQ,trimestral,fiscal,spnf_ing_corr_trib_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios
+PN03083FQ,trimestral,fiscal,spnf_ing_corr_no_trib_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General - Ingresos No Tributarios
+PN03084FQ,trimestral,fiscal,spnf_gnf_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General
+PN03085FQ,trimestral,fiscal,spnf_gnf_corriente_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Corriente
+PN03086FQ,trimestral,fiscal,spnf_gnf_capital_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital
+PN03087FQ,trimestral,fiscal,spnf_gnf_capital_fbk_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital - Formación Bruta de Capital
+PN03088FQ,trimestral,fiscal,spnf_gnf_capital_fbk_gn_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital - Formación Bruta de Capital - Gobierno Nacional
+PN03089FQ,trimestral,fiscal,spnf_gnf_capital_fbk_gr_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Regionales
+PN03090FQ,trimestral,fiscal,spnf_gnf_capital_fbk_gl_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Locales
+PN03091FQ,trimestral,fiscal,spnf_gnf_capital_otros_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos No Financieros del Gobierno General - Capital - Otros Gastos de Capital
+PN03092FQ,trimestral,fiscal,spnf_otros_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Otros
+PN03093FQ,trimestral,fiscal,spnf_res_prim_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Resultado Primario
+PN03094FQ,trimestral,fiscal,spnf_intereses_pct_pbi_trim,1,Operaciones del sector público no financiero (porcentaje del PBI) - Intereses
+PM05776FA,anual,fiscal,spnf_res_prim_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Resultado Primario
+PM05778FA,anual,fiscal,spnf_intereses_deuda_externa_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Intereses - Deuda externa
+PM05779FA,anual,fiscal,spnf_intereses_deuda_interna_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Intereses - Deuda interna
+PM05780FA,anual,fiscal,spnf_res_econ_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Resultado Económico
+PM05781FA,anual,fiscal,spnf_financ_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto
+PM05782FA,anual,fiscal,spnf_financ_externo_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo
+PM05783FA,anual,fiscal,spnf_financ_externo_desembolsos_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Desembolsos
+PM05784FA,anual,fiscal,spnf_financ_externo_amortizacion_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Amortización
+PM05785FA,anual,fiscal,spnf_financ_externo_otros_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Otros
+PM05786FA,anual,fiscal,spnf_financ_interno_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Interno
+PM05787FA,anual,fiscal,spnf_financ_privatizacion_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Privatización
+PM10078FA,anual,fiscal,spnf_ahorro_cc_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Ahorro en Cuenta Corriente
+PM10079FA,anual,fiscal,spnf_ingresos_de_capital_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos de Capital
+PM10080FA,anual,fiscal,spnf_gastos_de_capital_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Gastos de Capital
+PM10081FA,anual,fiscal,spnf_inversion_publica_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Inversión Pública
+PM10082FA,anual,fiscal,spnf_otros_gastos_del_capital_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Otros Gastos del Capital
+PM10083FA,anual,fiscal,spnf_intereses_pct_pbi_anual,1,Operaciones del sector público no financiero (porcentaje del PBI) - Intereses
+PN03112FQ,trimestral,fiscal,spnf_fin_res_prim_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Resultado Primario
+PN03113FQ,trimestral,fiscal,spnf_fin_res_prim_gc_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Resultado Primario del Gobierno Central
+PN03120FQ,trimestral,fiscal,spnf_fin_res_prim_gc_ingresos_de_capital_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Resultado Primario del Gobierno Central - Ingresos de Capital
+PN03121FQ,trimestral,fiscal,spnf_fin_res_prim_gc_otras_entidades_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Resultado Primario del Gobierno Central - Otras Entidades
+PN03122FQ,trimestral,fiscal,spnf_fin_intereses_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Intereses
+PN03123FQ,trimestral,fiscal,spnf_fin_intereses_deuda_externa_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Intereses - Deuda Externa
+PN03124FQ,trimestral,fiscal,spnf_fin_intereses_deuda_interna_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Intereses - Deuda Interna
+PN03125FQ,trimestral,fiscal,spnf_fin_res_econ_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Resultado Económico
+PN03126FQ,trimestral,fiscal,spnf_fin_financ_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto
+PN03127FQ,trimestral,fiscal,spnf_fin_financ_externo_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo
+PN03128FQ,trimestral,fiscal,spnf_fin_financ_externo_desembolsos_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Desembolsos
+PN03129FQ,trimestral,fiscal,spnf_fin_financ_externo_amortizacion_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Amortización
+PN03130FQ,trimestral,fiscal,spnf_fin_financ_externo_otros_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Otros
+PN03131FQ,trimestral,fiscal,spnf_fin_financ_interno_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Interno
+PN03132FQ,trimestral,fiscal,spnf_fin_financ_privatizacion_pct_pbi_trim,1,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Privatización
+PN02294FM,mensual,fiscal,ing_gg_trib,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios
+PN02295FM,mensual,fiscal,ing_gg_trib_gn,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional
+PN02296FM,mensual,fiscal,ing_gg_trib_gn_ir,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta
+PN02297FM,mensual,fiscal,ing_gg_trib_gn_ir_pn,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales
+PN02298FM,mensual,fiscal,ing_gg_trib_gn_ir_pj,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas
+PN02299FM,mensual,fiscal,ing_gg_trib_gn_ir_regularizacion,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización
+PN02300FM,mensual,fiscal,ing_gg_trib_gn_importaciones,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a las Importaciones
+PN02301FM,mensual,fiscal,ing_gg_trib_gn_igv,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV
+PN02302FM,mensual,fiscal,ing_gg_trib_gn_igv_interno,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno
+PN02303FM,mensual,fiscal,ing_gg_trib_gn_igv_importaciones,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones
+PN02304FM,mensual,fiscal,ing_gg_trib_gn_isc,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC
+PN02305FM,mensual,fiscal,ing_gg_trib_gn_isc_combustibles,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles
+PN02306FM,mensual,fiscal,ing_gg_trib_gn_isc_otros,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros
+PN02307FM,mensual,fiscal,ing_gg_trib_gn_otros_trib,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios
+PN02308FM,mensual,fiscal,ing_gg_trib_gn_devoluciones,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos
+PN02309FM,mensual,fiscal,ing_gg_trib_gl,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios de los Gobiernos Locales
+PN02310FM,mensual,fiscal,ing_gg_no_trib,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos No Tributarios
+PN02311FM,mensual,fiscal,ing_gg_total_ingresos_corrientes,1,Ingresos corrientes del gobierno general (millones S/) - Total Ingresos Corrientes
+PN37894FM,mensual,fiscal,ing_gg_no_trib_gn,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios del Gobierno Nacional (Mill. S/)
+PN37895FM,mensual,fiscal,ing_gg_contribuciones_sociales,1,Ingresos corrientes del gobierno general (millones S/) - Contribuciones sociales (Mill. S/)
+PN37896FM,mensual,fiscal,ing_gg_rec_propios_transf,1,Ingresos corrientes del gobierno general (millones S/) - Recursos propios y transferencias (Mill. S/)
+PN37897FM,mensual,fiscal,ing_gg_canon_y_regalias,1,Ingresos corrientes del gobierno general (millones S/) - Canon y regalías (Mill. S/)
+PN37898FM,mensual,fiscal,ing_gg_otros,1,Ingresos corrientes del gobierno general (millones S/) - Otros (Mill. S/)
+PN37899FM,mensual,fiscal,ing_gg_no_trib_gr,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Regionales (Mill. S/)
+PN37900FM,mensual,fiscal,ing_gg_no_trib_gl,1,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Locales (Mill. S/)
+PN38595FM,mensual,fiscal,ing_gg_trib_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios
+PN38596FM,mensual,fiscal,ing_gg_trib_gn_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional
+PN38597FM,mensual,fiscal,ing_gg_trib_gn_ir_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta
+PN38598FM,mensual,fiscal,ing_gg_trib_gn_ir_pn_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales
+PN38599FM,mensual,fiscal,ing_gg_trib_gn_ir_pj_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas
+PN38600FM,mensual,fiscal,ing_gg_trib_gn_ir_regularizacion_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización
+PN38601FM,mensual,fiscal,ing_gg_trib_gn_importaciones_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuestos a las Importaciones
+PN38602FM,mensual,fiscal,ing_gg_trib_gn_igv_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV
+PN38603FM,mensual,fiscal,ing_gg_trib_gn_igv_interno_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno
+PN38604FM,mensual,fiscal,ing_gg_trib_gn_igv_importaciones_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones
+PN38605FM,mensual,fiscal,ing_gg_trib_gn_isc_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC
+PN38606FM,mensual,fiscal,ing_gg_trib_gn_isc_combustibles_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles
+PN38607FM,mensual,fiscal,ing_gg_trib_gn_isc_otros_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros
+PN38608FM,mensual,fiscal,ing_gg_trib_gn_otros_trib_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios
+PN38609FM,mensual,fiscal,ing_gg_trib_gn_devoluciones_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos
+PN38610FM,mensual,fiscal,ing_gg_trib_gl_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios de los Gobiernos Locales
+PN38611FM,mensual,fiscal,ing_gg_no_trib_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos No Tributarios
+PN38612FM,mensual,fiscal,ing_gg_no_trib_gn_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios del Gobierno Nacional
+PN38613FM,mensual,fiscal,ing_gg_contribuciones_sociales_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Contribuciones sociales
+PN38614FM,mensual,fiscal,ing_gg_rec_propios_transf_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Recursos propios y transferencias
+PN38615FM,mensual,fiscal,ing_gg_canon_y_regalias_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Canon y regalías
+PN38616FM,mensual,fiscal,ing_gg_otros_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Otros
+PN38617FM,mensual,fiscal,ing_gg_no_trib_gr_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Regionales
+PN38618FM,mensual,fiscal,ing_gg_no_trib_gl_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Locales
+PN38619FM,mensual,fiscal,ing_gg_total_ingresos_corrientes_real,1,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Total Ingresos Corrientes
+PN03251FQ,trimestral,fiscal,ing_gg_trib_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios
+PN03252FQ,trimestral,fiscal,ing_gg_trib_gn_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional
+PN03253FQ,trimestral,fiscal,ing_gg_trib_gn_ir_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IR
+PN03254FQ,trimestral,fiscal,ing_gg_trib_gn_ir_pn_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IR - Personas Naturales
+PN03255FQ,trimestral,fiscal,ing_gg_trib_gn_ir_pj_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IR - Personas Jurídicas
+PN03256FQ,trimestral,fiscal,ing_gg_trib_gn_ir_regularizacion_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IR - Regularización
+PN03257FQ,trimestral,fiscal,ing_gg_trib_gn_importaciones_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - Impuestos a las Importaciones
+PN03258FQ,trimestral,fiscal,ing_gg_trib_gn_igv_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IGV
+PN03259FQ,trimestral,fiscal,ing_gg_trib_gn_igv_interno_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IGV - Interno
+PN03260FQ,trimestral,fiscal,ing_gg_trib_gn_igv_importaciones_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IGV - Importaciones
+PN03261FQ,trimestral,fiscal,ing_gg_trib_gn_isc_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - ISC
+PN03262FQ,trimestral,fiscal,ing_gg_trib_gn_isc_combustibles_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - ISC - Combustibles
+PN03263FQ,trimestral,fiscal,ing_gg_trib_gn_isc_otros_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - ISC - Otros
+PN03264FQ,trimestral,fiscal,ing_gg_trib_gn_otros_trib_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - Otros Ingresos Tributarios
+PN03265FQ,trimestral,fiscal,ing_gg_trib_gn_devoluciones_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - Devoluciones de Impuestos
+PN03266FQ,trimestral,fiscal,ing_gg_trib_gl_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios de los Gobiernos Locales
+PN03267FQ,trimestral,fiscal,ing_gg_no_trib_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios
+PN03268FQ,trimestral,fiscal,ing_gg_total_ingresos_corrientes_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Total Ingresos Corrientes
+PN37916FQ,trimestral,fiscal,ing_gg_no_trib_desglose_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios (% PBI)
+PN37917FQ,trimestral,fiscal,ing_gg_no_trib_contribuciones_sociales_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios (% PBI) - Contribuciones sociales
+PN37918FQ,trimestral,fiscal,ing_gg_no_trib_rec_propios_transf_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios (% PBI) - Recursos propios y transferencias
+PN37919FQ,trimestral,fiscal,ing_gg_no_trib_canon_y_regalias_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios (% PBI) - Canon y regalías
+PN37920FQ,trimestral,fiscal,ing_gg_no_trib_otros_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios (% PBI) - Otros
+PN37921FQ,trimestral,fiscal,ing_gg_no_trib_gr_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios de los Gobiernos Regionales (% PBI)
+PN37922FQ,trimestral,fiscal,ing_gg_no_trib_gl_pct_pbi_trim,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Corrientes del GG - Ingresos no Tributarios de los Gobiernos Locales (% PBI)
+PM05876FA,anual,fiscal,ing_gg_trib_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios
+PM05877FA,anual,fiscal,ing_gg_trib_ir_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Impuestos a los Ingresos
+PM05878FA,anual,fiscal,ing_gg_trib_ir_pn_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Impuestos a los Ingresos - Personas Naturales
+PM05879FA,anual,fiscal,ing_gg_trib_ir_pj_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Impuestos a los Ingresos - Personas Jurídicas
+PM05880FA,anual,fiscal,ing_gg_trib_ir_regularizacion_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Impuestos a los Ingresos - Regularización
+PM05881FA,anual,fiscal,ing_gg_trib_importaciones_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Impuestos a las Importaciones
+PM05882FA,anual,fiscal,ing_gg_trib_igv_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - IGV
+PM05883FA,anual,fiscal,ing_gg_trib_igv_interno_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - IGV - Interno
+PM05884FA,anual,fiscal,ing_gg_trib_igv_importaciones_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - IGV - Importaciones
+PM05885FA,anual,fiscal,ing_gg_trib_isc_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - ISC
+PM05886FA,anual,fiscal,ing_gg_trib_isc_combustibles_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - ISC - Combustibles
+PM05887FA,anual,fiscal,ing_gg_trib_isc_otros_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - ISC - Otros
+PM05888FA,anual,fiscal,ing_gg_trib_otros_trib_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Otros Ingresos Tributarios
+PM05889FA,anual,fiscal,ing_gg_trib_documentos_valorados_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios - Documentos Valorados
+PM05890FA,anual,fiscal,ing_gg_no_trib_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios
+PM05891FA,anual,fiscal,ing_gg_no_trib_contrib_essalud_onp_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Contribuciones a Essalud y ONP
+PM05892FA,anual,fiscal,ing_gg_no_trib_regalias_pct_pbi_anual,1,"Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Regalías petroleras, gasíferas y mineras"
+PM05893FA,anual,fiscal,ing_gg_no_trib_canon_petrolero_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Canon Petrolero
+PM05894FA,anual,fiscal,ing_gg_no_trib_otros_ingresos_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Otros ingresos
+PM05895FA,anual,fiscal,ing_gg_total_pct_pbi_anual,1,Ingresos corrientes del gobierno general (porcentaje del PBI) - Total
+PN02390FM,mensual,fiscal,gnf_gg_corr,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes
+PN02391FM,mensual,fiscal,gnf_gg_corr_remuneraciones,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones
+PN02392FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gn,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobierno Nacional
+PN02393FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gr,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales
+PN02394FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gl,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Locales
+PN02395FM,mensual,fiscal,gnf_gg_corr_bys,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios
+PN02396FM,mensual,fiscal,gnf_gg_corr_bys_gn,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional
+PN02397FM,mensual,fiscal,gnf_gg_corr_bys_gr,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales
+PN02398FM,mensual,fiscal,gnf_gg_corr_bys_gl,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales
+PN02399FM,mensual,fiscal,gnf_gg_corr_transferencias,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias
+PN02400FM,mensual,fiscal,gnf_gg_corr_transferencias_gn,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobierno Nacional
+PN02401FM,mensual,fiscal,gnf_gg_corr_transferencias_gr,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Regionales
+PN02402FM,mensual,fiscal,gnf_gg_corr_transferencias_gl,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Locales
+PN02403FM,mensual,fiscal,gnf_gg_capital,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital
+PN02404FM,mensual,fiscal,gnf_gg_capital_fbk,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital
+PN02405FM,mensual,fiscal,gnf_gg_capital_fbk_gn,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional
+PN02406FM,mensual,fiscal,gnf_gg_capital_fbk_gr,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales
+PN02407FM,mensual,fiscal,gnf_gg_capital_fbk_gl,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales
+PN02408FM,mensual,fiscal,gnf_gg_capital_otros,1,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Otros Gastos de Capital
+PN02409FM,mensual,fiscal,gnf_gg_gnf_total,1,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total
+PN02410FM,mensual,fiscal,gnf_gg_gnf_total_gn,1,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobierno Nacional
+PN02411FM,mensual,fiscal,gnf_gg_gnf_total_gr,1,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Regionales
+PN02412FM,mensual,fiscal,gnf_gg_gnf_total_gl,1,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Locales
+PN09808FM,mensual,fiscal,gnf_gg_corr_bys_mantenimiento,1,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios (Mantenimiento)
+PN38072FM,mensual,fiscal,gnf_gg_gasto_total,1,Gastos no financieros del gobierno general (millones S/) - Gasto Total del Gobierno General
+PN38620FM,mensual,fiscal,gnf_gg_corr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes
+PN38621FM,mensual,fiscal,gnf_gg_corr_remuneraciones_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones
+PN38622FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gn_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobierno Nacional
+PN38623FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales
+PN38624FM,mensual,fiscal,gnf_gg_corr_remuneraciones_gl_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Locales
+PN38625FM,mensual,fiscal,gnf_gg_corr_bys_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios
+PN38626FM,mensual,fiscal,gnf_gg_corr_bys_mantenimiento_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios (Mantenimiento)
+PN38627FM,mensual,fiscal,gnf_gg_corr_bys_gn_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional
+PN38628FM,mensual,fiscal,gnf_gg_corr_bys_gr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales
+PN38629FM,mensual,fiscal,gnf_gg_corr_bys_gl_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales
+PN38630FM,mensual,fiscal,gnf_gg_corr_transferencias_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias
+PN38631FM,mensual,fiscal,gnf_gg_corr_transferencias_gn_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobierno Nacional
+PN38632FM,mensual,fiscal,gnf_gg_corr_transferencias_gr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Regionales
+PN38633FM,mensual,fiscal,gnf_gg_corr_transferencias_gl_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Locales
+PN38634FM,mensual,fiscal,gnf_gg_capital_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital
+PN38635FM,mensual,fiscal,gnf_gg_capital_fbk_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital
+PN38636FM,mensual,fiscal,gnf_gg_capital_fbk_gn_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional
+PN38637FM,mensual,fiscal,gnf_gg_capital_fbk_gr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales
+PN38638FM,mensual,fiscal,gnf_gg_capital_fbk_gl_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales
+PN38639FM,mensual,fiscal,gnf_gg_capital_otros_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Otros Gastos de Capital
+PN38640FM,mensual,fiscal,gnf_gg_gnf_total_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total
+PN38641FM,mensual,fiscal,gnf_gg_gnf_total_gn_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobierno Nacional
+PN38642FM,mensual,fiscal,gnf_gg_gnf_total_gr_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Regionales
+PN38643FM,mensual,fiscal,gnf_gg_gnf_total_gl_real,1,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Locales
+PN03329FQ,trimestral,fiscal,gnf_gg_corr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes
+PN03330FQ,trimestral,fiscal,gnf_gg_corr_remuneraciones_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones
+PN03331FQ,trimestral,fiscal,gnf_gg_corr_remuneraciones_gn_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobierno Nacional
+PN03332FQ,trimestral,fiscal,gnf_gg_corr_remuneraciones_gr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales
+PN03333FQ,trimestral,fiscal,gnf_gg_corr_remuneraciones_gl_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobiernos Locales
+PN03334FQ,trimestral,fiscal,gnf_gg_corr_bys_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios
+PN03335FQ,trimestral,fiscal,gnf_gg_corr_bys_gn_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional
+PN03336FQ,trimestral,fiscal,gnf_gg_corr_bys_gr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Regionales
+PN03337FQ,trimestral,fiscal,gnf_gg_corr_bys_gl_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Locales
+PN03338FQ,trimestral,fiscal,gnf_gg_corr_transferencias_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias
+PN03339FQ,trimestral,fiscal,gnf_gg_corr_transferencias_gn_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Nacional
+PN03340FQ,trimestral,fiscal,gnf_gg_corr_transferencias_gr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Regionales
+PN03341FQ,trimestral,fiscal,gnf_gg_corr_transferencias_gl_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Locales
+PN03342FQ,trimestral,fiscal,gnf_gg_capital_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital
+PN03343FQ,trimestral,fiscal,gnf_gg_capital_fbk_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital
+PN03344FQ,trimestral,fiscal,gnf_gg_capital_fbk_gn_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional
+PN03345FQ,trimestral,fiscal,gnf_gg_capital_fbk_gr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Regionales
+PN03346FQ,trimestral,fiscal,gnf_gg_capital_fbk_gl_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Locales
+PN03347FQ,trimestral,fiscal,gnf_gg_capital_otros_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto de Capital - Otros Gastos de Capital
+PN03348FQ,trimestral,fiscal,gnf_gg_gnf_total_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto No Financiero Total
+PN03349FQ,trimestral,fiscal,gnf_gg_gnf_total_gn_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobierno Nacional
+PN03350FQ,trimestral,fiscal,gnf_gg_gnf_total_gr_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Regionales
+PN03351FQ,trimestral,fiscal,gnf_gg_gnf_total_gl_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Locales
+PN09811FQ,trimestral,fiscal,gnf_gg_corr_bys_mantenimiento_pct_pbi_trim,1,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios (Mantenimiento)
+PM05919FA,anual,fiscal,gasto_gg_corr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes
+PM05920FA,anual,fiscal,gasto_gg_corr_remuneraciones_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones
+PM05921FA,anual,fiscal,gasto_gg_corr_remuneraciones_gn_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobierno Nacional
+PM05922FA,anual,fiscal,gasto_gg_corr_remuneraciones_gr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales
+PM05923FA,anual,fiscal,gasto_gg_corr_remuneraciones_gl_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobiernos Locales
+PM05924FA,anual,fiscal,gasto_gg_corr_bys_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios
+PM05925FA,anual,fiscal,gasto_gg_corr_bys_gn_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional
+PM05926FA,anual,fiscal,gasto_gg_corr_bys_gr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Regionales
+PM05927FA,anual,fiscal,gasto_gg_corr_bys_gl_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Bienes y Servicios - Gobierno Locales
+PM05928FA,anual,fiscal,gasto_gg_corr_transferencias_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias
+PM05929FA,anual,fiscal,gasto_gg_corr_transferencias_gn_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Nacional
+PM05930FA,anual,fiscal,gasto_gg_corr_transferencias_gr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Regionales
+PM05931FA,anual,fiscal,gasto_gg_corr_transferencias_gl_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gastos Corrientes - Transferencias - Gobierno Locales
+PM05932FA,anual,fiscal,gasto_gg_capital_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital
+PM05933FA,anual,fiscal,gasto_gg_capital_fbk_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital
+PM05934FA,anual,fiscal,gasto_gg_capital_fbk_gn_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional
+PM05935FA,anual,fiscal,gasto_gg_capital_fbk_gr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Regionales
+PM05936FA,anual,fiscal,gasto_gg_capital_fbk_gl_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital - Formación Bruta de Capital - Gobierno Locales
+PM05937FA,anual,fiscal,gasto_gg_capital_otros_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto de Capital - Otros Gastos de Capital
+PM05938FA,anual,fiscal,gasto_gg_gnf_total_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total
+PM05939FA,anual,fiscal,gasto_gg_gnf_total_gn_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobierno Nacional
+PM05940FA,anual,fiscal,gasto_gg_gnf_total_gr_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Regionales
+PM05941FA,anual,fiscal,gasto_gg_gnf_total_gl_pct_pbi_anual,1,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Locales
+PN02219FM,mensual,fiscal,gc_res_prim,1,Operaciones del gobierno central (millones S/) - Resultado Primario
+PN02234FM,mensual,fiscal,gc_res_prim_ingresos_de_capital,1,Operaciones del gobierno central (millones S/) - Resultado Primario - Ingresos de Capital
+PN02235FM,mensual,fiscal,gc_intereses,1,Operaciones del gobierno central (millones S/) - Intereses
+PN02236FM,mensual,fiscal,gc_intereses_deuda_interna,1,Operaciones del gobierno central (millones S/) - Intereses - Deuda Interna
+PN02237FM,mensual,fiscal,gc_intereses_deuda_externa,1,Operaciones del gobierno central (millones S/) - Intereses - Deuda Externa
+PN02238FM,mensual,fiscal,gc_res_econ,1,Operaciones del gobierno central (millones S/) - Resultado Económico
+PN02239FM,mensual,fiscal,gc_financ,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto
+PN02240FM,mensual,fiscal,gc_financ_externo,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo
+PN02241FM,mensual,fiscal,gc_financ_externo_desembolsos,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Desembolsos
+PN02242FM,mensual,fiscal,gc_financ_externo_amortizaciones,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Amortizaciones
+PN02243FM,mensual,fiscal,gc_financ_interno,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Interno
+PN02244FM,mensual,fiscal,gc_financ_privatizacion,1,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Privatización
+PN02245FM,mensual,fiscal,gc_gasto_no_financiero_neto_de_transferencias_a_entidades_publicas,1,Operaciones del gobierno central (millones S/) - Gasto No Financiero Neto de Tranferencias a Entidades Públicas
+PN02246FM,mensual,fiscal,gc_fbk_neto_de_pagos_por_crpaos,1,Operaciones del gobierno central (millones S/) - Formación Bruta de Capital Neto de Pagos por CRPAOs
+PN02247FM,mensual,fiscal,gc_corr_totales,1,Operaciones del gobierno central (millones S/) - Gastos Corrientes Totales
+PN02248FM,mensual,fiscal,gc_ahorro_cc,1,Operaciones del gobierno central (millones S/) - Ahorro en Cuenta Corriente
+PN02222FM,mensual,fiscal,gasto_gc_gnf_corr,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes
+PN02223FM,mensual,fiscal,gasto_gc_gnf_corr_remuneraciones,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Remuneraciones
+PN02224FM,mensual,fiscal,gasto_gc_gnf_corr_bys,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Bienes y Servicios
+PN02225FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias
+PN02226FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias_pensiones,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Pensiones
+PN02227FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias_onp_fonahpu,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - ONP - FONAHPU
+PN02228FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias_foncomun,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - FONCOMUN
+PN02229FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias_canon,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Canon
+PN02230FM,mensual,fiscal,gasto_gc_gnf_corr_transferencias_otros,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Otros
+PN02231FM,mensual,fiscal,gasto_gc_gnf_gastos_de_capital,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital
+PN02232FM,mensual,fiscal,gasto_gc_gnf_gastos_de_capital_fbk,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Formación Bruta de Capital
+PN02233FM,mensual,fiscal,gasto_gc_gnf_gastos_de_capital_otros,1,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Otros
+PN03371FQ,trimestral,fiscal,deuda_total_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública
+PN03372FQ,trimestral,fiscal,deuda_externa_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa
+PN03373FQ,trimestral,fiscal,deuda_externa_creditos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos
+PN03374FQ,trimestral,fiscal,deuda_externa_creditos_org_intl_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - Organismos Internacionales
+PN03375FQ,trimestral,fiscal,deuda_externa_creditos_club_de_paris_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - Club de París
+PN03376FQ,trimestral,fiscal,deuda_externa_creditos_proveedores_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - Proveedores
+PN03377FQ,trimestral,fiscal,deuda_externa_creditos_banca_internacional_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - Banca Internacional
+PN03378FQ,trimestral,fiscal,deuda_externa_creditos_america_latina_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - América Latina
+PN03379FQ,trimestral,fiscal,deuda_externa_creditos_otros_bilaterales_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos - Otros Bilaterales
+PN03380FQ,trimestral,fiscal,deuda_externa_bonos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Bonos
+PN03381FQ,trimestral,fiscal,deuda_interna_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna
+PN03382FQ,trimestral,fiscal,deuda_interna_lp_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo
+PN03383FQ,trimestral,fiscal,deuda_interna_lp_creditos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos
+PN03384FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del Banco de la Nación
+PN03385FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_gn_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del Banco de la Nación - Gobierno Nacional
+PN03386FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_gl_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del Banco de la Nación - Gobiernos Locales
+PN03388FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_banca_comercial_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del Banco de la Nación - Créditos Banca Comercial
+PN03389FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_banca_comercial_gn_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del BN - Créditos Banca Comercial - Gobierno Nacional
+PN03390FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_banca_comercial_gr_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del BN - Créditos Banca Comercial - Gobiernos Regionales
+PN03391FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_banca_comercial_gl_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del BN - Créditos Banca Comercial - Gobiernos Locales
+PN03392FQ,trimestral,fiscal,deuda_interna_lp_creditos_del_bn_banca_comercial_empresas_publcas_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos del BN - Créditos Banca Comercial - Empresas Públcas
+PN03393FQ,trimestral,fiscal,deuda_interna_lp_bonos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos
+PN03394FQ,trimestral,fiscal,deuda_interna_lp_btp_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público
+PN03395FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_capitalizacion_bcrp_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de Capitalización BCRP
+PN03396FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_apoyo_sistema_financiero_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de Apoyo Sistema Financiero
+PN03397FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_liquidez_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de Liquidez
+PN03398FQ,trimestral,fiscal,deuda_interna_lp_suscripcion_temporal_de_acciones_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Suscripción Temporal de Acciones
+PN03399FQ,trimestral,fiscal,deuda_interna_lp_canje_temporal_de_cartera_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Canje Temporal de Cartera
+PN03400FQ,trimestral,fiscal,deuda_interna_lp_programas_rfa_y_fope_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Programas RFA y FOPE
+PN03401FQ,trimestral,fiscal,deuda_interna_lp_consolidacion_del_sistema_financiero_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Consolidación del Sistema Financiero
+PN03402FQ,trimestral,fiscal,deuda_interna_lp_bonos_por_canje_de_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos por Canje de Deuda Pública
+PN03403FQ,trimestral,fiscal,deuda_interna_lp_bonos_soberanos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos Soberanos
+PN03404FQ,trimestral,fiscal,deuda_interna_lp_bonos_caja_de_pensiones_militar_policial_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos Caja de Pensiones Militar-Policial
+PN03405FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_reconocimiento_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de Reconocimiento
+PN03406FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_la_municipalidad_de_lima_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de la Municipalidad de Lima
+PN03407FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_empresas_publicas_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Bonos de Empresas Públicas
+PN03408FQ,trimestral,fiscal,deuda_interna_cp_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo
+PN03409FQ,trimestral,fiscal,deuda_interna_cp_creditos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos
+PN03410FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público
+PN03411FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_creditos_del_bn_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Créditos del Banco de la Nación
+PN03412FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_obligaciones_pendientes_de_cobro_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Obligaciones Pendientes de Cobro
+PN03413FQ,trimestral,fiscal,deuda_interna_cp_creditos_gr_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Gobiernos Regionales
+PN03414FQ,trimestral,fiscal,deuda_interna_cp_creditos_gl_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Gobiernos Locales
+PN03415FQ,trimestral,fiscal,deuda_interna_cp_letras_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Letras
+PN03416FQ,trimestral,fiscal,deuda_interna_cp_letras_tesoro_publico_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Letras - Tesoro Público
+PN03417FQ,trimestral,fiscal,deuda_obligaciones_por_asociaciones_publico_privadas_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Obligaciones por Asociaciones Público Privadas
+PN03418FQ,trimestral,fiscal,deuda_fondo_de_estabilizacion_de_precios_de_combustibles_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Fondo de Estabilización de Precios de Combustibles
+PN03419FQ,trimestral,fiscal,deuda_deuda_externa_de_cofide_fondo_mivivienda_y_banco_agrario_mill,1,"Saldo de la deuda del sector público no financiero (millones S/) - Deuda Externa de COFIDE, Fondo Mivivienda y Banco Agrario"
+PN03420FQ,trimestral,fiscal,deuda_deuda_neta_del_sector_publico_no_financiero_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Neta del Sector Público no Financiero
+PN03421FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Tenencia de Bonos Globales y Soberanos
+PN03422FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Tenencia de Bonos Globales y Soberanos - Residentes
+PN03423FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_no_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Tenencia de Bonos Globales y Soberanos - No Residentes
+PN03424FQ,trimestral,fiscal,deuda_bonos_soberanos_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Soberanos
+PN03425FQ,trimestral,fiscal,deuda_bonos_soberanos_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Soberanos - Residentes
+PN03426FQ,trimestral,fiscal,deuda_bonos_soberanos_no_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Soberanos - No Residentes
+PN03427FQ,trimestral,fiscal,deuda_bonos_globales_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Globales
+PN03428FQ,trimestral,fiscal,deuda_bonos_globales_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Globales - Residentes
+PN03429FQ,trimestral,fiscal,deuda_bonos_globales_no_residentes_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Bonos Globales - No Residentes
+PN03431FQ,trimestral,fiscal,deuda_deuda_interna_de_lp_cofide_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Interna de Largo Plazo COFIDE
+PN37923FQ,trimestral,fiscal,deuda_externa_bonos_bonos_globales_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Bonos - Bonos globales
+PN37924FQ,trimestral,fiscal,deuda_externa_bonos_bonos_epnf_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Bonos - Bonos empresas públicas no financieras
+PN37925FQ,trimestral,fiscal,deuda_interna_lp_credito_bn_epnf_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Crédito BN - empresas públicas no financieras
+PN37926FQ,trimestral,fiscal,deuda_interna_cp_banca_comercial_epnf_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos de la Banca Comercial - empresas públicas no financieras
+PN37931FQ,trimestral,fiscal,deuda_interna_lp_creditos_comision_ad_hoc_ley_29625_mill,1,"Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Créditos - Comisión Ad Hoc, Ley 29625"
+PN37933FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_tenedores_de_bonos_de_la_deuda_agraria_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Tenedores de Bonos de la Deuda Agraria
+PN37934FQ,trimestral,fiscal,deuda_interna_cp_creditos_epnf_con_bn_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - empresas públicas no financieras - Con Banco de la Nación
+PN37935FQ,trimestral,fiscal,deuda_interna_cp_creditos_epnf_con_banca_comercial_y_otros_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Corto Plazo - Créditos - empresas públicas no financieras - Con Banca Comercial y otros
+PN38592FQ,trimestral,fiscal,deuda_interna_lp_adquisicion_de_acciones_cofide_mill,1,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Interna - Largo Plazo - Adquisición de acciones - COFIDE
+PN03433FQ,trimestral,fiscal,deuda_externa_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa
+PN03434FQ,trimestral,fiscal,deuda_externa_creditos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos
+PN03435FQ,trimestral,fiscal,deuda_externa_creditos_org_intl_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - Organismos Internacionales
+PN03436FQ,trimestral,fiscal,deuda_externa_creditos_club_de_paris_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - Club de París
+PN03437FQ,trimestral,fiscal,deuda_externa_creditos_proveedores_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - Proveedores
+PN03438FQ,trimestral,fiscal,deuda_externa_creditos_banca_internacional_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - Banca Internacional
+PN03439FQ,trimestral,fiscal,deuda_externa_creditos_america_latina_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - América Latina
+PN03440FQ,trimestral,fiscal,deuda_externa_creditos_otros_bilaterales_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Créditos - Otros Bilaterales
+PN03441FQ,trimestral,fiscal,deuda_externa_bonos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Bonos
+PN03442FQ,trimestral,fiscal,deuda_interna_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna
+PN03443FQ,trimestral,fiscal,deuda_interna_lp_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo
+PN03444FQ,trimestral,fiscal,deuda_interna_lp_creditos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos
+PN03445FQ,trimestral,fiscal,deuda_interna_lp_creditos_creditos_del_bn_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos - Créditos del BN
+PN03446FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_gn_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Gobierno Nacional
+PN03447FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_gl_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Gobiernos Locales
+PN03449FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_banca_comercial_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Créditos de la Banca Comercial
+PN03450FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_banca_comercial_gn_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Créditos de la Banca Comercial - Gobierno Nacional
+PN03451FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_banca_comercial_gr_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Créditos de la Banca Comercial - Gobiernos Regionales
+PN03452FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_banca_comercial_gl_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Créditos de la Banca Comercial - Gobiernos Locales
+PN03453FQ,trimestral,fiscal,deuda_interna_lp_creditos_bn_banca_comercial_empresas_publicas_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos BN - Créditos de la Banca Comercial - Empresas Públicas
+PN03454FQ,trimestral,fiscal,deuda_interna_lp_bonos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos
+PN03455FQ,trimestral,fiscal,deuda_interna_lp_btp_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público
+PN03456FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_capitalizacion_bcrp_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Capitalización BCRP
+PN03457FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero
+PN03458FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_bonos_de_liquidez_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero - Bonos de Liquidez
+PN03459FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_suscripcion_temporal_de_acciones_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero - Suscripción Temporal de Acciones
+PN03460FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_canje_temporal_de_cartera_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero - Canje Temporal de Cartera
+PN03461FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_programas_rfa_y_fope_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero - Programas RFA y FOPE
+PN03462FQ,trimestral,fiscal,deuda_interna_lp_btp_bonos_de_apoyo_sistema_financiero_consolidacion_del_sf_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público - Bonos de Apoyo Sistema Financiero - Consolidación del SF
+PN03463FQ,trimestral,fiscal,deuda_interna_lp_btp_por_canje_de_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público por Canje de Deuda Pública
+PN03464FQ,trimestral,fiscal,deuda_interna_lp_btp_soberanos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público Soberanos
+PN03465FQ,trimestral,fiscal,deuda_interna_lp_btp_caja_de_pensiones_militar_policial_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Público Caja de Pensiones Militar-Policial
+PN03466FQ,trimestral,fiscal,deuda_interna_lp_btp_de_reconocimiento_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos del Tesoro Pública de Reconocimiento
+PN03467FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_la_municipalidad_de_lima_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos de la Municipalidad de Lima
+PN03468FQ,trimestral,fiscal,deuda_interna_lp_bonos_de_empresas_publicas_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Bonos de Empresas Públicas
+PN03469FQ,trimestral,fiscal,deuda_interna_cp_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo
+PN03470FQ,trimestral,fiscal,deuda_interna_cp_creditos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos
+PN03471FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público
+PN03472FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_creditos_del_bn_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Créditos del BN
+PN03473FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_obligaciones_pendientes_de_cobro_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Obligaciones Pendientes de Cobro
+PN03474FQ,trimestral,fiscal,deuda_interna_cp_creditos_gr_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Gobiernos Regionales
+PN03475FQ,trimestral,fiscal,deuda_interna_cp_creditos_gl_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Gobiernos Locales
+PN03476FQ,trimestral,fiscal,deuda_interna_cp_letras_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Letras
+PN03477FQ,trimestral,fiscal,deuda_interna_cp_letras_tesoro_publico_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Letras - Tesoro Público
+PN03478FQ,trimestral,fiscal,deuda_obligaciones_por_asociaciones_publico_privadas_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Obligaciones por Asociaciones Público Privadas
+PN03479FQ,trimestral,fiscal,deuda_fondo_de_estabilizacion_de_precios_de_combustibles_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Fondo de Estabilización de Precios de Combustibles
+PN03480FQ,trimestral,fiscal,deuda_deuda_externa_de_cofide_fondo_mivivienda_y_banco_agrario_pct_pbi,1,"Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Externa de COFIDE, Fondo Mivivienda y Banco Agrario"
+PN03481FQ,trimestral,fiscal,deuda_deuda_neta_del_sector_publico_no_financiero_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Neta del Sector Público no Financiero
+PN03482FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Tenencia de Bonos Globales y Soberanos
+PN03483FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Tenencia de Bonos Globales y Soberanos - Residentes
+PN03484FQ,trimestral,fiscal,deuda_tenencia_de_bonos_globales_y_soberanos_no_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Tenencia de Bonos Globales y Soberanos - No Residentes
+PN03485FQ,trimestral,fiscal,deuda_bonos_soberanos_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Soberanos
+PN03486FQ,trimestral,fiscal,deuda_bonos_soberanos_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Soberanos - Residentes
+PN03487FQ,trimestral,fiscal,deuda_bonos_soberanos_no_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Soberanos - No Residentes
+PN03488FQ,trimestral,fiscal,deuda_bonos_globales_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Globales
+PN03489FQ,trimestral,fiscal,deuda_bonos_globales_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Globales - Residentes
+PN03490FQ,trimestral,fiscal,deuda_bonos_globales_no_residentes_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Bonos Globales - No Residentes
+PN03491FQ,trimestral,fiscal,deuda_deuda_interna_de_lp_cofide_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Interna de Largo Plazo COFIDE
+PN37927FQ,trimestral,fiscal,deuda_externa_bonos_bonos_globales_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Bonos - Bonos globales
+PN37928FQ,trimestral,fiscal,deuda_externa_bonos_bonos_epnf_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Externa - Bonos - Bonos empresas públicas no financieras
+PN37929FQ,trimestral,fiscal,deuda_interna_lp_credito_bn_epnf_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Crédito BN - empresas públicas no financieras
+PN37930FQ,trimestral,fiscal,deuda_interna_lp_banca_comercial_epnf_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos de la Banca Comercial - empresas públicas no financieras
+PN37932FQ,trimestral,fiscal,deuda_interna_lp_creditos_comision_ad_hoc_ley_29625_pct_pbi,1,"Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Créditos - Comisión Ad Hoc, Ley 29625"
+PN37936FQ,trimestral,fiscal,deuda_interna_cp_creditos_tesoro_publico_tenedores_de_bonos_de_la_deuda_agraria_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - Tesoro Público - Tenedores de Bonos de la Deuda Agraria
+PN37937FQ,trimestral,fiscal,deuda_interna_cp_creditos_epnf_con_bn_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - empresas públicas no financieras - Con Banco de la Nación
+PN37938FQ,trimestral,fiscal,deuda_interna_cp_creditos_epnf_con_banca_comercial_y_otros_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Corto Plazo - Créditos - empresas públicas no financieras - Con Banca Comercial y otros
+PN38593FQ,trimestral,fiscal,deuda_interna_lp_adquisicion_de_acciones_cofide_pct_pbi,1,Saldo de la deuda del sector público no financiero (porcentaje del PBI) - Deuda Pública Interna - Largo Plazo - Adquisición de acciones - COFIDE
+PM10188FA,anual,fiscal,deuda_total_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Deuda Pública (% PBI)
+PM10189FA,anual,fiscal,deuda_externa_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Deuda Pública Externa (% PBI)
+PM10190FA,anual,fiscal,deuda_org_intl_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Organismos Internacionales (% PBI)
+PM10191FA,anual,fiscal,deuda_club_de_paris_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Club de París (% PBI)
+PM10192FA,anual,fiscal,deuda_bonos_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos (% PBI)
+PM10193FA,anual,fiscal,deuda_proveedores_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Proveedores (% PBI)
+PM10194FA,anual,fiscal,deuda_banca_internacional_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Banca Internacional (% PBI)
+PM10195FA,anual,fiscal,deuda_america_latina_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - América Latina (% PBI)
+PM10196FA,anual,fiscal,deuda_otros_bilaterales_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Otros Bilaterales (% PBI)
+PM10197FA,anual,fiscal,deuda_interna_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Deuda Pública Interna (% PBI)
+PM10198FA,anual,fiscal,deuda_lp_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Largo Plazo (% PBI)
+PM10199FA,anual,fiscal,deuda_creditos_bancarios_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Créditos Bancarios (% PBI)
+PM10200FA,anual,fiscal,deuda_creditos_del_bn_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Créditos del Banco de la Nación (% PBI)
+PM10201FA,anual,fiscal,deuda_gc_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Gobierno Central (% PBI)
+PM10202FA,anual,fiscal,deuda_gl_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Gobiernos Locales (% PBI)
+PM10203FA,anual,fiscal,deuda_otros_bancos_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Otros Bancos (% PBI)
+PM10204FA,anual,fiscal,deuda_btp_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos del Tesoro Público (% PBI)
+PM10205FA,anual,fiscal,deuda_bonos_de_capitalizacion_bcrp_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos de Capitalización BCRP (% PBI)
+PM10206FA,anual,fiscal,deuda_bonos_de_apoyo_sistema_financiero_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos de Apoyo Sistema Financiero (% PBI)
+PM10207FA,anual,fiscal,deuda_bonos_de_liquidez_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos de Liquidez (% PBI)
+PM10208FA,anual,fiscal,deuda_suscripcion_temporal_de_acciones_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Suscripción Temporal de Acciones (% PBI)
+PM10209FA,anual,fiscal,deuda_canje_temporal_de_cartera_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Canje Temporal de Cartera (% PBI)
+PM10210FA,anual,fiscal,deuda_programas_rfa_y_fope_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Programas RFA y FOPE (% PBI)
+PM10211FA,anual,fiscal,deuda_consolidacion_del_sistema_financiero_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Consolidación del Sistema Financiero (% PBI)
+PM10212FA,anual,fiscal,deuda_bonos_por_canje_de_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos por Canje de Deuda Pública (% PBI)
+PM10213FA,anual,fiscal,deuda_bonos_soberanos_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos Soberanos (% PBI)
+PM10214FA,anual,fiscal,deuda_bonos_caja_de_pensiones_militar_policial_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos Caja de Pensiones Militar-Policial (% PBI)
+PM10215FA,anual,fiscal,deuda_bonos_de_reconocimiento_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos de Reconocimiento (% PBI)
+PM10216FA,anual,fiscal,deuda_bonos_municipalidad_de_lima_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Bonos Municipalidad de Lima (% PBI)
+PM10217FA,anual,fiscal,deuda_cp_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Corto Plazo (% PBI)
+PM10218FA,anual,fiscal,deuda_creditos_bn_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Créditos Banco de la Nación (% PBI)
+PM10219FA,anual,fiscal,deuda_obligaciones_pendientes_de_cobro_pct_pbi_anual,1,Saldo deuda pública (porcentaje del PBI) - Obligaciones Pendientes de Cobro (Flotante) (% PBI)
+PM06045FA,anual,fiscal,deuda_neta_activos_mill_anual,1,Deuda neta del sector público no financiero (millones S/) - Activos
+PM06046FA,anual,fiscal,deuda_neta_pasivos_mill_anual,1,Deuda neta del sector público no financiero (millones S/) - Pasivos
+PM06047FA,anual,fiscal,deuda_neta_deuda_neta_mill_anual,1,Deuda neta del sector público no financiero (millones S/) - Deuda Neta
+PM06048FA,anual,fiscal,deuda_neta_activos_pct_pbi_anual,1,Deuda neta del sector público no financiero (porcentaje del PBI) - Activos
+PM06049FA,anual,fiscal,deuda_neta_pasivos_pct_pbi_anual,1,Deuda neta del sector público no financiero (porcentaje del PBI) - Pasivos
+PM06050FA,anual,fiscal,deuda_neta_deuda_neta_pct_pbi_anual,1,Deuda neta del sector público no financiero (porcentaje del PBI) - Deuda Neta
+RD13774DM,mensual,fiscal,recaud_internos_amazonas,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Amazonas (millones de soles)
+RD13775DM,mensual,fiscal,recaud_internos_ancash,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ancash (millones de soles)
+RD13776DM,mensual,fiscal,recaud_internos_apurimac,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Apurimac (millones de soles)
+RD13777DM,mensual,fiscal,recaud_internos_arequipa,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Arequipa (millones de soles)
+RD13778DM,mensual,fiscal,recaud_internos_ayacucho,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ayacucho (millones de soles)
+RD13779DM,mensual,fiscal,recaud_internos_cajamarca,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cajamarca (millones de soles)
+RD13780DM,mensual,fiscal,recaud_internos_callao,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Callao (millones de soles)
+RD13781DM,mensual,fiscal,recaud_internos_cusco,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cusco (millones de soles)
+RD13782DM,mensual,fiscal,recaud_internos_huancavelica,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huancavelica (millones de soles)
+RD13783DM,mensual,fiscal,recaud_internos_huanuco,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huánuco (millones de soles)
+RD13784DM,mensual,fiscal,recaud_internos_ica,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ica (millones de soles)
+RD13785DM,mensual,fiscal,recaud_internos_junin,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Junín (millones de soles)
+RD13786DM,mensual,fiscal,recaud_internos_la_libertad,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - La Libertad (millones de soles)
+RD13787DM,mensual,fiscal,recaud_internos_lambayeque,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lambayeque (millones de soles)
+RD13788DM,mensual,fiscal,recaud_internos_lima_metropolitana,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima Metropolitana (millones de soles)
+RD13789DM,mensual,fiscal,recaud_internos_lima_provincias,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima provincias (millones de soles)
+RD13790DM,mensual,fiscal,recaud_internos_loreto,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Loreto (millones de soles)
+RD13791DM,mensual,fiscal,recaud_internos_madre_de_dios,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Madre de Dios (millones de soles)
+RD13792DM,mensual,fiscal,recaud_internos_moquegua,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Moquegua (millones de soles)
+RD13793DM,mensual,fiscal,recaud_internos_pasco,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Pasco (millones de soles)
+RD13794DM,mensual,fiscal,recaud_internos_piura,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Piura (millones de soles)
+RD13795DM,mensual,fiscal,recaud_internos_puno,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Puno (millones de soles)
+RD13796DM,mensual,fiscal,recaud_internos_san_martin,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - San Martín (millones de soles)
+RD13797DM,mensual,fiscal,recaud_internos_tacna,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tacna (millones de soles)
+RD13798DM,mensual,fiscal,recaud_internos_tumbes,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tumbes (millones de soles)
+RD13799DM,mensual,fiscal,recaud_internos_ucayali,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ucayali (millones de soles)
+RD13800DM,mensual,fiscal,recaud_internos_total,1,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Total (millones de soles)
+RD13882DM,mensual,fiscal,recaud_igv_amazonas,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Amazonas (millones de soles)
+RD13883DM,mensual,fiscal,recaud_igv_ancash,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ancash (millones de soles)
+RD13884DM,mensual,fiscal,recaud_igv_apurimac,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Apurimac (millones de soles)
+RD13885DM,mensual,fiscal,recaud_igv_arequipa,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Arequipa (millones de soles)
+RD13886DM,mensual,fiscal,recaud_igv_ayacucho,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ayacucho (millones de soles)
+RD13887DM,mensual,fiscal,recaud_igv_cajamarca,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cajamarca (millones de soles)
+RD13888DM,mensual,fiscal,recaud_igv_callao,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Callao (millones de soles)
+RD13889DM,mensual,fiscal,recaud_igv_cusco,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cusco (millones de soles)
+RD13890DM,mensual,fiscal,recaud_igv_huancavelica,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huancavelica (millones de soles)
+RD13891DM,mensual,fiscal,recaud_igv_huanuco,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huánuco (millones de soles)
+RD13892DM,mensual,fiscal,recaud_igv_ica,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ica (millones de soles)
+RD13893DM,mensual,fiscal,recaud_igv_junin,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Junín (millones de soles)
+RD13894DM,mensual,fiscal,recaud_igv_la_libertad,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - La Libertad (millones de soles)
+RD13895DM,mensual,fiscal,recaud_igv_lambayeque,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lambayeque (millones de soles)
+RD13896DM,mensual,fiscal,recaud_igv_lima_metropolitana,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima Metropolitana (millones de soles)
+RD13897DM,mensual,fiscal,recaud_igv_lima_provincias,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima provincias (millones de soles)
+RD13898DM,mensual,fiscal,recaud_igv_loreto,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Loreto (millones de soles)
+RD13899DM,mensual,fiscal,recaud_igv_madre_de_dios,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Madre de Dios (millones de soles)
+RD13900DM,mensual,fiscal,recaud_igv_moquegua,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Moquegua (millones de soles)
+RD13901DM,mensual,fiscal,recaud_igv_pasco,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Pasco (millones de soles)
+RD13902DM,mensual,fiscal,recaud_igv_piura,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Piura (millones de soles)
+RD13903DM,mensual,fiscal,recaud_igv_puno,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Puno (millones de soles)
+RD13904DM,mensual,fiscal,recaud_igv_san_martin,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - San Martín (millones de soles)
+RD13905DM,mensual,fiscal,recaud_igv_tacna,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tacna (millones de soles)
+RD13906DM,mensual,fiscal,recaud_igv_tumbes,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tumbes (millones de soles)
+RD13907DM,mensual,fiscal,recaud_igv_ucayali,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ucayali (millones de soles)
+RD13908DM,mensual,fiscal,recaud_igv_total,1,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Total (millones de soles)
+RD13828DM,mensual,fiscal,recaud_ir_amazonas,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Amazonas (millones de soles)
+RD13829DM,mensual,fiscal,recaud_ir_ancash,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ancash (millones de soles)
+RD13830DM,mensual,fiscal,recaud_ir_apurimac,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Apurimac (millones de soles)
+RD13831DM,mensual,fiscal,recaud_ir_arequipa,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Arequipa (millones de soles)
+RD13832DM,mensual,fiscal,recaud_ir_ayacucho,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ayacucho (millones de soles)
+RD13833DM,mensual,fiscal,recaud_ir_cajamarca,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cajamarca (millones de soles)
+RD13834DM,mensual,fiscal,recaud_ir_callao,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Callao (millones de soles)
+RD13835DM,mensual,fiscal,recaud_ir_cusco,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cusco (millones de soles)
+RD13836DM,mensual,fiscal,recaud_ir_huancavelica,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huancavelica (millones de soles)
+RD13837DM,mensual,fiscal,recaud_ir_huanuco,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huánuco (millones de soles)
+RD13838DM,mensual,fiscal,recaud_ir_ica,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ica (millones de soles)
+RD13839DM,mensual,fiscal,recaud_ir_junin,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Junín (millones de soles)
+RD13840DM,mensual,fiscal,recaud_ir_la_libertad,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - La Libertad (millones de soles)
+RD13841DM,mensual,fiscal,recaud_ir_lambayeque,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lambayeque (millones de soles)
+RD13842DM,mensual,fiscal,recaud_ir_lima_metropolitana,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima Metropolitana (millones de soles)
+RD13843DM,mensual,fiscal,recaud_ir_lima_provincias,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima provincias (millones de soles)
+RD13844DM,mensual,fiscal,recaud_ir_loreto,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Loreto (millones de soles)
+RD13845DM,mensual,fiscal,recaud_ir_madre_de_dios,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Madre de Dios (millones de soles)
+RD13846DM,mensual,fiscal,recaud_ir_moquegua,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Moquegua (millones de soles)
+RD13847DM,mensual,fiscal,recaud_ir_pasco,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Pasco (millones de soles)
+RD13848DM,mensual,fiscal,recaud_ir_piura,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Piura (millones de soles)
+RD13849DM,mensual,fiscal,recaud_ir_puno,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Puno (millones de soles)
+RD13850DM,mensual,fiscal,recaud_ir_san_martin,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - San Martín (millones de soles)
+RD13851DM,mensual,fiscal,recaud_ir_tacna,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tacna (millones de soles)
+RD13852DM,mensual,fiscal,recaud_ir_tumbes,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tumbes (millones de soles)
+RD13853DM,mensual,fiscal,recaud_ir_ucayali,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ucayali (millones de soles)
+RD13854DM,mensual,fiscal,recaud_ir_total,1,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Total (millones de soles)
+RD14092DM,mensual,fiscal,inv_gn_amazonas,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Amazonas
+RD14093DM,mensual,fiscal,inv_gn_ancash,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ancash
+RD14094DM,mensual,fiscal,inv_gn_apurimac,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Apurímac
+RD14095DM,mensual,fiscal,inv_gn_arequipa,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Arequipa
+RD14096DM,mensual,fiscal,inv_gn_ayacucho,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ayacucho
+RD14097DM,mensual,fiscal,inv_gn_cajamarca,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cajamarca
+RD14098DM,mensual,fiscal,inv_gn_callao,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Callao
+RD14099DM,mensual,fiscal,inv_gn_cusco,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cusco
+RD14100DM,mensual,fiscal,inv_gn_huancavelica,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huancavelica
+RD14101DM,mensual,fiscal,inv_gn_huanuco,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huánuco
+RD14102DM,mensual,fiscal,inv_gn_ica,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ica
+RD14103DM,mensual,fiscal,inv_gn_junin,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Junín
+RD14104DM,mensual,fiscal,inv_gn_la_libertad,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - La Libertad
+RD14105DM,mensual,fiscal,inv_gn_lambayeque,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lambayeque
+RD14106DM,mensual,fiscal,inv_gn_lima,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lima
+RD14107DM,mensual,fiscal,inv_gn_loreto,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Loreto
+RD14108DM,mensual,fiscal,inv_gn_madre_de_dios,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Madre de Dios
+RD14109DM,mensual,fiscal,inv_gn_moquegua,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Moquegua
+RD14110DM,mensual,fiscal,inv_gn_pasco,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Pasco
+RD14111DM,mensual,fiscal,inv_gn_piura,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Piura
+RD14112DM,mensual,fiscal,inv_gn_puno,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Puno
+RD14113DM,mensual,fiscal,inv_gn_san_martin,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - San Martín
+RD14114DM,mensual,fiscal,inv_gn_tacna,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tacna
+RD14115DM,mensual,fiscal,inv_gn_tumbes,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tumbes
+RD14116DM,mensual,fiscal,inv_gn_ucayali,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ucayali
+RD14117DM,mensual,fiscal,inv_gn_total,1,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Total
+RD14144DM,mensual,fiscal,inv_gr_amazonas,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Amazonas
+RD14145DM,mensual,fiscal,inv_gr_ancash,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Ancash
+RD14146DM,mensual,fiscal,inv_gr_apurimac,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Apurímac
+RD14147DM,mensual,fiscal,inv_gr_arequipa,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Arequipa
+RD14148DM,mensual,fiscal,inv_gr_ayacucho,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Ayacucho
+RD14149DM,mensual,fiscal,inv_gr_cajamarca,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Cajamarca
+RD14150DM,mensual,fiscal,inv_gr_cusco,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Cusco
+RD14151DM,mensual,fiscal,inv_gr_huancavelica,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Huancavelica
+RD14152DM,mensual,fiscal,inv_gr_huanuco,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Huánuco
+RD14153DM,mensual,fiscal,inv_gr_ica,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Ica
+RD14154DM,mensual,fiscal,inv_gr_junin,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Junín
+RD14155DM,mensual,fiscal,inv_gr_la_libertad,1,Inversión bruta fija de los gobiernos regionales (millones S/) - La Libertad
+RD14156DM,mensual,fiscal,inv_gr_lambayeque,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Lambayeque
+RD14157DM,mensual,fiscal,inv_gr_loreto,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Loreto
+RD14158DM,mensual,fiscal,inv_gr_madre_de_dios,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Madre de Dios
+RD14159DM,mensual,fiscal,inv_gr_moquegua,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Moquegua
+RD14160DM,mensual,fiscal,inv_gr_pasco,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Pasco
+RD14161DM,mensual,fiscal,inv_gr_piura,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Piura
+RD14162DM,mensual,fiscal,inv_gr_puno,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Puno
+RD14163DM,mensual,fiscal,inv_gr_san_martin,1,Inversión bruta fija de los gobiernos regionales (millones S/) - San Martín
+RD14164DM,mensual,fiscal,inv_gr_tacna,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Tacna
+RD14165DM,mensual,fiscal,inv_gr_tumbes,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Tumbes
+RD14166DM,mensual,fiscal,inv_gr_ucayali,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Ucayali
+RD14167DM,mensual,fiscal,inv_gr_lima,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Lima
+RD14168DM,mensual,fiscal,inv_gr_callao,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Callao
+RD14169DM,mensual,fiscal,inv_gr_municipalidad_metropolitana_de_lima,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Municipalidad Metropolitana de Lima
+RD14170DM,mensual,fiscal,inv_gr_total,1,Inversión bruta fija de los gobiernos regionales (millones S/) - Total
+RD14118DM,mensual,fiscal,inv_gl_amazonas,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Amazonas
+RD14119DM,mensual,fiscal,inv_gl_ancash,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ancash
+RD14120DM,mensual,fiscal,inv_gl_apurimac,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Apurímac
+RD14121DM,mensual,fiscal,inv_gl_arequipa,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Arequipa
+RD14122DM,mensual,fiscal,inv_gl_ayacucho,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ayacucho
+RD14123DM,mensual,fiscal,inv_gl_cajamarca,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cajamarca
+RD14124DM,mensual,fiscal,inv_gl_callao,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Callao
+RD14125DM,mensual,fiscal,inv_gl_cusco,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cusco
+RD14126DM,mensual,fiscal,inv_gl_huancavelica,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huancavelica
+RD14127DM,mensual,fiscal,inv_gl_huanuco,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huánuco
+RD14128DM,mensual,fiscal,inv_gl_ica,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ica
+RD14129DM,mensual,fiscal,inv_gl_junin,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Junín
+RD14130DM,mensual,fiscal,inv_gl_la_libertad,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - La Libertad
+RD14131DM,mensual,fiscal,inv_gl_lambayeque,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lambayeque
+RD14132DM,mensual,fiscal,inv_gl_lima,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lima
+RD14133DM,mensual,fiscal,inv_gl_loreto,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Loreto
+RD14134DM,mensual,fiscal,inv_gl_madre_de_dios,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Madre de Dios
+RD14135DM,mensual,fiscal,inv_gl_moquegua,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Moquegua
+RD14136DM,mensual,fiscal,inv_gl_pasco,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Pasco
+RD14137DM,mensual,fiscal,inv_gl_piura,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Piura
+RD14138DM,mensual,fiscal,inv_gl_puno,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Puno
+RD14139DM,mensual,fiscal,inv_gl_san_martin,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - San Martín
+RD14140DM,mensual,fiscal,inv_gl_tacna,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tacna
+RD14141DM,mensual,fiscal,inv_gl_tumbes,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tumbes
+RD14142DM,mensual,fiscal,inv_gl_ucayali,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ucayali
+RD14143DM,mensual,fiscal,inv_gl_total,1,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Total
+RD14038DM,mensual,fiscal,gnf_gr_amazonas,1,Gastos no financiero de gobiernos regionales - Amazonas (millones de soles)
+RD14039DM,mensual,fiscal,gnf_gr_ancash,1,Gastos no financiero de gobiernos regionales - Ancash (millones de soles)
+RD14040DM,mensual,fiscal,gnf_gr_apurimac,1,Gastos no financiero de gobiernos regionales - Apurímac (millones de soles)
+RD14041DM,mensual,fiscal,gnf_gr_arequipa,1,Gastos no financiero de gobiernos regionales - Arequipa (millones de soles)
+RD14042DM,mensual,fiscal,gnf_gr_ayacucho,1,Gastos no financiero de gobiernos regionales - Ayacucho (millones de soles)
+RD14043DM,mensual,fiscal,gnf_gr_cajamarca,1,Gastos no financiero de gobiernos regionales - Cajamarca (millones de soles)
+RD14044DM,mensual,fiscal,gnf_gr_cusco,1,Gastos no financiero de gobiernos regionales - Cusco (millones de soles)
+RD14045DM,mensual,fiscal,gnf_gr_huancavelica,1,Gastos no financiero de gobiernos regionales - Huancavelica (millones de soles)
+RD14046DM,mensual,fiscal,gnf_gr_huanuco,1,Gastos no financiero de gobiernos regionales - Huánuco (millones de soles)
+RD14047DM,mensual,fiscal,gnf_gr_ica,1,Gastos no financiero de gobiernos regionales - Ica (millones de soles)
+RD14048DM,mensual,fiscal,gnf_gr_junin,1,Gastos no financiero de gobiernos regionales - Junín (millones de soles)
+RD14049DM,mensual,fiscal,gnf_gr_la_libertad,1,Gastos no financiero de gobiernos regionales - La Libertad (millones de soles)
+RD14050DM,mensual,fiscal,gnf_gr_lambayeque,1,Gastos no financiero de gobiernos regionales - Lambayeque (millones de soles)
+RD14051DM,mensual,fiscal,gnf_gr_loreto,1,Gastos no financiero de gobiernos regionales - Loreto (millones de soles)
+RD14052DM,mensual,fiscal,gnf_gr_madre_de_dios,1,Gastos no financiero de gobiernos regionales - Madre de Dios (millones de soles)
+RD14053DM,mensual,fiscal,gnf_gr_moquegua,1,Gastos no financiero de gobiernos regionales - Moquegua (millones de soles)
+RD14054DM,mensual,fiscal,gnf_gr_pasco,1,Gastos no financiero de gobiernos regionales - Pasco (millones de soles)
+RD14055DM,mensual,fiscal,gnf_gr_piura,1,Gastos no financiero de gobiernos regionales - Piura (millones de soles)
+RD14056DM,mensual,fiscal,gnf_gr_puno,1,Gastos no financiero de gobiernos regionales - Puno (millones de soles)
+RD14057DM,mensual,fiscal,gnf_gr_san_martin,1,Gastos no financiero de gobiernos regionales - San Martín (millones de soles)
+RD14058DM,mensual,fiscal,gnf_gr_tacna,1,Gastos no financiero de gobiernos regionales - Tacna (millones de soles)
+RD14059DM,mensual,fiscal,gnf_gr_tumbes,1,Gastos no financiero de gobiernos regionales - Tumbes (millones de soles)
+RD14060DM,mensual,fiscal,gnf_gr_ucayali,1,Gastos no financiero de gobiernos regionales - Ucayali (millones de soles)
+RD14061DM,mensual,fiscal,gnf_gr_lima,1,Gastos no financiero de gobiernos regionales - Lima (millones de soles)
+RD14062DM,mensual,fiscal,gnf_gr_callao,1,Gastos no financiero de gobiernos regionales - Callao (millones de soles)
+RD14063DM,mensual,fiscal,gnf_gr_municipalidad_metropolitana_de_lima,1,Gastos no financiero de gobiernos regionales - Municip. Metrop. de Lima (millones de soles)
+RD14064DM,mensual,fiscal,gnf_gr_total,1,Gastos no financiero de gobiernos regionales - Total (millones de soles)
+RD13986DM,mensual,fiscal,gnf_gl_amazonas,1,Gastos no financieros de gobiernos locales por departamentos - Amazonas (millones de soles)
+RD13987DM,mensual,fiscal,gnf_gl_ancash,1,Gastos no financieros de gobiernos locales por departamentos - Ancash (millones de soles)
+RD13988DM,mensual,fiscal,gnf_gl_apurimac,1,Gastos no financieros de gobiernos locales por departamentos - Apurímac (millones de soles)
+RD13989DM,mensual,fiscal,gnf_gl_arequipa,1,Gastos no financieros de gobiernos locales por departamentos - Arequipa (millones de soles)
+RD13990DM,mensual,fiscal,gnf_gl_ayacucho,1,Gastos no financieros de gobiernos locales por departamentos - Ayacucho (millones de soles)
+RD13991DM,mensual,fiscal,gnf_gl_cajamarca,1,Gastos no financieros de gobiernos locales por departamentos - Cajamarca (millones de soles)
+RD13992DM,mensual,fiscal,gnf_gl_callao,1,Gastos no financieros de gobiernos locales por departamentos - Callao (millones de soles)
+RD13993DM,mensual,fiscal,gnf_gl_cusco,1,Gastos no financieros de gobiernos locales por departamentos - Cusco (millones de soles)
+RD13994DM,mensual,fiscal,gnf_gl_huancavelica,1,Gastos no financieros de gobiernos locales por departamentos - Huancavelica (millones de soles)
+RD13995DM,mensual,fiscal,gnf_gl_huanuco,1,Gastos no financieros de gobiernos locales por departamentos - Huánuco (millones de soles)
+RD13996DM,mensual,fiscal,gnf_gl_ica,1,Gastos no financieros de gobiernos locales por departamentos - Ica (millones de soles)
+RD13997DM,mensual,fiscal,gnf_gl_junin,1,Gastos no financieros de gobiernos locales por departamentos - Junín (millones de soles)
+RD13998DM,mensual,fiscal,gnf_gl_la_libertad,1,Gastos no financieros de gobiernos locales por departamentos - La Libertad (millones de soles)
+RD13999DM,mensual,fiscal,gnf_gl_lambayeque,1,Gastos no financieros de gobiernos locales por departamentos - Lambayeque (millones de soles)
+RD14000DM,mensual,fiscal,gnf_gl_lima,1,Gastos no financieros de gobiernos locales por departamentos - Lima (millones de soles)
+RD14001DM,mensual,fiscal,gnf_gl_loreto,1,Gastos no financieros de gobiernos locales por departamentos - Loreto (millones de soles)
+RD14002DM,mensual,fiscal,gnf_gl_madre_de_dios,1,Gastos no financieros de gobiernos locales por departamentos - Madre de Dios (millones de soles)
+RD14003DM,mensual,fiscal,gnf_gl_moquegua,1,Gastos no financieros de gobiernos locales por departamentos - Moquegua (millones de soles)
+RD14004DM,mensual,fiscal,gnf_gl_pasco,1,Gastos no financieros de gobiernos locales por departamentos - Pasco (millones de soles)
+RD14005DM,mensual,fiscal,gnf_gl_piura,1,Gastos no financieros de gobiernos locales por departamentos - Piura (millones de soles)
+RD14006DM,mensual,fiscal,gnf_gl_puno,1,Gastos no financieros de gobiernos locales por departamentos - Puno (millones de soles)
+RD14007DM,mensual,fiscal,gnf_gl_san_martin,1,Gastos no financieros de gobiernos locales por departamentos - San Martín (millones de soles)
+RD14008DM,mensual,fiscal,gnf_gl_tacna,1,Gastos no financieros de gobiernos locales por departamentos - Tacna (millones de soles)
+RD14009DM,mensual,fiscal,gnf_gl_tumbes,1,Gastos no financieros de gobiernos locales por departamentos - Tumbes (millones de soles)
+RD14010DM,mensual,fiscal,gnf_gl_ucayali,1,Gastos no financieros de gobiernos locales por departamentos - Ucayali (millones de soles)
+RD14011DM,mensual,fiscal,gnf_gl_total,1,Gastos no financieros de gobiernos locales por departamentos - Total (millones de soles)

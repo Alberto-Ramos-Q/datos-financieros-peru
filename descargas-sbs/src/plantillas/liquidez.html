@@ -497,7 +497,7 @@ footer p { margin: 4px 0; max-width: 90ch; }
       <section id="fsd">
         <h2>Depositantes, escala de montos y el Fondo de Seguro de Depósitos</h2>
         <h3>Número de depositantes y depósito promedio</h3>
-        <p>Cada entidad informa cuántas personas naturales y jurídicas tienen depósitos en ella (cuadro «Número de personas por tipo de depósito», que sale del Anexo N.° 13). El tablero usa la columna de depósitos totales, donde una persona con ahorro y CTS en la misma entidad cuenta una vez: por eso es menor que la suma de las columnas de cada tipo de depósito. Pero el total del subsistema es la suma de las entidades: quien tiene cuentas en dos bancos cuenta dos veces. Por eso el número del sistema no es el número de personas con depósitos en el Perú. El depósito promedio (depósitos totales ÷ depositantes) es un cálculo propio y lo elevan los grandes depositantes.</p>
+        <p>Cada entidad informa cuántas personas naturales y jurídicas tienen depósitos en ella (cuadro «Número de personas por tipo de depósito», que sale del Anexo N.° 13). El tablero usa la columna de depósitos totales, donde una persona con ahorro y CTS en la misma entidad cuenta una vez: por eso es menor que la suma de las columnas de cada tipo de depósito. Pero el total del subsistema es la suma de las entidades: quien tiene cuentas en dos bancos cuenta dos veces. Por eso el número del sistema no es el número de personas con depósitos en el Perú. El depósito promedio (depósitos totales ÷ depositantes) es un cálculo propio y lo elevan los grandes depositantes. En enero de 2021, el archivo de este cuadro de las cajas rurales trae otro cuadro (los montos de los depósitos por tipo y persona, en miles de soles): ese mes las cajas rurales, y con ellas el sistema, quedan sin depositantes ni depósito promedio.</p>
         <h3>El Fondo de Seguro de Depósitos (FSD)</h3>
         <p>Si la SBS declara la disolución y liquidación de una entidad (en lenguaje común, si quiebra), el FSD paga a cada depositante cubierto sus depósitos hasta un monto máximo. Son miembros «todas las empresas del sistema financiero autorizadas a captar depósitos del público» (Ley N.° 26702, art. 145): al cierre de 2025, 41 entidades entre bancos, financieras, cajas municipales (con la Caja Municipal de Crédito Popular) y cajas rurales. El FSD respalda únicamente (art. 152):</p>
         <ul>
@@ -528,6 +528,7 @@ footer p { margin: 4px 0; max-width: 90ch; }
           <li><b>CTS desde diciembre de 2024:</b> desde ese mes los pasivos de corto plazo incluyen los depósitos CTS de libre disponibilidad. Con los mismos activos líquidos, un denominador mayor da un ratio menor, así que la serie tiene un quiebre en ese mes: compare con cuidado antes y después.</li>
           <li>Cuando una entidad cambia de subsistema (por ejemplo, una financiera que se convierte en banco), aparece en cada subsistema solo en los meses en que perteneció a él. Los traspasos hacen saltar los totales de los subsistemas.</li>
           <li>Las cifras son las que publica la SBS en cada cuadro mensual. La SBS a veces corrige meses ya publicados; este tablero usa la última versión descargada.</li>
+          <li><b>Cifras repetidas de otro mes:</b> en sus últimos meses antes de salir del sistema, la SBS publicó para algunas entidades las cifras de un mes anterior, con una nota al pie («La información de … corresponde al …»): CMAC Pisco de enero a abril de 2014 (repite diciembre de 2013), CRAC Señor de Luren en mayo de 2015, CRAC Chavín (luego Raíz) en marzo y abril de 2016, Financiera TFC en noviembre de 2019 y CMAC Sullana en junio de 2024. Esos meses la entidad queda sin dato: las tablas y el resumen muestran su último dato válido, con su mes, y el gráfico deja un hueco con el motivo. Los totales de los subsistemas y del sistema sí las incluyen, como los de la SBS. En noviembre de 2014 el ranking de créditos repite las cifras de octubre de CMAC Sullana (sin nota; su balance sí es de noviembre): la entidad, las cajas municipales y el sistema quedan sin créditos / depósitos ese mes.</li>
         </ul>
       </section>
 
@@ -613,6 +614,13 @@ const MIN_BASE = 1000;   // miles: con pasivos (o depósitos) menores a 1 milló
 const LCR0 = idxOf(D.lcrFrom), NSFR0 = idxOf(D.nsfrFrom);
 // Último mes con todo el resumen del sistema (los subsistemas publican a distinto ritmo): mes por defecto.
 const ALL_LAST = D.allHasta && idxOf(D.allHasta) >= 0 ? idxOf(D.allHasta) : N - 1;
+// Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): D.rep = [[mes, ámbito, mes repetido, alcance, motivo]].
+// Ese mes el ámbito queda sin dato (alcance «fila»: todos sus cuadros; «ranking»: solo los créditos; «ranking-agregado»:
+// el crédito del subsistema y del sistema). Tablas y KPI muestran el último dato válido con su mes; los gráficos, el motivo.
+const REP = new Map((D.rep || []).map(r => [r[1] + '|' + r[0], r]));
+const repAt = (sc, i) => sc == null || i == null || i < 0 || i >= N ? null : REP.get(sc + '|' + MONTHS[i]) || null;
+const repText = r => 'en ' + mShort(r[0]) + ' la SBS ' + (r[3] === 'fila' ? 'repitió las cifras de ' + mShort(r[2]) + ' en sus cuadros'
+  : r[3] === 'ranking' ? 'repitió en el ranking los créditos de ' + mShort(r[2]) : 'no publicó un crédito comparable') + ' (' + r[4] + ')';
 
 // ---------- Estado ----------
 const state = {ind: 'lmn', mi: ALL_LAST, range: '5a', scope: 'sistema', sub: 'banca-multiple', ent: null, scx: 'cd', fview: 'src', dview: 'n'};
@@ -673,6 +681,7 @@ function lastQ(sc, i, k = 'rcl', back = 6) {
 function fillIdx(sc, i, has, back = 3) {
   if (i == null || i < 0) return null;
   if (has(sc, i)) return i;
+  if (repAt(sc, i)) { for (let j = i - 1; j >= Math.max(0, i - back); j--) if (has(sc, j)) return j; return null; }
   const ref = isEnt(sc) ? SC[sc].s : sc;
   if (ref !== sc && has(ref, i)) return null;
   for (let j = i + 1; j < N; j++) if (has(ref, j)) return null;
@@ -911,9 +920,10 @@ function lineChart(box, cfg) {
     },
     unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
     rows(i) {
-      const main = series.filter(s => !s.noTip && !s.isMin).map(s => ({v: s.get(i), label: s.label, color: s.color}))
-        .filter(r => !cfg.skipEmpty || r.v != null)
-        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      const main = series.filter(s => !s.noTip && !s.isMin).map(s => { const v = s.get(i); return {v, label: s.label, color: s.color, rep: v == null ? repAt(s.sc ?? s.k, i) : null}; })
+        .filter(r => !cfg.skipEmpty || r.v != null || r.rep)
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity))
+        .map(r => r.rep ? {value: 'sin dato', label: r.label + ': ' + repText(r.rep), color: r.color} : {value: fmt(r.v), label: r.label, color: r.color});
       if (!main.length) return [{value: '—', label: cfg.naTip || 'Sin dato en este mes'}];
       const mins = series.filter(s => s.isMin && s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
       return main.concat(mins);
@@ -984,7 +994,7 @@ function areaChart(box, cfg) {
   timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
     const xi = x(i);
     cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
-    if (!has(i)) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: cfg.naTip || 'Sin dato'}]); return; }
+    if (!has(i)) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: (cfg.naTipAt && cfg.naTipAt(i)) || cfg.naTip || 'Sin dato'}]); return; }
     const T = tot(i);
     const rows = layers.slice().reverse().filter(l => l.get(i) != null && l.get(i) !== 0)
       .map(l => ({value: pct(share(l, i), 1), label: l.label + ' · ' + money(l.get(i)), color: l.color, sq: true}));
@@ -1097,15 +1107,17 @@ function renderKpis() {
   }
   const idx = [];
   for (let k = Math.max(0, i - 35); k <= i; k++) idx.push(k);
-  const series = [{label: main.name, color: scopeColor(sc), w: 2, sparse: main.q, get: k => ind(sc, k, main.k)}];
+  const series = [{label: main.name, color: scopeColor(sc), w: 2, sparse: main.q, sc, get: k => ind(sc, k, main.k)}];
   if (hasMin(main.k)) series.push(minSeries(main.k));
   lineChart(spark, {idx, H: 140, compact: true, u: 'pct', fmt: v => pct(v), aria: main.name + ', últimos tres años',
     empty: naMsg(sc, main.k, j) || undefined, series});
   const note = document.getElementById('kpi-note');
   const msg = (sc === EC ? naMsg(sc, 'lmn') + ' Se financian sobre todo con adeudos, y también con patrimonio y valores (ver «Con qué se financian»).'
     : sc === 'sistema' ? 'El sistema son los cinco subsistemas de este tablero; en liquidez, RFNE y depósitos, los cuatro que captan depósitos (sin las empresas de créditos).' : '');
-  const lag = lagNote(sc, i);
-  const full = [msg, lag].filter(Boolean).join(' ');
+  const lag = lagNote(sc, i), rp = repAt(sc, i);
+  const repMsg = rp ? 'Sin dato propio de ' + mLabel(MONTHS[i]) + (rp[3] !== 'fila' ? ' en créditos / depósitos' : '') + ': ' + repText(rp) +
+    '. Se muestra el último dato válido, con su mes.' : '';
+  const full = [msg, lag, repMsg].filter(Boolean).join(' ');
   note.hidden = !full; note.textContent = full;
 }
 // Nota de rezago: qué indicadores del resumen se leen en un mes anterior porque algún subsistema todavía
@@ -1126,7 +1138,7 @@ function lagNote(sc, i) {
   const groups = new Map(), miss = new Map();
   for (const k of keys) {
     const j = atIdx(sc, i, k);
-    if (j == null || j >= i) continue;
+    if (j == null || j >= i || repAt(sc, i)) continue;
     if (!groups.has(j)) groups.set(j, []);
     groups.get(j).push(IND_BY[k].l.charAt(0).toLowerCase() + IND_BY[k].l.slice(1));
     for (const f of LAG_FIELDS[k]) {
@@ -1286,8 +1298,11 @@ function renderDpt() {
   for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
   lineChart(document.getElementById('ch-dpt'), {idx: visIdx(), H: 300, endLabels: true, series, marker: state.mi, u: V.u, fmt: V.fmt, aria: V.name + ' por subsistema'});
   const i = atIdx('sistema', state.mi, 'nd') ?? state.mi, n = get('sistema', 'nd', i), p = get('sistema', 'nd', i - 12);
+  // Subsistema-mes con el cuadro equivocado (errores_origen.DEPOSITOR_SOURCE_ERRORS): D.ndErr = [[mes, subsistema, motivo]].
+  const ndErr = D.ndErr || [];
   document.getElementById('dpt-note').textContent = (n ? 'En ' + mLabel(MONTHS[i]) + ' las entidades reportan ' + people(n) + ' de depositantes' + (p ? ' (' + spct(100 * (n / p - 1)) + ' en 12 meses)' : '') + '. ' : '') +
-    'Las empresas de créditos no captan depósitos.';
+    'Las empresas de créditos no captan depósitos.' +
+    (ndErr.length ? ' Sin dato en ' + ndErr.map(r => mLabel(r[0]) + ' (' + SUB_BY[r[1]].l.toLowerCase() + ', y por eso el sistema)').join(', ') + ': ' + ndErr.map(r => r[2]).join('; ') + '.' : '');
 }
 
 // ---------- Escala de montos ----------
@@ -1331,8 +1346,10 @@ function renderEsc() {
     co.append(' de los depósitos.');
   } else co.textContent = '';
   document.getElementById('esc-note').textContent = 'La SBS publica la escala de montos solo por subsistema, no por entidad. Cada depositante se cuenta en cada entidad donde tiene depósitos. ' +
-    (sc === 'sistema' ? 'En el sistema se suman los cuatro subsistemas que captan depósitos; los tramos se definen con el monto máximo de cobertura que usa el cuadro de cada subsistema.' : '');
+    (sc === 'sistema' ? 'En el sistema se suman los cuatro subsistemas que captan depósitos; los tramos se definen con el monto máximo de cobertura que usa el cuadro de cada subsistema.' : '') + scaleErrNote();
 }
+// Escala con el perímetro de otro mes (errores_origen.DEPOSIT_SCALE_ERRORS): D.scaleErr = [[mes, subsistema, motivo]].
+const scaleErrNote = () => (D.scaleErr || []).length ? ' Sin escala en ' + D.scaleErr.map(r => mLabel(r[0]) + ' (' + SUB_BY[r[1]].l.toLowerCase() + ', y por eso el sistema)').join(', ') + ': ' + D.scaleErr.map(r => r[2]).join('; ') + '.' : '';
 
 // ---------- Cobertura del FSD ----------
 function fsdSeries() {
@@ -1349,7 +1366,7 @@ function renderFsd() {
   lineChart(document.getElementById('ch-fsd'), {idx: visIdx(), H: 300, endLabels: true, series, marker: state.mi, u: 'pct', fmt: v => pct(v), aria: 'Depósitos dentro de la cobertura del FSD por subsistema'});
   const i = atIdx('sistema', state.mi, 'cub') ?? state.mi, c = get('banca-multiple', 'fsd', i), v = ind('sistema', i, 'cub');
   document.getElementById('fsd-note').textContent = (v != null ? 'Según esta estimación, en ' + mLabel(MONTHS[i]) + ' alrededor del ' + pct(v, 0) + ' de los depósitos del sistema estaba dentro de la cobertura' + (c ? ' (cobertura usada en el cuadro de la banca: ' + soles(c) + ')' : '') + '. ' : '') +
-    'En las cajas y las financieras, una parte mayor de los depósitos suele estar dentro de la cobertura que en la banca: sus depósitos se reparten más en saldos pequeños (ver la escala de montos).';
+    'En las cajas y las financieras, una parte mayor de los depósitos suele estar dentro de la cobertura que en la banca: sus depósitos se reparten más en saldos pequeños (ver la escala de montos).' + scaleErrNote();
 }
 
 // ---------- Ranking de entidades (mancuerna: hace 12 meses → mes elegido) ----------
@@ -1371,8 +1388,10 @@ function rankRows() {
   const sub = state.sub, i = state.mi, k0 = effInd(sub);
   const out = [];
   let small = 0;
+  const rep = [];
   for (const k of D.entities) {
     if (SC[k].s !== sub) continue;
+    if (repAt(k, i) && ind(k, i, k0) == null) { rep.push(k); continue; }
     const e = entRow(k, i);
     if (!(e.fund > 0)) continue;
     e.v = e[k0];
@@ -1386,7 +1405,14 @@ function rankRows() {
   }
   // Primero las de menor liquidez; en créditos / depósitos, dolarización y adeudos, las de mayor valor.
   out.sort((a, b) => IND_BY[k0].good === 'up' ? a.v - b.v : b.v - a.v);
-  return {rows: out, small};
+  return {rows: out, small, rep};
+}
+// Nota de las entidades que no aparecen porque la SBS repitió sus cifras de otro mes: motivo y último dato válido.
+function repNote(ks, i, k) {
+  return ks.map(e => {
+    const r = repAt(e, i), j = atIdx(e, i, k), v = j == null ? null : ind(e, j, k);
+    return ' ' + SC[e].n + ' no aparece: ' + repText(r) + '.' + (v != null ? ' Su último dato válido es ' + pct(v) + ', de ' + mLabel(MONTHS[j]) + '.' : '');
+  }).join('');
 }
 function renderRank() {
   const sub = state.sub, I = IND_BY[effInd(sub)], i = state.mi, S = SUB_BY[sub];
@@ -1408,14 +1434,15 @@ function renderRank() {
   legendItem(lg, 'dot hollow', null, '12 meses antes');
   if (ref != null) { legendItem(lg, 'dot', 'var(--bad)', 'Bajo el mínimo'); legendItem(lg, 'vref min', null, 'Mínimo regulatorio'); }
   legendItem(lg, 'vref', null, 'Total de ' + S.l.toLowerCase());
-  const {rows, small} = rankRows();
+  const {rows, small, rep} = rankRows();
   const cl = CLAMP[I.k], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
   const cut = rows.some(r => r.v !== clamp(r.v) || (r.p != null && r.p !== clamp(r.p)));
   note.textContent = (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de 1 millón en la base del ratio (pasivos de corto plazo o depósitos) y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
     (sub === EC ? 'A la derecha, el pasivo más patrimonio de la entidad.' : 'A la derecha, los depósitos totales de la entidad.') +
     (cut ? ' La escala se corta en ' + cl[1] + '%; el número muestra el valor completo.' : '') +
     (I.k !== state.ind ? ' Las empresas de créditos no captan depósitos: se muestra el peso de los adeudos en su pasivo.' : '') +
-    (I.k === 'lme' ? ' Un ratio en dólares muy alto suele indicar que la entidad casi no tiene pasivos en dólares.' : '');
+    (I.k === 'lme' ? ' Un ratio en dólares muy alto suele indicar que la entidad casi no tiene pasivos en dólares.' : '') +
+    repNote(rep, i, I.k);
   if (!rows.length) { emptyMsg(box, 'No hay entidades con datos para este mes.'); return; }
   const W = box.clientWidth, narrow = W < 600;
   const labW = narrow ? 112 : 200, valW = narrow ? 64 : 76, totW = narrow ? 0 : 118, rowH = 28, top = 24;
@@ -1504,8 +1531,10 @@ function renderScatter() {
   if (ref != null) { legendItem(lg, 'dot', 'var(--bad)', 'Bajo el mínimo'); legendItem(lg, 'ln mindash', null, 'Mínimo regulatorio'); }
   legendItem(lg, 'vref', null, 'Total del subsistema');
   legendItem(lg, 'dot hollow', null, 'Fuera de escala');
-  const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, i)).filter(e => e[Yk] != null && e[X.id] != null && e.dep > 0);
-  document.getElementById('sc-note').textContent = 'Solo entidades con al menos 1 millón en la base de cada ratio. La escala vertical se corta en ' + yClip + '% y la horizontal en ' + X.clip[1] + '%; pase el cursor sobre un círculo hueco para ver su valor.';
+  const scGap = k => repAt(k, i) && (ind(k, i, Yk) == null || ind(k, i, X.id) == null);
+  const scRep = D.entities.filter(k => SC[k].s === sub && scGap(k));
+  const pts = D.entities.filter(k => SC[k].s === sub && !scGap(k)).map(k => entRow(k, i)).filter(e => e[Yk] != null && e[X.id] != null && e.dep > 0);
+  document.getElementById('sc-note').textContent = 'Solo entidades con al menos 1 millón en la base de cada ratio. La escala vertical se corta en ' + yClip + '% y la horizontal en ' + X.clip[1] + '%; pase el cursor sobre un círculo hueco para ver su valor.' + repNote(scRep, i, Yk);
   if (pts.length < 2) { emptyMsg(box, 'No hay suficientes entidades con datos para este mes.'); return; }
   const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
   const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
@@ -1625,9 +1654,9 @@ function renderEnt() {
     htmlEl('div', {cls: 'val', text: dep || it.lab === 'Adeudos / pasivo' ? it.val : '—'}, d);
     htmlEl('div', {cls: 'sub', text: dep || it.lab === 'Adeudos / pasivo' ? (it.sub || ' ') : 'no capta depósitos'}, d);
   }
-  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, sparse: I.q, get: j => ind(k, j, I.k)}];
-  series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, sparse: I.q, get: j => ind(sub, j, I.k)});
-  if (!I.q) series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2, dash: '5 4', get: j => ind('sistema', j, I.k)});
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, sparse: I.q, sc: k, get: j => ind(k, j, I.k)}];
+  series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, sparse: I.q, sc: sub, get: j => ind(sub, j, I.k)});
+  if (!I.q) series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2, dash: '5 4', sc: 'sistema', get: j => ind('sistema', j, I.k)});
   if (hasMin(I.k)) series.push(minSeries(I.k));
   const lg = document.getElementById('ent-legend');
   lg.replaceChildren();
@@ -1640,10 +1669,12 @@ function renderEnt() {
   const V = FV_BY.src;
   fonLegend('ent-fon-legend', V);
   areaChart(document.getElementById('ch-ent-fon'), {idx: visIdx(), H: 260, marker: i, totalName: V.total,
-    layers: V.layers.map(L => ({...L, get: j => L.get(k, j)})), aria: 'Fuentes de fondeo de ' + E.n});
+    layers: V.layers.map(L => ({...L, get: j => L.get(k, j)})), aria: 'Fuentes de fondeo de ' + E.n,
+    naTipAt: j => { const r = repAt(k, j); return r ? 'Sin dato: ' + repText(r) : null; }});
   const note = document.getElementById('ent-note');
   const msg = (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. ' : '') +
-    (e.lme == null && get(k, 'pcE', i) != null && dep ? 'Sus pasivos de corto plazo en dólares son menores a 1 millón: el ratio en ME no se muestra. ' : '');
+    (e.lme == null && get(k, 'pcE', i) != null && dep ? 'Sus pasivos de corto plazo en dólares son menores a 1 millón: el ratio en ME no se muestra. ' : '') +
+    (repAt(k, i) ? 'Sin dato propio de ' + mLabel(MONTHS[i]) + (repAt(k, i)[3] !== 'fila' ? ' en créditos / depósitos' : '') + ': ' + repText(repAt(k, i)) + '. Las cifras de arriba son el último dato válido, con su mes; en los gráficos ese mes queda como un hueco. ' : '');
   note.hidden = !msg; note.textContent = msg;
 }
 
@@ -1653,7 +1684,7 @@ const TABLES = {
   evo() {
     const k = state.ind, series = evoSeries(), idx = visIdx().slice().reverse();
     const head = ['Mes'].concat(series.map(s => s.label)).concat(hasMin(k) ? ['Mínimo'] : []);
-    return [head, idx.map(i => [IND_BY[k].q ? qLabel(i) : mLabel(MONTHS[i])].concat(series.map(s => pct(s.get(i)))).concat(hasMin(k) ? [pct(refOf(k, i), 0)] : []))
+    return [head, idx.map(i => [IND_BY[k].q ? qLabel(i) : mLabel(MONTHS[i])].concat(series.map(s => repCell(s.k, i, s.get, v => pct(v)))).concat(hasMin(k) ? [pct(refOf(k, i), 0)] : []))
       .filter(r => r.slice(1, 1 + series.length).some(c => c !== '—'))];
   },
   fon() {
@@ -1689,10 +1720,25 @@ const TABLES = {
     if (!k) return [['Mes'], []];
     const sub = SC[k].s, idx = visIdx().slice().reverse();
     return [['Mes', 'Liquidez MN', 'Liquidez ME', 'RCL', 'RFNE', 'Créditos / depósitos', 'Dolarización', 'Adeudos / pasivo', 'Depósitos totales', 'Depositantes', 'Liquidez MN de ' + SUB_BY[sub].s],
-      idx.map(i => fundOf(k, i) == null ? null : [mLabel(MONTHS[i]), pct(ind(k, i, 'lmn')), pct(ind(k, i, 'lme')), pct(ind(k, i, 'rcl')), pct(ind(k, i, 'rfne')),
-        pct(ind(k, i, 'cd')), pct(ind(k, i, 'dol')), pct(ind(k, i, 'ade')), money(depOf(k, i)), people(get(k, 'nd', i)), pct(ind(sub, i, 'lmn'))]).filter(Boolean)];
+      idx.map(i => {
+        if (fundOf(k, i) == null && !repAt(k, i)) return null;
+        const c = (g, f) => repCell(k, i, g, f);
+        return [mLabel(MONTHS[i]), c(j => ind(k, j, 'lmn'), pct), c(j => ind(k, j, 'lme'), pct), c(j => ind(k, j, 'rcl'), pct), c(j => ind(k, j, 'rfne'), pct),
+          c(j => ind(k, j, 'cd'), pct), c(j => ind(k, j, 'dol'), pct), c(j => ind(k, j, 'ade'), pct), c(j => depOf(k, j), money), c(j => get(k, 'nd', j), people), pct(ind(sub, i, 'lmn'))];
+      }).filter(Boolean)];
   },
 };
+// Celda del ámbito sc en el mes i; si la SBS repitió ese mes las cifras de otro (D.rep), el último dato válido
+// (hasta 3 meses antes) con su mes y el motivo en el title (regla «sin huecos»).
+function repCell(sc, i, g, fmt) {
+  const v = g(i), r = v == null ? repAt(sc, i) : null;
+  if (!r) return fmt(v);
+  for (let j = i - 1; j >= Math.max(0, i - 3); j--) {
+    const w = g(j);
+    if (w != null) return {v: fmt(w) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(r) + '.'};
+  }
+  return {v: '—', title: 'Sin dato: ' + repText(r) + '.'};
+}
 // Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
 // muestra el último valor publicado de la columna, con su mes (nunca un hueco).
 const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));

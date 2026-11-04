@@ -14,6 +14,17 @@ soles. El monto por departamento es `creditos_directos_calculado` (% × TOTAL / 
 - Mibanco 2023-10 sale con «-» en toda la fila (ni % ni TOTAL) y el total de banca no lo incluye.
   Se imputa: créditos directos del ranking de ese mes (`panel_entidad_mes.parquet`) repartidos con
   el promedio de su estructura por departamento de 2023-09 y 2023-11. Va marcado en los datos (`imp`).
+- Cifras repetidas de otro mes (2026-11-03, `errores_origen.RANKING_REPEATS`): en 9 entidad-mes la SBS repite en
+  este cuadro la distribución del mes anterior (CMAC Pisco 2014-01 → 04, CRAC Señor de Luren 2015-05, CRAC Chavín /
+  Raíz 2016-03 y 04, Financiera TFC 2019-11, CMAC Sullana 2024-06; las nueve con la nota «La información de ...
+  corresponde al ...»). La serie de la ENTIDAD (`ent`: T y D) queda sin dato ese mes (`source_repeat_mask(d,
+  "creditos-departamento")`); los agregados por subsistema y sistema, y el control contra la fila TOTAL, siguen con
+  las cifras publicadas (la SBS las suma en su total). La página recibe la lista en `rep` ([mes, «subsistema/entidad»,
+  mes repetido, «fila», motivo, acción]): la ficha, el mapa y las tablas de la entidad muestran el último dato válido
+  con su mes y el motivo; la entidad no entra en «Quién presta» ese mes (con nota); y el IHH y el número de
+  entidades del subsistema y del sistema quedan sin dato ese mes si la entidad pesa (acción «blank_month», mismo
+  criterio que el tablero de concentración), con el último dato válido en las fichas y tablas; con Pisco
+  («drop_entity», 0,4 % de las CMAC) se calculan sin ella.
 - Crecimiento anual: nominal (el cuadro no separa monedas, así que no se puede aislar el tipo de
   cambio).
 - Por habitante y sobre el VAB (no es el PBI: el INEI no reparte impuestos ni derechos de importación
@@ -50,6 +61,9 @@ import numpy as np
 import pandas as pd
 
 from visual_mora import SUBSYSTEMS, artifact_version, month_key, month_range, read_table
+from errores_origen import repeat_footnote, source_repeat_mask, source_repeats
+
+TEMA = "creditos-departamento"
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
@@ -287,6 +301,21 @@ def load_amounts() -> tuple[pd.DataFrame, pd.DataFrame, list[dict]]:
     return ent, pub, imputed
 
 
+def repeat_list(ent: pd.DataFrame, masked: pd.Series) -> list[list]:
+    """Para la página: [mes, «subsistema/entidad», mes repetido, «fila», motivo, acción] de cada entidad-mes enmascarada.
+    La acción («blank_month» o «drop_entity», de `RANKING_REPEATS`) dice si el IHH del subsistema y del sistema queda
+    sin dato ese mes (la entidad pesa) o se calcula sin ella (Pisco, 0,4 % de las CMAC)."""
+    present = set(map(tuple, ent.loc[masked, ["periodo", "subsistema", "id_entidad"]].drop_duplicates().values.tolist()))
+    out = []
+    for k, r in sorted(source_repeats(TEMA).items()):
+        if k not in present:
+            continue
+        note = repeat_footnote(r)
+        out.append([month_key(k[0]), f"{k[1]}/{k[2]}", month_key(r["same_as"]), "fila",
+                    "nota al pie del cuadro: " + note if note else "sin nota al pie", r["action"]])
+    return out
+
+
 def check_totals(ent: pd.DataFrame, pub: pd.Series, imputed: list[dict]) -> None:
     """Suma de entidades (con exterior) vs. fila TOTAL publicada por subsistema y mes."""
     s = ent.groupby(["periodo", "subsistema"])["valor"].sum()
@@ -337,7 +366,13 @@ def build_data(force_inputs: bool, force_geo: bool) -> dict:
         er = piv.loc[EXTERIOR] if EXTERIOR in piv.index else pd.Series(0.0, index=months)
         ext[scope] = [int(round(float(v))) if pd.notna(v) else 0 for v in er]
 
-    # Entidades: {n, s, a, T (total con exterior), D: {dep: [a, ...]}}; solo departamentos con saldo.
+    # Entidades: {n, s, a, T (total con exterior), D: {dep: [a, ...]}}; solo departamentos con saldo. Sin las
+    # entidad-mes en que la SBS repite la distribución de otro mes (los agregados de arriba sí las incluyen).
+    masked = source_repeat_mask(ent, TEMA)
+    print(f"  Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): {int(masked.sum())} filas de entidad sin dato "
+          f"en {ent[masked].groupby(['periodo', 'id_entidad']).ngroups} entidad-mes; agregados sin cambio")
+    rep = repeat_list(ent, masked)
+    ent = ent[~masked]
     names = pd.read_csv(ENTIDADES, dtype=str).set_index("id_entidad")["nombre_actual"]
     panel = read_table(PANEL, columns=["periodo", "subsistema", "id_entidad", "nombre_entidad"])
     last_name = panel.sort_values("periodo").groupby(["subsistema", "id_entidad"])["nombre_entidad"].last()
@@ -396,6 +431,8 @@ def build_data(force_inputs: bool, force_geo: bool) -> dict:
         "entities": entities,
         "extInfo": ext_info,
         "imp": imputed,
+        # Entidad-mes con las cifras de otro mes (errores_origen.RANKING_REPEATS): sin dato en la serie de la entidad.
+        "rep": rep,
         "pop": {"y0": years[0], "v": pop},
         "vab": {"y0": vab_years[0], "v": vab, "estado": {str(k): v for k, v in vab_state.items()}},
         "geo": {"w": geo["w"], "h": geo["h"], "paths": geo["paths"], "focus": geo["focus"]},

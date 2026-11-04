@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pobreza monetaria por departamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Paleta: azul #001E6B y gris #B2B4B5. Tema claro por defecto; el oscuro solo si la persona lo elige.
+   Grupos: rampa ordinal del azul (grupo 1, mayor pobreza) al gris (último grupo). Mapa de calor: secuencial
+   de un solo tono (m1–m6). Perú / urbana / rural: categórica en orden fijo (s1, s2, s3). */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f;
+  --sys: #868a93; --band: rgba(201,211,237,.6); --atyp: rgba(17,26,48,.05);
+  --down: #001e6b; --up: #5a2a85;
+  --r1: #b2b4b5; --r2: #98a1b5; --r3: #7e8dae; --r4: #6578a4; --r5: #4c6198; --r6: #334c8b; --r7: #19367b; --r8: #001e6b;
+  /* Grupos: --q{k}-{g} = grupo g de k, muestreado a distancias iguales (OKLab) a lo largo de r1–r8 */
+  --q2-1: #001e6b; --q2-2: #b2b4b5;
+  --q3-1: #001e6b; --q3-2: #556a9d; --q3-3: #b2b4b5;
+  --q4-1: #001e6b; --q4-2: #39518e; --q4-3: #7283a9; --q4-4: #b2b4b5;
+  --q5-1: #001e6b; --q5-2: #2a4586; --q5-3: #556a9d; --q5-4: #818faf; --q5-5: #b2b4b5;
+  --q6-1: #001e6b; --q6-2: #223d80; --q6-3: #445b94; --q6-4: #6679a4; --q6-5: #8b97b2; --q6-6: #b2b4b5;
+  --q7-1: #001e6b; --q7-2: #1c387d; --q7-3: #39518e; --q7-4: #556a9d; --q7-5: #7283a9; --q7-6: #919cb3; --q7-7: #b2b4b5;
+  --m1: #e8ecf4; --m2: #c9d3ed; --m3: #8da2dd; --m4: #6b85c8; --m5: #22418a; --m6: #001e6b;
+  --mt1: #111a30; --mt2: #111a30; --mt3: #111a30; --mt4: #ffffff; --mt5: #ffffff; --mt6: #ffffff;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1;
+  --sys: #8a8f9c; --band: rgba(41,54,98,.75); --atyp: rgba(230,233,240,.06);
+  --down: #b9c8ee; --up: #d2b4f0;
+  --r1: #4a5573; --r2: #4e6399; --r3: #5c76b7; --r4: #738ecf; --r5: #8ea5dd; --r6: #a9bbe8; --r7: #c3d0f0; --r8: #dce3f5;
+  --q2-1: #dce3f5; --q2-2: #4a5573;
+  --q3-1: #dce3f5; --q3-2: #7e97d5; --q3-3: #4a5573;
+  --q4-1: #dce3f5; --q4-2: #9cb0e3; --q4-3: #647ebf; --q4-4: #4a5573;
+  --q5-1: #dce3f5; --q5-2: #acbde9; --q5-3: #7e97d5; --q5-4: #5972b1; --q5-5: #4a5573;
+  --q6-1: #dce3f5; --q6-2: #b5c5ec; --q6-3: #90a6de; --q6-4: #6d88c9; --q6-5: #546ba6; --q6-6: #4a5573;
+  --q7-1: #dce3f5; --q7-2: #bbcaee; --q7-3: #9cb0e3; --q7-4: #7e97d5; --q7-5: #647ebf; --q7-6: #51679f; --q7-7: #4a5573;
+  --m1: #1b2448; --m2: #293662; --m3: #475e99; --m4: #6279b3; --m5: #b1bfe0; --m6: #dce3f5;
+  --mt1: #e6e9f0; --mt2: #e6e9f0; --mt3: #e6e9f0; --mt4: #0b1022; --mt5: #0b1022; --mt6: #0b1022;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 800px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+.kpis { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 28px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .poor { cursor: help; }
+.tile .poor strong { color: var(--ink); font-weight: 600; }
+.tile .poor:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.tile .flag { display: inline-block; font-size: 11.5px; color: var(--ink2); border: 1px solid var(--border); border-radius: 6px; padding: 0 6px; margin-top: 6px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.bandsw { width: 16px; height: 10px; border-radius: 2px; display: inline-block; background: var(--band); box-shadow: inset 0 0 0 1px var(--border); }
+.hollow { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 2px solid var(--ink2); flex: none; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; overflow: visible; }
+.scroll-x { overflow-x: auto; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; max-width: 92ch; }
+.panel-title { margin: 14px 0 2px; font-size: 13px; color: var(--ink2); font-weight: 600; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 0 0 16px; }
+.filters .lab { font-size: 13px; color: var(--ink2); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.stepper { display: inline-flex; align-items: center; gap: 4px; }
+.stepper .btn { padding: 4px 8px; }
+
+.table-wrap { max-height: 420px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.rowlbl { font-size: 12px; fill: var(--ink2); }
+.rowlbl.sel { fill: var(--ink); font-weight: 600; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.row-hit { fill: transparent; outline: none; cursor: pointer; }
+g.rowg > :not(.row-hit) { pointer-events: none; }
+.row-hit:hover, .row-hit:focus-visible { fill: var(--wash); }
+.cell { cursor: pointer; outline: none; }
+.cell:focus-visible { stroke: var(--ink); stroke-width: 2; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 170px; max-width: 340px; }
+#tip .t { color: var(--ink); font-weight: 600; margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 48px; }
+#tip .l { color: var(--ink2); }
+#tip .x { color: var(--muted); font-size: 12px; margin-top: 4px; border-top: 1px solid var(--grid); padding-top: 4px; }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 100ch; }
+
+.scale { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0 4px; font-size: 12px; color: var(--ink2); align-items: flex-end; }
+.scale > span { display: inline-flex; flex-direction: column; gap: 3px; width: 72px; }
+.scale i { display: block; height: 12px; border-radius: 3px; }
+.scale .refmark { width: auto; margin-left: 12px; flex-direction: row; align-items: center; gap: 6px; }
+
+.callout { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 12px; }
+.callout .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.callout p { margin: 6px 0 0; color: var(--ink2); max-width: 88ch; }
+.callout b { color: var(--ink); }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; overflow-x: auto; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0; white-space: nowrap;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Mapa y grupos */
+.map-grid { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: 12px 28px; margin-top: 12px; align-items: start; }
+.map svg path.dep { stroke: var(--surface); stroke-width: 1.2; cursor: pointer; outline: none; }
+.map svg path.dep:hover, .map svg path.dep:focus-visible, .map svg circle.mk:hover, .map svg circle.mk:focus-visible { stroke: var(--ink); stroke-width: 3; }
+.map svg .sel { stroke: var(--ink) !important; stroke-width: 4 !important; }
+.map svg circle.mk { stroke: var(--ink2); stroke-width: 2.5; cursor: pointer; outline: none; }
+.map svg .mklbl { font-size: 30px; fill: var(--ink2); }
+.map svg .lead { stroke: var(--ink2); stroke-width: 1.5; }
+.groups { display: grid; gap: 10px; }
+.grp { border-top: 1px solid var(--grid); padding-top: 8px; }
+.grp .gh { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.grp .gh b { font-weight: 600; }
+.grp .gh .iv { margin-left: auto; color: var(--ink2); font-variant-numeric: tabular-nums; font-size: 13px; white-space: nowrap; }
+.grp .gm { font-size: 13px; color: var(--ink2); margin: 2px 0 0 20px; }
+.grp .gm button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+.grp .gm button.sel { color: var(--ink); font-weight: 600; }
+.grp .gn { font-size: 12px; color: var(--muted); margin: 4px 0 0 20px; }
+.gsrc { font-size: 12.5px; color: var(--muted); margin: 0 0 4px; }
+.gsrc a { color: var(--accent); }
+
+.dtiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+.dtiles .tile .val { font-size: 24px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 24px; }
+
+/* Cómo se mide */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 18px 0 6px; }
+.edu p, .edu li { max-width: 78ch; }
+.edu p { margin: 0 0 10px; }
+.edu .src { font-size: 12.5px; color: var(--muted); }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.edu ul { padding-left: 20px; margin: 6px 0 10px; }
+.edu li { margin: 4px 0; }
+.edu table { font-size: 13px; max-width: 640px; }
+.edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 4px; }
+.howto { padding-left: 20px; }
+.howlink { color: var(--accent); font-size: 14px; text-underline-offset: 2px; }
+.howto li { margin: 8px 0; }
+.gloss { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 6px 16px; margin: 8px 0 0; font-size: 14px; }
+.gloss dt { font-weight: 600; }
+.gloss dd { margin: 0; color: var(--ink2); max-width: 70ch; }
+.method summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.method summary::-webkit-details-marker { display: none; }
+.method summary .sumtitle { font-family: var(--font-head); font-size: 20px; font-weight: 600; }
+.method summary .sumtitle::after { content: '  ▸ ver'; font-family: var(--font-ui); font-size: 13px; font-weight: 500; color: var(--accent); }
+.method[open] summary .sumtitle::after { content: '  ▾ ocultar'; }
+.method summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.notice { border-left: 3px solid var(--accent); padding: 6px 12px; background: var(--wash); margin: 14px 0 10px; }
+.edu code { font-size: 12.5px; background: var(--wash); padding: 0 4px; border-radius: 4px; }
+.dlbar { margin-left: auto; display: inline-flex; gap: 8px; align-items: center; }
+.dlmsg { font-size: 12.5px; color: var(--muted); }
+.hitos { margin: 10px 0 0; padding-left: 0; list-style: none; display: grid; gap: 8px; }
+.hitos li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 13px; color: var(--ink2); }
+.hitos .hn { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; }
+.hitos q { quotes: '«' '»'; }
+.hitos .src { display: block; color: var(--muted); font-size: 12px; }
+.smgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px 18px; margin-top: 8px; }
+.smgrid .panel-title { margin-top: 6px; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .map-grid, .two { grid-template-columns: 1fr; }
+  .dtiles { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 20px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .edu section { padding: 16px 14px 12px; }
+  .gloss { grid-template-columns: 1fr; gap: 2px; }
+  .gloss dd { margin-bottom: 8px; }
+  .scale > span { width: auto; flex: 1 1 0; min-width: 0; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Pobreza monetaria · microdatos de la ENAHO del INEI</p>
+      <h1 id="h1">Pobreza monetaria por departamento, Perú</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede"></p>
+  <p class="lede" style="margin-top:-12px"><a href="#mide" id="howto-link" class="howlink">¿Primera vez aquí? Empiece por «Cómo leer este tablero» →</a></p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-panorama" aria-controls="tab-panorama" aria-selected="true">Panorama</button>
+    <button type="button" role="tab" id="tabbtn-ficha" aria-controls="tab-ficha" aria-selected="false" tabindex="-1">Departamento</button>
+    <button type="button" role="tab" id="tabbtn-mide" aria-controls="tab-mide" aria-selected="false" tabindex="-1">Cómo se mide</button>
+  </div>
+
+  <div class="filters" id="filters">
+    <span class="lab">Indicador</span>
+    <span class="seg" id="ind-seg" role="group" aria-label="Indicador"></span>
+    <span class="stepper" style="margin-left:8px">
+      <span class="lab" style="margin-right:4px">Año</span>
+      <button type="button" class="btn" id="year-prev" aria-label="Año anterior">‹</button>
+      <select class="btn" id="year-pick" aria-label="Año"></select>
+      <button type="button" class="btn" id="year-next" aria-label="Año siguiente">›</button>
+    </span>
+    <span class="dlbar"><span class="dlmsg" id="dl-msg" role="status"></span><button type="button" class="btn" id="dl-csv">Descargar datos (CSV)</button></span>
+  </div>
+
+  <!-- ============================== PANORAMA ============================== -->
+  <div id="tab-panorama" role="tabpanel" aria-labelledby="tabbtn-panorama">
+    <section class="kpis" id="kpis" aria-label="Indicadores nacionales"></section>
+    <div class="callout" id="pan-callout"></div>
+
+    <figure class="card" style="margin-top:12px" id="card-map">
+      <div class="card-head">
+        <div>
+          <h2 id="map-title"></h2>
+          <p id="map-desc"></p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="grp">Ver tabla</button></div>
+      </div>
+      <div class="map-grid">
+        <div class="chart map" id="ch-map"></div>
+        <div>
+          <p class="gsrc" id="grp-src"></p>
+          <div class="groups" id="grp-list"></div>
+        </div>
+      </div>
+      <div class="table-wrap" id="tb-grp" hidden></div>
+      <p class="note" id="note-map"></p>
+    </figure>
+
+    <figure class="card" id="card-dots">
+      <div class="card-head">
+        <div>
+          <h2 id="dots-title"></h2>
+          <p>Cifra puntual de cada departamento con su intervalo de confianza al 95 % (IC 95 %), coloreada según su grupo. Dos intervalos que se solapan no prueban que no haya diferencia: para comparar, use los grupos.</p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="dots">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-dots"></div>
+      <div class="chart" id="ch-dots"></div>
+      <div class="table-wrap" id="tb-dots" hidden></div>
+      <p class="note" id="note-dots"></p>
+    </figure>
+
+    <figure class="card" id="card-chg">
+      <div class="card-head">
+        <div>
+          <h2 id="chg-title"></h2>
+          <p id="chg-desc"></p>
+        </div>
+        <div class="card-tools"><span class="seg" id="chg-seg" role="group" aria-label="Comparar con"></span><button type="button" class="btn" data-table="chg">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-chg"></div>
+      <div class="chart" id="ch-chg"></div>
+      <div class="table-wrap" id="tb-chg" hidden></div>
+      <p class="note" id="note-chg"></p>
+    </figure>
+
+    <figure class="card" id="card-nat">
+      <div class="card-head">
+        <div>
+          <h2 id="nat-title"></h2>
+          <p>Perú, área urbana y área rural. La franja es el intervalo de confianza al 95 % de la cifra nacional.</p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="nat">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-nat"></div>
+      <div class="chart" id="ch-nat"></div>
+      <ol class="hitos" id="hitos"></ol>
+      <div class="table-wrap" id="tb-nat" hidden></div>
+      <p class="note" id="note-nat"></p>
+    </figure>
+
+    <figure class="card" id="card-reg">
+      <div class="card-head">
+        <div>
+          <h2 id="reg-title"></h2>
+          <p id="reg-desc"></p>
+        </div>
+        <div class="card-tools"><span class="seg" id="reg-seg" role="group" aria-label="Desagregación"></span><button type="button" class="btn" data-table="reg">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-reg"></div>
+      <div id="ch-reg"></div>
+      <div class="table-wrap" id="tb-reg" hidden></div>
+      <p class="note" id="note-reg"></p>
+    </figure>
+
+    <figure class="card" id="card-heat">
+      <div class="card-head">
+        <div>
+          <h2 id="heat-title"></h2>
+          <p id="heat-desc"></p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="heat">Ver tabla</button></div>
+      </div>
+      <div class="scale" id="heat-scale" aria-label="Escala de colores"></div>
+      <div class="chart scroll-x" id="ch-heat"></div>
+      <div class="table-wrap" id="tb-heat" hidden></div>
+      <p class="note" id="note-heat"></p>
+    </figure>
+
+    <figure class="card" id="card-sc">
+      <div class="card-head">
+        <div>
+          <h2 id="sc-title"></h2>
+          <p id="sc-desc"></p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="sc">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-sc"></div>
+      <div class="chart" id="ch-sc"></div>
+      <div class="table-wrap" id="tb-sc" hidden></div>
+      <p class="note" id="note-sc"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== FICHA ============================== -->
+  <div id="tab-ficha" role="tabpanel" aria-labelledby="tabbtn-ficha" hidden>
+    <div class="filters" style="margin-bottom:12px">
+      <span class="lab">Departamento</span>
+      <select class="btn" id="unit-pick" aria-label="Departamento"></select>
+    </div>
+    <h2 id="dep-title" style="font-size:24px"></h2>
+    <p class="note" id="dep-long" style="margin:2px 0 12px"></p>
+    <div class="dtiles" id="dep-tiles"></div>
+    <div class="callout" id="dep-status"></div>
+
+    <figure class="card" id="card-dep">
+      <div class="card-head">
+        <div>
+          <h2 id="depch-title"></h2>
+          <p>La franja es el intervalo de confianza al 95 %. La línea discontinua es el Perú.</p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="dep">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="leg-dep"></div>
+      <div class="chart" id="ch-dep"></div>
+      <div class="table-wrap" id="tb-dep" hidden></div>
+      <p class="note" id="note-dep"></p>
+    </figure>
+
+    <figure class="card" id="card-gasto">
+      <div class="card-head">
+        <div>
+          <h2>Gasto e ingreso real por persona</h2>
+          <p>Promedio mensual por persona, en soles de 2025, ajustados por la inflación y por las diferencias de precios entre departamentos (a precios de Lima Metropolitana). La línea discontinua es el Perú.</p>
+        </div>
+        <div class="card-tools"><button type="button" class="btn" data-table="gasto">Ver tabla</button></div>
+      </div>
+      <div class="two">
+        <div><p class="panel-title">Gasto real por persona</p><div class="chart" id="ch-gasto"></div></div>
+        <div><p class="panel-title">Ingreso real por persona</p><div class="chart" id="ch-ingreso"></div></div>
+      </div>
+      <div class="table-wrap" id="tb-gasto" hidden></div>
+      <p class="note" id="note-gasto"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== CÓMO SE MIDE ============================== -->
+  <div id="tab-mide" role="tabpanel" aria-labelledby="tabbtn-mide" hidden>
+    <div class="edu">
+      <section>
+        <p class="kicker">Para empezar</p>
+        <h2 id="howto">Cómo leer este tablero</h2>
+        <ul class="howto">
+          <li><b>Cada cifra es una estimación con margen de error.</b> La ENAHO entrevista a una muestra de hogares, no a todos. Por ejemplo, en 2025 la pobreza de Cajamarca fue 41,0 %. Con 95 % de confianza, el valor real está entre 36,5 % y 45,6 %.</li>
+          <li><b>Compare departamentos por grupos, no por la cifra.</b> El INEI reúne en un grupo a los departamentos cuya pobreza no se puede distinguir con la estadística. En 2025, Cajamarca (41,0 %) y Pasco (36,4 %) están en el mismo grupo, así que no se puede afirmar que Cajamarca tenga más pobreza que Pasco.</li>
+          <li><b>Los colores del mapa son grupos, no niveles fijos.</b> El grupo 1 es el de mayor pobreza ese año. Como el número de grupos cambia cada año, el «grupo 2» de un año no equivale al de otro.</li>
+          <li><b>Un círculo sin relleno, o un punto en la esquina de una celda, marca una cifra referencial.</b> Su CV supera el 15 %: el error es grande en relación con la propia cifra, y el INEI la considera solo orientativa. En pobreza extrema, la mayoría de las cifras departamentales son referenciales.</li>
+          <li><b>Las líneas verticales punteadas y la columna sombreada de 2020 marcan cambios</b> en la encuesta (nuevo marco muestral en 2007, pandemia en 2020) o en cómo publica el INEI (Lima y el Callao por separado desde 2013). La franja de color alrededor de una línea es su intervalo de confianza. La serie se puede comparar, con los matices que se explican abajo.</li>
+          <li><b>El tablero usa 26 unidades:</b> los 24 departamentos, con Lima dividida en Lima Metropolitana y Región Lima, más el Callao.</li>
+          <li><b>Las cifras son porcentajes de la población, y sus diferencias, puntos porcentuales (p. p.).</b> Si la pobreza pasa de 27,6 % a 25,7 %, baja 1,9 p. p.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p class="kicker">Conceptos</p>
+        <h2>Qué mide este tablero</h2>
+        <p>Mide el porcentaje de personas en situación de <b>pobreza monetaria</b>: las que viven en hogares cuyo gasto mensual por persona no alcanza para comprar una canasta básica de alimentos y otros bienes y servicios (vivienda, vestido, educación, salud, transporte, entre otros). La <b>pobreza extrema</b> es no alcanzar ni siquiera el costo de la canasta de alimentos.</p>
+        <p class="src">Fuente: INEI, Informe técnico de pobreza monetaria 2016-2025, págs. 11 y 67.</p>
+        <h3>Por qué se usa el gasto y no el ingreso</h3>
+        <p>El INEI usa el gasto de consumo porque se aproxima mejor al ingreso permanente de los hogares y se subdeclara menos que el ingreso. El gasto incluye lo comprado, lo autoproducido, los pagos en especie y lo recibido de otros hogares o de instituciones.</p>
+        <p class="src">Fuente: INEI, Informe técnico de pobreza monetaria 2016-2025, págs. 11 y 13.</p>
+        <h3>Las líneas de pobreza de 2025</h3>
+        <p>En promedio nacional, la canasta básica de consumo costó <b>S/ 462 por persona al mes</b> y la de alimentos, <b>S/ 260</b>. No hay una única línea: el INEI calcula 82 líneas, según el dominio geográfico y el departamento. En Lima Metropolitana y el Callao, por ejemplo, la línea total fue de S/ 568.</p>
+        <p class="src">Fuente: INEI, Informe técnico de pobreza monetaria 2016-2025, págs. 55 y 229–230.</p>
+        <h3>No es pobreza multidimensional</h3>
+        <p>Esta medición deja fuera dimensiones como la desnutrición, las necesidades básicas insatisfechas o la exclusión social. El INEI las mide aparte, en su Tablero de Pobreza Multidimensional.</p>
+        <p class="src">Fuente: INEI, Informe técnico de pobreza monetaria 2016-2025, pág. 11; INEI, Perú: Evolución de los indicadores de pobreza multidimensional, 2016-2025, págs. 3 y 9.</p>
+
+        <h3>Margen de error y cifras referenciales</h3>
+        <p>La ENAHO es una encuesta por muestreo, representativa cada año para cada departamento. Toda cifra tiene un margen de error. El <b>intervalo de confianza al 95 % (IC 95 %)</b> indica el rango de valores compatibles con la muestra: el método acierta en el 95 % de las muestras posibles. El <b>coeficiente de variación (CV)</b> mide la precisión relativa. Si es <b>mayor al 15 %</b>, el INEI considera la cifra <b>referencial</b>, porque la muestra no alcanza para ese nivel de detalle.</p>
+        <p class="src">Fuente: INEI, Ficha Técnica ENAHO 2025, págs. 9–10; Informe técnico de pobreza monetaria 2016-2025, pág. 232; Ficha Técnica ENDES 2022, pág. 14.</p>
+        <h3>Grupos de departamentos estadísticamente semejantes</h3>
+        <p>Dos departamentos pueden diferir en varios puntos porcentuales y, aun así, no ser distintos en términos estadísticos. Por eso el INEI compara cada departamento con todos los demás mediante pruebas estadísticas (t de Student y Kolmogorov-Smirnov) y forma <b>grupos con niveles de pobreza estadísticamente semejantes</b>. Según el INEI, dentro de un grupo no se puede afirmar que un departamento tenga más pobreza que otro. En 2025, el grupo de mayor pobreza reunió a siete departamentos: Ayacucho, Cajamarca, Huánuco, Huancavelica, Loreto, Pasco y Puno.</p>
+        <p class="src">Fuente: INEI, Informe técnico de pobreza monetaria 2016-2025, págs. 74–77.</p>
+        <h3>Lima y el Callao</h3>
+        <p>Igual que el INEI, el tablero divide el departamento de Lima en <b>Lima Metropolitana</b> (los 43 distritos de la provincia de Lima) y <b>Región Lima</b> (las provincias de Barranca, Cajatambo, Canta, Cañete, Huaral, Huarochirí, Huaura, Oyón y Yauyos), y muestra aparte la <b>Provincia Constitucional del Callao</b>. Hasta los datos de 2012, el INEI publicaba un solo «Lima» que incluía al Callao, y desde los datos de 2013 publica las tres unidades por separado. Para 2004–2012, las cifras separadas son cálculo propio con los microdatos de la ENAHO: el INEI no las publicó así. En el diseño de la muestra, el nivel de inferencia es el «Área Metropolitana de Lima y Callao», no cada parte por separado; el INEI publica igual las tres cifras, y en 2025 las tres tuvieron un CV menor al 15 %. En el mapa, Región Lima ocupa el polígono del departamento de Lima, y Lima Metropolitana y el Callao aparecen como marcadores sobre el mar.</p>
+        <p class="src">Fuente: INEI, informes de pobreza 2004-2010 (pág. 17), 2007-2016 (págs. 45–48) y 2016-2025 (págs. 73–77 y 232); Ficha Técnica ENAHO 2025, pág. 10.</p>
+        <h3>¿Se pueden comparar los años?</h3>
+        <p>Sí, con matices. Toda la serie 2004–2025 se calcula con la metodología que el INEI adoptó en 2012 (año base 2010), aplicada también hacia atrás desde 2004. Hubo cambios en el diseño de la encuesta:</p>
+        <ul>
+          <li>un nuevo marco muestral en 2007;</li>
+          <li>el paso gradual al marco del Censo 2017 entre 2020 y 2024;</li>
+          <li>en 2020, por la pandemia, entrevistas telefónicas con un cuestionario reducido, que mantuvo las preguntas necesarias para medir la pobreza;</li>
+          <li>desde la pandemia, una modalidad mixta (presencial y por teléfono): el 14 % de las entrevistas de 2025.</li>
+        </ul>
+        <p>El INEI prepara una actualización (nuevo año base 2024, Censos 2025 y nuevas proyecciones de población) que podría modificar las cifras en el futuro.</p>
+        <p class="src">Fuentes: Comisión Consultiva de Pobreza, Declaración 2025, pág. 1; INEI, Evolución de la Pobreza 2004-2010. Nueva Metodología (marzo de 2012), pág. 5; INEI, Informe de Calidad de la Encuesta ENAHO 2025, págs. 11–12; INEI, Metodología del cálculo del factor de expansión anual 2025, pág. 2; INEI, Informe técnico de pobreza monetaria 2009-2020, pág. 180; INEI, Informe técnico de pobreza monetaria 2016-2025, págs. 19–20 y 400.</p>
+
+        <h3>Glosario</h3>
+        <dl class="gloss">
+          <dt>ENAHO</dt><dd>Encuesta Nacional de Hogares del INEI. Se aplica de forma continua durante todo el año y es la base de la medición oficial de la pobreza.</dd>
+          <dt>Muestra y marco muestral</dt><dd>La muestra es el conjunto de viviendas que se entrevistan. El marco muestral es el listado de áreas y viviendas del que se elige esa muestra.</dd>
+          <dt>Factor de expansión</dt><dd>Peso que indica a cuántos hogares de la población representa cada hogar entrevistado.</dd>
+          <dt>Intervalo de confianza al 95 % (IC 95 %)</dt><dd>Rango calculado con un método que, si se repitiera la encuesta muchas veces, contendría el valor real en el 95 % de los casos. En la práctica: el valor real está muy probablemente dentro de ese rango.</dd>
+          <dt>Coeficiente de variación (CV)</dt><dd>Error estándar de la estimación expresado como porcentaje de la propia cifra. Cuanto menor, más precisa es la cifra.</dd>
+          <dt>Cifra referencial</dt><dd>Cifra con CV mayor al 15 %. Se puede usar como orientación, pero con cautela.</dd>
+          <dt>Punto porcentual (p. p.)</dt><dd>Diferencia entre dos porcentajes. Pasar de 20 % a 22 % es subir 2 p. p. (un aumento relativo del 10 %), no «2 %».</dd>
+          <dt>Dominio geográfico</dt><dd>Cada una de las zonas para las que el INEI calcula sus líneas de pobreza: costa, sierra y selva, urbanas y rurales, y Lima Metropolitana con el Callao.</dd>
+          <dt>Año base</dt><dd>Año cuyos datos de la ENAHO sirvieron para definir la canasta de la metodología vigente: 2010.</dd>
+        </dl>
+      </section>
+
+      <section>
+        <details class="method">
+          <summary><span class="kicker">Para replicar o citar</span><span class="sumtitle">Nota metodológica</span></summary>
+          <p class="notice">Este tablero no es una publicación oficial del INEI: es un cálculo propio con los microdatos públicos de la ENAHO, validado con las cifras que publica el INEI.</p>
+
+          <h3>Datos</h3>
+          <p>ENAHO 2004–2025, módulo Sumaria (una fila por hogar), descargada del portal de microdatos del INEI el 21 de octubre de 2026.</p>
+          <h3>Definiciones</h3>
+          <ul>
+            <li><b>Condición de pobreza:</b> la que el INEI asigna a cada hogar en Sumaria (variable <code>pobreza</code>: 1, pobre extremo; 2, pobre no extremo; 3, no pobre). No se recalcula. Una persona es pobre si su hogar tiene 1 o 2, y pobre extrema si tiene 1.</li>
+            <li><b>Peso poblacional:</b> <code>factor07 × mieperho</code> (factor de expansión del hogar multiplicado por el número de miembros: cuántas personas representa cada hogar), redondeado al entero, como en las rutinas oficiales del INEI.</li>
+            <li><b>Gasto e ingreso real por persona:</b> el gasto es la suma de los 8 grupos de gasto del hogar, cada uno deflactado con el IPC de su grupo y con el deflactor espacial; el ingreso es <code>inghog1d</code>, deflactado con el IPC general y el deflactor espacial. Ambos se dividen entre 12 × <code>mieperho</code> y quedan en soles de 2025 a precios de Lima Metropolitana. Su varianza se calcula sobre la submuestra de cada unidad, como en los anexos del INEI.</li>
+            <li><b>Unidades:</b> departamento según los dos primeros dígitos del <code>ubigeo</code>. Lima Metropolitana es la provincia 1501; Región Lima, el resto del departamento 15; el Callao, el 07.</li>
+          </ul>
+          <h3>Estimación</h3>
+          <ul>
+            <li>La incidencia es el total ponderado de personas pobres entre el total ponderado de personas de cada unidad.</li>
+            <li>La varianza se estima por linealización de Taylor con el diseño de la encuesta: estratos (<code>estrato</code>) y conglomerados (<code>conglome</code>), con cada unidad como subpoblación.</li>
+            <li>El intervalo al 95 % es la estimación ± 1,96 errores estándar. Con más de 3 000 conglomerados por año, equivale en la práctica a usar la t de Student con grados de libertad iguales a conglomerados menos estratos (diferencia menor a 0,005 p. p.). Una cifra es referencial si su CV es mayor al 15 %.</li>
+            <li id="mide-prec"></li>
+            <li><b>Personas pobres (solo Perú):</b> incidencia de pobreza total redondeada a un decimal × población oficial al 30 de junio (INEI, Boletín Especial N° 24, base Censo 2017). Es el cálculo del INEI: reproduce sus cifras publicadas de 2019 a 2025 (por ejemplo, 2025: 25,7 % × 34 350 244 = 8 828 mil). No se usa la suma de los factores de la encuesta, que da entre 1,2 % y 1,6 % más población. Los informes de 2012 a 2017 publicaron cifras mayores porque usaban las proyecciones anteriores, basadas en el Censo 2007; aquí toda la serie usa la población vigente. No hay totales por departamento: el INEI no los publica.</li>
+          </ul>
+          <h3>Grupos</h3>
+          <ul id="mide-grupos"></ul>
+
+          <h3>Validación</h3>
+          <p>Todas las cifras que el INEI publica para estos años y ámbitos se compararon con el cálculo propio, y las departamentales se recalcularon además con un código independiente. Dos series no tienen cifra oficial con que compararlas: la pobreza total por departamento de 2004–2013 y la pobreza extrema por departamento. Esas se validan de forma indirecta, con los grupos del INEI. La precisión (intervalos y CV) del Cuadro III.1 no se reproduce entera; ver «Diferencias con los cuadros del INEI y erratas».</p>
+          <div class="table-wrap" style="max-height:none">
+          <table>
+            <thead><tr><th scope="col">Qué se comparó</th><th scope="col">Con qué</th><th scope="col">Resultado</th></tr></thead>
+            <tbody>
+              <tr><td>Pobreza total por departamento 2014–2025</td><td>Cuadro III.1 de los informes 2014-2023, 2015-2024 y 2016-2025</td><td>780/780 comparaciones; diferencia máxima 0,05 p. p. (redondeo)</td></tr>
+              <tr><td>Pobreza total y extrema, gasto e ingreso por ámbito (nacional, área, región natural y dominio) 2016–2025; intervalo de la pobreza nacional de cada año; intervalos y CV de 2025</td><td>Informe técnico 2016-2025</td><td>594/594 cifras</td></tr>
+              <tr><td>Pobreza 2004–2015: ámbitos, departamentos 2014–2015 y grupos</td><td>16 publicaciones del INEI</td><td>494/494 cifras</td></tr>
+              <tr><td>Grupos de departamentos 2016–2025</td><td>Cuadros 4.2 y 4.4 del informe 2016-2025</td><td>98/98 grupos (196 límites)</td></tr>
+              <tr><td>Grupos de departamentos 2007–2015</td><td>Informe más reciente del INEI que trae cada año</td><td>88/88 grupos (en 2007 y 2008, los intervalos publicados solo se reproducen sin estratos)</td></tr>
+              <tr><td>Grupos de departamentos 2004–2006</td><td>Informe de marzo de 2012</td><td>17/17 grupos</td></tr>
+              <tr><td>Gasto e ingreso por persona por departamento 2016–2025</td><td>Cuadros I.1, I.8, I.15, I.19 e I.21 del informe 2016-2025</td><td>1 300/1 300 cifras (±0,5 soles)</td></tr>
+              <tr><td>Recálculo independiente de la pobreza por departamento 2004–2025</td><td>Cálculo principal</td><td>1 144/1 144 cifras idénticas</td></tr>
+            </tbody>
+          </table>
+          </div>
+
+          <h3>Qué es cada tramo de la serie departamental</h3>
+          <table><thead><tr><th scope="col">Años</th><th scope="col">Pobreza total por departamento</th></tr></thead><tbody id="mide-tramos"></tbody></table>
+          <p id="mide-tramos-pe" style="margin-top:10px"></p>
+          <p class="note" id="mide-general"></p>
+          <h3>Marcas en los gráficos</h3>
+          <ul id="mide-breaks"></ul>
+          <h3>Diferencias con los cuadros del INEI y erratas</h3>
+          <ul id="mide-notas"></ul>
+          <h3>Limitaciones</h3>
+          <ul>
+            <li>Las cifras con CV mayor al 15 % son poco precisas. En pobreza total, en 2025 son referenciales Ica, Madre de Dios y Moquegua. En pobreza extrema, la mayoría de los departamentos lo son cada año (24 de las 26 unidades en 2025). En 2004–2006 la muestra era menor.</li>
+            <li>La ENAHO no es representativa por provincia ni por distrito: el tablero no baja de departamento.</li>
+            <li>Las cifras por departamento de 2004–2013 son estimación propia: el INEI no publicó cifras puntuales departamentales para esos años, solo grupos. La pobreza extrema por departamento es estimación propia en toda la serie, y antes de 2010 no hubo cifras del INEI con que contrastarla.</li>
+            <li>El INEI calcula la precisión de algunos cuadros con un procedimiento que no se reproduce con los microdatos. Las cifras puntuales sí cuadran.</li>
+            <li>La actualización metodológica en curso del INEI puede cambiar los niveles de toda la serie.</li>
+          </ul>
+          <h3>Cómo citar</h3>
+          <p id="mide-cite"></p>
+          <h3>Referencias</h3>
+          <ul class="srcs" id="mide-srcs"></ul>
+        </details>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" role="status" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema (claro por defecto; el oscuro solo si la persona lo elige) ----------
+(function theme() {
+  const root = document.documentElement;
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('pobreza-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('pobreza-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  paint();
+})();
+
+const NS = 'http://www.w3.org/2000/svg';
+const YEARS = D.years, NY = YEARS.length;
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre'];
+// Números al estilo del INEI: coma decimal y espacio de miles.
+const fx = (v, d = 1) => {
+  if (v == null || Number.isNaN(v)) return '—';
+  const s = Math.abs(v).toFixed(d).split('.');
+  const ent = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return (v < 0 ? '−' : '') + ent + (s[1] ? ',' + s[1] : '');
+};
+const pct = (v, d = 1) => v == null ? '—' : fx(v, d) + ' %';
+const sol = v => v == null ? '—' : 'S/ ' + fx(v, 0);
+const ppTxt = v => (v > 0 ? '+' : v < 0 ? '−' : '') + fx(Math.abs(v), 1) + ' p. p.';
+// Límite inferior del IC: si el cálculo da negativo (cifras muy pequeñas), se muestra 0.
+const lo0 = v => v == null ? v : Math.max(0, v);
+const icTxt = (lo, hi, v) => (v === 0 && lo === 0 && hi === 0) ? 'sin intervalo: ningún hogar de la muestra en esta condición' : fx(lo0(lo)) + '–' + fx(hi);
+const cvTxt = (cv, v) => cv == null ? (v === 0 ? 'no aplica (ningún hogar de la muestra en esta condición)' : 'no disponible') : fx(cv) + ' %';
+const lcFirst = t => t ? t.charAt(0).toLowerCase() + t.slice(1) : t;
+const dLabel = s => +s.slice(8, 10) + ' de ' + MESES[+s.slice(5, 7) - 1] + ' de ' + s.slice(0, 4);
+
+const UNIT = Object.fromEntries(D.units.map(u => [u.id, u]));
+const U26 = D.unitsByYear[String(YEARS[NY - 1])];
+const nameOf = id => UNIT[id] ? UNIT[id].name : id;
+const nameIn = id => id === '07' ? 'el Callao' : nameOf(id);
+const IND = {
+  pt: {label: 'Pobreza total', lower: 'pobreza monetaria', short: 'pobreza total'},
+  pe: {label: 'Pobreza extrema', lower: 'pobreza extrema', short: 'pobreza extrema'},
+};
+let ind = 'pt', yi = NY - 1, unit = '01', tab = 'panorama';
+const yearOf = () => YEARS[yi];
+
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (hi === lo) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const tickPct = t => fx(t, t % 1 ? 1 : 0) + ' %';
+const tickSol = t => fx(t, 0);
+
+// ---------- Tooltip (texto con textContent) ----------
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows, extra) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  for (const t of (extra || []).filter(Boolean)) htmlEl('div', {cls: 'x', text: t}, tip);
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+
+// ---------- Grupos ----------
+// Grupo de una unidad en un año. Hasta 2012 los grupos oficiales tienen «15C» (Lima con Callao): Lima
+// Metropolitana, Región Lima y el Callao heredan ese grupo.
+function groupsOf(ix, y) { return D.groups[ix][String(y)] || D.groups[ix][y]; }
+function groupOf(ix, y, id) {
+  const G = groupsOf(ix, y);
+  if (!G) return null;
+  for (const it of G.list) {
+    if (it.ids.includes(id)) return it;
+    if (it.ids.includes('15C') && D.limaSplit.units.includes(id)) return it;
+  }
+  return null;
+}
+// Rampa ordinal del azul SBS (grupo 1, mayor pobreza) al gris SBS (último grupo).
+const rampIdx = (g, k) => k <= 1 ? 8 : Math.round(8 - (g - 1) * 7 / (k - 1));
+// Con 2–7 grupos, tonos a distancias perceptuales iguales (--q{k}-{g}); fuera de ese rango, la rampa r1–r8.
+const groupColor = (g, k) => (k >= 2 && k <= 7 && g >= 1 && g <= k) ? `var(--q${k}-${g})` : `var(--r${rampIdx(g, k)})`;
+function groupInterval(G, it) {
+  if (G.kind === 'rango') return fx(it.lo, 0) + '–' + fx(it.hi, 0) + ' %';
+  return fx(it.lo, 1) + '–' + fx(it.hi, 1) + ' %';
+}
+const groupKindLabel = G => G.src === 'oficial'
+  ? (G.kind === 'rango' ? 'límites publicados por el INEI (% enteros)' : 'intervalo publicado por el INEI para el grupo')
+  : 'intervalo de confianza del grupo (cálculo propio)';
+const groupMemberName = id => id === '15C' ? 'Lima (con el Callao)' : nameOf(id);
+
+// ---------- Estado de cada cifra ----------
+function statusTexts(ix, y, id) {
+  const out = [ix === 'pt' ? D.statusYear[String(y)].texto : D.statusYearPe[String(y)]];
+  if (ix === 'pt' && D.precOficial.includes(y) && id && id !== 'PE') out.push('Intervalo y CV: los publicados por el INEI (' + D.precSrc[String(y)] + ').');
+  if (id && limaInherits(ix, y, id)) out.push(D.limaSplit.texto);
+  return out;
+}
+const refTxt = 'Cifra referencial: CV mayor al 15 %.';
+function limaInherits(ix, y, id) {
+  const G = groupsOf(ix, y);
+  return D.limaSplit.units.includes(id) && !!G && G.src === 'oficial' && G.list.some(it => it.ids.includes('15C'));
+}
+const dv = (id, key, i) => D.dep[id][key][i];
+
+// ---------- Selectores ----------
+const indSeg = document.getElementById('ind-seg');
+for (const k of ['pt', 'pe']) {
+  const b = htmlEl('button', {type: 'button', text: IND[k].label, 'aria-pressed': String(k === ind)}, indSeg);
+  b.addEventListener('click', () => { ind = k; indSeg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderVisible(); refreshTables(); saveState(); });
+}
+const yPick = document.getElementById('year-pick');
+YEARS.forEach((y, i) => htmlEl('option', {value: i, text: String(y)}, yPick));
+yPick.value = yi;
+const setYear = i => { yi = Math.max(0, Math.min(NY - 1, i)); yPick.value = yi; renderVisible(); refreshTables(); saveState(); };
+// Estado en la URL: #pestaña&anio=AAAA&ind=pt|pe&dep=ID (para compartir una vista concreta).
+function saveState() {
+  const h = '#' + tab + '&anio=' + YEARS[yi] + '&ind=' + ind + '&dep=' + unit;
+  if (location.hash === h) return;
+  try { history.replaceState(null, '', h); } catch (e) { /* el visor puede no permitirlo */ }
+}
+function readState() {
+  const parts = location.hash.slice(1).split('&'), out = {tab: parts[0]};
+  for (const p of parts.slice(1)) { const [k, v] = p.split('='); out[k] = decodeURIComponent(v || ''); }
+  if (out.anio && YEARS.includes(+out.anio)) { yi = YEARS.indexOf(+out.anio); yPick.value = yi; }
+  if (out.ind === 'pt' || out.ind === 'pe') { ind = out.ind; indSeg.querySelectorAll('button').forEach((x, j) => x.setAttribute('aria-pressed', String(['pt', 'pe'][j] === ind))); }
+  if (out.dep && U26.includes(out.dep)) { unit = out.dep; uPick.value = unit; }
+  return out.tab;
+}
+yPick.addEventListener('change', () => setYear(+yPick.value));
+document.getElementById('year-prev').addEventListener('click', () => setYear(yi - 1));
+document.getElementById('year-next').addEventListener('click', () => setYear(yi + 1));
+const uPick = document.getElementById('unit-pick');
+U26.slice().sort((a, b) => nameOf(a).localeCompare(nameOf(b), 'es')).forEach(id => htmlEl('option', {value: id, text: nameOf(id)}, uPick));
+uPick.value = unit;
+uPick.addEventListener('change', () => pickUnit(uPick.value, false));
+function pickUnit(id, goFicha) {
+  unit = id; uPick.value = id;
+  if (!goFicha) saveState();
+  if (goFicha) showTab('ficha', true); else renderVisible();
+  refreshTables();
+}
+
+// ---------- Indicadores nacionales ----------
+function renderKpis() {
+  const box = document.getElementById('kpis'), y = yearOf(), A = D.amb;
+  box.replaceChildren();
+  const P = A.PE, prev = yi > 0 ? yi - 1 : null;
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: (ind === 'pt' ? 'Pobreza monetaria total' : 'Pobreza monetaria extrema') + ', Perú ' + y}, hero);
+  const v = htmlEl('div', {cls: 'val'}, hero);
+  v.textContent = fx(P[ind][yi], 1); htmlEl('span', {cls: 'unit', text: '% de la población'}, v);
+  htmlEl('div', {cls: 'sub', text: 'Intervalo de confianza al 95 %: ' + fx(P[ind + '_lo'][yi]) + '–' + fx(P[ind + '_hi'][yi]) + ' %'}, hero);
+  if (prev != null) {
+    const r1 = v => Math.round(v * 10) / 10, d = +(r1(P[ind][yi]) - r1(P[ind][prev])).toFixed(1);
+    const sig = D.sig[y + '-' + YEARS[prev] + '-' + ind];
+    htmlEl('div', {cls: 'sub', text: 'Diferencia frente a ' + YEARS[prev] + ': ' + ppTxt(d) + (sig ? '; según el INEI, ' + sig.txt : ' (resta de las cifras redondeadas; sin prueba de significancia en este tablero)')}, hero);
+  }
+  if (ind === 'pt') poorCountLine(hero);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  sparkline(sp, P[ind], yi);
+  const other = ind === 'pt' ? 'pe' : 'pt';
+  const tiles = [
+    {lab: (other === 'pt' ? 'Pobreza monetaria total' : 'Pobreza monetaria extrema') + ', Perú ' + y, v: P[other][yi], lo: P[other + '_lo'][yi], hi: P[other + '_hi'][yi]},
+    {lab: IND[ind].label + ', área urbana ' + y, v: A.urbana[ind][yi], lo: A.urbana[ind + '_lo'][yi], hi: A.urbana[ind + '_hi'][yi]},
+    {lab: IND[ind].label + ', área rural ' + y, v: A.rural[ind][yi], lo: A.rural[ind + '_lo'][yi], hi: A.rural[ind + '_hi'][yi]},
+  ];
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const val = htmlEl('div', {cls: 'val'}, d); val.textContent = fx(t.v, 1); htmlEl('span', {cls: 'unit', text: '%'}, val);
+    htmlEl('div', {cls: 'sub', text: 'IC 95 %: ' + fx(t.lo) + '–' + fx(t.hi) + ' %'}, d);
+  }
+  const G = groupsOf(ind, y), g1 = G.list[0];
+  const d = htmlEl('div', {cls: 'tile'}, box);
+  htmlEl('div', {cls: 'lab', text: 'Grupos de departamentos ' + y}, d);
+  const val = htmlEl('div', {cls: 'val'}, d); val.textContent = String(G.k); htmlEl('span', {cls: 'unit', text: 'grupos'}, val);
+  htmlEl('div', {cls: 'sub', text: g1.ids.length === 1 ? 'El de mayor ' + IND[ind].short + ' es una sola unidad.' : 'El de mayor ' + IND[ind].short + ' reúne ' + g1.ids.length + ' unidades.'}, d);
+  htmlEl('span', {cls: 'flag', text: G.src === 'oficial' ? 'Grupos del INEI' : 'Agrupación propia'}, d);
+}
+// Personas pobres, Perú: método del INEI (incidencia redondeada × población oficial al 30 de junio).
+const milesTxt = v => {
+  const r = Math.round(v), mm = Math.floor(r / 1000), k = r % 1000;
+  if (!mm) return fx(k, 0) + ' mil';
+  return fx(mm, 0) + (mm === 1 ? ' millón' : ' millones') + (k ? ' ' + fx(k, 0) + ' mil' : '');
+};
+function poorCountLine(parent) {
+  const N = D.pobres, y = YEARS[yi], v = N.miles[yi], pub = N.pub[String(y)], cur = y >= N.desde;
+  const line = htmlEl('div', {cls: 'sub poor', tabindex: '0', role: 'button', 'aria-label': 'Cómo se calcula el número de personas pobres'}, parent);
+  htmlEl('strong', {text: milesTxt(v) + ' personas'}, line);
+  let txt = cur && pub ? ' en situación de pobreza (cifra del INEI)' : ' en situación de pobreza (estimación con el método del INEI)';
+  if (yi > 0) {
+    const d = Math.round(v) - Math.round(N.miles[yi - 1]);
+    if (d !== 0) txt += '; ' + fx(Math.abs(d), 0) + ' mil ' + (d < 0 ? 'menos' : 'más') + ' que en ' + YEARS[yi - 1];
+  }
+  line.appendChild(document.createTextNode(txt + ' ⓘ'));
+  const extra = ['Cálculo: incidencia de pobreza total redondeada a un decimal (' + fx(D.amb.PE.pt[yi], 1) + ' %) × población oficial del Perú al 30 de junio (' + fx(N.pob[yi], 0) + ' personas), en miles. Es el mismo cálculo que hace el INEI.',
+    cur ? (pub ? 'Coincide con la cifra publicada por el INEI: ' + fx(pub.miles, 0) + ' mil (' + pub.fuente + ').' : 'Desde ' + N.desde + ' este cálculo reproduce todas las cifras publicadas por el INEI; para este año el INEI no publicó la cifra.')
+        : (pub ? 'En su momento el INEI publicó ' + fx(pub.miles, 0) + ' mil (' + pub.fuente + '), con las proyecciones de población anteriores, basadas en el Censo 2007. Aquí se usa la población vigente, basada en el Censo 2017, para que toda la serie sea comparable.'
+               : 'Antes de ' + N.desde + ' se usa la población vigente (basada en el Censo 2017), para que toda la serie sea comparable.'),
+    'Población: ' + N.fuentePob + '. Solo nacional: el INEI no publica totales por departamento.'];
+  const show = e => { const [cx, cy] = anchorOf(e, line); showTip(cx, cy, 'Personas pobres, Perú ' + y, [], extra); };
+  line.addEventListener('mouseenter', show); line.addEventListener('mouseleave', hideTip);
+  line.addEventListener('focus', show); line.addEventListener('blur', hideTip);
+  line.addEventListener('click', show);
+}
+function sparkline(box, arr, mark) {
+  const W = Math.max(160, box.clientWidth || 300), H = 54, m = 4;
+  const vals = arr.filter(v => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
+  const x = i => m + i * (W - 2 * m) / (NY - 1), y = v => m + (hi - v) / (hi - lo || 1) * (H - 2 * m);
+  const svg = svgEl('svg', {width: W, height: H + 14, role: 'img', 'aria-label': 'Evolución ' + YEARS[0] + '–' + YEARS[NY - 1]}, box);
+  svgEl('path', {d: arr.map((v, i) => (i ? 'L' : 'M') + x(i) + ',' + y(v)).join(''), fill: 'none', stroke: 'var(--s1)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+  svgEl('circle', {cx: x(mark), cy: y(arr[mark]), r: 3.5, fill: 'var(--s1)', stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+  const a = svgEl('text', {x: m, y: H + 12, class: 'lbl'}, svg); a.textContent = YEARS[0];
+  const b = svgEl('text', {x: W - m, y: H + 12, class: 'lbl', 'text-anchor': 'end'}, svg); b.textContent = YEARS[NY - 1];
+}
+
+function renderCallout() {
+  const box = document.getElementById('pan-callout'), y = yearOf(), G = groupsOf(ind, y), P = D.amb.PE;
+  box.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'En ' + y}, box);
+  const g1 = G.list[0], gk = G.list[G.list.length - 1];
+  const names = it => it.ids.map(groupMemberName).sort((a, b) => a.localeCompare(b, 'es'));
+  const join = arr => arr.length === 1 ? arr[0] : arr.slice(0, -1).join(', ') + ' y ' + arr[arr.length - 1];
+  const p1 = htmlEl('p', null, box);
+  p1.textContent = `La ${IND[ind].lower} alcanzó al ${pct(P[ind][yi])} de la población del Perú. ` +
+    (G.src === 'oficial'
+      ? `Según el INEI, los departamentos forman ${G.k} grupos con niveles estadísticamente semejantes. `
+      : `El INEI no publicó grupos de ${IND[ind].short} para ${y}; una agrupación propia divide a los departamentos en ${G.k} grupos. `) +
+    (g1.ids.length === 1 ? `El de mayor ${IND[ind].short} lo forma solo ${names(g1)[0]}` : `El de mayor ${IND[ind].short} reúne a ${join(names(g1))}`) +
+    `; el de menor ${gk.ids.length === 1 ? 'lo forma solo ' + names(gk)[0] : 'reúne a ' + join(names(gk))}.`;
+  if (ind === 'pe') htmlEl('p', {text: 'En pobreza extrema, la mayoría de las cifras departamentales son referenciales (CV mayor al 15 %): compare por grupos.'}, box);
+  const p2 = htmlEl('p', null, box);
+  p2.textContent = G.src === 'oficial'
+    ? 'Según el INEI, dentro de un grupo no se puede afirmar que un departamento tenga más pobreza que otro, aunque sus cifras puntuales difieran en varios puntos porcentuales.'
+    : 'La agrupación propia solo asegura que los intervalos de grupos vecinos no se solapen; dentro de un grupo puede haber pares de departamentos con diferencias significativas.';
+}
+
+// ---------- Mapa por grupos ----------
+// Lima Metropolitana no tiene polígono propio: va como marcador sobre el mar, igual que el Callao (polígono muy pequeño).
+const MARKERS = [
+  {id: '07', cx: 252, cy: 918, tx: 331, ty: 957, label: 'Callao'},
+  {id: '15LM', cx: 252, cy: 992, tx: 340, ty: 962, label: 'Lima Metropolitana'},
+];
+function unitTipRows(ix, y, id, color) {
+  const i = YEARS.indexOf(y), G = groupsOf(ix, y), it = groupOf(ix, y, id);
+  const rows = [{value: pct(dv(id, ix, i)), label: IND[ix].label, color, sq: true},
+    {value: icTxt(dv(id, ix + '_lo', i), dv(id, ix + '_hi', i), dv(id, ix, i)), label: 'IC 95 %'},
+    {value: cvTxt(dv(id, ix + '_cv', i), dv(id, ix, i)), label: 'coeficiente de variación'}];
+  if (it) rows.push({value: 'Grupo ' + it.g + ' de ' + G.k, label: G.src === 'oficial' ? 'del INEI' : '(agrupación propia)'});
+  const ex = [];
+  if (dv(id, ix + '_ref', i)) ex.push(refTxt);
+  ex.push(...statusTexts(ix, y, id));
+  if (it && it.nota) ex.push(it.nota);
+  return [rows, ex];
+}
+function renderMap() {
+  const y = yearOf(), G = groupsOf(ind, y);
+  document.getElementById('map-title').textContent = G.src === 'oficial'
+    ? 'Grupos de departamentos con ' + IND[ind].short + ' estadísticamente semejante, ' + y
+    : 'Grupos de departamentos por ' + IND[ind].short + ' (agrupación propia), ' + y;
+  document.getElementById('map-desc').textContent = 'Cada color es un grupo, numerado del de mayor ' + IND[ind].short + ' (grupo 1) al de menor, que va en gris. Haga clic o toque un departamento para abrir su ficha en la pestaña Departamento.';
+  const box = document.getElementById('ch-map');
+  box.replaceChildren();
+  const GEO = D.geo, W = Math.min(box.clientWidth || 400, 440);
+  const svg = svgEl('svg', {viewBox: `0 0 ${GEO.w} ${GEO.h}`, width: W, height: GEO.h * W / GEO.w, role: 'img',
+    'aria-label': 'Mapa del Perú por grupos de ' + IND[ind].short + ', ' + y}, box);
+  const bind = (node, id) => {
+    const it = groupOf(ind, y, id), color = it ? groupColor(it.g, G.k) : 'var(--grid)';
+    node.setAttribute('fill', color);
+    node.setAttribute('tabindex', 0);
+    node.setAttribute('aria-label', nameOf(id) + ': ' + pct(dv(id, ind, yi)) + (it ? ', grupo ' + it.g : ''));
+    const show = e => { const [cx, cy] = anchorOf(e, node); const [rows, ex] = unitTipRows(ind, y, id, color); showTip(cx, cy, nameOf(id) + ' · ' + y, rows, ex); };
+    node.addEventListener('pointermove', show); node.addEventListener('focus', () => show(null));
+    node.addEventListener('pointerleave', hideTip); node.addEventListener('blur', hideTip);
+    node.addEventListener('click', () => pickUnit(id, true));
+    node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickUnit(id, true); } });
+    if (id === unit) node.classList.add('sel');
+  };
+  for (const u of D.units) {
+    if (!u.map || !GEO.paths[u.map]) continue;
+    bind(svgEl('path', {d: GEO.paths[u.map], class: 'dep'}, svg), u.id);
+  }
+  for (const m of MARKERS) {
+    svgEl('line', {x1: m.cx + 16, y1: m.cy, x2: m.tx, y2: m.ty, class: 'lead'}, svg);
+    bind(svgEl('circle', {cx: m.cx, cy: m.cy, r: 20, class: 'mk'}, svg), m.id);
+    const t = svgEl('text', {x: m.cx - 30, y: m.cy + 10, 'text-anchor': 'end', class: 'mklbl'}, svg); t.textContent = m.label;
+  }
+  const sel = svg.querySelector('.sel'); if (sel) svg.appendChild(sel);
+  // Lista de grupos
+  const src = document.getElementById('grp-src');
+  src.replaceChildren();
+  if (G.src === 'oficial') {
+    src.appendChild(document.createTextNode('Grupos publicados por el INEI. Fuente: '));
+    const f = G.list[0];
+    if (f.url) htmlEl('a', {href: f.url, text: f.fuente, target: '_blank', rel: 'noopener'}, src); else src.appendChild(document.createTextNode(f.fuente));
+    src.appendChild(document.createTextNode('.'));
+  } else {
+    src.textContent = 'Agrupación propia, no del INEI: el INEI no publicó grupos de ' + IND[ind].short + ' para ' + y + '. Para armarla, los departamentos se ordenan por su cifra y se busca la partición en grupos contiguos que minimiza la suma de cuadrados dentro de los grupos, ponderando cada departamento por la inversa de su varianza (método de Fisher-Jenks); se empieza con 5 grupos y se reduce el número hasta que los intervalos de confianza de grupos vecinos no se solapen. En 2016–2025, años con grupos del INEI, este método reproduce el 91 % de las asignaciones oficiales en pobreza total y el 78 % en pobreza extrema.';
+  }
+  const list = document.getElementById('grp-list');
+  list.replaceChildren();
+  for (const it of G.list) {
+    const d = htmlEl('div', {cls: 'grp'}, list), h = htmlEl('div', {cls: 'gh'}, d);
+    const sw = htmlEl('span', {cls: 'sw'}, h); sw.style.background = groupColor(it.g, G.k);
+    htmlEl('b', {text: 'Grupo ' + it.g}, h);
+    htmlEl('span', {cls: 'iv', text: groupInterval(G, it)}, h);
+    const gm = htmlEl('div', {cls: 'gm'}, d);
+    const ids = it.ids.slice().sort((a, b) => groupMemberName(a).localeCompare(groupMemberName(b), 'es'));
+    ids.forEach((id, j) => {
+      if (j) gm.appendChild(document.createTextNode(', '));
+      if (id === '15C') { gm.appendChild(document.createTextNode(groupMemberName(id))); return; }
+      const b = htmlEl('button', {type: 'button', text: nameOf(id), cls: id === unit ? 'sel' : ''}, gm);
+      b.addEventListener('click', () => pickUnit(id, true));
+    });
+    if (it.nota) htmlEl('div', {cls: 'gn', text: it.nota}, d);
+  }
+  const notes = ['Intervalo de cada grupo: ' + groupKindLabel(G) + '.'];
+  if (G.kind === 'rango') notes.push('En el informe de marzo de 2012 los límites de los grupos de 2004–2006 vienen en porcentajes enteros y el informe no los define. Con los microdatos se comprueba que, en un grupo de un solo departamento, son su intervalo de confianza redondeado y, en uno de varios, la menor y la mayor cifra de sus miembros (deducción propia).');
+  if (G.src === 'oficial' && G.list.some(it => it.ids.includes('15C'))) notes.push('Hasta los datos de ' + D.limaSplit.last + ', los grupos del INEI tenían un solo «Lima» que incluía al Callao: en el mapa, Lima Metropolitana, Región Lima y el Callao llevan el color de ese grupo.');
+  notes.push('El número de grupos cambia cada año. Un mismo número de grupo no es comparable entre años.');
+  document.getElementById('note-map').textContent = notes.join(' ');
+}
+
+// ---------- Puntos con IC ----------
+function renderDots() {
+  const y = yearOf(), G = groupsOf(ind, y), box = document.getElementById('ch-dots');
+  document.getElementById('dots-title').textContent = IND[ind].label + ' por departamento, ' + y;
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = U26.map(id => ({id, v: dv(id, ind, yi), lo: lo0(dv(id, ind + '_lo', yi)), hi: dv(id, ind + '_hi', yi), ref: dv(id, ind + '_ref', yi), it: groupOf(ind, y, id)}))
+    .sort((a, b) => b.v - a.v);
+  const narrow = W < 560, labW = narrow ? 112 : 150, valW = 54, rowH = 22, top = 8, H = rows.length * rowH + top + 24;
+  const nat = D.amb.PE[ind][yi];
+  const dom = niceDomain(0, Math.max(...rows.map(r => r.hi), nat), W < 480 ? 2 : narrow ? 4 : 6);
+  const x0 = labW + 8, pw = W - x0 - valW, x = v => x0 + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': IND[ind].label + ' por departamento con intervalos de confianza, ' + y}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top, y2: H - 20, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)'}, g);
+    const tx = svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, g); tx.textContent = tickPct(t);
+  }
+  svgEl('line', {x1: x(nat), x2: x(nat), y1: top - 4, y2: H - 20, stroke: 'var(--sys)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'}, svg);
+  rows.forEach((r, j) => {
+    const yy = top + j * rowH + rowH / 2, color = r.it ? groupColor(r.it.g, G.k) : 'var(--sys)';
+    const row = svgEl('g', {class: 'rowg'}, svg);
+    const hit = svgEl('rect', {class: 'row-hit', x: 0, y: yy - rowH / 2, width: W, height: rowH, tabindex: 0, 'aria-label': nameOf(r.id) + ': ' + pct(r.v)}, row);
+    const lb = svgEl('text', {x: labW, y: yy + 4, 'text-anchor': 'end', class: 'rowlbl' + (r.id === unit ? ' sel' : '')}, row);
+    lb.textContent = nameOf(r.id) + (r.ref ? ' (ref.)' : '');
+    svgEl('line', {x1: x(r.lo), x2: x(r.hi), y1: yy, y2: yy, stroke: color, 'stroke-width': 2.5, 'stroke-linecap': 'round'}, row);
+    svgEl('circle', {cx: x(r.v), cy: yy, r: 5, fill: r.ref ? 'var(--surface)' : color, stroke: r.ref ? color : 'var(--surface)', 'stroke-width': r.ref ? 2.5 : 1.5}, row);
+    const vt = svgEl('text', {x: W - valW + 8, y: yy + 4, class: 'rowlbl' + (r.id === unit ? ' sel' : '')}, row); vt.textContent = fx(r.v, 1);
+    const show = e => { const [cx, cy] = anchorOf(e, hit); const [rr, ex] = unitTipRows(ind, y, r.id, color); showTip(cx, cy, nameOf(r.id) + ' · ' + y, rr, ex); };
+    hit.addEventListener('pointermove', show); hit.addEventListener('focus', () => show(null));
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    hit.addEventListener('click', () => pickUnit(r.id, true));
+    hit.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickUnit(r.id, true); } });
+  });
+  const nl = svgEl('text', {x: x(nat) + 4, y: top + 2, class: 'lbl'}, svg); nl.textContent = 'Perú ' + pct(nat);
+  const leg = document.getElementById('leg-dots');
+  leg.replaceChildren();
+  for (const it of G.list) { const s = htmlEl('span', null, leg); htmlEl('span', {cls: 'sw'}, s).style.background = groupColor(it.g, G.k); s.appendChild(document.createTextNode('Grupo ' + it.g)); }
+  const s1 = htmlEl('span', null, leg); htmlEl('span', {cls: 'hollow'}, s1); s1.appendChild(document.createTextNode('Referencial (CV mayor al 15 %)'));
+  const s2 = htmlEl('span', null, leg); htmlEl('span', {cls: 'ln dash'}, s2); s2.appendChild(document.createTextNode('Perú'));
+  const notes = ['Cifras de ' + y + ': ' + lcFirst(ind === 'pt' ? D.statusYear[String(y)].texto : D.statusYearPe[String(y)])];
+  if (ind === 'pt' && D.precOficial.includes(y)) notes.push('Los intervalos de ' + y + ' son los publicados por el INEI (' + D.precSrc[String(y)] + ').');
+  if (y <= D.limaSplit.last) notes.push('Hasta ' + D.limaSplit.last + ' el INEI no publicaba por separado Lima Metropolitana, Región Lima y el Callao: esas tres cifras son cálculo propio.');
+  document.getElementById('note-dots').textContent = notes.join(' ');
+}
+
+// ---------- Gráfico de líneas anual con franjas y quiebres ----------
+function breaksFor(id) {
+  return D.breaks.filter(b => b.anio !== 2013 || (id && D.limaSplit.units.includes(id)));
+}
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 560, fmt = cfg.fmt || (v => fx(v, 1));
+  const idx = []; for (let i = 0; i < NY; i++) if (cfg.series.some(s => s.arr[i] != null)) idx.push(i);
+  if (idx.length < 2) return;
+  const i0 = idx[0], i1 = idx[idx.length - 1], n = i1 - i0;
+  const showEnd = !narrow && cfg.endLabels;
+  const m = {l: 46, r: showEnd ? (cfg.endW || 120) : 12, t: 22, b: 26}, H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const vals = [];
+  for (const s of cfg.series) for (let i = i0; i <= i1; i++) { for (const a of [s.arr, s.lo, s.hi]) if (a && a[i] != null) vals.push(lo0(a[i])); }
+  for (const r of (cfg.refs || [])) for (let i = i0; i <= i1; i++) if (r.arr[i] != null) vals.push(r.arr[i]);
+  let lo = cfg.zero ? 0 : Math.min(...vals), hi = cfg.yMax != null ? Math.max(cfg.yMax, ...vals) : Math.max(...vals);
+  if (!cfg.zero) { const pad = (hi - lo) * 0.08; lo -= pad; hi += pad; }
+  const dom = niceDomain(lo, hi, 5);
+  const x = i => m.l + (i - i0) * pw / Math.max(1, n), y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  const gx = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)'}, gx);
+    const tx = svgEl('text', {x: m.l - 8, y: y(t) + 4, 'text-anchor': 'end'}, gx); tx.textContent = (cfg.tick || tickPct)(t);
+  }
+  const fit = Math.max(2, Math.floor(pw / 46)), step = [1, 2, 5].find(s => n / s < fit) || 5;
+  for (let i = i0; i <= i1; i++) if (YEARS[i] % step === 0) {
+    const tx = svgEl('text', {x: x(i), y: H - 6, 'text-anchor': 'middle'}, gx); tx.textContent = YEARS[i];
+  }
+  // Quiebres
+  for (const b of breaksFor(cfg.unit)) {
+    const bi = YEARS.indexOf(b.anio);
+    if (bi <= i0 && b.tipo === 'linea') continue;
+    if (bi < i0 || bi > i1) continue;
+    if (b.tipo === 'anio') {
+      const half = pw / Math.max(1, n) / 2;
+      svgEl('rect', {x: x(bi) - half, y: m.t, width: half * 2, height: ph, fill: 'var(--atyp)'}, svg);
+      if (!cfg.small) { const t = svgEl('text', {x: x(bi), y: m.t - 6, 'text-anchor': 'middle', class: 'lbl'}, svg); t.textContent = b.corto; }
+    } else {
+      const xb = (x(bi) + x(bi - 1)) / 2;
+      svgEl('line', {x1: xb, x2: xb, y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+      if (!cfg.small) { const t = svgEl('text', {x: xb + 4, y: m.t - 6, class: 'lbl'}, svg); t.textContent = b.corto; }
+    }
+  }
+  const path = arr => { let d = '', pen = false; for (let i = i0; i <= i1; i++) { const v = arr[i]; if (v == null) { pen = false; continue; } d += (pen ? 'L' : 'M') + x(i) + ',' + y(v); pen = true; } return d; };
+  for (const s of cfg.series) if (s.lo && s.hi) {
+    let up = '', dn = '';
+    const ok = []; for (let i = i0; i <= i1; i++) if (s.lo[i] != null && s.hi[i] != null) ok.push(i);
+    if (ok.length > 1) {
+      up = ok.map((i, j) => (j ? 'L' : 'M') + x(i) + ',' + y(s.hi[i])).join('');
+      dn = ok.slice().reverse().map(i => 'L' + x(i) + ',' + y(lo0(s.lo[i]))).join('');
+      svgEl('path', {d: up + dn + 'Z', fill: 'var(--band)', stroke: 'none'}, svg);
+    }
+  }
+  for (const r of (cfg.refs || [])) svgEl('path', {d: path(r.arr), fill: 'none', stroke: 'var(--sys)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'}, svg);
+  for (const s of cfg.series) svgEl('path', {d: path(s.arr), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+  // Marcas de cifras referenciales
+  for (const s of cfg.series) if (s.ref) for (let i = i0; i <= i1; i++) if (s.ref[i] && s.arr[i] != null)
+    svgEl('circle', {cx: x(i), cy: y(s.arr[i]), r: 3.5, fill: 'var(--surface)', stroke: s.color, 'stroke-width': 2}, svg);
+  // Año seleccionado
+  if (yi >= i0 && yi <= i1) svgEl('line', {x1: x(yi), x2: x(yi), y1: m.t, y2: m.t + ph, stroke: 'var(--axis)', 'stroke-width': 1}, svg);
+  // Hitos numerados (sobre la primera serie)
+  for (const mk of (cfg.marks || [])) {
+    const v = cfg.series[0].arr[mk.i];
+    if (v == null || mk.i < i0 || mk.i > i1) continue;
+    const cy = Math.max(m.t + 10, y(v) - (mk.i === i1 ? 34 : 20));
+    svgEl('line', {x1: x(mk.i), x2: x(mk.i), y1: cy + 9, y2: y(v) - 3, stroke: 'var(--accent)', 'stroke-width': 1}, svg);
+    svgEl('circle', {cx: x(mk.i), cy, r: 9, fill: 'var(--accent)'}, svg);
+    const t = svgEl('text', {x: x(mk.i), y: cy + 4, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 600, fill: 'var(--accent-ink)'}, svg); t.textContent = mk.n;
+  }
+  if (showEnd) {
+    const ends = cfg.series.map(s => ({s, v: s.arr[i1], y: y(s.arr[i1])})).filter(e => e.v != null).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      svgEl('circle', {cx: x(i1), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      const a = svgEl('tspan', {class: 'dval'}, t); a.textContent = fmt(e.v);
+      const b = svgEl('tspan', {}, t); b.textContent = ' ' + (e.s.short || e.s.label);
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = cfg.series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0, 'aria-label': cfg.aria + '; use las flechas para recorrer los años'}, svg);
+  let cur = null;
+  const show = (i, evt) => {
+    cur = i;
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+    cfg.series.forEach((s, j) => { const v = s.arr[i]; dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible'); if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); } });
+    const rows = [];
+    for (const s of cfg.series) {
+      rows.push({value: fmt(s.arr[i]), label: s.label, color: s.color});
+      if (s.lo && s.lo[i] != null) rows.push({value: fmt(lo0(s.lo[i])) + '–' + fmt(s.hi[i]), label: 'IC 95 %'});
+    }
+    for (const r of (cfg.refs || [])) rows.push({value: fmt(r.arr[i]), label: r.label, color: 'var(--sys)'});
+    const [cx, cy] = anchorOf(evt, cross);
+    showTip(cx, cy, String(YEARS[i]), rows, cfg.extra ? cfg.extra(i) : []);
+  };
+  const at = i => Math.max(i0, Math.min(i1, i));
+  hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(at(i0 + Math.round((evt.clientX - r.left - m.l) / pw * n)), evt); });
+  const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); };
+  hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+  hit.addEventListener('focus', () => show(cur == null ? at(yi) : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault(); show(at((cur == null ? at(yi) : cur) + (e.key === 'ArrowRight' ? 1 : -1)), null);
+  });
+}
+function legendInto(id, items) {
+  const leg = document.getElementById(id);
+  leg.replaceChildren();
+  for (const it of items) {
+    const s = htmlEl('span', null, leg);
+    const k = htmlEl('span', {cls: it.kind === 'band' ? 'bandsw' : it.kind === 'dash' ? 'ln dash' : it.kind === 'hollow' ? 'hollow' : 'ln'}, s);
+    if (it.color) { if (it.kind === 'hollow') k.style.borderColor = it.color; else k.style.background = it.color; }
+    if (!it.kind) k.style.height = '3px';
+    s.appendChild(document.createTextNode(it.label));
+  }
+}
+
+function renderNat() {
+  const A = D.amb;
+  document.getElementById('nat-title').textContent = (ind === 'pt' ? 'Pobreza monetaria total' : 'Pobreza monetaria extrema') + ', ' + YEARS[0] + '–' + YEARS[NY - 1];
+  lineChart(document.getElementById('ch-nat'), {
+    aria: IND[ind].label + ' en el Perú, área urbana y rural', endLabels: true, zero: true, fmt: v => pct(v),
+    series: [
+      {arr: A.PE[ind], lo: A.PE[ind + '_lo'], hi: A.PE[ind + '_hi'], ref: A.PE[ind + '_ref'], color: 'var(--s1)', label: 'Perú', w: 2.5},
+      {arr: A.urbana[ind], ref: A.urbana[ind + '_ref'], color: 'var(--s2)', label: 'Urbana'},
+      {arr: A.rural[ind], ref: A.rural[ind + '_ref'], color: 'var(--s3)', label: 'Rural'},
+    ],
+    extra: i => [D.breaks.filter(b => b.anio === YEARS[i] && b.tipo === 'anio').map(b => b.texto)[0],
+      ...(ind === 'pt' ? D.hitos.filter(h => h.anio === YEARS[i]).map(h => 'INEI: «' + h.cita + '»') : [])],
+    marks: ind === 'pt' ? D.hitos.map((h, j) => ({i: YEARS.indexOf(h.anio), n: j + 1})) : [],
+  });
+  const hl = document.getElementById('hitos');
+  hl.replaceChildren();
+  hl.hidden = ind !== 'pt' || !D.hitos.length;
+  if (ind === 'pt') D.hitos.forEach((h, j) => {
+    const li = htmlEl('li', null, hl);
+    htmlEl('span', {cls: 'hn', text: String(j + 1)}, li);
+    const d = htmlEl('div', null, li);
+    htmlEl('b', {text: (h.desde === h.anio - 1 ? h.anio : h.desde + '–' + h.anio) + '. '}, d);
+    htmlEl('q', {text: h.cita}, d);
+    htmlEl('span', {cls: 'src', text: h.fuente}, d);
+  });
+  legendInto('leg-nat', [{label: 'Perú', color: 'var(--s1)'}, {label: 'Área urbana', color: 'var(--s2)'}, {label: 'Área rural', color: 'var(--s3)'}, {label: 'IC 95 % (Perú)', kind: 'band'}]);
+  document.getElementById('note-nat').textContent = 'Marcas: ' + breaksFor(null).map(b => b.corto + ' (' + b.anio + ')').join(', ') + '; detalle en «Cómo se mide». ' +
+    'Las cifras nacionales, urbanas y rurales coinciden con las publicadas por el INEI en todos los años.';
+}
+
+
+// ---------- Cambios con significancia oficial (Cuadro III.1) ----------
+let chgBase = 'prev';
+const CHG = (D.chg && D.chg.data) || {};
+const chgYears = Object.keys(CHG).map(Number).sort((a, b) => a - b);
+const STARS = {'***': 'muy altamente significativa (p < 0,01)', '**': 'altamente significativa (p < 0,05)', '*': 'significativa (p < 0,10)', '': 'no marcado como significativo en el cuadro del INEI'};
+function chgSel() {
+  if (!chgYears.length) return null;
+  const y = chgYears.includes(yearOf()) ? yearOf() : chgYears[chgYears.length - 1];
+  const bases = Object.keys(CHG[y]).map(Number).sort((a, b) => b - a);
+  const b = chgBase === 'prev' ? bases[0] : bases[bases.length - 1];
+  return {y, b, rows: CHG[y][b], meta: D.chg.meta[y]};
+}
+function renderChg() {
+  const card = document.getElementById('card-chg');
+  const S = chgSel();
+  card.hidden = !S;
+  if (!S) return;
+  const seg = document.getElementById('chg-seg');
+  if (!seg.childElementCount) for (const [k, lab] of [['prev', 'Frente al año anterior'], ['2019', 'Frente a 2019']]) {
+    const b = htmlEl('button', {type: 'button', text: lab, 'aria-pressed': String(k === chgBase)}, seg);
+    b.addEventListener('click', () => { chgBase = k; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderChg(); refreshTables(); });
+  }
+  const {y, b, rows, meta} = S, iy = YEARS.indexOf(y), ib = YEARS.indexOf(b);
+  document.getElementById('chg-title').textContent = 'Cambio de la pobreza monetaria total por departamento, ' + b + '–' + y;
+  document.getElementById('chg-desc').textContent = 'Cada fila va de la cifra de ' + b + ' (círculo vacío) a la de ' + y + ' (círculo lleno). Solo se colorean los cambios que el INEI califica de estadísticamente significativos.';
+  const box = document.getElementById('ch-chg');
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const r1 = v => Math.round(v * 10) / 10;
+  const list = U26.map(id => ({id, a: r1(dv(id, 'pt', ib)), z: r1(dv(id, 'pt', iy)), d: rows[id][0], p: rows[id][1], s: rows[id][2]}))
+    .sort((p, q) => p.d - q.d);
+  const colorOf = o => o.s === '' ? 'var(--sys)' : o.d < 0 ? 'var(--down)' : 'var(--up)';
+  const narrow = W < 560, labW = narrow ? 112 : 150, valW = narrow ? 92 : 120, rowH = 22, top = 8, H = list.length * rowH + top + 24;
+  const dom = niceDomain(0, Math.max(...list.map(o => Math.max(o.a, o.z))), W < 480 ? 2 : narrow ? 4 : 6);
+  const x0 = labW + 8, pw = W - x0 - valW, x = v => x0 + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Cambio de la pobreza total por departamento entre ' + b + ' y ' + y}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: top, y2: H - 20, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)'}, g);
+    const tx = svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, g); tx.textContent = tickPct(t);
+  }
+  list.forEach((o, j) => {
+    const yy = top + j * rowH + rowH / 2, col = colorOf(o), row = svgEl('g', {class: 'rowg'}, svg);
+    const hit = svgEl('rect', {class: 'row-hit', x: 0, y: yy - rowH / 2, width: W, height: rowH, tabindex: 0, 'aria-label': nameOf(o.id) + ': ' + ppTxt(o.d) + ', ' + STARS[o.s]}, row);
+    const lb = svgEl('text', {x: labW, y: yy + 4, 'text-anchor': 'end', class: 'rowlbl' + (o.id === unit ? ' sel' : '')}, row); lb.textContent = nameOf(o.id);
+    svgEl('line', {x1: x(o.a), x2: x(o.z), y1: yy, y2: yy, stroke: col, 'stroke-width': o.s === '' ? 1.5 : 3, 'stroke-linecap': 'round'}, row);
+    svgEl('circle', {cx: x(o.a), cy: yy, r: 3.5, fill: 'var(--surface)', stroke: 'var(--sys)', 'stroke-width': 1.5}, row);
+    svgEl('circle', {cx: x(o.z), cy: yy, r: 5, fill: col, stroke: 'var(--surface)', 'stroke-width': 1.5}, row);
+    const vt = svgEl('text', {x: W - valW + 8, y: yy + 4, class: 'rowlbl' + (o.s !== '' ? ' sel' : '')}, row); vt.textContent = ppTxt(o.d) + (o.s ? ' ' + o.s : '');
+    const show = e => { const [cx, cy] = anchorOf(e, hit); showTip(cx, cy, nameOf(o.id) + ' · ' + b + '–' + y, [
+      {value: pct(o.a), label: String(b), color: 'var(--sys)'}, {value: pct(o.z), label: String(y), color: col},
+      {value: ppTxt(o.d), label: 'diferencia publicada por el INEI'}, {value: fx(o.p, 2), label: 'valor p (P>t)'}],
+      [o.s ? 'Según el INEI, el cambio es ' + STARS[o.s] + '.' : 'El cuadro del INEI no marca este cambio como significativo.',
+       !o.s && o.p < 0.10 ? 'Su P>t impreso es ' + fx(o.p, 2) + ', pero el cuadro del INEI no lo marca; se respeta el cuadro.' : null]); };
+    hit.addEventListener('pointermove', show); hit.addEventListener('focus', () => show(null));
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    hit.addEventListener('click', () => pickUnit(o.id, true));
+    hit.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickUnit(o.id, true); } });
+  });
+  const leg = document.getElementById('leg-chg');
+  leg.replaceChildren();
+  for (const [c, t] of [['var(--down)', 'Bajó (significativo según el INEI)'], ['var(--up)', 'Subió (significativo según el INEI)'], ['var(--sys)', 'Sin marca de significancia del INEI']]) {
+    const sp = htmlEl('span', null, leg); htmlEl('span', {cls: 'sw'}, sp).style.background = c; sp.appendChild(document.createTextNode(t));
+  }
+  const nup = list.filter(o => o.s !== '' && o.d > 0).length, ndn = list.filter(o => o.s !== '' && o.d < 0).length;
+  const notes = [];
+  if (yearOf() !== y) notes.push('El INEI publica la significancia de estos cambios solo en sus informes de los datos ' + chgYears[0] + '–' + chgYears[chgYears.length - 1] + ': se muestra ' + y + ', el último disponible.');
+  if (ind === 'pe') notes.push('Solo pobreza total: el INEI no publica la significancia de los cambios de la pobreza extrema por departamento.');
+  notes.push('Entre ' + b + ' y ' + y + ', según el INEI, la pobreza total bajó de forma significativa en ' + ndn + ' de las 26 unidades, subió en ' + nup + '; en ' + (26 - nup - ndn) + ', el INEI no marca el cambio como significativo.');
+  notes.push('Diferencias en puntos porcentuales y significancia: INEI, ' + meta.cuadro + ' del informe ' + meta.informe + ', pág. ' + meta.pagina + ' del PDF. * p < 0,10 (significativa); ** p < 0,05 (altamente); *** p < 0,01 (muy altamente). Se respetan las marcas del cuadro aunque el valor p impreso, redondeado a dos decimales, quede en el límite. Las cifras de cada año son las del tablero, redondeadas como las del INEI.');
+  document.getElementById('note-chg').textContent = notes.join(' ');
+}
+
+// ---------- Regiones naturales y dominios ----------
+let regMode = 'reg';
+function renderReg() {
+  const seg = document.getElementById('reg-seg');
+  if (!seg.childElementCount) for (const [k, lab] of [['reg', 'Regiones naturales'], ['dom', 'Dominios']]) {
+    const b = htmlEl('button', {type: 'button', text: lab, 'aria-pressed': String(k === regMode)}, seg);
+    b.addEventListener('click', () => { regMode = k; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderReg(); refreshTables(); });
+  }
+  const A = D.amb, box = document.getElementById('ch-reg');
+  box.replaceChildren();
+  const lab = ind === 'pt' ? 'Pobreza monetaria total' : 'Pobreza monetaria extrema';
+  if (regMode === 'reg') {
+    document.getElementById('reg-title').textContent = lab + ' por región natural, ' + YEARS[0] + '–' + YEARS[NY - 1];
+    document.getElementById('reg-desc').textContent = 'Costa, sierra y selva. La línea discontinua es el Perú.';
+    const c = htmlEl('div', {cls: 'chart'}, box);
+    const cols = ['var(--s1)', 'var(--s2)', 'var(--s3)'];
+    lineChart(c, {aria: lab + ' por región natural', endLabels: true, zero: true, fmt: v => pct(v),
+      series: D.regiones.map((r, j) => ({arr: A[r.k][ind], ref: A[r.k][ind + '_ref'], color: cols[j], label: r.n})), refs: [{arr: A.PE[ind], label: 'Perú'}],
+      extra: i => D.regiones.filter(r => A[r.k][ind + '_ref'][i]).map(r => r.n + ': ' + lcFirst(refTxt))});
+    legendInto('leg-reg', [...D.regiones.map((r, j) => ({label: r.n, color: cols[j]})), {label: 'Perú', kind: 'dash'}, {label: 'Referencial (CV mayor al 15 %)', kind: 'hollow', color: 'var(--ink2)'}]);
+  } else {
+    document.getElementById('reg-title').textContent = lab + ' por dominio geográfico, ' + YEARS[0] + '–' + YEARS[NY - 1];
+    document.getElementById('reg-desc').textContent = 'Los siete dominios geográficos del INEI (sus líneas de pobreza se calculan por dominio y departamento). Todos los paneles usan la misma escala; la franja es el IC 95 % y la línea discontinua, el Perú.';
+    const grid = htmlEl('div', {cls: 'smgrid'}, box);
+    const yMax = Math.max(...D.dominios.flatMap(d => A[d.k][ind + '_hi'].filter(v => v != null)));
+    for (const d of D.dominios) {
+      const cell = htmlEl('div', null, grid);
+      htmlEl('p', {cls: 'panel-title', text: d.n}, cell);
+      const c = htmlEl('div', {cls: 'chart'}, cell);
+      lineChart(c, {aria: lab + ', ' + d.n, H: 170, zero: true, yMax, small: true, fmt: v => pct(v),
+        series: [{arr: A[d.k][ind], lo: A[d.k][ind + '_lo'], hi: A[d.k][ind + '_hi'], ref: A[d.k][ind + '_ref'], color: 'var(--s1)', label: d.n, w: 2}], refs: [{arr: A.PE[ind], label: 'Perú'}],
+        extra: i => [A[d.k][ind + '_ref'][i] ? refTxt : null]});
+    }
+    legendInto('leg-reg', [{label: 'Dominio', color: 'var(--s1)'}, {label: 'IC 95 %', kind: 'band'}, {label: 'Perú', kind: 'dash'}, {label: 'Referencial (CV mayor al 15 %)', kind: 'hollow', color: 'var(--s1)'}]);
+  }
+  document.getElementById('note-reg').textContent = 'Cifras que coinciden con las publicadas por el INEI en todos los años (validadas con los informes técnicos de pobreza). Un círculo vacío marca una cifra referencial (CV mayor al 15 %); en pobreza extrema hay varias en la costa y en los dominios urbanos. El dominio «Lima Metropolitana y el Callao» incluye al Callao, a diferencia de la unidad departamental «Lima Metropolitana».';
+}
+
+// ---------- Gasto por persona frente a pobreza ----------
+function renderSc() {
+  const card = document.getElementById('card-sc');
+  card.hidden = !D.showSpending;
+  if (!D.showSpending) return;
+  const first = YEARS.indexOf(D.spendStart), i = yi >= first ? yi : first, y = YEARS[i], G = groupsOf(ind, y);
+  document.getElementById('sc-title').textContent = 'Gasto por persona y pobreza monetaria ' + (ind === 'pt' ? 'total' : 'extrema') + ' por departamento, ' + y;
+  document.getElementById('sc-desc').textContent = 'Cada punto es un departamento: gasto real promedio por persona al mes (eje horizontal) y ' + IND[ind].short + ' (eje vertical), coloreado según su grupo.';
+  const box = document.getElementById('ch-sc');
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const pts = U26.map(id => ({id, x: dv(id, 'gr', i), y: dv(id, ind, i), it: groupOf(ind, y, id), ref: dv(id, ind + '_ref', i)}));
+  const P = D.amb.PE, nat = {x: P.gr[i], y: P[ind][i]};
+  const H = Math.min(440, Math.max(300, W * 0.55)), m = {l: 52, r: 16, t: 14, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const dx = niceDomain(Math.min(...pts.map(p => p.x)) * 0.95, Math.max(...pts.map(p => p.x)) * 1.03, 5);
+  const dy = niceDomain(0, Math.max(...pts.map(p => p.y)) * 1.05, 5);
+  const X = v => m.l + (v - dx.lo) / (dx.hi - dx.lo) * pw, Y = v => m.t + (dy.hi - v) / (dy.hi - dy.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Gasto por persona frente a ' + IND[ind].short + ', ' + y}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dy.ticks) { svgEl('line', {x1: m.l, x2: m.l + pw, y1: Y(t), y2: Y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)'}, g); const tx = svgEl('text', {x: m.l - 8, y: Y(t) + 4, 'text-anchor': 'end'}, g); tx.textContent = tickPct(t); }
+  for (const t of dx.ticks) { svgEl('line', {x1: X(t), x2: X(t), y1: m.t, y2: m.t + ph, stroke: 'var(--grid)'}, g); const tx = svgEl('text', {x: X(t), y: m.t + ph + 16, 'text-anchor': 'middle'}, g); tx.textContent = fx(t, 0); }
+  const xl = svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg); xl.textContent = W < 560 ? 'Gasto real por persona (S/ al mes)' : 'Gasto real por persona al mes (S/ de 2025, precios de Lima Metropolitana)';
+  svgEl('line', {x1: X(nat.x), x2: X(nat.x), y1: m.t, y2: m.t + ph, stroke: 'var(--sys)', 'stroke-dasharray': '5 4'}, svg);
+  svgEl('line', {x1: m.l, x2: m.l + pw, y1: Y(nat.y), y2: Y(nat.y), stroke: 'var(--sys)', 'stroke-dasharray': '5 4'}, svg);
+  const nl = svgEl('text', {x: X(nat.x) + 4, y: m.t + 10, class: 'lbl'}, svg); nl.textContent = 'Perú';
+  for (const p of pts.sort((a, b) => (a.id === unit) - (b.id === unit))) {
+    const col = p.it ? groupColor(p.it.g, G.k) : 'var(--sys)', sel = p.id === unit;
+    const c = svgEl('circle', {cx: X(p.x), cy: Y(p.y), r: sel ? 7 : 5.5, fill: p.ref ? 'var(--surface)' : col, stroke: p.ref ? col : (sel ? 'var(--ink)' : 'var(--surface)'), 'stroke-width': p.ref || sel ? 2.5 : 1.5, class: 'cell', tabindex: 0, 'aria-label': nameOf(p.id) + ': gasto ' + sol(p.x) + ', ' + pct(p.y)}, svg);
+    if (sel) { const t = svgEl('text', {x: X(p.x) + 9, y: Y(p.y) + 4, class: 'dlbl'}, svg); t.textContent = nameOf(p.id); }
+    const show = e => { const [cx, cy] = anchorOf(e, c); showTip(cx, cy, nameOf(p.id) + ' · ' + y, [{value: sol(p.x), label: 'gasto real por persona al mes', color: col, sq: true}, {value: pct(p.y), label: IND[ind].short}],
+      [p.it ? 'Grupo ' + p.it.g + ' de ' + G.k + (G.src === 'oficial' ? ' del INEI' : ' (agrupación propia)') : null, p.ref ? refTxt : null]); };
+    c.addEventListener('pointermove', show); c.addEventListener('focus', () => show(null));
+    c.addEventListener('pointerleave', hideTip); c.addEventListener('blur', hideTip);
+    c.addEventListener('click', () => pickUnit(p.id, true));
+  }
+  legendInto('leg-sc', [...G.list.map(it => ({label: 'Grupo ' + it.g, color: groupColor(it.g, G.k), kind: 'band'})), {label: 'Referencial', kind: 'hollow', color: 'var(--ink2)'}, {label: 'Perú', kind: 'dash'}]);
+  document.querySelectorAll('#leg-sc .bandsw').forEach((k, j) => { k.style.background = groupColor(G.list[j].g, G.k); k.style.boxShadow = 'none'; });
+  const notes = [];
+  if (i !== yi) notes.push('El gasto por departamento se publica desde ' + D.spendStart + ', el primer año validado con el INEI; por eso se muestra ' + y + '.');
+  notes.push('La pobreza monetaria se mide comparando el gasto por persona de cada hogar con la línea de su dominio y departamento; aquí se muestra el promedio departamental de ese gasto, en soles de 2025 y a precios de Lima Metropolitana. Por eso la relación es esperable por construcción y no indica causa. Las líneas de pobreza, además, difieren entre departamentos.');
+  document.getElementById('note-sc').textContent = notes.join(' ');
+}
+
+// ---------- Descarga de datos (CSV) ----------
+function csvRows() {
+  const head = ['anio', 'ambito_tipo', 'ambito_id', 'ambito', 'indicador', 'valor', 'ic_inf', 'ic_sup', 'cv', 'referencial', 'grupo', 'n_grupos', 'fuente_grupo', 'unidad', 'nota'];
+  const out = [head];
+  const num = (v, d) => v == null ? '' : String(+(+v).toFixed(d));
+  YEARS.forEach((y, i) => {
+    for (const [k, tipo, name] of [['PE', 'nacional', 'Perú'], ['urbana', 'area', 'Urbana'], ['rural', 'area', 'Rural'],
+      ...D.regiones.map(r => [r.k, 'region_natural', r.n]), ...D.dominios.map(d => [d.k, 'dominio', d.n])]) {
+      const a = D.amb[k];
+      const nt = 'Coincide con el INEI.' + (D.statusYearPe[String(y)].includes('Año atípico') ? ' Año atípico (pandemia, entrevista telefónica).' : '');
+      for (const ix of ['pt', 'pe']) out.push([y, tipo, k.replace(/^(reg|dom)_/, ''), name, ix === 'pt' ? 'pobreza_total' : 'pobreza_extrema', num(a[ix][i], 4), num(a[ix + '_lo'][i], 4), num(a[ix + '_hi'][i], 4), num(a[ix + '_cv'][i], 2), a[ix + '_ref'][i] ? 'si' : 'no', '', '', '', '%', nt]);
+      if (k === 'PE') {
+        const pub = D.pobres.pub[String(y)], cur = y >= D.pobres.desde;
+        out.push([y, tipo, k, name, 'personas_pobres', num(D.pobres.miles[i], 1), '', '', '', '', '', '', '', 'miles de personas',
+          'Incidencia redondeada × población oficial al 30 de junio (método del INEI). ' + (cur && pub ? 'Coincide con la cifra del INEI.' : cur ? 'El INEI no publicó la cifra de este año.' : pub ? 'El INEI publicó ' + pub.miles + ' mil con las proyecciones de población anteriores (Censo 2007).' : 'Con la población vigente (Censo 2017).')]);
+      }
+      if (a.gr) for (const [ix, nm] of [['gr', 'gasto_real_pc'], ['ir', 'ingreso_real_pc']]) if (a[ix][i] != null)
+        out.push([y, tipo, k, name, nm, num(a[ix][i], 2), num(a[ix + '_lo'][i], 2), num(a[ix + '_hi'][i], 2), num(a[ix + '_cv'][i], 2), '', '', '', '', 'S/ de 2025 (Lima Met.) por persona al mes', '']);
+    }
+    for (const id of U26) {
+      const d = D.dep[id];
+      for (const ix of ['pt', 'pe']) {
+        const it = groupOf(ix, y, id), G = groupsOf(ix, y);
+        out.push([y, 'departamento', id, nameOf(id), ix === 'pt' ? 'pobreza_total' : 'pobreza_extrema', num(d[ix][i], 4), num(d[ix + '_lo'][i], 4), num(d[ix + '_hi'][i], 4), num(d[ix + '_cv'][i], 2),
+          d[ix + '_ref'][i] ? 'si' : 'no', it ? it.g : '', G.k, G.src === 'oficial' ? 'INEI' : 'propia', '%',
+          (ix === 'pt' ? D.statusYear[String(y)].texto : D.statusYearPe[String(y)]) + (ix === 'pt' && D.precOficial.includes(y) ? ' IC y CV del INEI (Cuadro III.1).' : '')]);
+      }
+      for (const [ix, nm] of [['gr', 'gasto_real_pc'], ['ir', 'ingreso_real_pc']]) if (d[ix] && d[ix][i] != null)
+        out.push([y, 'departamento', id, nameOf(id), nm, num(d[ix][i], 2), num(d[ix + '_lo'][i], 2), num(d[ix + '_hi'][i], 2), num(d[ix + '_cv'][i], 2), '', '', '', '', 'S/ de 2025 (Lima Met.) por persona al mes', '']);
+    }
+  });
+  return out;
+}
+function toCsv(rows) {
+  const q = v => { const t = String(v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  return '﻿' + rows.map(r => r.map(q).join(',')).join('\r\n') + '\r\n';
+}
+if (window.claude && typeof window.claude.use === 'function') {
+  window.claude.use('downloads').then(dl => { if (!dl) document.getElementById('dl-csv').hidden = true; }).catch(() => { document.getElementById('dl-csv').hidden = true; });
+}
+document.getElementById('dl-csv').addEventListener('click', async () => {
+  const msg = document.getElementById('dl-msg');
+  const name = 'pobreza_departamental_peru_' + YEARS[0] + '_' + YEARS[NY - 1] + '.csv', text = toCsv(csvRows());
+  msg.textContent = '';
+  if (window.claude && typeof window.claude.use === 'function') {
+    try {
+      const dl = await window.claude.use('downloads');
+      if (!dl) { msg.textContent = 'La descarga no está disponible en esta vista.'; return; }
+      await dl.save({filename: name, data: text});
+      msg.textContent = 'Descargado.';
+    } catch (e) {
+      msg.textContent = e && e.code === 'declined' ? '' : 'No se pudo descargar en esta vista.';
+    }
+    return;
+  }
+  const a = htmlEl('a', {href: URL.createObjectURL(new Blob([text], {type: 'text/csv;charset=utf-8'})), download: name});
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+// ---------- Mapa de calor ----------
+const HEAT = {pt: [10, 20, 30, 45, 60], pe: [2, 5, 10, 20, 35]};
+const heatLevel = v => HEAT[ind].filter(b => v >= b).length;
+function renderHeatScale() {
+  const sc = document.getElementById('heat-scale'), br = HEAT[ind];
+  sc.replaceChildren();
+  const edges = [null, ...br, null];
+  for (let k = 0; k < 6; k++) {
+    const s = htmlEl('span', null, sc), i = htmlEl('i', null, s); i.style.background = `var(--m${k + 1})`;
+    htmlEl('span', {text: edges[k] == null ? '< ' + edges[k + 1] + ' %' : edges[k + 1] == null ? '≥ ' + edges[k] + ' %' : edges[k] + ' a < ' + edges[k + 1] + ' %'}, s);
+  }
+  const r = htmlEl('span', {cls: 'refmark'}, sc);
+  const dot = htmlEl('span', {cls: 'sw'}, r); dot.style.cssText = 'width:6px;height:6px;border-radius:50%;background:var(--ink2)';
+  r.appendChild(document.createTextNode('referencial (CV mayor al 15 %)'));
+}
+function renderHeat() {
+  renderHeatScale();
+  document.getElementById('heat-title').textContent = IND[ind].label + ' por departamento, todos los años';
+  document.getElementById('heat-desc').textContent = 'Ordenado por la cifra de ' + yearOf() + '. Haga clic o toque una celda para abrir la ficha del departamento.';
+  const box = document.getElementById('ch-heat');
+  box.replaceChildren();
+  const avail = box.clientWidth;
+  if (!avail) return;
+  const labW = avail < 560 ? 112 : 150, cw = Math.max(34, Math.floor((avail - labW - 8) / NY)), rh = 22, top = 40;
+  const W = labW + 8 + cw * NY, H = top + rh * U26.length + 4;
+  const rows = U26.slice().sort((a, b) => dv(b, ind, yi) - dv(a, ind, yi));
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Mapa de calor de ' + IND[ind].short + ' por departamento y año'}, box);
+  // Tramos de la serie (pobreza total) sobre los años
+  const peFirst = YEARS.find(y => groupsOf('pe', y).src === 'oficial');
+  const spans = ind === 'pt' ? D.status : [{desde: YEARS[0], hasta: peFirst - 1, corto: 'Estimación propia'}, {desde: peFirst, hasta: YEARS[NY - 1], corto: 'Estimación propia; reproduce los grupos del INEI'}];
+  for (const s of spans) {
+    const a = YEARS.indexOf(Math.max(s.desde, YEARS[0])), b = YEARS.indexOf(Math.min(s.hasta, YEARS[NY - 1]));
+    if (a < 0 || b < 0) continue;
+    const xa = labW + 8 + a * cw + 2, xb = labW + 8 + (b + 1) * cw - 2;
+    svgEl('line', {x1: xa, x2: xb, y1: 12, y2: 12, stroke: 'var(--axis)', 'stroke-width': 2}, svg);
+    const t = svgEl('text', {x: xa, y: 8, class: 'lbl'}, svg);
+    t.textContent = (b - a + 1) * cw > 160 ? s.corto + ' (' + s.desde + '–' + s.hasta + ')' : s.desde + '–' + String(s.hasta).slice(2);
+  }
+  YEARS.forEach((y, i) => {
+    const t = svgEl('text', {x: labW + 8 + i * cw + cw / 2, y: top - 8, 'text-anchor': 'middle', class: 'lbl' + (i === yi ? ' dval' : '')}, svg);
+    t.textContent = cw >= 40 || i % 2 === 0 || i === NY - 1 ? String(y) : '';
+  });
+  rows.forEach((id, j) => {
+    const yy = top + j * rh;
+    const lb = svgEl('text', {x: labW, y: yy + rh / 2 + 4, 'text-anchor': 'end', class: 'rowlbl' + (id === unit ? ' sel' : '')}, svg); lb.textContent = nameOf(id);
+    YEARS.forEach((y, i) => {
+      const v = dv(id, ind, i), lv = heatLevel(v), xx = labW + 8 + i * cw;
+      const c = svgEl('rect', {x: xx + 1, y: yy + 1, width: cw - 2, height: rh - 2, rx: 2, fill: `var(--m${lv + 1})`, class: 'cell', tabindex: -1}, svg);
+      if (cw >= 34) { const t = svgEl('text', {x: xx + cw / 2, y: yy + rh / 2 + 4, 'text-anchor': 'middle', 'font-size': 11, fill: `var(--mt${lv + 1})`, 'pointer-events': 'none'}, svg); t.textContent = fx(v, ind === 'pe' && v < 10 ? 1 : 0); }
+      if (dv(id, ind + '_ref', i)) svgEl('circle', {cx: xx + cw - 5, cy: yy + 5, r: 2, fill: `var(--mt${lv + 1})`, 'pointer-events': 'none'}, svg);
+      const show = e => { const [cx, cy] = anchorOf(e, c); const [rr, ex] = unitTipRows(ind, y, id, `var(--m${lv + 1})`); showTip(cx, cy, nameOf(id) + ' · ' + y, rr, ex); };
+      c.addEventListener('pointermove', show); c.addEventListener('pointerleave', hideTip);
+      c.addEventListener('click', () => { yi = i; yPick.value = i; pickUnit(id, true); });
+    });
+  });
+  const n = [];
+  if (ind === 'pt') n.push('Tramos: ' + D.status.map(s => s.desde + '–' + s.hasta + ', ' + s.texto.charAt(0).toLowerCase() + s.texto.slice(1)).join(' '));
+  else n.push('Pobreza extrema por departamento: estimación propia con la metodología del INEI; desde ' + peFirst + ' reproduce los intervalos de los grupos que publica el INEI.');
+  n.push('Valores redondeados al entero' + (ind === 'pe' ? ' (con un decimal por debajo de 10 %)' : '') + '; el detalle está en el recuadro de cada celda y en «Ver tabla».');
+  document.getElementById('note-heat').textContent = n.join(' ');
+}
+
+// ---------- Ficha por departamento ----------
+function renderFicha() {
+  const id = unit, u = UNIT[id], y = yearOf(), d = D.dep[id];
+  document.getElementById('dep-title').textContent = u.name;
+  document.getElementById('dep-long').textContent = u.long !== u.name ? u.long : '';
+  const tiles = document.getElementById('dep-tiles');
+  tiles.replaceChildren();
+  for (const ix of ['pt', 'pe']) {
+    const G = groupsOf(ix, y), it = groupOf(ix, y, id);
+    const t = htmlEl('div', {cls: 'tile'}, tiles);
+    htmlEl('div', {cls: 'lab', text: IND[ix].label + ' ' + y}, t);
+    const v = htmlEl('div', {cls: 'val'}, t); v.textContent = fx(d[ix][yi], 1); htmlEl('span', {cls: 'unit', text: '%'}, v);
+    htmlEl('div', {cls: 'sub', text: d[ix][yi] === 0 ? 'Ningún hogar de la muestra en ' + IND[ix].short + ': sin intervalo ni CV' : 'IC 95 %: ' + icTxt(d[ix + '_lo'][yi], d[ix + '_hi'][yi], d[ix][yi]) + ' % · CV ' + cvTxt(d[ix + '_cv'][yi], d[ix][yi])}, t);
+    htmlEl('div', {cls: 'sub', text: 'Perú: ' + pct(D.amb.PE[ix][yi])}, t);
+    if (it) htmlEl('span', {cls: 'flag', text: 'Grupo ' + it.g + ' de ' + G.k + (G.src === 'oficial' ? ' (INEI)' : ' (agrupación propia)')}, t);
+    if (d[ix + '_ref'][yi]) htmlEl('span', {cls: 'flag', text: 'Referencial', style: 'margin-left:6px'}, t);
+  }
+  if (D.showSpending) {
+    const first = YEARS.indexOf(D.spendStart), gi = yi >= first ? yi : first, yLab = YEARS[gi];
+    for (const [k, lab] of [['gr', 'Gasto real por persona'], ['ir', 'Ingreso real por persona']]) {
+      const t = htmlEl('div', {cls: 'tile'}, tiles);
+      htmlEl('div', {cls: 'lab', text: lab + ' ' + yLab + (gi !== yi ? ' (primer año de la serie)' : '')}, t);
+      const v = htmlEl('div', {cls: 'val'}, t); v.textContent = sol(d[k][gi]); htmlEl('span', {cls: 'unit', text: 'al mes'}, v);
+      htmlEl('div', {cls: 'sub', text: 'Perú: ' + sol(D.amb.PE[k][gi])}, t);
+      htmlEl('div', {cls: 'sub', text: 'Soles de 2025 a precios de Lima Metropolitana'}, t);
+    }
+  }
+  const st = document.getElementById('dep-status');
+  st.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'Sobre las cifras de ' + y}, st);
+  htmlEl('p', {text: 'Pobreza total: ' + lcFirst(D.statusYear[String(y)].texto)}, st);
+  htmlEl('p', {text: 'Pobreza extrema: ' + lcFirst(D.statusYearPe[String(y)])}, st);
+  if (D.precOficial.includes(y)) htmlEl('p', {text: 'El intervalo y el CV de la pobreza total de ' + y + ' son los publicados por el INEI (' + D.precSrc[String(y)] + ').'}, st);
+  if (limaInherits('pt', y, id) || limaInherits('pe', y, id)) htmlEl('p', {text: D.limaSplit.texto + (limaInherits('pe', y, id) ? '' : ' Esto vale para los grupos de pobreza total; los de pobreza extrema de este año son una agrupación propia, con las tres unidades por separado.')}, st);
+  for (const ix of ['pt', 'pe']) { const it = groupOf(ix, y, id); if (it && it.nota) htmlEl('p', {text: IND[ix].label + ': ' + lcFirst(it.nota)}, st); }
+  if (d.pt_ref[yi] || d.pe_ref[yi]) htmlEl('p', {text: 'Hay cifras referenciales este año (CV mayor al 15 %): la muestra no alcanza para ese nivel de detalle.'}, st);
+  // Evolución
+  document.getElementById('depch-title').textContent = IND[ind].label + ' en ' + nameIn(id) + ', ' + YEARS[0] + '–' + YEARS[NY - 1];
+  lineChart(document.getElementById('ch-dep'), {
+    aria: IND[ind].label + ' en ' + nameIn(id), endLabels: true, zero: true, unit: id, endW: 160, fmt: v => pct(v),
+    series: [{arr: d[ind], lo: d[ind + '_lo'], hi: d[ind + '_hi'], ref: d[ind + '_ref'], color: 'var(--s1)', label: u.name, w: 2.5}],
+    refs: [{arr: D.amb.PE[ind], label: 'Perú'}],
+    extra: i => {
+      const it = groupOf(ind, YEARS[i], id), G = groupsOf(ind, YEARS[i]);
+      return [it ? 'Grupo ' + it.g + ' de ' + G.k + (G.src === 'oficial' ? ' del INEI' : ' (agrupación propia)') : null,
+        d[ind + '_ref'][i] ? refTxt : null, ...statusTexts(ind, YEARS[i], id)];
+    },
+  });
+  legendInto('leg-dep', [{label: u.name, color: 'var(--s1)'}, {label: 'IC 95 %', kind: 'band'}, {label: 'Perú', kind: 'dash'}, {label: 'Referencial (CV mayor al 15 %)', kind: 'hollow', color: 'var(--s1)'}]);
+  document.getElementById('note-dep').textContent = 'Marcas: ' + breaksFor(id).map(b => b.corto + ' (' + b.anio + ')').join(', ') + '; detalle en «Cómo se mide».';
+  // Gasto e ingreso
+  const card = document.getElementById('card-gasto');
+  card.hidden = !D.showSpending;
+  if (D.showSpending) {
+    for (const [k, box, lab] of [['gr', 'ch-gasto', 'Gasto'], ['ir', 'ch-ingreso', 'Ingreso']]) {
+      lineChart(document.getElementById(box), {
+        aria: lab + ' real por persona en ' + u.name, H: 240, unit: id, fmt: sol, tick: tickSol,
+        series: [{arr: d[k], color: 'var(--s1)', label: u.name, w: 2.5}],
+        refs: [{arr: D.amb.PE[k], label: 'Perú'}],
+      });
+    }
+    document.getElementById('note-gasto').textContent = 'Se muestran desde ' + D.spendStart + ', primer año de los cuadros departamentales de gasto e ingreso del informe 2016-2025 del INEI; este cálculo coincide con ellos salvo redondeo (± 0,5 soles).';
+  }
+}
+
+// ---------- Cómo se mide ----------
+function renderMide() {
+  document.getElementById('mide-prec').textContent = D.precOficial.length
+    ? 'Excepción: en ' + (D.precOficial.length > 1 ? D.precOficial.slice(0, -1).join(', ') + ' y ' + D.precOficial[D.precOficial.length - 1] : D.precOficial[0]) + ', el intervalo y el CV de la pobreza total por departamento son los que publica el INEI en el Cuadro III.1 del informe de cada año (2014-2023, 2015-2024 y 2016-2025), no los calculados (ver «Diferencias con los cuadros del INEI y erratas»).' : '';
+  const gl = document.getElementById('mide-grupos');
+  gl.replaceChildren();
+  const offYears = ix => YEARS.filter(y => groupsOf(ix, y).src === 'oficial');
+  const rng = a => a.length ? a[0] + '–' + a[a.length - 1] : 'ninguno';
+  [
+    'Pobreza total: grupos publicados por el INEI en todos los años (' + rng(offYears('pt')) + '), tomados del informe más reciente que los publica.',
+    'Pobreza extrema: grupos del INEI en ' + rng(offYears('pe')) + '. En los años anteriores el INEI no los publicó, y el tablero muestra una agrupación propia, rotulada así. Para armarla, los departamentos se ordenan por su cifra y se busca la partición en grupos contiguos que minimiza la suma de cuadrados dentro de los grupos, ponderando cada departamento por la inversa de su varianza (método de Fisher-Jenks); se empieza con 5 grupos y se reduce el número hasta que los intervalos de confianza de grupos vecinos no se solapen. En 2016–2025, años con grupos del INEI, este método reproduce el 91 % de las asignaciones oficiales en pobreza total y el 78 % en pobreza extrema.',
+    'Desde 2007, cada grupo lleva el intervalo que el INEI publica para él («límites inferior y superior de cada grupo robusto»). No es el rango de las cifras de sus miembros: una cifra puntual puede quedar fuera del intervalo de su grupo. El INEI no lo define; con los microdatos coincide (± 0,05 p. p. en los 196 límites de 2016–2025) con el intervalo de confianza de la pobreza del grupo tomado en conjunto (comprobación propia).',
+    'Los grupos del INEI son siempre grupos contiguos del ordenamiento, y los intervalos de grupos consecutivos nunca se solapan. No es un criterio de «todos contra todos»: en 35 de los 98 grupos oficiales de 2016–2025, al menos un par de miembros difiere en una prueba t por pares (|t| ≥ 1,96). El INEI no publica el algoritmo ni el nivel de significancia (comprobación propia).',
+    'Para 2004–2006, el informe de marzo de 2012 publica los límites de los grupos en porcentajes enteros, sin definirlos. Con los microdatos se comprueba que, en un grupo de un solo departamento, son su intervalo de confianza redondeado y, en uno de varios, la menor y la mayor cifra de sus miembros (deducción propia).',
+    'Hasta los datos de ' + D.limaSplit.last + ', los grupos del INEI tenían un solo «Lima» que incluía al Callao. En esos años, Lima Metropolitana, Región Lima y el Callao llevan el grupo de esa unidad.',
+  ].forEach(t => htmlEl('li', {text: t}, gl));
+  const tb = document.getElementById('mide-tramos');
+  tb.replaceChildren();
+  for (const s of D.status) {
+    const tr = htmlEl('tr', null, tb);
+    htmlEl('td', {text: s.desde + '–' + s.hasta}, tr);
+    htmlEl('td', {text: s.texto, style: 'white-space:normal;text-align:left'}, tr);
+  }
+  const peY = YEARS.filter(y => groupsOf('pe', y).src === 'oficial');
+  document.getElementById('mide-tramos-pe').textContent = 'Pobreza extrema por departamento: toda la serie es estimación propia con la metodología del INEI. Desde ' + peY[0] + ' reproduce los intervalos de los grupos de pobreza extrema que publica el INEI; antes de ' + peY[0] + ' no se contrastó con cifras departamentales del INEI.';
+  document.getElementById('mide-general').textContent = D.statusGeneral + ' Las cifras nacionales, urbanas y rurales coinciden con las del INEI en todos los años.';
+  const bl = document.getElementById('mide-breaks');
+  bl.replaceChildren();
+  for (const b of D.breaks) {
+    const li = htmlEl('li', null, bl);
+    htmlEl('b', {text: b.corto + ' (' + b.anio + '). '}, li);
+    li.appendChild(document.createTextNode(b.texto + ' Fuente: ' + b.fuente + '.'));
+  }
+  const nl = document.getElementById('mide-notas');
+  nl.replaceChildren();
+  const seen = new Set();
+  for (const ix of ['pt', 'pe']) for (const y of YEARS) for (const it of groupsOf(ix, y).list) if (it.nota && !seen.has(it.nota)) {
+    seen.add(it.nota);
+    htmlEl('li', {text: IND[ix].label + ', ' + y + ', grupo ' + it.g + ': ' + lcFirst(it.nota)}, nl);
+  }
+  htmlEl('li', {text: 'Cada informe del INEI publica el intervalo y el CV de la pobreza total por departamento solo para su último año (Cuadro III.1). Difieren de los que se obtienen con los microdatos y el diseño muestral: en 2025, hasta 0,17 p. p. en los límites del intervalo y 0,26 puntos en el CV; en 2023 y 2024 (informes 2014-2023 y 2015-2024), hasta 0,24 y 0,37 p. p. en los límites del intervalo. Las cifras puntuales coinciden, y ninguna marca de referencial cambia. El tablero usa los del INEI en 2023, 2024 y 2025, y el cálculo propio en los demás años, para los que el INEI no publica la precisión por departamento.'}, nl);
+  htmlEl('li', {text: 'Cuando la cifra es muy pequeña, el límite inferior del intervalo calculado puede salir negativo; se muestra como 0 (el CSV descargable conserva el valor calculado). Si ningún hogar de la muestra está en pobreza extrema (cifra 0,0), no hay intervalo ni CV.'}, nl);
+  document.getElementById('mide-cite').textContent = 'Ramos Quispe, Elisban Alberto. Pobreza monetaria por departamento, Perú ' + YEARS[0] + '–' + YEARS[NY - 1] + ' [tablero], versión del ' + dLabel(D.gen) +
+    '. Elaboración propia con los microdatos de la Encuesta Nacional de Hogares (ENAHO) del INEI. Indique además la dirección desde la que accedió al tablero y la fecha de consulta. Para las cifras oficiales, cite los informes técnicos del INEI de la lista de referencias.';
+  const sl = document.getElementById('mide-srcs');
+  sl.replaceChildren();
+  const extra = [
+    {t: 'INEI, Perú: Evolución de la pobreza monetaria 2016-2025. Informe técnico', pub: 'may-2026', url: 'https://cdn.www.gob.pe/uploads/document/file/9911234/8087825-informe-tecnico-de-pobreza-monetaria-2016-2025.pdf?v=1777993734'},
+    {t: 'Comisión Consultiva de Pobreza, Declaración sobre la estimación de la pobreza monetaria, 2025', pub: '5 de mayo de 2026', url: 'https://cdn.www.gob.pe/uploads/document/file/9911249/8087825-declaracion-de-la-comision-consultiva.pdf?v=1777993734'},
+    {t: 'INEI, microdatos de la Encuesta Nacional de Hogares (ENAHO), 2004–2025', pub: 'descargados el 21 de octubre de 2026', url: 'https://proyectos.inei.gob.pe/microdatos/'},
+    {t: 'INEI, Ficha Técnica ENAHO 2025; Informe de Calidad de la Encuesta ENAHO 2025; Metodología del cálculo del factor de expansión anual 2025', pub: 'documentación de la ENAHO 2025, portal de microdatos del INEI', url: null},
+    {t: 'INEI, Perú: Evolución de los indicadores de pobreza multidimensional, 2016-2025', pub: 'ago-2026', url: 'https://cdn.www.gob.pe/uploads/document/file/10407775/8445753-informe-tecnico-pobreza-multidimensional-2016-2025.pdf?v=1785950371'},
+    {t: 'INEI, Ficha Técnica ENDES 2022 (definiciones de coeficiente de variación e intervalo de confianza)', pub: '', url: 'https://proyectos.inei.gob.pe/endes/2022/DOCUMENTOS/FICHA_TECNICA_ENDES_2022.pdf'},
+  ];
+  for (const s of [...extra, ...D.sources.filter(z => z.k !== 'B2007')]) {
+    const li = htmlEl('li', null, sl);
+    if (s.url) htmlEl('a', {href: s.url, text: s.t, target: '_blank', rel: 'noopener'}, li); else li.appendChild(document.createTextNode(s.t));
+    if (s.pub) li.appendChild(document.createTextNode(' (' + pubTxt(s.pub) + ')'));
+  }
+  htmlEl('li', {text: 'Las páginas citadas son las del PDF; en el informe 2016-2025 coinciden con las impresas, en otros informes pueden diferir.', style: 'list-style:none;margin-left:-18px;color:var(--muted)'}, sl);
+}
+const MES3 = {ene: 'enero', feb: 'febrero', mar: 'marzo', abr: 'abril', may: 'mayo', jun: 'junio', jul: 'julio', ago: 'agosto', set: 'setiembre', oct: 'octubre', nov: 'noviembre', dic: 'diciembre'};
+const pubTxt = p => p.replace(/\b(ene|feb|mar|abr|may|jun|jul|ago|set|oct|nov|dic)-(\d{4})\b/g, (m, a, b) => MES3[a] + ' de ' + b);
+
+// ---------- Tablas (equivalente accesible de cada gráfico) ----------
+const TABLES = {
+  chg: () => {
+    const S = chgSel();
+    if (!S) return [[''], []];
+    const {y, b, rows} = S, iy = YEARS.indexOf(y), ib = YEARS.indexOf(b), r1 = v => Math.round(v * 10) / 10;
+    return [['Departamento', b + ' (%)', y + ' (%)', 'Diferencia (p. p., INEI)', 'Valor p', 'Significancia (INEI)'],
+      U26.slice().sort((p, q) => rows[p][0] - rows[q][0]).map(id => [nameOf(id), fx(r1(dv(id, 'pt', ib))), fx(r1(dv(id, 'pt', iy))), fx(rows[id][0]), fx(rows[id][1], 2), rows[id][2] ? rows[id][2] + ' ' + STARS[rows[id][2]] : STARS['']])];
+  },
+  reg: () => {
+    const list = regMode === 'reg' ? D.regiones : D.dominios;
+    return [['Año', ...list.map(r => r.n + ' (%)'), 'Perú (%)'], YEARS.map((y, i) => [String(y), ...list.map(r => fx(D.amb[r.k][ind][i])), fx(D.amb.PE[ind][i])]).reverse()];
+  },
+  sc: () => {
+    const first = YEARS.indexOf(D.spendStart), i = yi >= first ? yi : first, y = YEARS[i];
+    return [['Departamento', 'Gasto real por persona ' + y + ' (S/)', IND[ind].label + ' ' + y + ' (%)', 'Grupo'],
+      U26.slice().sort((a, b) => dv(b, 'gr', i) - dv(a, 'gr', i)).map(id => { const it = groupOf(ind, y, id); return [nameOf(id), fx(dv(id, 'gr', i), 0), fx(dv(id, ind, i)), it ? String(it.g) : '']; })];
+  },
+  grp: () => {
+    const y = yearOf(), G = groupsOf(ind, y);
+    return [['Grupo', 'Departamentos', groupKindLabel(G)], G.list.map(it => ['Grupo ' + it.g, it.ids.map(groupMemberName).sort((a, b) => a.localeCompare(b, 'es')).join(', '), groupInterval(G, it)])];
+  },
+  dots: () => {
+    const y = yearOf();
+    return [['Departamento', IND[ind].label + ' ' + y + ' (%)', 'IC 95 % inferior', 'IC 95 % superior', 'CV', 'Referencial', 'Grupo'],
+      U26.slice().sort((a, b) => dv(b, ind, yi) - dv(a, ind, yi)).map(id => { const it = groupOf(ind, y, id); return [nameOf(id), fx(dv(id, ind, yi)), fx(lo0(dv(id, ind + '_lo', yi))), fx(dv(id, ind + '_hi', yi)), cvTxt(dv(id, ind + '_cv', yi), dv(id, ind, yi)), dv(id, ind + '_ref', yi) ? 'Sí' : 'No', it ? String(it.g) : '']; })];
+  },
+  nat: () => {
+    const A = D.amb;
+    return [['Año', 'Perú (%)', 'IC 95 %', 'CV (%)', 'Urbana (%)', 'Rural (%)'],
+      YEARS.map((y, i) => [String(y), fx(A.PE[ind][i]), fx(lo0(A.PE[ind + '_lo'][i])) + '–' + fx(A.PE[ind + '_hi'][i]), fx(A.PE[ind + '_cv'][i]), fx(A.urbana[ind][i]), fx(A.rural[ind][i])]).reverse()];
+  },
+  heat: () => [['Departamento'].concat(YEARS.map(String)), U26.slice().sort((a, b) => dv(b, ind, yi) - dv(a, ind, yi)).map(id => [nameOf(id)].concat(YEARS.map((y, i) => fx(dv(id, ind, i)) + (dv(id, ind + '_ref', i) ? ' (ref.)' : ''))))],
+  dep: () => {
+    const d = D.dep[unit];
+    return [['Año', 'Pobreza total (%)', 'IC 95 %', 'CV', 'Grupo', 'Pobreza extrema (%)', 'IC 95 %', 'CV', 'Grupo'],
+      YEARS.map((y, i) => {
+        const a = groupOf('pt', y, unit), b = groupOf('pe', y, unit), Ga = groupsOf('pt', y), Gb = groupsOf('pe', y);
+        return [String(y), fx(d.pt[i]) + (d.pt_ref[i] ? ' (ref.)' : ''), icTxt(d.pt_lo[i], d.pt_hi[i], d.pt[i]), cvTxt(d.pt_cv[i], d.pt[i]), a ? a.g + ' de ' + Ga.k + (Ga.src === 'oficial' ? '' : ' (propia)') : '',
+          fx(d.pe[i]) + (d.pe_ref[i] ? ' (ref.)' : ''), icTxt(d.pe_lo[i], d.pe_hi[i], d.pe[i]), cvTxt(d.pe_cv[i], d.pe[i]), b ? b.g + ' de ' + Gb.k + (Gb.src === 'oficial' ? '' : ' (propia)') : ''];
+      }).reverse()];
+  },
+  gasto: () => {
+    const d = D.dep[unit], P = D.amb.PE;
+    return [['Año', 'Gasto real ' + nameOf(unit) + ' (S/)', 'IC 95 %', 'Gasto real Perú (S/)', 'Ingreso real ' + nameOf(unit) + ' (S/)', 'IC 95 %', 'Ingreso real Perú (S/)'],
+      YEARS.map((y, i) => i).filter(i => d.gr[i] != null).map(i => [String(YEARS[i]), fx(d.gr[i], 0), fx(d.gr_lo[i], 0) + '–' + fx(d.gr_hi[i], 0), fx(P.gr[i], 0), fx(d.ir[i], 0), fx(d.ir_lo[i], 0) + '–' + fx(d.ir_hi[i], 0), fx(P.ir[i], 0)]).reverse()];
+  },
+};
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  const [head, rows] = TABLES[key]();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+}
+function refreshTables() { for (const k in TABLES) { const w = document.getElementById('tb-' + k); if (w && !w.hidden) fillTable(k); } }
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key), open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+});
+
+// ---------- Pestañas ----------
+const TABS = ['panorama', 'ficha', 'mide'];
+function renderPanorama() { renderKpis(); renderCallout(); renderMap(); renderDots(); renderChg(); renderNat(); renderReg(); renderHeat(); renderSc(); }
+function renderVisible() {
+  hideTip();
+  if (tab === 'panorama') renderPanorama(); else if (tab === 'ficha') renderFicha(); else renderMide();
+}
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'mide';
+  renderVisible();
+  if (fromUser) {
+    saveState();
+    if (id === 'ficha') document.getElementById('dep-title').scrollIntoView({block: 'nearest'});
+  }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+document.getElementById('h1').textContent = 'Pobreza monetaria por departamento, Perú ' + YEARS[0] + '–' + YEARS[NY - 1];
+document.getElementById('lede').textContent = 'Qué porcentaje de la población vive en hogares cuyo gasto por persona no alcanza para cubrir una canasta básica de consumo (alimentos y otros bienes y servicios), en cada departamento y cada año desde ' + YEARS[0] +
+  '. Cálculo propio con los microdatos de la ENAHO del INEI, validado con las cifras que publica el INEI. Cada cifra tiene un margen de error: una cifra más alta no basta para decir que un departamento tiene más pobreza que otro.';
+document.getElementById('howto-link').addEventListener('click', e => { e.preventDefault(); showTab('mide', true); document.getElementById('howto').scrollIntoView({block: 'start'}); });
+const foot = document.getElementById('foot');
+[
+  'Fuente: INEI, Encuesta Nacional de Hogares (ENAHO) ' + YEARS[0] + '–' + YEARS[NY - 1] + ', microdatos; grupos de departamentos y cifras oficiales de los informes técnicos de pobreza monetaria del INEI listados en «Cómo se mide».',
+  'Las cifras por departamento son cálculo propio con la metodología del INEI. Coinciden con las del INEI en todos los años en que el INEI las publica; en los demás, se indica en cada cifra.',
+  'Actualizado el ' + dLabel(D.gen) + '.',
+].forEach(t => htmlEl('p', {text: t}, foot));
+
+addEventListener('hashchange', () => { const t = readState(); showTab(TABS.includes(t) ? t : tab, false); refreshTables(); });
+const startTab = readState();
+showTab(TABS.includes(startTab) ? startTab : 'panorama', false);
+let rt;
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

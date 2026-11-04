@@ -397,6 +397,8 @@ footer p { margin: 4px 0; max-width: 90ch; }
         <h3>Deudores y saldo por deudor</h3>
         <p>Es el número de deudores que publica la SBS por tipo de crédito. En el tablero empieza en diciembre de 2010. No se pueden sumar. En el total de cada subsistema, un deudor con créditos del mismo tipo en dos entidades se cuenta una vez. En el total de una entidad, un deudor con dos tipos de crédito también se cuenta una vez. Por eso los créditos empresariales, que reúnen cinco tipos, no tienen número de deudores.</p>
         <p>Para el sistema se usa el cuadro SF-2103 «Evolución del Sistema Financiero» de la SBS, que cuenta a cada deudor una sola vez en todas las empresas de operaciones múltiples. Es trimestral, empieza en diciembre de 2019 y solo trae el total. El saldo por deudor es el saldo de colocaciones entre el número de deudores.</p>
+        <p id="deu-err-note" hidden></p>
+        <p id="rep-note" hidden></p>
       </section>
 
       <section id="indicadores">
@@ -614,17 +616,81 @@ function contrib(scope, i) {
   const v = parts.map(x => 100 * x / base);
   return {parts: v, total: v.reduce((a, b) => a + b, 0)};
 }
+// Deudores sin dato por un error de origen de la SBS (el Excel repite las cifras de otro mes; lista de
+// errores de origen): {m, from, tot} o null. El mes entero repetido (D.deuErr) vale para el subsistema y sus
+// entidades en todos los tipos; el total repetido (D.deuTotErr), solo para el tipo «total»: con alcance «sub»,
+// solo el total del subsistema; con «all», también el de cada entidad. El sistema (SF-2103) no tiene errores.
+function deuErrAt(scope, tipo, i) {
+  const s = SC[scope] && SC[scope].s, m = MONTHS[i];
+  if (!s || !m) return null;
+  const e = (D.deuErr || []).find(([x, y]) => x === m && y === s);
+  if (e) return {m, from: e[2], tot: false};
+  if (tipo !== 'total') return null;
+  const f = (D.deuTotErr || []).find(([x, y, a]) => x === m && y === s && (a === 'all' || scope === s));
+  return f ? {m, from: f[3], tot: true} : null;
+}
+const dvWhy = dv => dv.err ? deuErrText(dv.err) : repText(dv.rep);
+const deuErrText = e => 'en ' + mShort(e.m) + ' la SBS repitió ' + (e.tot ? 'el total de deudores' : 'las cifras de deudores') +
+  ' de ' + (e.from ? mShort(e.from) : 'otro mes') + ' (error de origen)';
+const capFirst = s => s.charAt(0).toUpperCase() + s.slice(1);
+// Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): D.rep = [[mes, «subsistema/entidad», mes repetido,
+// alcance, motivo]]. Ese mes la serie de la entidad queda sin dato (la SBS repitió en sus cuadros las cifras de otro mes;
+// los totales del subsistema y del sistema sí las suman, como la SBS). Tablas y ficha muestran el último dato válido con
+// su mes y el motivo; en los gráficos el mes es un hueco con el motivo en el tooltip.
+const REP = new Map((D.rep || []).map(r => [r[1] + '|' + r[0], r]));
+const repAt = (sc, i) => sc == null || i == null || i < 0 || i >= N ? null : REP.get(sc + '|' + MONTHS[i]) || null;
+const repText = r => 'en ' + mShort(r[0]) + ' la SBS repitió las cifras de ' + mShort(r[2]) + ' en sus cuadros (' + r[4] + ')';
+// Por qué el indicador k de la entidad sc no tiene dato en el mes i por una cifra repetida: el mes mismo; para el
+// crecimiento anual, también el mes de hace 12 meses; para la mora ajustada, cualquier mes de la ventana de castigos
+// de 12 meses. Texto o null.
+function repWhy(sc, i, k) {
+  const r = repAt(sc, i);
+  if (r) return repText(r);
+  if (k === 'cre' && repAt(sc, i - 12)) return 'el crecimiento anual compara con ' + mShort(MONTHS[i - 12]) + ', y ' + repText(repAt(sc, i - 12));
+  if (k === 'adj') for (let q = 1; q <= 11; q++) { const w = repAt(sc, i - q); if (w) return 'la suma de castigos de 12 meses incluye ' + mShort(w[0]) + ', y ' + repText(w); }
+  return null;
+}
+// Último mes con dato de la entidad antes de un mes repetido (hasta el mes cuyas cifras repitió la SBS, o 3 meses).
+function repFallback(sc, tipo, i) {
+  const r = repAt(sc, i);
+  if (!r) return null;
+  const lo = Math.max(0, Math.min(i - 3, idxOf(r[2])));
+  for (let j = i - 1; j >= lo; j--) if (raw(sc, tipo, j)) return j;
+  return null;
+}
 // Deudores: para el sistema, el último trimestre del SF-2103 hasta el mes elegido (máx. 2 meses antes).
-// Si los deudores del mes todavía no se publican (no hay ninguno después), el último publicado.
+// Si los deudores del mes todavía no se publican (no hay ninguno después), el último publicado (en el sistema,
+// hasta 6 meses antes: el SF-2103 sale con más rezago que el boletín; desde el 2026-11-03, antes quedaba «—»).
+// Si el mes es un error de origen de la SBS (deuErrAt), el último mes válido de los 12 anteriores, con el motivo (err).
+function deuRaw(scope, tipo, j) {
+  const s = SC[scope], T = s && s.T[tipo], q = s ? j - s.a : -1;
+  if (!T || j < 0 || q < 0 || q >= T[5].length || T[5][q] == null) return null;
+  return {deu: T[5][q], tot: T[0][q]};
+}
 function debtors(scope, tipo, i) {
   for (let j = i; j >= Math.max(0, i - (scope === 'sistema' ? 2 : 0)); j--) {
-    const r = raw(scope, tipo, j);
-    if (r && r.deu != null) return {v: r.deu, i: j, tot: r.tot};
+    const r = deuRaw(scope, tipo, j);
+    if (r) return {v: r.deu, i: j, tot: r.tot};
+  }
+  // Entidad-mes con las cifras de otro mes (D.rep): el último dato válido, con el motivo (rep).
+  const rp = repAt(scope, i);
+  if (rp) {
+    const lo = Math.max(0, Math.min(i - 3, idxOf(rp[2])));
+    for (let j = i - 1; j >= lo; j--) { const r = deuRaw(scope, tipo, j); if (r) return {v: r.deu, i: j, tot: r.tot, rep: rp}; }
+    return null;
+  }
+  const err = deuErrAt(scope, tipo, i);
+  if (err) {
+    for (let j = i - 1; j >= Math.max(0, i - 12); j--) {
+      const r = raw(scope, tipo, j);
+      if (r && r.deu != null) return {v: r.deu, i: j, tot: r.tot, err};
+    }
+    return null;
   }
   const s = SC[scope], T = s && s.T[tipo];
-  if (scope === 'sistema' || !T || !raw(scope, tipo, i)) return null;
+  if (!T || !raw(scope, tipo, i)) return null;
   for (let j = i + 1 - s.a; j < T[5].length; j++) if (T[5][j] != null) return null;
-  for (let j = i - 1; j >= Math.max(0, i - 3); j--) {
+  for (let j = i - 1; j >= Math.max(0, i - (scope === 'sistema' ? 6 : 3)); j--) {
     const r = raw(scope, tipo, j);
     if (r && r.deu != null) return {v: r.deu, i: j, tot: r.tot};
   }
@@ -864,8 +930,9 @@ function lineChart(box, cfg) {
     },
     unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
     rows(i) {
-      return series.filter(s => !s.noTip).map(s => ({v: s.get(i), label: s.label, color: s.color}))
-        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      return series.filter(s => !s.noTip).map(s => { const v = s.get(i); return {v, label: s.label, color: s.color, why: v == null && s.na ? s.na(i) : null}; })
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity))
+        .map(r => r.why ? {value: 'sin dato', label: r.label + ': ' + r.why, color: r.color} : {value: fmt(r.v), label: r.label, color: r.color});
     },
   };
   group.charts.push(chart);
@@ -1072,8 +1139,11 @@ function renderKpis() {
   const s1 = htmlEl('div', {cls: 'sub'}, d);
   if (dv) {
     const dp = debtors(sc, t, dv.i - 12);
-    deltaSpan(s1, dp && dp.i === dv.i - 12 ? 100 * (dv.v / dp.v - 1) : null, 'sal', ' en 12 meses' + (dv.i !== i ? ' (a ' + mShort(MONTHS[dv.i]) + ')' : ''));
-    htmlEl('div', {cls: 'sub', text: 'Saldo por deudor: S/ ' + f0.format(1000 * dv.tot / dv.v)}, d);
+    // Hace 12 meses cae en un error de origen: se explica en vez de comparar con otro mes.
+    if (dp && dp.err && dp.i !== dv.i - 12) s1.textContent = 'Variación en 12 meses no calculable: ' + deuErrText(dp.err) + '.';
+    else deltaSpan(s1, dp && dp.i === dv.i - 12 ? 100 * (dv.v / dp.v - 1) : null, 'sal', ' en 12 meses' + (dv.i !== i ? ' (a ' + mShort(MONTHS[dv.i]) + ')' : ''));
+    htmlEl('div', {cls: 'sub', text: 'Saldo por deudor: S/ ' + f0.format(1000 * dv.tot / dv.v) + (dv.i !== i ? ' (' + mShort(MONTHS[dv.i]) + ')' : '')}, d);
+    if (dv.err) htmlEl('div', {cls: 'sub', text: 'Último dato válido, de ' + mShort(MONTHS[dv.i]) + ': ' + deuErrText(dv.err) + '.'}, d);
   } else {
     s1.textContent = naMsg(sc, 'sal', t) || (t === 'empresariales' ? 'No se suman: un deudor puede tener varios tipos de crédito.'
       : sc === 'sistema' ? (t === 'total' ? 'El SF-2103 es trimestral y empieza en dic-2019.' : 'Para el sistema solo hay el total (SF-2103).') : 'Sin dato');
@@ -1274,27 +1344,34 @@ function entRow(k, t, i, subTot) {
   const dv = debtors(k, t, i);
   return {k, n: SC[k].n, tot: r.tot, sh: subTot ? 100 * r.tot / subTot : null, cre: growth(k, t, i), dol: ind(k, t, i, 'dol'),
     mora: ind(k, t, i, 'mora'), car: ind(k, t, i, 'car'), adj: ind(k, t, i, 'adj'), moraP: ind(k, t, i - 12, 'mora'), deu: dv ? dv.v : null,
-    deuI: dv ? dv.i : null, deuTot: dv ? dv.tot : null};
+    deuI: dv ? dv.i : null, deuTot: dv ? dv.tot : null, deuErr: dv && (dv.err || dv.rep) ? dvWhy(dv) : null};
 }
 function rankRows() {
   const sub = state.sub, t = state.tipo, i = effIdx(sub), k0 = state.ind;
   const subR = raw(sub, t, i);
-  const out = [];
+  const out = [], rep = [];
   let small = 0;
   for (const k of D.entities) {
     if (SC[k].s !== sub) continue;
     const e = entRow(k, t, i, subR ? subR.tot : null);
-    if (!e) continue;
+    if (!e) { if (repAt(k, i)) rep.push(k); continue; }
     if (e.tot < MIN_TOT) { small++; continue; }
     e.v = ind(k, t, i, k0);
-    if (e.v == null) continue;
+    if (e.v == null) { if (repWhy(k, i, k0)) rep.push(k); continue; }
     if (k0 === 'sal') { const p = rawPrev(k, t, i - 12); e.p = p ? p.tot : null; }
     else if (k0 === 'cre') e.p = growth(k, t, i - 12);
     else e.p = ind(k, t, i - 12, k0);
     out.push(e);
   }
   out.sort((a, b) => b.v - a.v);
-  return {rows: out, small};
+  return {rows: out, small, rep};
+}
+// Nota de las entidades que el ranking omite por una cifra repetida (con su último dato válido).
+function repNote(ks, i, k0) {
+  return ks.map(k => {
+    const why = repWhy(k, i, k0), j = repFallback(k, state.tipo, i), v = j == null ? null : ind(k, state.tipo, j, k0);
+    return SC[k].n + ' no aparece: ' + why + (v != null ? '. Su último dato válido es ' + fmtInd(k0, v) + ' (' + mLabel(MONTHS[j]) + ')' : '') + '.';
+  }).join(' ');
 }
 const CLAMP = {cre: [-50, 100]};
 function renderRank() {
@@ -1311,9 +1388,9 @@ function renderRank() {
 
   const box = document.getElementById('ch-rank');
   box.replaceChildren();
-  const {rows, small} = rankRows();
+  const {rows, small, rep} = rankRows();
   const note = document.getElementById('rank-note');
-  note.textContent = (i !== state.mi ? lagNote() + ' ' : '') + (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 1 millón en este tipo de crédito y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
+  note.textContent = (i !== state.mi ? lagNote() + ' ' : '') + (rep.length ? repNote(rep, i, state.ind) + ' ' : '') + (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 1 millón en este tipo de crédito y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
     (isSal ? 'A la derecha, la participación en el saldo del subsistema.' : 'A la derecha, el saldo de créditos directos del tipo elegido.') +
     (state.ind === 'cre' ? ' La escala se corta en −50% y +100%; el número muestra el valor completo. Un crecimiento muy alto suele venir de una fusión o de una cartera que recién empieza.' : '');
   if (!rows.length) { emptyMsg(box, naMsg(sub) || 'No hay entidades con datos para esta combinación.'); return; }
@@ -1393,7 +1470,9 @@ function renderScatter() {
   const subR = raw(sub, t, i);
   const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, t, i, subR ? subR.tot : null))
     .filter(e => e && e.tot >= MIN_TOT && e.cre != null && e[q] != null);
-  document.getElementById('sc-note').textContent = (i !== state.mi ? lagNote() + ' ' : '') + 'Solo entidades con al menos S/ 1 millón en el tipo de crédito elegido, hoy y hace 12 meses. La escala se corta en ' +
+  const scRep = D.entities.filter(k => SC[k].s === sub && !pts.some(p => p.k === k) && (repWhy(k, i, 'cre') || repWhy(k, i, q)))
+    .map(k => SC[k].n + ' no aparece: ' + (repWhy(k, i, 'cre') || repWhy(k, i, q)) + '.');
+  document.getElementById('sc-note').textContent = (i !== state.mi ? lagNote() + ' ' : '') + (scRep.length ? scRep.join(' ') + ' ' : '') + 'Solo entidades con al menos S/ 1 millón en el tipo de crédito elegido, hoy y hace 12 meses. La escala se corta en ' +
     SC_X[0] + '% y +' + SC_X[1] + '% de crecimiento y en ' + SC_Y + '% de ' + Q.lower + '; pase el cursor sobre un círculo hueco para ver su valor.';
   if (pts.length < 2) { emptyMsg(box, naMsg(sub) || 'No hay suficientes entidades con datos para esta combinación.'); return; }
   const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
@@ -1458,8 +1537,8 @@ function renderScatter() {
 function entOptions() {
   const sub = state.sub, i = effIdx(sub);
   const list = D.entities.filter(k => SC[k].s === sub).map(k => {
-    const r = raw(k, 'total', i);
-    return {k, n: SC[k].n, tot: r ? r.tot : null};
+    const j = raw(k, 'total', i) ? i : repFallback(k, 'total', i), r = j == null ? null : raw(k, 'total', j);
+    return {k, n: SC[k].n + (r && j !== i ? ' (último dato válido: ' + mShort(MONTHS[j]) + ')' : ''), tot: r ? r.tot : null};
   });
   const active = list.filter(e => e.tot != null).sort((a, b) => b.tot - a.tot);
   const gone = list.filter(e => e.tot == null).sort((a, b) => a.n.localeCompare(b.n, 'es'));
@@ -1484,22 +1563,28 @@ function renderEnt() {
   box.replaceChildren(); stats.replaceChildren();
   if (!k) return;
   // Si la entidad todavía no publica el mes elegido, su último mes, marcado en cada dato.
-  const E = SC[k], sub = E.s, t = state.tipo, i = effIdx(k), I = IND_BY[state.ind], lag = i !== state.mi ? ' · ' + mLabel(MONTHS[i]) : '';
+  const E = SC[k], sub = E.s, t = state.tipo, i0 = effIdx(k), I = IND_BY[state.ind];
+  // Mes con las cifras de otro mes (D.rep): la ficha usa el último dato válido, con su mes; el gráfico deja el hueco.
+  const rp = repAt(k, i0), iF = rp ? repFallback(k, t, i0) : null, i = rp && iF != null ? iF : i0;
+  const lag = i !== state.mi ? ' · ' + mLabel(MONTHS[i]) : '';
   document.getElementById('ent-title').textContent = E.n;
   document.getElementById('ent-desc').textContent = I.name + ' de ' + typeLower(t) +
     (state.ind === 'sal' ? '.' : ', frente a su subsistema (' + SUB_BY[sub].l.toLowerCase() + ') y al sistema.');
   const subR = raw(sub, t, i), e = entRow(k, t, i, subR ? subR.tot : null) || {};
-  const chg = o => { const v = ind(k, t, i, o), p = ind(k, t, i - 12, o); return v == null || p == null ? '' : spp(v - p) + ' en 12 meses'; };
+  const chg = o => { const v = ind(k, t, i, o), p = ind(k, t, i - 12, o);
+    if (v != null && p == null && repWhy(k, i - 12, o)) return 'sin dato de hace 12 meses (cifras repetidas)';
+    return v == null || p == null ? '' : spp(v - p) + ' en 12 meses'; };
   const pr = rawPrev(k, t, i - 12);
   const items = [
     {lab: 'Saldo de colocaciones', val: money(e.tot), sub: typeName(t)},
-    {lab: 'Crecimiento anual', val: spct(e.cre), sub: e.cre == null ? '' : 'nominal: ' + spct(pr && e.tot ? 100 * (e.tot / pr.tot - 1) : null)},
+    {lab: 'Crecimiento anual', val: spct(e.cre), sub: e.cre == null ? (e.tot != null && repWhy(k, i, 'cre') ? 'sin dato: ' + repWhy(k, i, 'cre') : '') : 'nominal: ' + spct(pr && e.tot ? 100 * (e.tot / pr.tot - 1) : null)},
     {lab: 'Participación', val: pct(e.sh, 1), sub: 'del subsistema'},
     {lab: 'Dolarización', val: pct(e.dol, 1), sub: chg('dol')},
     {lab: 'Mora', val: pct(e.mora), sub: chg('mora')},
     {lab: 'Cartera de alto riesgo', val: pct(e.car), sub: chg('car')},
-    {lab: 'Mora ajustada por castigos', val: pct(e.adj), sub: e.adj == null && adjGap(i, t) ? (i < ADJ0 ? 'desde ' + mShort(D.adjFrom) : 'solo al cierre de trimestre') : chg('adj')},
-    {lab: 'Deudores', val: people(e.deu), sub: e.deu ? (e.deuI !== i ? mShort(MONTHS[e.deuI]) + ' · ' : '') + 'Saldo por deudor: S/ ' + f0.format(1000 * e.deuTot / e.deu) : (t === 'empresariales' ? 'no se suman entre tipos' : '')},
+    {lab: 'Mora ajustada por castigos', val: pct(e.adj), sub: e.adj == null && adjGap(i, t) ? (i < ADJ0 ? 'desde ' + mShort(D.adjFrom) : 'solo al cierre de trimestre')
+      : e.adj == null && e.tot != null && repWhy(k, i, 'adj') ? 'sin dato: ' + repWhy(k, i, 'adj') : chg('adj')},
+    {lab: 'Deudores', val: people(e.deu), sub: e.deu ? (e.deuI !== i ? mShort(MONTHS[e.deuI]) + ' · ' : '') + (e.deuTot != null ? 'Saldo por deudor: S/ ' + f0.format(1000 * e.deuTot / e.deu) : '') : (t === 'empresariales' ? 'no se suman entre tipos' : '')},
   ];
   for (const it of items) {
     const d = htmlEl('div', null, stats);
@@ -1507,7 +1592,7 @@ function renderEnt() {
     htmlEl('div', {cls: 'val', text: it.val}, d);
     htmlEl('div', {cls: 'sub', text: it.sub || ' '}, d);
   }
-  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, get: j => ind(k, t, j)}];
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, get: j => ind(k, t, j), na: j => repWhy(k, j, I.k)}];
   if (state.ind !== 'sal') {
     series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, get: j => ind(sub, t, j)});
     if (hasType('sistema', t)) series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 1.5, dash: '5 4', get: j => ind('sistema', t, j)});
@@ -1520,11 +1605,14 @@ function renderEnt() {
     ln.style.background = s.color;
     sp.appendChild(document.createTextNode(s.label));
   }
-  lineChart(box, {idx: visIdx(), H: 320, endLabels: true, bridge: I.k === 'adj', series, marker: i, u: I.u, fmt: v => fmtInd(I.k, v), aria: I.name + ' de ' + E.n,
+  lineChart(box, {idx: visIdx(), H: 320, endLabels: true, bridge: I.k === 'adj', series, marker: i0, u: I.u, fmt: v => fmtInd(I.k, v), aria: I.name + ' de ' + E.n,
     empty: naMsg(sub) || 'La entidad no tiene este tipo de crédito en el periodo.'});
   const note = document.getElementById('ent-note');
-  const msg = E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. En el primer año después del cambio, su crecimiento anual se calcula con esa serie.' : '';
-  const full = i !== state.mi ? withLag(msg) : msg;
+  const msg = [rp ? 'Sin dato propio de ' + mLabel(MONTHS[i0]) + ': ' + repText(rp) + '. ' + (iF != null ? 'Las cifras de arriba son el último dato válido, de ' + mLabel(MONTHS[iF]) + '; ' : '') +
+      'en el gráfico ese mes queda como un hueco.' : '',
+    E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. En el primer año después del cambio, su crecimiento anual se calcula con esa serie.' : '',
+    e.deuErr && !rp ? 'Deudores: ' + e.deuErr + '; se muestra el último dato válido, de ' + mLabel(MONTHS[e.deuI]) + '.' : ''].filter(Boolean).join(' ');
+  const full = i0 !== state.mi ? withLag(msg) : msg;
   note.hidden = !full; note.textContent = full;
 }
 
@@ -1551,9 +1639,30 @@ const TABLES = {
     const k = state.ent, t = state.tipo;
     if (!k) return [['Mes'], []];
     const sub = SC[k].s, idx = visIdx().slice().reverse();
+    // Deudores de un mes con error de origen de la SBS: el último dato válido, con su mes y el motivo.
+    const deuCell = i => {
+      const d = deuRaw(k, t, i);
+      if (d) return f0.format(d.deu);
+      const dv = (deuErrAt(k, t, i) || repAt(k, i)) && debtors(k, t, i);
+      return dv ? {v: f0.format(dv.v) + ' (' + mLabel(MONTHS[dv.i]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[dv.i]) + ': ' + dvWhy(dv) + '.'} : '—';
+    };
+    // Celda del indicador o; en un mes con las cifras de otro mes (D.rep), el último dato válido con su mes y el
+    // motivo; si falta porque la cuenta usa un mes repetido (crecimiento, mora ajustada), «—» con el motivo.
+    const cell = (i, o, fmt) => {
+      const v = o === 'sal' ? (raw(k, t, i) || {}).tot : ind(k, t, i, o);
+      if (v != null) return fmt(v);
+      const rp = repAt(k, i);
+      if (rp) {
+        const j = repFallback(k, t, i), w = j == null ? null : (o === 'sal' ? raw(k, t, j).tot : ind(k, t, j, o));
+        if (w != null) return {v: fmt(w) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(rp) + '.'};
+        return {v: '—', title: 'Sin dato: ' + repText(rp) + '.'};
+      }
+      const why = raw(k, t, i) && repWhy(k, i, o);
+      return why ? {v: '—', title: 'Sin dato: ' + why + '.'} : fmt(v);
+    };
     return [['Mes', 'Saldo', 'Crecimiento anual', 'Dolarización', 'Mora', 'Alto riesgo', 'Ajustada', 'Deudores', 'Mora de ' + SUB_BY[sub].s],
-      idx.map(i => { const r = raw(k, t, i); return r ? [mLabel(MONTHS[i]), money(r.tot), spct(growth(k, t, i)), pct(ind(k, t, i, 'dol'), 1), pct(ind(k, t, i, 'mora')),
-        pct(ind(k, t, i, 'car')), pct(ind(k, t, i, 'adj')), r.deu == null ? '—' : f0.format(r.deu), pct(ind(sub, t, i, 'mora'))] : null; })
+      idx.map(i => raw(k, t, i) || repAt(k, i) ? [mLabel(MONTHS[i]), cell(i, 'sal', money), cell(i, 'cre', v => spct(v)), cell(i, 'dol', v => pct(v, 1)), cell(i, 'mora', v => pct(v)),
+        cell(i, 'car', v => pct(v)), cell(i, 'adj', v => pct(v)), deuCell(i), pct(ind(sub, t, i, 'mora'))] : null)
         .filter(Boolean)];
   },
 };
@@ -1609,8 +1718,11 @@ function fillRankTable(wrap) {
     {l: 'Mora hace 12 meses', get: r => r.moraP, fmt: v => pct(v)},
     {l: 'Alto riesgo', get: r => r.car, fmt: v => pct(v)},
     {l: 'Ajustada por castigos', get: r => r.adj, fmt: v => pct(v)},
-    {l: 'Deudores' + (dLag ? ' (' + mShort(MONTHS[dLag.deuI]) + ')' : ''), get: r => r.deu, fmt: v => v == null ? '—' : f0.format(v)},
+    {l: 'Deudores' + (dLag ? ' (' + mShort(MONTHS[dLag.deuI]) + ')' : ''), get: r => r.deu, fmt: v => v == null ? '—' : f0.format(v),
+      title: r => r.deuErr ? 'Último dato válido, de ' + mLabel(MONTHS[r.deuI]) + ': ' + r.deuErr + '.' : null},
   ];
+  // Mes con error de origen en los deudores: el encabezado lo explica (las celdas también, al pasar el cursor).
+  const dErr = rows.find(r => r.deuErr);
   const c = cols[rankSort.col];
   rows.sort((a, b) => {
     const va = c.get(a), vb = c.get(b);
@@ -1621,6 +1733,7 @@ function fillRankTable(wrap) {
   cols.forEach((col, j) => {
     const th = htmlEl('th', {scope: 'col'}, tr);
     if (j === rankSort.col) th.setAttribute('aria-sort', rankSort.dir > 0 ? 'ascending' : 'descending');
+    if (col.title && dErr) th.title = col.title(dErr);
     const b = htmlEl('button', {type: 'button', text: col.l + (j === rankSort.col ? (rankSort.dir > 0 ? ' ↑' : ' ↓') : '')}, th);
     b.addEventListener('click', () => {
       rankSort = {col: j, dir: j === rankSort.col ? -rankSort.dir : (j === 0 ? 1 : -1)};
@@ -1628,7 +1741,10 @@ function fillRankTable(wrap) {
       wrap.querySelectorAll('th button')[j].focus();
     });
   });
-  rows.forEach(r => { const row = htmlEl('tr', null, tb); cols.forEach(col => htmlEl('td', {text: col.fmt(col.get(r))}, row)); });
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); cols.forEach(col => {
+    const ti = col.title && col.title(r);
+    htmlEl('td', ti ? {text: col.fmt(col.get(r)), cls: 'lag', title: ti} : {text: col.fmt(col.get(r))}, row);
+  }); });
 }
 document.querySelectorAll('[data-table]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1716,6 +1832,35 @@ TABS.forEach((t, k) => {
 // ---------- Textos de metodología y pie ----------
 const creFrom = (() => { for (let i = 12; i < N; i++) if (growth('sistema', 'total', i) != null) return MONTHS[i]; return null; })();
 document.querySelectorAll('[data-v]').forEach(e => { e.textContent = {adjFrom: mLabel(D.adjFrom), adjMonthly: mLabel(D.adjMonthly), adjFromSub: mLabel(D.adjFromSub), creFrom: creFrom ? mLabel(creFrom) : '—'}[e.dataset.v] || '—'; });
+// Meses de deudores con errores de origen de la SBS (lista de errores de origen): qué se corrigió y qué se muestra en su lugar.
+(() => {
+  const el = document.getElementById('deu-err-note'), all = (D.deuErr || []).length + (D.deuTotErr || []).length;
+  if (!el || !all) return;
+  const subL = s => SUB_BY[s].l.toLowerCase();
+  const item = (m, s, from) => subL(s) + ' en ' + mShort(m) + (from ? ' (repite ' + mShort(from) + ')' : '');
+  const join = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' y ' + l[l.length - 1] : l[0];
+  const parts = [];
+  if ((D.deuErr || []).length) parts.push('en ' + join(D.deuErr.map(([m, s, f]) => item(m, s, f))) + ', el cuadro de deudores repite las cifras de otro mes en todas las entidades y tipos de crédito');
+  if ((D.deuTotErr || []).length) parts.push('en ' + join(D.deuTotErr.map(([m, s, a, f]) => item(m, s, f) + (a === 'all' ? ', también en cada entidad' : ''))) + ', solo la columna del total repite la de otro mes (los tipos de crédito están bien)');
+  el.replaceChildren(htmlEl('b', {text: 'Meses con cifras repetidas por la SBS.'}), document.createTextNode(' ' + capFirst(parts.join('; ')) +
+    '. Esos deudores no se usan: en el resumen, la ficha de la entidad y las tablas se muestra el último dato válido con su mes, y el saldo por deudor se calcula con ese mes.'));
+  el.hidden = false;
+})();
+// Entidad-mes en que la SBS repitió en sus cuadros las cifras de otro mes (errores_origen.RANKING_REPEATS).
+(() => {
+  const el = document.getElementById('rep-note'), list = D.rep || [];
+  if (!el || !list.length) return;
+  const byEnt = new Map();
+  for (const r of list) { if (!byEnt.has(r[1])) byEnt.set(r[1], []); byEnt.get(r[1]).push(r); }
+  const join = l => l.length > 1 ? l.slice(0, -1).join(', ') + ' y ' + l[l.length - 1] : l[0];
+  const items = [...byEnt.entries()].map(([k, rs]) => (SC[k] ? SC[k].n : k.split('/')[1]) + ' en ' + join(rs.map(r => mShort(r[0]))) + ' (repite ' + mShort(rs[0][2]) + ')');
+  el.replaceChildren(htmlEl('b', {text: 'Entidades con las cifras de otro mes.'}), document.createTextNode(' En ' + join(items) +
+    ' la SBS repitió en sus cuadros las cifras de un mes anterior, casi siempre con una nota al pie («La información de … corresponde al …»). ' +
+    'En la serie de la entidad ese mes queda sin dato, y también el crecimiento anual de 12 meses después y la mora ajustada cuya suma de castigos incluye ese mes: ' +
+    'la ficha y las tablas muestran el último dato válido con su mes, el ranking y la dispersión la omiten con una nota, y en los gráficos queda un hueco que explica el motivo. ' +
+    'Los totales del subsistema y del sistema no cambian: la SBS suma esas cifras en sus totales.'));
+  el.hidden = false;
+})();
 document.getElementById('lede').textContent =
   'Cuánto prestan y cuánto se atrasa en los bancos, financieras, cajas municipales, cajas rurales y empresas de créditos del Perú, por tipo de crédito y por entidad, mes a mes. Datos de la SBS de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + '.';
 [

@@ -114,6 +114,7 @@ th button { font: inherit; color: inherit; background: none; border: 0; padding:
 th button:hover { color: var(--ink); }
 th[aria-sort] button { color: var(--ink); }
 td.bad { color: var(--bad); font-weight: 600; }
+td.lag { color: var(--muted); }
 .tag { display: inline-block; font-size: 11.5px; font-weight: 600; border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
 .tag.bad { color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
 .tag.near { color: var(--ink2); box-shadow: inset 0 0 0 1px var(--axis); }
@@ -537,6 +538,14 @@ const BASEL_BREAK = {i: BASEL0, label: 'D. Leg. 1531'};
 const C1_0 = (() => { for (const k of D.entities) { const s = SC[k]; if (s.V.c1) { const j = s.V.c1.findIndex(v => v != null); if (j >= 0) return s.a + j; } } return N; })();
 
 // ---------- Estado ----------
+// Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): D.rep = [[mes, «subsistema/entidad», mes repetido,
+// alcance, motivo]]. Ese mes la entidad queda sin dato: la ficha y su tabla muestran el último dato válido con su mes,
+// el ranking y la dispersión la omiten con una nota y el tooltip del hueco da el motivo.
+const REP = new Map((D.rep || []).map(r => [r[1] + '|' + r[0], r]));
+const repAt = (sc, i) => sc == null || i == null || i < 0 || i >= N ? null : REP.get(sc + '|' + MONTHS[i]) || null;
+const repText = r => 'en ' + mShort(r[0]) + ' la SBS repitió las cifras de ' + mShort(r[2]) + ' en sus cuadros (' + r[4] + ')';
+// Último mes válido (hasta 3 antes) de una entidad con el mes i repetido.
+const repBack = (k, i, has) => { for (let j = i - 1; j >= Math.max(0, i - 3); j--) if (has(j)) return j; return null; };
 const state = {ind: 'rcg', mi: SYS_LAST, range: '5a', scope: 'sistema', sub: 'banca-multiple', ent: null, scx: 'mora'};
 const RANGES = [
   {id: '3a', label: '3 años', n: 36},
@@ -814,8 +823,9 @@ function lineChart(box, cfg) {
     },
     unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
     rows(i) {
-      const main = series.filter(s => !s.noTip && !s.isMin).map(s => ({v: s.get(i), label: s.label, color: s.color}))
-        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      const main = series.filter(s => !s.noTip && !s.isMin).map(s => { const v = s.get(i); return {v, label: s.label, color: s.color, rep: v == null ? repAt(s.sc, i) : null}; })
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity))
+        .map(r => r.rep ? {value: 'sin dato', label: r.label + ': ' + repText(r.rep), color: r.color} : {value: fmt(r.v), label: r.label, color: r.color});
       const mins = series.filter(s => s.isMin && s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
       return main.concat(mins);
     },
@@ -1194,8 +1204,10 @@ function rankRows() {
   const sub = state.sub, i = state.mi, k0 = state.ind;
   const out = [];
   let small = 0;
+  const rep = [];
   for (const k of D.entities) {
     if (SC[k].s !== sub) continue;
+    if (repAt(k, i)) { rep.push(k); continue; }
     const e = entRow(k, i);
     if (!e) continue;
     if (!(e.apr >= MIN_APR)) { small++; continue; }
@@ -1206,7 +1218,14 @@ function rankRows() {
   }
   // Primero las más débiles: menor capital o mayor apalancamiento.
   out.sort((a, b) => k0 === 'lev' ? b.v - a.v : a.v - b.v);
-  return {rows: out, small};
+  return {rows: out, small, rep};
+}
+// Nota de las entidades que no aparecen porque la SBS repitió sus cifras de otro mes: motivo y último dato válido.
+function repNote(ks, i, k) {
+  return ks.map(e => {
+    const j = repBack(e, i, q => ind(e, q, k) != null);
+    return ' ' + SC[e].n + ' no aparece: ' + repText(repAt(e, i)) + '.' + (j != null ? ' Su último dato válido es ' + fmtInd(k, ind(e, j, k)) + ', de ' + mLabel(MONTHS[j]) + '.' : '');
+  }).join('');
 }
 function renderRank() {
   const I = IND_BY[state.ind], sub = state.sub, i = state.mi, S = SUB_BY[sub];
@@ -1227,12 +1246,12 @@ function renderRank() {
 
   const box = document.getElementById('ch-rank');
   box.replaceChildren();
-  const {rows, small} = rankRows();
+  const {rows, small, rep} = rankRows();
   const cl = CLAMP[state.ind] || [-Infinity, Infinity], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
   const cut = rows.some(r => r.v !== clamp(r.v) || (r.p != null && r.p !== clamp(r.p)));
   const note = document.getElementById('rank-note');
   note.textContent = (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 1 millón de activos ponderados y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
-    'A la derecha, el patrimonio efectivo de la entidad.' + (cut ? ' La escala se corta en ' + (I.u === 'pct' ? cl.map(v => v + '%') : I.u === 'pp' ? cl.map(v => spp(v, 0)) : cl.map(v => v + ' veces')).join(' y ') + '; el número muestra el valor completo.' : '');
+    'A la derecha, el patrimonio efectivo de la entidad.' + (cut ? ' La escala se corta en ' + (I.u === 'pct' ? cl.map(v => v + '%') : I.u === 'pp' ? cl.map(v => spp(v, 0)) : cl.map(v => v + ' veces')).join(' y ') + '; el número muestra el valor completo.' : '') + repNote(rep, i, state.ind);
   if (!rows.length) { emptyMsg(box, naMsg(sub) || 'No hay entidades con datos para este mes.'); return; }
   const W = box.clientWidth, narrow = W < 600, I_u = I.u;
   const labW = narrow ? 112 : 200, valW = state.ind === 'bufs' ? (narrow ? 96 : 120) : (narrow ? 64 : 76), totW = narrow ? 0 : 118, rowH = 28, top = 24;
@@ -1320,10 +1339,11 @@ function renderScatter() {
   legendItem(lg, 'dot hollow', null, 'Fuera de escala');
   const box = document.getElementById('ch-sc');
   box.replaceChildren();
-  const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, i))
+  const scRep = D.entities.filter(k => SC[k].s === sub && repAt(k, i));
+  const pts = D.entities.filter(k => SC[k].s === sub && !repAt(k, i)).map(k => entRow(k, i))
     .filter(e => e && e.apr >= MIN_APR && e.rcg != null && e[X.id] != null && (X.u !== 'log' || e[X.id] > 0));
   document.getElementById('sc-note').textContent = 'Solo entidades con al menos S/ 1 millón de activos ponderados por riesgo. La escala vertical se corta en ' + SC_Y + '%' +
-    (X.clip ? ' y la horizontal en ' + fx(X.clip[0], 0) + '% y ' + X.clip[1] + '%' : '') + '; pase el cursor sobre un círculo hueco para ver su valor. La mora y el ROE son los que publica la SBS en sus indicadores financieros.';
+    (X.clip ? ' y la horizontal en ' + fx(X.clip[0], 0) + '% y ' + X.clip[1] + '%' : '') + '; pase el cursor sobre un círculo hueco para ver su valor. La mora y el ROE son los que publica la SBS en sus indicadores financieros.' + repNote(scRep, i, 'rcg');
   if (pts.length < 2) { emptyMsg(box, naMsg(sub) || 'No hay suficientes entidades con datos para este mes.'); return; }
   const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
   const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
@@ -1421,17 +1441,20 @@ function renderEnt() {
   const E = SC[k], sub = E.s, i = state.mi, I = IND_BY[state.ind];
   document.getElementById('ent-title').textContent = E.n;
   document.getElementById('ent-desc').textContent = I.name + (state.ind === 'bufs' ? '.' : ', frente a su subsistema (' + SUB_BY[sub].l.toLowerCase() + ') y al sistema.');
-  const e = entRow(k, i) || {};
-  const chg = o => { const v = ind(k, i, o), p = ind(k, i - 12, o); return v == null || p == null ? '' : fmtDelta(o, v - p, p) + ' en 12 meses'; };
+  // Mes repetido por la SBS: la ficha muestra el último dato válido de la entidad, con su mes.
+  const rp = repAt(k, i), ei = rp ? (repBack(k, i, q => ind(k, q, 'rcg') != null) ?? i) : i;
+  const tag = ei !== i ? ' · ' + mLabel(MONTHS[ei]) : '';
+  const e = entRow(k, ei) || {};
+  const chg = o => { const v = ind(k, ei, o), p = ind(k, ei - 12, o); return v == null || p == null ? '' : fmtDelta(o, v - p, p) + ' en 12 meses'; };
   const items = [
-    {lab: 'Ratio de capital global', val: pct(e.rcg), sub: chg('rcg')},
-    {lab: 'Colchón sobre el mínimo', val: spp(e.bufp), sub: LG[i] != null ? 'mínimo ' + limTxt(LG[i]) : ''},
-    {lab: 'Colchón en soles', val: fmtInd('bufs', e.bufs), sub: ''},
-    {lab: 'Ratio de capital ordinario de nivel 1', val: pct(e.c1r), sub: e.c1r == null && i < C1_0 ? 'desde ' + mShort(MONTHS[C1_0]) : chg('c1r')},
-    {lab: 'Patrimonio efectivo', val: money(e.pe), sub: ''},
-    {lab: 'Activos ponderados por riesgo', val: money(e.apr), sub: ''},
-    {lab: 'Apalancamiento', val: veces(e.lev), sub: chg('lev')},
-    {lab: 'Mora', val: pct(e.mora), sub: 'créditos atrasados / directos'},
+    {lab: 'Ratio de capital global', val: pct(e.rcg) + tag, sub: chg('rcg')},
+    {lab: 'Colchón sobre el mínimo', val: spp(e.bufp) + tag, sub: LG[ei] != null ? 'mínimo ' + limTxt(LG[ei]) : ''},
+    {lab: 'Colchón en soles', val: fmtInd('bufs', e.bufs) + tag, sub: ''},
+    {lab: 'Ratio de capital ordinario de nivel 1', val: pct(e.c1r) + (e.c1r != null ? tag : ''), sub: e.c1r == null && ei < C1_0 ? 'desde ' + mShort(MONTHS[C1_0]) : chg('c1r')},
+    {lab: 'Patrimonio efectivo', val: money(e.pe) + tag, sub: ''},
+    {lab: 'Activos ponderados por riesgo', val: money(e.apr) + tag, sub: ''},
+    {lab: 'Apalancamiento', val: veces(e.lev) + tag, sub: chg('lev')},
+    {lab: 'Mora', val: pct(e.mora) + (e.mora != null ? tag : ''), sub: 'créditos atrasados / directos'},
   ];
   for (const it of items) {
     const d = htmlEl('div', null, stats);
@@ -1439,7 +1462,7 @@ function renderEnt() {
     htmlEl('div', {cls: 'val', text: it.val}, d);
     htmlEl('div', {cls: 'sub', text: it.sub || ' '}, d);
   }
-  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, get: j => ind(k, j)}];
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--s1)', w: 2.5, sc: k, get: j => ind(k, j)}];
   if (state.ind !== 'bufs') {
     series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, get: j => ind(sub, j)});
     series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 1.5, dash: '5 4', get: j => ind('sistema', j)});
@@ -1454,7 +1477,8 @@ function renderEnt() {
   lineChart(box, {idx: visIdx(), H: 320, endLabels: true, series, marker: i, u: I.u, fmt: v => fmtShort(I.k, v), aria: I.name + ' de ' + E.n,
     empty: naMsg(k) || 'La entidad no tiene datos de este indicador en el periodo.'});
   const note = document.getElementById('ent-note');
-  const msg = E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses.' : '';
+  const msg = (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. ' : '') +
+    (rp ? 'Sin dato propio de ' + mLabel(MONTHS[i]) + ': ' + repText(rp) + '. Las cifras de arriba son el último dato válido, con su mes; en el gráfico ese mes queda como un hueco.' : '');
   note.hidden = !msg; note.textContent = msg;
 }
 
@@ -1490,8 +1514,17 @@ const TABLES = {
     if (!k) return [['Mes'], []];
     const sub = SC[k].s, idx = visIdx().slice().reverse();
     return [['Mes', 'Capital global', 'Mínimo', 'Colchón', 'Colchón (S/)', 'Capital ordinario', 'Patrimonio efectivo', 'Activos ponderados', 'Apalancamiento', 'Capital global de ' + SUB_BY[sub].s],
-      idx.map(i => ind(k, i, 'rcg') == null ? null : [mLabel(MONTHS[i]), pct(ind(k, i, 'rcg')), limTxt(LG[i]), spp(ind(k, i, 'bufp')), fmtInd('bufs', ind(k, i, 'bufs')),
-        pct(ind(k, i, 'c1r')), money(get(k, 'pe', i)), money(get(k, 'apr', i)), veces(ind(k, i, 'lev')), pct(ind(sub, i, 'rcg'))]).filter(Boolean)];
+      idx.map(i => {
+        const r = repAt(k, i);
+        if (ind(k, i, 'rcg') == null && !r) return null;
+        // Mes repetido por la SBS: el último dato válido, con su mes y el motivo (regla «sin huecos»).
+        const j = r ? repBack(k, i, q => ind(k, q, 'rcg') != null) : i;
+        const c = txt => !r ? txt : j == null ? {v: '—', title: 'Sin dato: ' + repText(r) + '.'}
+          : {v: txt + (txt === '—' ? '' : ' (' + mLabel(MONTHS[j]) + ')'), cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(r) + '.'};
+        const q = j ?? i;
+        return [mLabel(MONTHS[i]), c(pct(ind(k, q, 'rcg'))), limTxt(LG[i]), c(spp(ind(k, q, 'bufp'))), c(fmtInd('bufs', ind(k, q, 'bufs'))),
+          c(pct(ind(k, q, 'c1r'))), c(money(get(k, 'pe', q))), c(money(get(k, 'apr', q))), c(veces(ind(k, q, 'lev'))), pct(ind(sub, i, 'rcg'))];
+      }).filter(Boolean)];
   },
 };
 function fillTable(key) {
@@ -1501,7 +1534,14 @@ function fillTable(key) {
   const [head, rows] = TABLES[key]();
   const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
   head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
-  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+// Celda de texto o {v, cls, title} (último dato válido con su motivo).
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const td = htmlEl('td', {text: c.v, cls: c.cls || ''}, row);
+  if (c.title) td.title = c.title;
+  return td;
 }
 function fillRankTable(wrap) {
   const {rows} = rankRows();

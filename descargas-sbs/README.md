@@ -2,7 +2,7 @@
 
 Descarga, lee y consolida los reportes públicos de la Superintendencia de Banca, Seguros y AFP (SBS):
 
-- **Boletín Estadístico del Sistema Financiero:** 131 cuadros en total entre cinco subsistemas (banca múltiple,
+- **Boletín Estadístico del Sistema Financiero:** 146 cuadros en total entre cinco subsistemas (banca múltiple,
   empresas financieras, cajas municipales, cajas rurales y empresas de crédito), desde 2010 o desde que la
   SBS publica cada cuadro.
 - **Tasas activas** por tipo de crédito y entidad, en moneda nacional, desde 2015.
@@ -42,7 +42,26 @@ python src/visual_liquidez.py
 python src/visual_tasas.py
 python src/visual_eeff.py
 python src/visual_indicadores.py
+
+# Tablero de concentración y alcance (con comparación internacional)
+python src/eventos_mercado.py                # entradas, salidas y fusiones de entidades (control)
+python src/internacional/descargar_chile.py
+python src/internacional/descargar_colombia.py
+python src/internacional/descargar_brasil.py
+python src/internacional/construir_peru.py
+python src/internacional/construir_chile.py
+python src/internacional/construir_colombia.py
+python src/internacional/construir_brasil.py
+python src/visual_mercado.py
 ```
+
+**Concentración y alcance:**
+- La comparación internacional usa los datos públicos de la CMF (Chile), la Superintendencia Financiera (Colombia)
+  y el Banco Central do Brasil.
+- Los descargadores van de a un servidor por vez y con pausa.
+- La población adulta del INEI viene en `config/insumo_poblacion_adulta.csv`.
+- Los errores de origen de la SBS (meses en que un cuadro repite cifras de otro mes) están listados en
+  `src/errores_origen.py`. Todos los tableros los aplican.
 
 Opciones útiles:
 

@@ -692,6 +692,15 @@ const MIN_ACT = 10000;   // miles de S/: entidades con activo menor a S/ 10 mill
 // ---------- Estado ----------
 // Mes inicial: el último con los cinco subsistemas (el sistema llega hasta ahí); el selector llega al último mes publicado.
 const ALL_LAST = D.allHasta && idxOf(D.allHasta) >= 0 ? idxOf(D.allHasta) : N - 1;
+// Cifras repetidas de otro mes en la serie de una entidad (errores_origen.RANKING_REPEATS): D.rep = [[mes, ámbito,
+// mes repetido, alcance, motivo]]. Alcance «fila»: ese mes la entidad no tiene dato propio (la SBS repitió las cifras de
+// otro mes); «flujo»: tiene balance, pero su flujo de 12 meses usaría el acumulado de un mes repetido. Tablas y KPI
+// muestran el último dato válido con su mes; en los gráficos el mes queda como un hueco y el tooltip da el motivo.
+const REP = new Map((D.rep || []).map(r => [r[1] + '|' + r[0], r]));
+const repAt = (sc, i) => sc == null || i == null || i < 0 || i >= N ? null : REP.get(sc + '|' + MONTHS[i]) || null;
+const repText = r => r[3] === 'fila' ? 'en ' + mShort(r[0]) + ' la SBS repitió las cifras de ' + mShort(r[2]) + ' en sus cuadros (' + r[4] + ')'
+  : 'el flujo de 12 meses de ' + mShort(r[0]) + ' usaría el acumulado de ' + mShort(r[2]) + ' (' + r[4] + ')';
+const repShort = r => r[3] === 'fila' ? 'la SBS repitió las cifras de ' + mShort(r[2]) : 'el flujo de 12 meses usaría el acumulado repetido de ' + mShort(r[2]);
 const state = {ind: 'roe', mi: ALL_LAST, range: '5a', scope: 'sistema', sub: 'banca-multiple', ent: null, scx: 'mora', mixU: 'pct', ptuY: null};
 
 // ---------- Datos ----------
@@ -736,6 +745,10 @@ function ind(scope, i, k = state.ind) {
 // entidad) todavía no publica el mes elegido, se usa su último mes con dato y se marca ese mes.
 const pubLast = sc => sc === 'sistema' ? ALL_LAST : lastIdx(SUB_BY[sc] ? sc : SC[sc].s);
 function effIdx(sc, i) {
+  if (SC[sc] && repAt(sc, i)) {
+    for (let j = i - 1; j >= Math.max(0, i - 3); j--) { const r = raw(sc, j); if (r && r.rn != null && !repAt(sc, j)) return j; }
+    return i;
+  }
   if (!SC[sc] || raw(sc, i)) return i;
   const L = pubLast(sc);
   return L < i && raw(sc, L) ? L : i;
@@ -998,9 +1011,10 @@ function lineChart(box, cfg) {
     unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
     rows(i) {
       // Las series sin dato ese mes (p. ej. el sistema en un mes que no publicaron los cinco) no entran al tooltip.
-      const r = series.filter(s => !s.noTip).map(s => ({v: s.get(i), label: s.label, color: s.color}));
-      return (r.some(x => x.v != null) ? r.filter(x => x.v != null) : r)
-        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      const r = series.filter(s => !s.noTip).map(s => { const v = s.get(i); return {v, label: s.label, color: s.color, rep: v == null ? repAt(s.sc, i) : null}; });
+      return (r.some(x => x.v != null) ? r.filter(x => x.v != null || x.rep) : r)
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity))
+        .map(r => r.rep ? {value: 'sin dato', label: r.label + ': ' + repText(r.rep), color: r.color} : {value: fmt(r.v), label: r.label, color: r.color});
     },
   };
   group.charts.push(chart);
@@ -1121,7 +1135,8 @@ function countChart(box, cfg) {
     hl.setAttribute('x', x(i) - bw / 2); hl.setAttribute('visibility', 'visible');
     const c = cfg.get(i), tot = c.reduce((a, b) => a + b, 0);
     const rows = [{value: String(tot), label: 'Entidades con pérdida en 12 meses'}]
-      .concat(SUBS.map((s, k) => ({value: String(c[k]), label: s.l, color: SUB_COLOR[s.k], sq: true})).filter(r => r.value !== '0'));
+      .concat(SUBS.map((s, k) => ({value: String(c[k]), label: s.l, color: SUB_COLOR[s.k], sq: true})).filter(r => r.value !== '0'))
+      .concat((cfg.repRows ? cfg.repRows(i) : []));
     showTip(...anchorOf(evt, hl), mLabel(MONTHS[i]), rows);
   }, () => { hideTip(); hl.setAttribute('visibility', 'hidden'); });
 }
@@ -1248,7 +1263,8 @@ function mixArea(box, cfg) {
   timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
     cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
     const v = cfg.get(i);
-    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), v ? mixTipRows(v) : [{value: '—', label: 'Sin cuadro de personal ese mes'}]);
+    const rp = !v && cfg.sc ? repAt(cfg.sc, i) : null;
+    showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), v ? mixTipRows(v) : [{value: rp ? 'sin dato' : '—', label: rp ? 'Sin dato: ' + repText(rp) : 'Sin cuadro de personal ese mes'}]);
   }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
 }
 function renderMix() {
@@ -1265,7 +1281,7 @@ function renderMix() {
 function renderEntMix(k) {
   const E = SC[k];
   mixLegend(document.getElementById('ent-mix-legend'));
-  mixArea(document.getElementById('ch-ent-mix'), {idx: visIdx(), H: 220, marker: state.mi, get: j => mixAt(k, j), aria: 'Personal por categoría de ' + E.n,
+  mixArea(document.getElementById('ch-ent-mix'), {idx: visIdx(), H: 220, marker: state.mi, sc: k, get: j => mixAt(k, j), aria: 'Personal por categoría de ' + E.n,
     empty: 'No hay cuadro de personal de la entidad en el periodo.'});
   const ie = effIdx(k, state.mi), v = mixAt(k, ie), s = D.mix[k], j = idxOf('2023-11');
   // Nota del hueco solo si la serie de la entidad pasa por ese mes y le falta el dato.
@@ -1572,6 +1588,14 @@ function entRow(k, i) {
   o.mora = ind(k, i, 'mora');
   return o;
 }
+// Nota de las entidades que un ranking o una dispersión omiten porque la SBS repitió sus cifras de otro mes: el motivo y
+// su último dato válido del indicador k, con su mes (regla «sin huecos»).
+function repNote(ks, i, k) {
+  return ks.map(e => {
+    const r = repAt(e, i), j = effIdx(e, i), v = j !== i ? ind(e, j, k) : null;
+    return SC[e].n + ' no se muestra: ' + repText(r) + (v != null ? '; su último dato válido es ' + fmtInd(k, v) + ' (' + mLabel(MONTHS[j]) + ')' : '') + '. ';
+  }).join('');
+}
 // Valor de hace 12 meses (si la entidad estaba en otro subsistema, se usa esa serie).
 function prevVal(k, i, key) {
   if (i < 12) return null;
@@ -1582,11 +1606,12 @@ function prevVal(k, i, key) {
 }
 function rankRows() {
   const sub = state.sub, i = effIdx(sub, state.mi), k0 = state.ind;
-  const out = [];
+  const out = [], rep = [];
   let small = 0, none = 0;
   for (const k of D.entities) {
     if (SC[k].s !== sub) continue;
     const e = entRow(k, i);
+    if ((!e || e[k0] == null) && repAt(k, i)) { rep.push(k); continue; }
     if (!e) continue;
     if (e.ac < MIN_ACT) { small++; continue; }
     e.v = e[k0];
@@ -1595,7 +1620,7 @@ function rankRows() {
     out.push(e);
   }
   out.sort((a, b) => b.v - a.v);
-  return {rows: out, small, none};
+  return {rows: out, small, none, rep};
 }
 function renderRank() {
   const I = IND_BY[state.ind], sub = state.sub, i = effIdx(sub, state.mi), S = SUB_BY[sub];
@@ -1609,14 +1634,15 @@ function renderRank() {
   if (I.k !== 'uti') { const c = htmlEl('span', null, lg); htmlEl('i', {cls: 'vref'}, c); c.appendChild(document.createTextNode('Total de ' + S.l.toLowerCase())); }
   const box = document.getElementById('ch-rank');
   box.replaceChildren();
-  const {rows, small, none} = rankRows();
+  const {rows, small, none, rep} = rankRows();
   const cl = I.clamp || [-Infinity, Infinity], clamp = v => Math.max(cl[0], Math.min(cl[1], v));
   document.getElementById('rank-note').textContent = (i !== state.mi ? lagNote(state.mi, [sub]) : '') +
     (small ? small + (small === 1 ? ' entidad tiene' : ' entidades tienen') + ' menos de S/ 10 millones de activo y no se muestra' + (small === 1 ? '' : 'n') + '. ' : '') +
     (none ? none + (none === 1 ? ' entidad no tiene' : ' entidades no tienen') + ' dato de ' + I.lower + ' en ' + mLabel(MONTHS[i]) +
       ' (' + (none === 1 ? 'le' : 'les') + (I.k === 'cpt' ? ' falta el conteo de personal de ese mes' : I.k === 'upt' ? ' falta un año de historia o algún conteo de personal' : ' falta un año de historia o el denominador es cero o negativo') + ') y no se muestra' + (none === 1 ? '' : 'n') + '. ' : '') +
     (document.getElementById('ch-rank').clientWidth >= 600 ? (I.u === 'spt' ? 'A la derecha, el personal a fin de mes. ' : 'A la derecha, el activo total. ') : '') +
-    (I.clamp ? 'La escala se corta en ' + (I.k === 'cpt' ? fmtInd(I.k, cl[1]) : fmtInd(I.k, cl[0]) + ' y ' + fmtInd(I.k, cl[1])) + '; el número muestra el valor completo.' : '');
+    (I.clamp ? 'La escala se corta en ' + (I.k === 'cpt' ? fmtInd(I.k, cl[1]) : fmtInd(I.k, cl[0]) + ' y ' + fmtInd(I.k, cl[1])) + '; el número muestra el valor completo. ' : '') +
+    repNote(rep, i, I.k);
   if (!rows.length) { emptyMsg(box, 'No hay entidades con datos para esta combinación.'); return; }
   const W = box.clientWidth, narrow = W < 600;
   const spt = I.u === 'spt';
@@ -1696,9 +1722,11 @@ function renderScatter() {
   const box = document.getElementById('ch-sc');
   box.replaceChildren();
   const pts = D.entities.filter(k => SC[k].s === sub).map(k => entRow(k, i)).filter(e => e && e.ac >= MIN_ACT && e[yk] != null && e[state.scx] != null);
+  const scRep = D.entities.filter(k => SC[k].s === sub && repAt(k, i) && (!raw(k, i) || ind(k, i, yk) == null || ind(k, i, state.scx) == null));
   const XC = X.clamp, YC = Y.clamp;
   document.getElementById('sc-note').textContent = (i !== state.mi ? lagNote(state.mi, [sub]) : '') + 'Solo entidades con al menos S/ 10 millones de activo y con dato de los dos indicadores (hace falta un año de historia). La escala se corta en ' + fmtInd(yk, YC[0]) + ' y ' + fmtInd(yk, YC[1]) +
-    ' de ' + Y.lower + ' y en ' + (XC[0] < 0 ? fmtInd(state.scx, XC[0]) + ' y ' : '') + fmtInd(state.scx, XC[1]) + ' de ' + X.lower + '; pase el cursor sobre un círculo hueco para ver su valor.';
+    ' de ' + Y.lower + ' y en ' + (XC[0] < 0 ? fmtInd(state.scx, XC[0]) + ' y ' : '') + fmtInd(state.scx, XC[1]) + ' de ' + X.lower + '; pase el cursor sobre un círculo hueco para ver su valor. ' +
+    repNote(scRep, i, yk);
   if (pts.length < 2) { emptyMsg(box, 'No hay suficientes entidades con datos para esta combinación.'); return; }
   const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
   const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
@@ -1786,7 +1814,8 @@ function renderLoss() {
   const lg = document.getElementById('loss-legend');
   lg.replaceChildren();
   for (const s of SUBS) { const sp = htmlEl('span', null, lg); htmlEl('i', {cls: 'dot sqr'}, sp).style.background = SUB_COLOR[s.k]; sp.appendChild(document.createTextNode(s.l)); }
-  countChart(document.getElementById('ch-loss-n'), {idx: visIdx(), H: 190, marker: Math.min(i, ALL_LAST), get: lossCount, aria: 'Número de entidades con pérdida en 12 meses, por subsistema'});
+  countChart(document.getElementById('ch-loss-n'), {idx: visIdx(), H: 190, marker: Math.min(i, ALL_LAST), get: lossCount, aria: 'Número de entidades con pérdida en 12 meses, por subsistema',
+    repRows: j => D.entities.filter(k => repAt(k, j) && (raw(k, j) || {}).rn == null).map(k => ({value: 'sin dato', label: SC[k].n + ' (no se cuenta): ' + repShort(repAt(k, j))}))});
   const box = document.getElementById('ch-loss');
   box.replaceChildren();
   const rows = lossRows(i);
@@ -1817,12 +1846,12 @@ function renderLoss() {
     }
     svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = money(r.rn);
     if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = money(r.ut);
-    hoverable(gr, evt => showTip(...anchorOf(evt, gr), r.n + lagTag(i, r.m), [
+    hoverable(gr, evt => showTip(...anchorOf(evt, gr), r.n + lagTag(i, r.m), (repAt(r.k, i) ? [{value: '', label: 'Último dato válido: ' + repText(repAt(r.k, i))}] : []).concat([
       {value: money(r.rn), label: 'Utilidad de 12 meses', color: SUB_COLOR[r.s], sq: true},
       {value: money(r.ut), label: 'Acumulada en el año'},
       {value: pct(r.roe, 1), label: 'ROE'},
       {value: money(r.ac), label: 'Activo total'},
-      {value: SUB_BY[r.s].l, label: ''}]));
+      {value: SUB_BY[r.s].l, label: ''}])));
     gr.addEventListener('click', () => { state.sub = r.s; syncSub(); pickEnt(r.k); });
     gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.sub = r.s; syncSub(); pickEnt(r.k); } });
   });
@@ -1879,7 +1908,7 @@ function renderEnt() {
     htmlEl('div', {cls: 'val', text: it.val}, d);
     htmlEl('div', {cls: 'sub', text: it.sub || ' '}, d);
   }
-  const series = [{label: E.n, short: 'Entidad', color: 'var(--c-ent)', w: 2.5, get: j => ind(k, j)}];
+  const series = [{label: E.n, short: 'Entidad', color: 'var(--c-ent)', w: 2.5, sc: k, get: j => ind(k, j)}];
   if (state.ind !== 'uti') {
     series.push({label: SUB_BY[sub].l, short: SUB_BY[sub].s, color: 'var(--c-sub)', w: 2, get: j => ind(sub, j)});
     series.push({label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 1.5, dash: '5 4', get: j => ind('sistema', j)});
@@ -1895,7 +1924,13 @@ function renderEnt() {
   lineChart(box, {idx: visIdx(), H: 320, endLabels: true, series, marker: state.mi, u: I.u, fmt: v => fmtInd(I.k, v), aria: I.name + ' de ' + E.n,
     clip: I.clamp || null, empty: 'La entidad no tiene 12 meses de historia en el periodo.'});
   const note = document.getElementById('ent-note');
-  const msg = lagNote(state.mi, [k, sub]) + (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. Su utilidad y sus promedios de 12 meses usan toda su historia.' : '');
+  const rp = repAt(k, state.mi);
+  const repMsg = rp ? 'Sin dato propio de ' + mLabel(MONTHS[state.mi]) + (rp[3] === 'fila' ? '' : ' en la utilidad de 12 meses') + ': ' + repText(rp) + '. ' +
+    (i !== state.mi ? 'Las cifras de arriba son el último dato válido, de ' + mLabel(MONTHS[i]) + '; e' : 'E') + 'n los gráficos ese mes queda como un hueco. ' : '';
+  const reps = (D.rep || []).filter(r => r[1] === k && r[3] === 'fila');
+  const avgMsg = reps.some(r => state.mi > idxOf(r[0]) && state.mi <= idxOf(r[0]) + 11) && raw(k, state.mi) ? 'Los promedios de 12 meses (activo, patrimonio, créditos y personal) de los meses siguientes a ' +
+    reps.map(r => mLabel(r[0])).join(' y ') + ' se calculan sin ' + (reps.length > 1 ? 'esos meses' : 'ese mes') + '. ' : '';
+  const msg = (state.mi !== i && rp ? '' : lagNote(state.mi, [k, sub])) + repMsg + avgMsg + (E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses. Su utilidad y sus promedios de 12 meses usan toda su historia.' : '');
   note.hidden = !msg; note.textContent = msg;
   // Cascadas de la entidad y de su subsistema, en la misma escala.
   const dom = wfDomain([k, sub], i);
@@ -1949,11 +1984,27 @@ const TABLES = {
     const sub = SC[k].s, idx = visIdx().slice().reverse();
     return [['Mes', 'ROE', 'ROA', 'Utilidad 12 m', 'Acumulada', 'Margen financiero', 'Eficiencia', 'Costo del riesgo', 'Mora', 'Activo', 'ROE de ' + SUB_BY[sub].s,
       'Utilidad por trabajador', 'Créditos por trabajador', 'Trabajadores a fin de mes'].concat(MIX.map(c => c.l)),
-      idx.map(i => { const r = raw(k, i), v = mixAt(k, i); return r ? [mLabel(MONTHS[i]), pct(ind(k, i, 'roe'), 1), pct(ind(k, i, 'roa')), money(r.rn), money(r.ut), pct(ind(k, i, 'mfb')),
-        pct(ind(k, i, 'efi'), 1), pct(ind(k, i, 'cr')), pct(ind(k, i, 'mora')), money(r.ac), pct(ind(sub, i, 'roe'), 1),
-        perW(ind(k, i, 'upt')), perW(ind(k, i, 'cpt')), people(r.np)].concat(MIX.map(c => v ? people(v[c.k]) : '—')) : null; }).filter(Boolean)];
+      idx.map(i => {
+        if (!raw(k, i) && !repAt(k, i)) return null;
+        const c = (g, f) => repCell(k, i, g, f), R = (j, f) => (raw(k, j) || {})[f];
+        return [mLabel(MONTHS[i]), c(j => ind(k, j, 'roe'), v => pct(v, 1)), c(j => ind(k, j, 'roa'), v => pct(v)), c(j => R(j, 'rn'), money), c(j => R(j, 'ut'), money),
+          c(j => ind(k, j, 'mfb'), v => pct(v)), c(j => ind(k, j, 'efi'), v => pct(v, 1)), c(j => ind(k, j, 'cr'), v => pct(v)), c(j => ind(k, j, 'mora'), v => pct(v)),
+          c(j => R(j, 'ac'), money), pct(ind(sub, i, 'roe'), 1), c(j => ind(k, j, 'upt'), perW), c(j => ind(k, j, 'cpt'), perW), c(j => R(j, 'np'), people)]
+          .concat(MIX.map(q => c(j => { const v = mixAt(k, j); return v ? v[q.k] : null; }, people)));
+      }).filter(Boolean)];
   },
 };
+// Celda del ámbito sc en el mes i; si la SBS repitió ese mes las cifras de otro (D.rep), el último dato válido (hasta 3
+// meses antes) con su mes y el motivo en el title (regla «sin huecos»).
+function repCell(sc, i, g, fmt) {
+  const v = g(i), r = v == null ? repAt(sc, i) : null;
+  if (!r) return fmt(v);
+  for (let j = i - 1; j >= Math.max(0, i - 3); j--) {
+    const w = g(j);
+    if (w != null && !(repAt(sc, j) || [])[3]) return {v: fmt(w) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(r) + '.'};
+  }
+  return {v: '—', title: 'Sin dato: ' + repText(r) + '.'};
+}
 // Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
 // muestra el último valor publicado de la columna, con su mes (nunca un hueco).
 const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));

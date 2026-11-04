@@ -1,6 +1,6 @@
 # Descargas BCRP
 
-Descarga 901 series de [BCRPData](https://estadisticas.bcrp.gob.pe/estadisticas/series/), la base
+Descarga 1 567 series de [BCRPData](https://estadisticas.bcrp.gob.pe/estadisticas/series/), la base
 de datos del Banco Central de Reserva del Perú, con su historia completa, y arma paneles por frecuencia (diaria,
 mensual, trimestral y anual).
 
@@ -20,7 +20,22 @@ python src/construir_tablas.py               # regenera data/processed/ (paneles
 python src/visual_reservas.py
 python src/visual_inflacion.py
 python src/visual_transmision.py
+
+# Tablero de finanzas públicas: antes, sus insumos propios
+python src/descargar_geo.py                  # límites departamentales para el mapa
+python src/descargar_proyecciones.py --fuente MEF_MMM   # Marco Macroeconómico Multianual del MEF
+python src/descargar_ejecucion_mef.py        # ejecución presupuestal (Consulta Amigable del MEF)
+python src/descargar_fmi.py                  # comparación entre países (FMI, DataMapper)
+python src/visual_finanzas.py
 ```
+
+**Finanzas públicas:**
+- Los indicadores de riesgo de la deuda del MEF se bajan a mano a `data/manual/mef/`
+  (`Indicadores_Deuda_Publica_<MM>_<AAAA>.xlsx`).
+- La población por departamento del INEI viene en `config/insumo_inei_departamentos.csv`.
+- Las reglas fiscales vigentes están en `config/reglas_fiscales.csv`.
+- Las cifras del FMI se usan solo para comparar países; el tablero avisa que no son las del BCRP.
+- Si falta un insumo, el tablero sale sin la pestaña que lo usa y lo avisa.
 
 Opciones útiles:
 

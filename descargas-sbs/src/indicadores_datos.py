@@ -15,7 +15,8 @@ coincida con el del tablero equivalente.
 - `visual_liquidez`: activos líquidos y pasivos de corto plazo, RCL publicado, RFNE, depósitos totales
   (definición del ranking), depósitos en ME, adeudos, pasivo y créditos del ranking (`build_frame`).
 - `visual_eeff`: tipo de cambio contable de fin de mes (`load_fx_rates`, `data/processed/tc_contable.csv`).
-- Panel entidad × mes: posición global en ME (miles de S/).
+- `posicion-global-moneda-extranjera`: posición global en ME (miles de S/; la columna del panel, leída del cuadro
+  completo para los agregados).
 - `data/processed/sf2103_deudores.parquet`: deudores únicos del sistema (trimestral).
 
 Reglas de los agregados (detalle en el README, sección «Tablero de indicadores»):
@@ -32,10 +33,23 @@ Reglas de los agregados (detalle en el README, sección «Tablero de indicadores
   subsistema); la fila de castigos duplicada de Santander Consumer en 2025-04 se queda donde están
   sus créditos ese mes.
 
+Cifras repetidas de otro mes (2026-11-03, `errores_origen.RANKING_REPEATS`): en 9 entidad-mes la SBS repite el mes
+anterior en casi todos los cuadros (CMAC Pisco 2014-01 → 04, CRAC Señor de Luren 2015-05, CRAC Chavín / Raíz 2016-03 y
+04, Financiera TFC 2019-11, CMAC Sullana 2024-06) y en CMAC Sullana 2014-11 solo en el ranking. Las series de ENTIDAD
+se calculan con una copia de los componentes en la que esas celdas quedan vacías según el cuadro del que sale cada
+componente (`COMP_TEMA`, `mask_entity_components`, con `source_repeat_mask`); también los flujos del estado de
+resultados (filas quitadas antes de `rolling_block`) y los castigos (`writeoffs_by_entity(mask=True)`). Así el indicador
+de la entidad queda sin dato ese mes y en los cálculos de 12 meses que lo usan (variación anual en t+12, promedios y
+flujos de 12 meses). Los deudores de la entidad (CMAC Sullana 2024-06) ya llegan sin esas filas desde
+`visual_mora.load_debtors`. Los agregados (subsistema y sistema) siguen sumando los componentes completos, como los
+totales de la SBS. `build` devuelve en `info` la lista `rep` y los huecos `rep_gap` ({entidad: {indicador: [[desde,
+hasta, n.º de rep]]}}, por comparación con la serie sin enmascarar), que `visual_indicadores.py` pasa a la página.
+
 Salidas:
     data/processed/indicadores/indicadores_ambito_mes.parquet  tabla larga (solo celdas con valor)
     data/processed/indicadores/indicadores_ambito_mes.xlsx     versión para revisar (ancha)
     data/processed/indicadores/ambitos.csv                     ámbitos: nombre, subsistema, historial, activa
+    data/processed/indicadores/repeticiones.json               cifras repetidas de otro mes: rep y repGap (página)
     config/indicadores.csv                                      catálogo de indicadores
     data/_control/indicadores_validacion.csv                    cálculo propio vs. publicado por la SBS
 
@@ -58,6 +72,8 @@ import visual_rentabilidad as vr  # noqa: E402
 import visual_liquidez as vl  # noqa: E402
 import visual_eeff as ve  # noqa: E402
 from visual_mora import (ENTIDADES, PROJECT_DIR, SUBSYSTEMS, month_key, month_range, read_table)  # noqa: E402
+from errores_origen import (RANKING_TEMA, debtor_entity_errors, income_excluded_keys, repeat_footnote,  # noqa: E402
+                            source_repeat_mask, source_repeats)
 
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
 PANEL = PROJECT_DIR / "data" / "processed" / "panel_entidad_mes.parquet"
@@ -66,6 +82,7 @@ OUT_DIR = PROJECT_DIR / "data" / "processed" / "indicadores"
 OUT_LONG = OUT_DIR / "indicadores_ambito_mes.parquet"
 OUT_XLSX = OUT_DIR / "indicadores_ambito_mes.xlsx"
 OUT_SCOPES = OUT_DIR / "ambitos.csv"
+OUT_REPEATS = OUT_DIR / "repeticiones.json"   # cifras repetidas de otro mes: rep y rep_gap (para la página)
 CATALOG_CSV = PROJECT_DIR / "config" / "indicadores.csv"
 CONTROL_CSV = PROJECT_DIR / "data" / "_control" / "indicadores_validacion.csv"
 
@@ -380,6 +397,20 @@ STOCK_COLS = ["ct", "ca", "cref", "emp", "mype", "cons", "hip", "meu",
               "act", "pat", "pas", "disp", "csr", "prov", "batr", "bref", "bcd", "bcd_me",
               "dep", "dme", "ad", "rkcr", "alN", "pcN", "alE", "pcE", "fed", "fer", "rcl",
               "pe", "apr", "c1", "pg", "deu", "cas_sub"]
+# Cuadro (tema de data/processed/boletin) del que sale cada componente de entidad: para dejar vacías las entidad-mes en
+# que la SBS repite las cifras de otro mes (`mask_entity_components`). Los flujos del estado de resultados y los castigos
+# se enmascaran aparte (`build`, `writeoffs_by_entity`).
+COMP_TEMA = {**{c: ("creditos-tipo-situacion",) for c in ["ct", "ca", "cref", "emp", "mype", "cons", "hip"]},
+             "meu": ("creditos-tipo-modalidad-moneda",),
+             **{c: ("estados-financieros",) for c in ["act", "pat", "pas", "disp", "csr", "prov", "batr", "bref", "bcd",
+                                                     "bcd_me", "dep", "dme", "ad"]},
+             "rkcr": (RANKING_TEMA,),
+             **{c: ("ratios-liquidez",) for c in ["alN", "pcN", "alE", "pcE"]},
+             "fed": ("ratio-financiacion-neta-estable",), "fer": ("ratio-financiacion-neta-estable",),
+             "rcl": ("ratio-cobertura-liquidez",),
+             "pe": ("ratio-capital-global", "estructura-patrimonio-efectivo"), "apr": ("ratio-capital-global",),
+             "c1": ("ratio-capital-global",), "pg": ("posicion-global-moneda-extranjera",),
+             "deu": ("deudores-tipo-credito",), "cas_sub": ("castigos-tipo-credito",)}
 
 
 def load_entity_components() -> tuple[pd.DataFrame, dict]:
@@ -473,10 +504,17 @@ def load_entity_components() -> tuple[pd.DataFrame, dict]:
     sv = sv.assign(subsistema=sv["subsistema"].astype(str)).set_index(KEY)
     f = f.join(sv[["pe", "apr", "c1"]], how="outer")
 
-    # --- posición global (panel)
-    pn = read_table(PANEL, columns=KEY + ["posicion_global_me"])
-    pn = pn[pn["id_entidad"] != "_total"].assign(subsistema=lambda x: x["subsistema"].astype(str)).set_index(KEY)
-    f = f.join(pn["posicion_global_me"].rename("pg"), how="left")
+    # --- posición global (cuadro de posición global: el mismo valor que la columna del panel)
+    # Desde el 2026-11-03 el panel deja vacías las entidad-mes con cifras repetidas de otro mes
+    # (errores_origen.RANKING_REPEATS); aquí se lee el cuadro tal como lo publica la SBS, igual que los demás
+    # componentes (PE, balance, créditos), para que el par PG / PE de los agregados siga completo y coincida con
+    # los totales de la SBS, que suman esas cifras. La serie de la entidad se enmascara después, con los demás
+    # componentes (`mask_entity_components`).
+    pn = read_table(BOLETIN / "posicion-global-moneda-extranjera.parquet",
+                    filters=[("variable", "==", "posicion_global_me")])
+    pn = pn[~pn["es_total"]].assign(subsistema=lambda x: x["subsistema"].astype(str))
+    pn = pn.groupby(KEY)["valor"].first()
+    f = f.join(pn.rename("pg"), how="left")
 
     f = f.reindex(columns=STOCK_COLS)
     f.index = f.index.set_names(KEY)
@@ -504,6 +542,31 @@ def load_entity_components() -> tuple[pd.DataFrame, dict]:
     return f.reset_index(drop=True), aux
 
 
+def mask_entity_components(f: pd.DataFrame) -> tuple[pd.DataFrame, list[list], int]:
+    """Copia de los componentes para las series de ENTIDAD: vacías las celdas que vienen de un cuadro en que la SBS
+    repite las cifras de otro mes (`errores_origen.RANKING_REPEATS`; `COMP_TEMA` dice de qué cuadro sale cada una).
+    Devuelve la copia, la lista para la página ([mes, id_entidad, mes repetido, alcance «fila» / «ranking», motivo])
+    y el número de celdas con valor que quedan vacías. Los agregados se arman con `f` sin tocar."""
+    out = f.copy()
+    n = 0
+    for tema in sorted({t for ts in COMP_TEMA.values() for t in ts}):
+        m = source_repeat_mask(out, tema)
+        if not m.any():
+            continue
+        cols = [c for c, ts in COMP_TEMA.items() if tema in ts and c in out.columns]
+        n += int(out.loc[m, cols].notna().sum().sum())
+        out.loc[m, cols] = np.nan
+    rep = []
+    keys = set(zip(f["periodo"], f["subsistema"], f["id_entidad"]))
+    for k, r in sorted(source_repeats().items()):
+        if k not in keys:
+            continue
+        note = repeat_footnote(r)
+        rep.append([month_key(k[0]), k[2], month_key(r["same_as"]), "fila" if r["row"] == "all" else "ranking",
+                    "nota al pie del cuadro: " + note if note else "sin nota al pie; los demás cuadros del mes sí cambian"])
+    return out, rep, n
+
+
 # ---------------------------------------------------------------- series por ámbito
 def flows_by_period(r: pd.DataFrame) -> pd.DataFrame:
     """Salida de `rolling_block` (índice t) → índice periodo, con las columnas que usa el catálogo. Antes del
@@ -517,8 +580,10 @@ def flows_by_period(r: pd.DataFrame) -> pd.DataFrame:
     return out.rename(columns={"if": "if_"})
 
 
-def writeoffs_by_entity(f: pd.DataFrame, months: list[int]) -> pd.DataFrame:
-    """Castigos de 12 meses por `id_entidad` (aunque cambie de subsistema), en los meses de `adj_months`."""
+def writeoffs_by_entity(f: pd.DataFrame, months: list[int], mask: bool = False) -> pd.DataFrame:
+    """Castigos de 12 meses por `id_entidad` (aunque cambie de subsistema), en los meses de `adj_months`. Con `mask`,
+    el flujo publicado de una entidad-mes que repite otro mes (`errores_origen.RANKING_REPEATS`) queda vacío, y con él
+    los castigos de 12 meses que lo incluyen."""
     c = read_table(BOLETIN / "castigos-tipo-credito.parquet")
     c = c[(~c["es_total"]) & c["variable"].isin(["castigos_flujo_mensual", "castigos_flujo_trimestral"])
           & (c["apertura"] == "total")]
@@ -529,6 +594,11 @@ def writeoffs_by_entity(f: pd.DataFrame, months: list[int]) -> pd.DataFrame:
     grid = month_range(vm.writeoff_start(), last)
     flows = c.pivot_table(index="id_entidad", columns="periodo", values="valor", aggfunc="sum")
     flows = flows.reindex(columns=grid).fillna(0.0)
+    if mask:
+        bad = c[source_repeat_mask(c, "castigos-tipo-credito")]
+        for r in bad[["id_entidad", "periodo"]].drop_duplicates().itertuples(index=False):
+            if r.periodo in flows.columns:
+                flows.loc[r.id_entidad, r.periodo] = np.nan
     roll = flows.T.rolling(12, min_periods=12).sum()
     valid = vm.adj_months(last)
     roll = roll.loc[[m for m in roll.index if m in set(valid)]]
@@ -658,6 +728,14 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     valid_adj = set(vm.adj_months(months[-1]))
     w = aux["w"].astype({"subsistema": str, "id_entidad": str})
     cas_ent = writeoffs_by_entity(f, months)
+    # Series de entidad sin las cifras repetidas de otro mes (los agregados usan f, w y los castigos completos).
+    fe, rep, n_masked = mask_entity_components(f)
+    we = w[~source_repeat_mask(w, "estados-financieros")]
+    cas_bad = writeoffs_by_entity(f, months, mask=True).isna() & cas_ent.notna()
+    rep_ents = {r[1] for r in rep}
+    print(f"  Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): {len(rep)} entidad-mes; {n_masked} celdas "
+          f"de componentes y {len(w) - len(we)} filas del estado de resultados quedan vacías en las series de entidad "
+          f"(agregados sin cambios)")
 
     long_parts = []
     scope_meta = []
@@ -734,15 +812,17 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     last_name = panel[panel["id_entidad"] != "_total"].sort_values("periodo").groupby("id_entidad")["nombre_entidad"].last()
     ent_res = {}
     sub_last = {sub: int(sub_comp[sub]["ct"].last_valid_index()) for sub in SUBS}
-    for ent, rows in f.groupby("id_entidad"):
+    def entity_results(ent: str, rows: pd.DataFrame, wsrc: pd.DataFrame, masked: bool) -> tuple[dict, pd.Series, pd.DataFrame]:
         rows = rows.sort_values("periodo")
         comp = rows.set_index("periodo")[STOCK_COLS].reindex(midx)
         home = rows.set_index("periodo")["subsistema"].reindex(midx)
         comp["cas"] = cas_ent[ent].reindex(midx) if ent in cas_ent.columns else np.nan
         comp.loc[~(comp.index.isin(valid_adj)) | comp["ct"].isna(), "cas"] = np.nan
         comp.loc[comp.index.isin(valid_adj) & comp["ct"].notna() & comp["cas"].isna(), "cas"] = 0.0
+        if masked and ent in cas_bad.columns:   # castigos de 12 meses que incluyen un flujo repetido
+            comp.loc[cas_bad[ent].reindex(midx, fill_value=False).astype(bool).to_numpy(), "cas"] = np.nan
         comp["ctavg"] = rolling_mean12(comp["ct"])
-        g = w[w["id_entidad"] == ent]
+        g = wsrc[wsrc["id_entidad"] == ent]
         if len(g):
             fl = flows_by_period(vr.rolling_block(g.set_index("t")[vr.FLOW_KEYS + ["ac", "pa", "cd", "at", "ut", "np"]]))
             comp = comp.join(fl.reindex(midx))
@@ -755,6 +835,54 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
                             for m, s in zip(midx, home)], index=midx)
         res["part_sub"] = finish("part_sub", comp["ct"].where(sub_ct > 0), sub_ct.where(comp["ct"].notna() & (sub_ct > 0)))
         res["part_sis"] = finish("part_sis", comp["ct"].where(sis_ct > 0), sis_ct.where(comp["ct"].notna() & (sis_ct > 0)))
+        return res, home, comp
+
+    # Huecos que dejan las cifras repetidas en las series de entidad: el mes repetido y los cálculos de 12 meses que lo
+    # usan, por comparación con la serie sin enmascarar; cada hueco se atribuye al mes repetido anterior más cercano.
+    rep_idx = {(r[1], r[0]): n for n, r in enumerate(rep)}
+    rep_gap: dict[str, dict] = {}
+    n_vals = 0
+    for ent, rows in fe.groupby("id_entidad"):
+        res, home, comp = entity_results(ent, rows, we, True)
+        if ent in rep_ents:
+            raw, _, _ = entity_results(ent, f[f["id_entidad"] == ent], w, False)
+            rmonths = sorted(int(r[0].replace("-", "")) for r in rep if r[1] == ent)
+            for k, df in res.items():
+                lost = df["valor"].isna() & raw[k]["valor"].notna()
+                if not lost.any():
+                    continue
+                n_vals += int(lost.sum())
+                spans = []
+                for m in lost[lost].index:
+                    src = max((x for x in rmonths if x <= m), default=rmonths[0])
+                    ri, mk = rep_idx[(ent, month_key(src))], month_key(int(m))
+                    if spans and spans[-1][2] == ri and month_range(int(spans[-1][1].replace("-", "")), 210012)[1] == m:
+                        spans[-1][1] = mk
+                    else:
+                        spans.append([mk, mk, ri])
+                rep_gap.setdefault(ent, {})[k] = spans
+            # Deudores: `visual_mora.load_debtors` ya quita la entidad-mes en las dos versiones (CMAC Sullana 2024-06).
+            for per, _, e in sorted(debtor_entity_errors()):
+                mk = month_key(per)
+                if e == ent and (ent, mk) in rep_idx and pd.isna(res["deud"]["valor"].get(per)):
+                    rep_gap.setdefault(ent, {}).setdefault("deud", []).append([mk, mk, rep_idx[(ent, mk)]])
+            # Estado de resultados de CMAC Pisco 2014-01 → 04: `visual_rentabilidad.load_statements` ya omite esas filas
+            # en las dos versiones (el total de la SBS no las incluye). Hueco del mes en los indicadores que la entidad
+            # tenía en el mes repetido.
+            for per, _, e in sorted(income_excluded_keys()):
+                mk = month_key(per)
+                if e != ent or (ent, mk) not in rep_idx:
+                    continue
+                ri = rep_idx[(ent, mk)]
+                same = int(rep[ri][2].replace("-", ""))
+                for k, df in res.items():
+                    spans = rep_gap.setdefault(ent, {}).setdefault(k, [])
+                    if (pd.isna(df["valor"].get(per)) and pd.notna(raw[k]["valor"].get(same))
+                            and not any(a <= mk <= b for a, b, _ in spans)):
+                        spans.append([mk, mk, ri])
+                        spans.sort()
+                    if not spans:
+                        del rep_gap[ent][k]
         if not any(df["valor"].notna().any() for df in res.values()):
             continue
         ent_res[ent] = (res, home)
@@ -773,7 +901,11 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
             "activa": bool(last_m == sub_last.get(present.iloc[-1]) and (pd.notna(comp["ct"].get(last_m))
                                                                         or pd.notna(comp["act"].get(last_m)))),
             "desde": month_key(int(present.index.min())), "hasta": month_key(last_m),
-            "cred_ultimo": float(comp["ct"].get(last_m)) if pd.notna(comp["ct"].get(last_m)) else np.nan,
+            # Último crédito válido (orden de la lista de entidades): si el último mes repite otro mes (CMAC Sullana
+            # 2024-06, TFC 2019-11) queda vacío y se usa el anterior.
+            "cred_ultimo": (float(comp["ct"].get(last_m)) if pd.notna(comp["ct"].get(last_m))
+                            else float(comp["ct"].loc[:last_m].dropna().iloc[-1])
+                            if (ent, month_key(last_m)) in rep_idx and comp["ct"].loc[:last_m].notna().any() else np.nan),
         })
 
     # --- tabla larga
@@ -801,7 +933,10 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
         + [{"ambito": s, "tipo": "sub", "nombre": l, "subsistema": s, "historial": "[]", "activa": True, "corto": c}
            for s, l, c in SUBSYSTEMS]
         + scope_meta)
-    info = {"months": months, "lg": lg, "sub_comp": sub_comp, "sys_comp": sys_comp}
+    print(f"  Series de entidad: {n_vals} valores de indicador quedan sin dato por las cifras repetidas "
+          f"({len(rep_gap)} entidades)")
+    info = {"months": months, "lg": lg, "sub_comp": sub_comp, "sys_comp": sys_comp, "rep": rep, "rep_gap": rep_gap,
+            "rep_values": n_vals}
     return long, meta, info
 
 
@@ -1002,6 +1137,7 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     long.to_parquet(OUT_LONG, index=False)
     meta.to_csv(OUT_SCOPES, index=False, encoding="utf-8")
+    OUT_REPEATS.write_text(json.dumps({"rep": info["rep"], "repGap": info["rep_gap"]}, ensure_ascii=False), encoding="utf-8")
     cat = catalog_frame(long)
     cat.to_csv(CATALOG_CSV, index=False, encoding="utf-8")
     print("\nValidación contra lo publicado por la SBS...")

@@ -19,6 +19,26 @@ cada subsistema y cada entidad. Los agregados son la suma de las entidades (coin
 que publica la SBS salvo errores de origen; ver `_control/<tema>_validacion.csv`). Los deudores no
 se suman: un deudor con créditos en dos entidades se cuenta una vez en el total del subsistema.
 
+Deudores con errores de origen (desde el 2026-11-03): algunos Excel de deudores de la SBS repiten las
+cifras de otro mes (el mes entero, o solo la columna del total). `load_debtors` los quita con
+`errores_origen.drop_debtor_source_errors` (lista y detalle en `errores_origen.py`), así que esos
+subsistema-mes no tienen deudores ni saldo por deudor en los datos. La página no deja huecos: en los
+KPI, el ranking, la ficha y las tablas muestra el último dato válido con su mes y el motivo («la SBS
+repitió las cifras de abr-2016»), con `deuErr` / `deuTotErr` del JSON. Los deudores únicos del
+sistema (SF-2103) no están afectados. Desde el 2026-11-03 `load_debtors` quita también los deudores de
+una sola entidad repetidos (`entities=True`: CMAC Sullana 2024-06, que repite mayo).
+
+Cifras repetidas de otro mes (2026-11-03, `errores_origen.RANKING_REPEATS`): en 9 entidad-mes la SBS repite
+el mes anterior en casi todos los cuadros (CMAC Pisco 2014-01 → 04, CRAC Señor de Luren 2015-05, CRAC Chavín /
+Raíz 2016-03 y 04, Financiera TFC 2019-11, CMAC Sullana 2024-06). `mask_repeats` deja vacías esas cifras en la
+serie de la entidad, por cuadro de origen (`COL_TEMA`: saldos, castigos, moneda y deudores; los deudores de
+Pisco, Luren, Raíz y TFC son propios y se quedan), y los castigos de 12 meses de los 11 meses siguientes (su
+ventana suma el flujo repetido; solo pesa en Raíz). Los agregados (subsistema y sistema) se arman antes y siguen
+sumando lo publicado, como los totales de la SBS. La página recibe la lista en `rep`: la ficha y la tabla de la
+entidad muestran el último dato válido con su mes y el motivo, el ranking y la dispersión la omiten con una nota
+(también cuando falta el crecimiento anual o la mora ajustada porque su cuenta usa un mes repetido) y el tooltip
+del hueco del gráfico dice «sin dato: en jun-2024 la SBS repitió las cifras de may-2024 …».
+
 Genera además `outputs/mora_ssff_artifact.html`, la versión para publicar como Artifact de
 claude.ai (sin <html>/<head>/<body>).
 
@@ -35,6 +55,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from errores_origen import (DEBTOR_SOURCE_ERRORS, DEBTOR_TOTAL_ERRORS, drop_debtor_source_errors,  # noqa: E402
+                            repeat_footnote, repeats_tema, source_repeat_mask, source_repeats)
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
@@ -206,8 +230,12 @@ def load_currency() -> tuple[pd.DataFrame, pd.Series]:
 def load_debtors() -> tuple[pd.DataFrame, pd.DataFrame, pd.Series]:
     """Número de deudores: por entidad y tipo, total consolidado de cada subsistema por tipo
     (fila TOTAL publicada, no la suma) y deudores únicos del sistema (SF-2103, trimestral, solo total).
-    No hay deudores de «empresariales» (un deudor puede tener varios tipos) ni del consumo revolvente."""
-    d = read_table(BOLETIN / "deudores-tipo-credito.parquet")
+    No hay deudores de «empresariales» (un deudor puede tener varios tipos) ni del consumo revolvente.
+    Sin los errores de origen de `errores_origen.py` (meses y totales que repiten las cifras de otro
+    mes): esos subsistema-mes quedan sin dato aquí y en todo lo que se calcula con ellos (saldo por
+    deudor). Desde el 2026-11-03 también las entidad-mes cuyos deudores repiten otro mes (`entities=True`: CMAC
+    Sullana 2024-06; el total del subsistema no cambia). También lo usa `indicadores_datos.py`."""
+    d = drop_debtor_source_errors(read_table(BOLETIN / "deudores-tipo-credito.parquet"), entities=True)
     d = d.rename(columns={"apertura": "tipo", "valor": "deu"})
     ent = d[~d["es_total"]].groupby(["periodo", "subsistema", "id_entidad", "tipo"], as_index=False)["deu"].sum()
     sub = d[d["es_total"]].groupby(["periodo", "subsistema", "tipo"], as_index=False)["deu"].sum()
@@ -216,7 +244,62 @@ def load_debtors() -> tuple[pd.DataFrame, pd.DataFrame, pd.Series]:
     return ent, sub, sysd
 
 
+def debtor_error_notes() -> tuple[list, list]:
+    """Para la página: (deuErr, deuTotErr). deuErr = [[mes, subsistema, mes repetido]] de los meses enteros
+    repetidos; deuTotErr = [[mes, subsistema, alcance, mes repetido]] de los totales repetidos (alcance «sub»:
+    solo el total del subsistema; «all»: también el total de cada entidad). El mes repetido se busca en los
+    datos (el total del subsistema idéntico a ±12 meses); None si no se encuentra."""
+    d = read_table(BOLETIN / "deudores-tipo-credito.parquet", filters=[("es_total", "==", True)])
+    t = d[d["apertura"] == "total"].pivot_table(index="periodo", columns="subsistema", values="valor")
+    idx = lambda p: p // 100 * 12 + p % 100   # noqa: E731
+
+    def source(per: int, sub: str):
+        x = t[sub].dropna() if sub in t else pd.Series(dtype=float)
+        if per not in x.index:
+            return None
+        same = [p for p, v in x.items() if p != per and v == x[per] and abs(idx(p) - idx(per)) <= 12]
+        return month_key(min(same, key=lambda p: abs(idx(p) - idx(per)))) if same else None
+
+    err = [[month_key(m), s, source(m, s)] for m, s in sorted(DEBTOR_SOURCE_ERRORS) if m >= START_PERIOD]
+    tot = [[month_key(m), s, kind, source(m, s)] for (m, s), kind in sorted(DEBTOR_TOTAL_ERRORS.items())
+           if m >= START_PERIOD]
+    return err, tot
+
+
 COLS = ("tot", "atr", "ref", "cas", "meu", "deu")
+# Cuadro (tema de data/processed/boletin) del que sale cada columna, para `mask_repeats`.
+COL_TEMA = {"tot": "creditos-tipo-situacion", "atr": "creditos-tipo-situacion", "ref": "creditos-tipo-situacion",
+            "cas": "castigos-tipo-credito", "meu": "creditos-tipo-modalidad-moneda", "deu": "deudores-tipo-credito"}
+
+
+def mask_repeats(full: pd.DataFrame) -> tuple[pd.DataFrame, list[list], int]:
+    """Copia de `full` (una fila por entidad, mes y tipo) con vacíos en las columnas que vienen de un cuadro en que la
+    SBS repite las cifras de otro mes (`errores_origen.RANKING_REPEATS`, «row» = all: las que solo repiten el ranking
+    no tocan estos cuadros). Solo para la serie de la entidad: los agregados se arman antes, con lo publicado (la SBS
+    suma esas cifras en sus totales). Los castigos de 12 meses (`cas`) también quedan vacíos en los 11 meses que siguen
+    a un mes repetido, porque su ventana suma ese flujo (solo pesa en CRAC Raíz 2016-03/04: las demás entidad-mes son
+    el último mes de la entidad). Devuelve además la lista para la página [mes, «subsistema/entidad», mes repetido,
+    «fila», motivo] y el número de valores que pasan a vacío."""
+    out = full.copy()
+    before = out[list(COLS)].notna().sum().sum()
+    for col, tema in COL_TEMA.items():
+        out.loc[source_repeat_mask(out, tema), col] = np.nan
+    rep = []
+    mon = out["periodo"] // 100 * 12 + out["periodo"] % 100
+    for (per, sub, ent), r in source_repeats().items():
+        if r["row"] != "all":
+            continue
+        own = (out["subsistema"] == sub) & (out["id_entidad"] == ent)
+        if not (own & (out["periodo"] == per)).any():
+            continue
+        if repeats_tema(r, COL_TEMA["cas"]):
+            m0 = per // 100 * 12 + per % 100
+            out.loc[own & (mon > m0) & (mon <= m0 + 11), "cas"] = np.nan
+        note = repeat_footnote(r)
+        rep.append([month_key(per), f"{sub}/{ent}", month_key(r["same_as"]), "fila",
+                    "nota al pie del cuadro: " + note if note else "sin nota al pie"])
+    n = int(before - out[list(COLS)].notna().sum().sum())
+    return out, sorted(rep), n
 
 
 def series_block(g: pd.DataFrame, months: list[int], split_ok: bool) -> dict:
@@ -308,6 +391,10 @@ def build_data() -> dict:
         scopes[sub] = {"n": label, "s": sub, **series_block(g, months, sub in SPLIT_CONSUMO)}
 
     full = full.merge(deu_ent, on=key, how="left")
+    # Serie de la entidad sin las cifras que la SBS repite de otro mes (los agregados de arriba no cambian).
+    full, rep, n_masked = mask_repeats(full)
+    print(f"  Cifras repetidas de otro mes: {len(rep)} entidad-mes, {n_masked} valores de entidad vacíos "
+          f"(errores_origen.RANKING_REPEATS)")
     entities = []
     for (sub, ent), g in full.groupby(["subsistema", "id_entidad"]):
         k = f"{sub}/{ent}"
@@ -330,6 +417,7 @@ def build_data() -> dict:
     last = months[-1]
     # Primer mes con saldo en ME del sistema (todos los subsistemas publican el cuadro por moneda).
     fx_from = int(sysg.loc[(sysg["tipo"] == "total") & sysg["meu"].notna(), "periodo"].min())
+    deu_err, deu_tot_err = debtor_error_notes()
     return {
         "months": [month_key(m) for m in months],
         # Mora ajustada: trimestral desde adjFrom, mensual desde adjMonthly.
@@ -342,6 +430,12 @@ def build_data() -> dict:
         "subs": [{"k": k, "l": l, "s": s} for k, l, s in SUBSYSTEMS],
         "scopes": scopes,
         "entities": entities,
+        # Deudores sin dato por errores de origen de la SBS (la página muestra el último dato válido y el motivo).
+        "deuErr": deu_err,
+        "deuTotErr": deu_tot_err,
+        # Entidad-mes con las cifras de otro mes (errores_origen.RANKING_REPEATS): [mes, ámbito, mes repetido, alcance,
+        # motivo]. La página muestra el último dato válido con su mes y el motivo; en los gráficos, un hueco.
+        "rep": rep,
         "hasta": month_key(last),
         # Último mes con los cinco subsistemas (= último mes del sistema): mes por defecto del tablero.
         "allHasta": month_key(sys_end),

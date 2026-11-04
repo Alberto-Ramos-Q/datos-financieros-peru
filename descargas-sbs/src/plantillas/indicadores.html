@@ -717,7 +717,8 @@ dialog#big::backdrop { background: rgba(8,12,28,.5); }
         <p>El corte que se abre por defecto es el último mes en que los cinco subsistemas publicaron sus créditos. Los meses posteriores, en los que algún subsistema aún no publica, se pueden elegir en el selector y figuran como «parcial»; en ellos el sistema muestra el último mes completo, con su mes indicado junto al valor.</p>
         <p>El cuadro no deja celdas vacías por rezagos de publicación. Si falta el dato del mes de una columna, se muestra el último valor publicado dentro de la ventana de rezago del indicador, con su mes en pequeño al lado, por ejemplo «14.21 jul-26». La ventana de cada indicador figura en la columna «Frecuencia» de la tabla de indicadores: 2 meses en la mayoría, 3 en el número de deudores (trimestral en el sistema) y 6 en el ratio de cobertura de liquidez (trimestral en todos los ámbitos), que salen con más rezago. Al pasar el cursor o el foco por la celda, una nota explica por qué. Los gráficos de evolución dibujan solo los datos de cada mes; el de posición en el corte sí usa el último dato publicado y lo indica.</p>
         <p>El guion (—) aparece solo cuando el dato no existe: el indicador todavía no se publicaba en esa fecha, la entidad no operaba o ya no opera, el ámbito no tiene ese indicador o no hay ningún dato en la ventana de rezago. La nota de la celda dice cuál de esos casos es. Una entidad que dejó de operar muestra el guion desde el mes siguiente a su último dato: la ventana de rezago no se aplica a los meses posteriores a su cierre. Los indicadores que un ámbito no tiene en ningún mes (por ejemplo, los depósitos de una empresa de créditos o el RCL del sistema) no aparecen como filas: la leyenda debajo del cuadro los nombra.</p>
-        <p>El cuadro de capital sale, en todos los subsistemas, unas cuatro semanas después del balance y del cuadro de créditos. Por eso el ratio de capital global (y con él el CET1, el colchón y la posición global / patrimonio efectivo) suele llegar un mes después que los créditos. En esos casos el sistema del último mes queda vacío y el cuadro muestra el último mes con todos los subsistemas que reportan el indicador, rotulado con su mes. Si la SBS no publicó un mes de un indicador pero sí los siguientes, la celda de ese mes muestra el último dato anterior y la nota lo dice.</p>
+        <p>El cuadro de capital sale, en todos los subsistemas, unas cuatro semanas después del balance y del cuadro de créditos. Por eso el ratio de capital global (y con él el CET1, el colchón y la posición global / patrimonio efectivo) suele llegar un mes después que los créditos. En esos casos el sistema del último mes queda vacío y el cuadro muestra el último mes con todos los subsistemas que reportan el indicador, rotulado con su mes. Si la SBS no publicó un mes de un indicador pero sí los siguientes, la celda de ese mes muestra el último dato anterior y la nota lo dice. Lo mismo pasa con el número de deudores en los pocos meses en que el cuadro de deudores de la SBS repite las cifras de otro mes, en todo el cuadro o solo en el total (error de origen): esos meses se tratan como sin dato, el cuadro muestra el último dato válido y la nota de la celda dice qué mes se repitió. En los gráficos ese mes queda como un hueco y el detalle al pasar el cursor da el motivo.</p>
+        <p>Hay además nueve meses de seis entidades en que la SBS publicó en casi todos sus cuadros las cifras del mes anterior, con una nota al pie («La información de … corresponde al …»): CMAC Pisco de enero a abril de 2014, CRAC Señor de Luren en mayo de 2015, CRAC Chavín (luego Raíz) en marzo y abril de 2016, Financiera TFC en noviembre de 2019 y CMAC Sullana en junio de 2024; en CMAC Sullana de noviembre de 2014 solo el ranking repite los créditos de octubre. Esos meses la entidad queda sin dato propio, y también los cálculos de 12 meses que los usan (variación anual, utilidad y promedios de 12 meses, castigos). El cuadro y la ficha muestran el último dato válido de la entidad, con su mes y el motivo; en los gráficos el mes queda como un hueco con el motivo al pasar el cursor. Los subsistemas y el sistema no cambian: suman esas cifras, como los totales que publica la SBS.</p>
       </section>
 
       <section id="m-diag">
@@ -986,6 +987,8 @@ function spanOf(key) {
     const sc = SC[key];
     let first = null, last = null;
     for (const k in sc.V) { const s = series(key, k); const a = s.findIndex(v => v != null); if (a < 0) continue; let z = N - 1; while (s[z] == null) z--; if (first == null || a < first) first = a; if (last == null || z > last) last = z; }
+    // Un mes en que la SBS repitió las cifras de otro (D.rep) es un mes en que la entidad reportaba, aunque quede sin dato.
+    for (const r of D.rep || []) if (r[1] === key) { const i = MONTHS.indexOf(r[0]); if (i >= 0) { if (first == null || i < first) first = i; if (last == null || i > last) last = i; } }
     return {first, last};
   });
 }
@@ -1026,12 +1029,58 @@ function cellAt(key, k, j) {
   if (s[j] != null) return {v: s[j], j};
   // Una entidad que dejó de operar no tiene dato después de su último mes: no se le aplica la ventana de rezago.
   if (isEnt(key) && !SC[key].act) { const sp = spanOf(key); if (sp.last != null && j > sp.last) return {v: null, why: naWhy(key, k, j)}; }
+  // Cifras repetidas de otro mes (D.rep / D.repGap): el último dato válido anterior al hueco, con su mes y el motivo.
+  const rn = repNote(key, k, j);
+  if (rn) {
+    for (let b = 1; j - b >= 0; b++) {
+      if (s[j - b] != null) return {v: s[j - b], j: j - b, stale: true, why: rn + ' Se muestra el último dato válido, ' + mLabel(MONTHS[j - b]) + '.'};
+      if (!repAt(key, k, j - b) && b >= lagOf(I)) break;
+    }
+    return {v: null, why: rn + ' No hay un dato válido en los meses anteriores.'};
+  }
   const lag = lagOf(I);
   for (let b = 1; b <= lag && j - b >= 0; b++) if (s[j - b] != null) return {v: s[j - b], j: j - b, stale: true, why: staleWhy(key, k, j, j - b)};
   return {v: null, why: naWhy(key, k, j)};
 }
+// Deudores con errores de origen (D.deuErr: el Excel repite otro mes entero; D.deuTotErr: solo el total del
+// subsistema, «sub», o también el de cada entidad, «all»). Esos meses quedan sin `deud`: motivo del hueco o null.
+function deuErrNote(key, k, j) {
+  if (k !== 'deud' || key === 'sistema' || j == null || j < 0 || j >= N) return null;
+  const m = MONTHS[j], sub = subAt(key, j), ent = isEnt(key);
+  if (ent) { const sp = spanOf(key); if (sp.first == null || j < sp.first || j > sp.last) return null; }
+  const rep = r => r ? mLabel(r) : 'otro mes';
+  const e = (D.deuErr || []).find(r => r[0] === m && r[1] === sub);
+  if (e) return 'Sin dato de deudores de ' + mLabel(m) + ': el cuadro que publicó la SBS para ese mes repite las cifras de ' + rep(e[2]) + ' (error de origen).';
+  const t = (D.deuTotErr || []).find(r => r[0] === m && r[1] === sub && (r[2] === 'all' || !ent));
+  if (t) return 'Sin dato de deudores de ' + mLabel(m) + ': el total que publicó la SBS para ese mes repite el de ' + rep(t[3]) + ' (error de origen).';
+  return null;
+}
+// Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): D.rep = [[mes, entidad, mes repetido, alcance, motivo]]
+// (alcance «fila»: casi todos los cuadros; «ranking»: solo los créditos del ranking). D.repGap = {entidad: {indicador:
+// [[desde, hasta, n.º de D.rep]]}}: meses en que el indicador de la entidad queda sin dato por esas cifras (el mes
+// repetido y, en los cálculos de 12 meses, los meses cuya ventana lo incluye). Los agregados no se tocan.
+const repText = r => 'en ' + mLabel(r[0]) + ' la SBS ' + (r[3] === 'fila' ? 'repitió en sus cuadros las cifras de ' + mLabel(r[2])
+  : 'repitió en el ranking los créditos de ' + mLabel(r[2])) + ' (' + r[4] + ')';
+function repAt(key, k, j) {
+  if (!isEnt(key) || j == null || j < 0 || j >= N) return null;
+  const g = D.repGap && D.repGap[key] && D.repGap[key][k];
+  if (!g) return null;
+  const m = MONTHS[j];
+  for (const [a, b, ri] of g) if (m >= a && m <= b) return {r: D.rep[ri], own: m === D.rep[ri][0]};
+  return null;
+}
+function repNote(key, k, j) {
+  const x = repAt(key, k, j);
+  if (!x) return null;
+  return x.own ? 'Sin dato propio de ' + mLabel(MONTHS[j]) + ': ' + repText(x.r) + '.'
+    : 'Sin dato de ' + mLabel(MONTHS[j]) + ': el cálculo de 12 meses usa ' + mLabel(x.r[0]) + ', y ' + repText(x.r) + '.';
+}
+// Motivo de un hueco por error de origen: deudores repetidos o cifras repetidas de la entidad.
+const srcErrNote = (key, k, j) => deuErrNote(key, k, j) || repNote(key, k, j);
 function staleWhy(key, k, j, jj) {
   const I = IND_BY[k], m = mLabel(MONTHS[j]), mm = mLabel(MONTHS[jj]);
+  const de = srcErrNote(key, k, j);
+  if (de) return de + ' Se muestra el último dato válido, ' + mm + '.';
   if (I.q === 't') return 'Indicador trimestral: se muestra el último trimestre publicado, ' + mm + '.';
   if ((k === 'mora_aj' || k === 'castigos') && MONTHS[j] < '2016-12') return 'Hasta setiembre de 2016 el indicador es trimestral (los castigos se publicaban cada trimestre): se muestra el último trimestre, ' + mm + '.';
   if (key === 'sistema' && k === 'deud') return 'El número de deudores del sistema es trimestral (cuadro SF-2103): se muestra el último trimestre publicado, ' + mm + '.';
@@ -1058,6 +1107,8 @@ function naWhy(key, k, j) {
   }
   const f = firstIdx(key, k);
   if (f > j) return 'Sin dato de este indicador para ' + artName(key) + ' antes de ' + mLabel(MONTHS[f]) + '.';
+  const de = srcErrNote(key, k, j);
+  if (de) return de + ' Tampoco hay dato válido en los ' + lagOf(I) + ' meses anteriores.';
   return 'Sin dato publicado en ' + ml + ' ni en los ' + lagOf(I) + ' meses anteriores.';
 }
 
@@ -1276,6 +1327,13 @@ function lineChart(box, cfg) {
     cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
     series.forEach((s, j) => { const v = s.get(i); dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible'); if (v != null) { dots[j].setAttribute('cx', xi); dots[j].setAttribute('cy', y(v)); } });
     const rows = all.map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color, dash: !!s.dash}));
+    // Hueco por error de origen (deudores o cifras repetidas de la entidad): la nota dice por qué (en la variación
+    // anual, también si falta t−12).
+    for (const s of series) {
+      if (!s.key || s.get(i) != null) continue;
+      const nt = srcErrNote(s.key, cfg.I.k, i) || (cfg.yoy ? srcErrNote(s.key, cfg.I.k, i - 12) : null);
+      if (nt) rows.push({note: (series.length > 1 ? nameOf(s.key) + ': ' : '') + nt});
+    }
     showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
   }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); });
 }
@@ -1673,7 +1731,7 @@ function renderGap() {
     $('gap-title').textContent = 'Variación anual · ' + I.l + ' · ' + longName(key);
     $('gap-desc').textContent = 'Variación frente al mismo mes del año anterior, en %' + (ser.length > 1 ? ', ' + deName(key) + ' y ' + ser.slice(1).map(s => deName(s.key)).join(' y ') : '') + '.' + (I.u === 'miles' ? '' : ' En soles corrientes, sin descontar el efecto del tipo de cambio en los saldos en moneda extranjera.');
     lineLegend(lg, ser, []);
-    lineChart(box, {I, u: '%', fmt: v => spct(v, 1), idx: visIdx(), series: ser, marks: cols.map(c => c.j), cut: state.ci, H: 240, aria: 'Variación anual de ' + prLc(I.l) + ' ' + deName(key)});
+    lineChart(box, {I, u: '%', fmt: v => spct(v, 1), yoy: true, idx: visIdx(), series: ser, marks: cols.map(c => c.j), cut: state.ci, H: 240, aria: 'Variación anual de ' + prLc(I.l) + ' ' + deName(key)});
     return;
   }
   const unit = I.u === 'veces' ? 'veces' : 'pp', fmtD = v => v == null ? '—' : unit === 'pp' ? spp(v, I.d) : sgnd(v, I.d) + Math.abs(v).toFixed(I.d) + ' veces';
@@ -2355,7 +2413,7 @@ function dgNoChange(key, I, j) {
   const jb = c.j - 12;
   if (jb < 0) return 'La serie empieza en ' + mLabel(MONTHS[0]) + ': no hay dato de 12 meses antes.';
   const b = val(key, I.k, jb);
-  if (b == null) return 'No hay dato de ' + mLabel(MONTHS[jb]) + ' para comparar.';
+  if (b == null) return srcErrNote(key, I.k, jb) || 'No hay dato de ' + mLabel(MONTHS[jb]) + ' para comparar.';
   if (I.k === 'part_sub' && isEnt(key) && subAt(key, jb) !== subAt(key, c.j)) return 'La entidad cambió de subsistema entre ' + mLabel(MONTHS[jb]) + ' y ' + mLabel(MONTHS[c.j]) + ': su participación se mide sobre otro subsistema y no se compara.';
   if (isMoneyLike(I) && !(b > 0)) return 'El valor de ' + mLabel(MONTHS[jb]) + ' (' + fmtFull(I, b) + ') es negativo o cero: no se calcula una variación porcentual.';
   return 'Sin comparación de 12 meses.';
@@ -2711,7 +2769,7 @@ function hmScore(key, I, j, mode) {
   }
   const z = change12(key, I.k, j);
   if (!z && c.j >= 12 && typeof sameTramo === 'function' && !sameTramo(key, I.k, c.j - 12, c.j)) return {c, why: 'La entidad cambió de subsistema en los 12 meses previos: su participación en el subsistema no se compara entre subsistemas distintos.'};
-  if (!z) return {c, why: c.j >= 12 ? 'Sin dato de ' + mLabel(MONTHS[c.j - 12]) + ', 12 meses antes: no hay cambio que medir.' : 'La serie no tiene 12 meses previos: no hay cambio que medir.'};
+  if (!z) return {c, why: c.j >= 12 ? (srcErrNote(key, I.k, c.j - 12) ? srcErrNote(key, I.k, c.j - 12) + ' No hay cambio en 12 meses que medir.' : 'Sin dato de ' + mLabel(MONTHS[c.j - 12]) + ', 12 meses antes: no hay cambio que medir.') :'La serie no tiene 12 meses previos: no hay cambio que medir.'};
   if (z.z == null) return {c, z, why: z.sd === 0 ? 'Sus cambios en 12 meses previos no varían: no se puede medir qué tan inusual es el actual.' : 'Menos de ' + (z.need || minObs(I)) + ' cambios en 12 meses previos (' + z.nObs + '): no se mide qué tan inusual es el actual.'};
   return {c, z, s: Math.max(-3, Math.min(3, I.s ? z.z * I.s : z.z))};
 }
@@ -3160,6 +3218,10 @@ function gfChart(box, cfg) {
     series.forEach((s, j) => { const v = s.get(i); dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible'); if (v != null) { dots[j].setAttribute('cx', xi); dots[j].setAttribute('cy', y(v)); } });
     const rows = series.filter(s => !s.cmp || s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color, dash: !!s.dash}));
     for (const r of refs) { const v = r.get(i); if (v != null) rows.push({value: fmt(v), label: r.label, color: r.color, dash: true}); }
+    for (const s of series) {   // hueco por error de origen (deudores o cifras repetidas): la nota dice por qué
+      const nt = s.key && s.get(i) == null ? srcErrNote(s.key, I.k, i) : null;
+      if (nt) rows.push({note: (series.length > 1 ? nameOf(s.key) + ': ' : '') + nt});
+    }
     if (bv) {
       const b = bandOf(i);
       if (b) {

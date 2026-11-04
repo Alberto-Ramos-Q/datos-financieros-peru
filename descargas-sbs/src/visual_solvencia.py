@@ -13,6 +13,14 @@ Lee cuatro tablas largas de `data/processed/boletin/` (correr antes `leer_boleti
 y `data/processed/panel_entidad_mes.parquet` para la mora, el ROE y el activo de cada entidad
 (eje horizontal de la dispersión).
 
+Cifras repetidas de otro mes (2026-11-03, `errores_origen.RANKING_REPEATS`): en 9 entidad-mes la SBS repite el mes
+anterior en casi todos los cuadros (CMAC Pisco 2014-01 → 04, CRAC Señor de Luren 2015-05, CRAC Chavín / Raíz 2016-03
+y 04, Financiera TFC 2019-11, CMAC Sullana 2024-06). La serie de la entidad queda sin dato ese mes en los campos de
+los cuadros repetidos (`mask_repeats`, `FIELD_TEMA`; la mora, el ROE y el activo ya vienen vacíos del panel). Los
+agregados siguen sumando lo publicado, como los totales de la SBS (y `build_frame`, que usa `indicadores_datos.py`,
+no cambia). La página recibe la lista en `rep`: la ficha y la tabla de la entidad muestran el último dato válido con
+su mes, el ranking y la dispersión la omiten con una nota, y el tooltip del hueco da el motivo.
+
 Reglas de cálculo:
 - APR antes de 2021-04 (la SBS no lo publicaba) = PE × 100 / RCG de cada entidad. Por tipo de riesgo,
   = requerimiento × 10, reescalado para que sume el APR total (de 2011-07 a 2021-03 el límite global era
@@ -45,6 +53,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from visual_mora import (ENTIDADES, PROJECT_DIR, SUBSYSTEMS, artifact_version, read_table,  # noqa: E402
                          month_key, month_range)
+from errores_origen import repeat_footnote, repeats_tema, source_repeats  # noqa: E402
 
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
 PANEL = PROJECT_DIR / "data" / "processed" / "panel_entidad_mes.parquet"
@@ -94,6 +103,13 @@ LIMITS = [
 # Solo entidades: rcg y lev publicados, mora (%), roe (%), act (activo total, miles de S/).
 AMOUNTS = ["pe", "apr", "ac", "am", "ao", "c1", "t1", "n1", "n2", "n3", "ce", "at", "pas", "csr"]
 ENTITY_ONLY = ["rcg", "lev", "mora", "roe", "act"]
+# Cuadros (temas de data/processed/boletin) de los que sale cada campo de entidad, para `mask_repeats`.
+FIELD_TEMA = {**{f: ("ratio-capital-global",) for f in ["rcg", "apr", "ac", "am", "ao", "c1", "t1"]},
+              "pe": ("ratio-capital-global", "estructura-patrimonio-efectivo"),
+              **{f: ("estructura-patrimonio-efectivo",) for f in ["n1", "n2", "n3", "ce", "at"]},
+              "pas": ("estados-financieros",), "csr": ("estados-financieros",), "act": ("estados-financieros",),
+              "lev": ("indicadores-financieros",), "mora": ("indicadores-financieros",),
+              "roe": ("indicadores-financieros",)}
 KEY = ["periodo", "subsistema", "id_entidad"]
 
 
@@ -210,6 +226,25 @@ def series(g: pd.DataFrame, months: list[int], fields: list[str], decimals: dict
     return {"a": a, "V": V}
 
 
+def mask_repeats(full: pd.DataFrame) -> tuple[pd.DataFrame, list[list]]:
+    """Copia de `full` con vacíos en los campos de entidad que vienen de un cuadro en que la SBS repite las cifras de
+    otro mes (`errores_origen.RANKING_REPEATS`, salvo las que solo repiten el ranking, que aquí no se usa), y la lista
+    para la página: [mes, «subsistema/entidad», mes repetido, «fila», nota al pie]."""
+    out = full.copy()
+    key = pd.Series(list(zip(out["periodo"], out["subsistema"].astype(str), out["id_entidad"].astype(str))), index=out.index)
+    rep = []
+    for k, r in source_repeats().items():
+        rows = key == k
+        if r["row"] != "all" or not rows.any():
+            continue
+        cols = [f for f, ts in FIELD_TEMA.items() if f in out.columns and any(repeats_tema(r, t) for t in ts)]
+        out.loc[rows, cols] = np.nan
+        note = repeat_footnote(r)
+        rep.append([month_key(k[0]), f"{k[1]}/{k[2]}", month_key(r["same_as"]), "fila",
+                    "nota al pie del cuadro: " + note if note else "sin nota al pie"])
+    return out, rep
+
+
 def aggregate(df: pd.DataFrame) -> pd.DataFrame:
     """Suma de entidades por mes; un campo queda vacío si ninguna entidad lo tiene."""
     return df.groupby("periodo")[AMOUNTS].sum(min_count=1).reset_index()
@@ -253,7 +288,8 @@ def build_data() -> dict:
     scopes["sistema"] = {"n": "Sistema financiero", "s": None, **series(total.reset_index(), months, AMOUNTS, dec)}
 
     entities = []
-    for (sub, ent), g in full.groupby(["subsistema", "id_entidad"]):
+    ent_full, rep = mask_repeats(full)
+    for (sub, ent), g in ent_full.groupby(["subsistema", "id_entidad"]):
         block = series(g, months, AMOUNTS + ENTITY_ONLY, dec)
         if "rcg" not in block["V"]:
             continue
@@ -288,6 +324,7 @@ def build_data() -> dict:
         "entities": entities,
         "hasta": month_key(months[-1]),
         "sysHasta": month_key(sys_months[-1]),
+        "rep": rep,
         "generado": dt.date.today().isoformat(),
     }
 

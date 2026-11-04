@@ -564,8 +564,15 @@ def depurar_entidades(cols, subsistema: str):
     return salida
 
 
-def leer(ruta: Path, subsistema: str, periodo: int) -> list[dict]:
+def leer(ruta: Path, subsistema: str, periodo: int,
+         extra: tuple[dict, dict] | None = None) -> list[dict]:
+    """`extra` = (secciones, subrubros) adicionales; solo lo usa `estatales_estados_financieros`
+    (variantes de etiqueta de los balances de las entidades estatales). Sin él, nada cambia."""
     secciones, subrubros = mapas(periodo)
+    if extra:
+        secciones = {**secciones, **extra[0]}
+        subrubros = {k: {**subrubros.get(k, {}), **extra[1].get(k, {})}
+                     for k in set(subrubros) | set(extra[1])}
     out = []
     for hoja, g in comun.abrir(ruta).items():
         if g.empty:

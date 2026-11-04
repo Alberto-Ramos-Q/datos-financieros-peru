@@ -1,0 +1,2084 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Las finanzas públicas del Perú</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Tablero de finanzas públicas: estilos y paleta tomados del tablero del PBI.
+   Misma familia que la serie de tableros de la SBS, con su paleta: azul #001E6B y gris #B2B4B5.
+   Líneas que compiten (PBI / primarios / no primarios, inversión / ahorros, BCRP / MEF): paleta categórica
+   validada en su orden fijo (s1 azul SBS, s2 azul medio, s3 verde azulado). Una sola serie destacada en
+   azul SBS y su referencia (PBI, Perú) en gris discontinuo (sys).
+   Aportes por sector, por gasto y reparto del ingreso (partes de un total en el orden del cuadro): rampa
+   ordinal del azul SBS al gris SBS (r8 → r1: los seis pasos q1–q6 de la serie interpolados a ocho en
+   OKLab), con 2 px de separación entre segmentos.
+   Mapa: secuencial de un solo tono, del claro al azul SBS (m1–m6). Crecimiento con signo y mapa de calor:
+   divergente morado (cae) · gris (casi no cambia) · azul (crece), sin rojos.
+   Año proyectado y rango meta: franja azul clara (paso 2 de la secuencial con opacidad). */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f;
+  --sys: #868a93; --band: rgba(201,211,237,.6);
+  --pos: #001e6b; --neg: #5a2a85;
+  --r1: #b2b4b5; --r2: #98a1b5; --r3: #7e8dae; --r4: #6578a4; --r5: #4c6198; --r6: #334c8b; --r7: #19367b; --r8: #001e6b;
+  --m1: #e8ecf4; --m2: #c9d3ed; --m3: #8da2dd; --m4: #6b85c8; --m5: #22418a; --m6: #001e6b;
+  --d0: #001e6b; --d1: #476399; --d2: #95a6c6; --d3: #ebedf1; --d4: #b8abce; --d5: #876baa; --d6: #5a2a85;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1;
+  --sys: #8a8f9c; --band: rgba(41,54,98,.75);
+  --pos: #b9c8ee; --neg: #d2b4f0;
+  --r1: #66708f; --r2: #4e6399; --r3: #5c76b7; --r4: #738ecf; --r5: #8ea5dd; --r6: #a9bbe8; --r7: #c3d0f0; --r8: #dce3f5;
+  --m1: #1b2448; --m2: #293662; --m3: #475e99; --m4: #6279b3; --m5: #b1bfe0; --m6: #dce3f5;
+  --d0: #b9c8ee; --d1: #8692b6; --d2: #566081; --d3: #2a3150; --d4: #5e5a82; --d5: #9686b7; --d6: #d2b4f0;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 36px 0 12px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 28px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 4px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; background: var(--ink); }
+.bandsw { width: 16px; height: 10px; border-radius: 2px; display: inline-block; background: var(--band); box-shadow: inset 0 0 0 1px var(--border); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.panel-title { margin: 14px 0 2px; font-size: 13px; color: var(--ink2); font-weight: 600; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; max-width: 90ch; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 28px 0 0; }
+.filters .lab { font-size: 13px; color: var(--ink2); margin-right: 4px; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+
+.table-wrap { max-height: 420px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.hlbl { font-size: 12px; fill: var(--ink2); }
+.hlbl.l0 { font-weight: 600; fill: var(--ink); }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.col-hit { fill: transparent; outline: none; }
+.col-hit:hover, .col-hit:focus-visible { fill: var(--wash); }
+svg.heat { outline: none; }
+svg.heat:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 340px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+#tip .r.em strong, #tip .r.em .l { color: var(--ink); font-weight: 600; }
+#tip .r.em { border-top: 1px solid var(--grid); margin-top: 3px; padding-top: 3px; }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; }
+
+.scale { display: flex; flex-wrap: wrap; gap: 2px; margin: 12px 0 4px; font-size: 12px; color: var(--ink2); }
+.scale > span { display: inline-flex; flex-direction: column; gap: 3px; width: 82px; }
+.scale i { display: block; height: 12px; border-radius: 3px; }
+.scale .mid i { box-shadow: inset 0 0 0 1px var(--border); }
+
+.smgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px 16px; margin-top: 12px; }
+.sm { border-top: 1px solid var(--grid); padding-top: 10px; min-width: 0; }
+.sm h3 { font-size: 13.5px; }
+.sm .v { font-size: 13px; color: var(--ink2); margin: 2px 0 0; }
+.sm .v b { color: var(--ink); font-weight: 600; font-size: 15px; }
+.sm .d { font-size: 12px; color: var(--muted); margin: 2px 0 4px; min-height: 2.9em; }
+
+.callout { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 12px; }
+.callout .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.callout p { margin: 6px 0 0; color: var(--ink2); max-width: 85ch; }
+.callout b { color: var(--ink); }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 24px; overflow-x: auto; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0; white-space: nowrap;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, .theme button:focus-visible, .toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Regiones */
+.reg-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 24px; margin-top: 12px; align-items: start; }
+.map svg path.dep { stroke: var(--surface); stroke-width: .8; cursor: pointer; outline: none; }
+.map svg path.dep:hover, .map svg path.dep:focus-visible { stroke: var(--ink); stroke-width: 1.5; }
+.map svg path.dep.sel { stroke: var(--ink); stroke-width: 2; }
+.hb text { font-size: 12px; fill: var(--ink2); font-variant-numeric: tabular-nums; }
+.hb text.sel { fill: var(--ink); font-weight: 600; }
+.hb text.inbar { fill: var(--surface); font-weight: 600; }
+.hb.pick .row { cursor: pointer; }
+.dtiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.dtiles .tile .val { font-size: 22px; }
+.kpis.ej { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+table.txt th, table.txt td { text-align: left; }
+.kpis.ej .tile .val { font-size: 26px; }
+
+/* Cómo se mide */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; text-wrap: balance; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 18px 0 6px; }
+.edu p, .edu li { max-width: 74ch; }
+.edu p { margin: 0 0 10px; }
+.edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.box { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.box h3 { margin-top: 0; }
+.box .eq { font-size: 13.5px; color: var(--ink2); margin: 4px 0 10px; }
+.box table { font-size: 12.5px; }
+.box td, .box th { padding: 4px 6px; white-space: normal; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+.n { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .reg-grid, .three { grid-template-columns: 1fr; }
+  .dtiles { grid-template-columns: 1fr 1fr; }
+  .kpis.ej { grid-template-columns: 1fr 1fr; }
+  .tabs { -webkit-mask-image: linear-gradient(to right, #000 82%, transparent); mask-image: linear-gradient(to right, #000 82%, transparent); padding-right: 32px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 20px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .scale > span { width: auto; flex: 1 1 0; min-width: 0; font-size: 11px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Economía peruana · BCRP</p>
+      <h1>Las finanzas públicas del Perú</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cuánto recauda y cuánto gasta el Estado, cuánto se endeuda y cómo se reparten la recaudación y la inversión pública entre los departamentos.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-panorama" aria-controls="tab-panorama" aria-selected="true">Panorama</button>
+    <button type="button" role="tab" id="tabbtn-ingresos" aria-controls="tab-ingresos" aria-selected="false" tabindex="-1">Ingresos</button>
+    <button type="button" role="tab" id="tabbtn-gasto" aria-controls="tab-gasto" aria-selected="false" tabindex="-1">Gasto</button>
+    <button type="button" role="tab" id="tabbtn-deuda" aria-controls="tab-deuda" aria-selected="false" tabindex="-1">Deuda</button>
+    <button type="button" role="tab" id="tabbtn-reglas" aria-controls="tab-reglas" aria-selected="false" tabindex="-1">Reglas fiscales</button>
+    <button type="button" role="tab" id="tabbtn-region" aria-controls="tab-region" aria-selected="false" tabindex="-1">Perú en la región</button>
+    <button type="button" role="tab" id="tabbtn-presupuesto" aria-controls="tab-presupuesto" aria-selected="false" tabindex="-1">Presupuesto</button>
+    <button type="button" role="tab" id="tabbtn-regiones" aria-controls="tab-regiones" aria-selected="false" tabindex="-1">Departamentos</button>
+    <button type="button" role="tab" id="tabbtn-lee" aria-controls="tab-lee" aria-selected="false" tabindex="-1">Cómo se lee</button>
+  </div>
+
+  <div class="filters" role="group" aria-label="Periodo de los gráficos" id="range-wrap" style="margin:0 0 4px">
+    <span class="lab">Periodo de los gráficos mensuales y trimestrales</span>
+    <div class="seg" id="range"></div>
+  </div>
+
+  <!-- ============================== PANORAMA ============================== -->
+  <div id="tab-panorama" role="tabpanel" aria-labelledby="tabbtn-panorama">
+    <section class="kpis" id="kpis" aria-label="Indicadores principales" style="margin-top:16px"></section>
+    <div class="callout" id="pan-callout"></div>
+
+    <div class="section-title">Déficit fiscal</div>
+    <figure class="card" style="margin:0">
+      <div class="card-head">
+        <div>
+          <h2>Resultado del sector público: económico y primario</h2>
+          <p>Ingresos menos gastos del sector público no financiero, acumulados en los últimos 12 meses, en % del PBI. «Resultado económico» es el nombre técnico del déficit (si es negativo) o del superávit. El resultado primario excluye los intereses de la deuda; la diferencia entre las dos líneas es lo que se paga en intereses.</p>
+        </div>
+        <button class="btn" data-table="res">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Resultado económico</span>
+        <span><i class="ln" style="background:var(--s2)"></i>Resultado primario</span>
+      </div>
+      <div class="chart" id="ch-res"></div>
+      <div class="table-wrap" id="tb-res" hidden></div>
+      <p class="note" id="note-res"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Ingresos y gastos del gobierno general</h2>
+          <p>Ingresos corrientes y gasto no financiero del gobierno general (gobierno nacional, gobiernos regionales y gobiernos locales), acumulados en 12 meses, en % del PBI. Cuando el gasto supera a los ingresos, el Estado tiene que financiar la diferencia.</p>
+        </div>
+        <button class="btn" data-table="ig">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Ingresos corrientes</span>
+        <span><i class="ln" style="background:var(--s3)"></i>Gasto no financiero</span>
+      </div>
+      <div class="chart" id="ch-ig"></div>
+      <div class="table-wrap" id="tb-ig" hidden></div>
+      <p class="note" id="note-ig"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Medio siglo de cuentas fiscales</h2>
+          <p>Resultado económico del sector público no financiero de cada año, en % del PBI. Barras hacia abajo: déficit; hacia arriba: superávit.</p>
+        </div>
+        <button class="btn" data-table="long">Ver tabla</button>
+      </div>
+      <div class="chart" id="ch-long"></div>
+      <div class="table-wrap" id="tb-long" hidden></div>
+      <p class="note" id="note-long"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== INGRESOS ============================== -->
+  <div id="tab-ingresos" role="tabpanel" aria-labelledby="tabbtn-ingresos" hidden>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Presión tributaria</h2>
+          <p>Ingresos tributarios del gobierno general (impuestos del gobierno nacional y de los gobiernos locales, netos de devoluciones) en % del PBI, acumulados en los últimos 12 meses. No incluye las contribuciones a EsSalud y a la ONP, que el BCRP registra como ingresos no tributarios.</p>
+        </div>
+        <button class="btn" data-table="pres">Ver tabla</button>
+      </div>
+      <div class="chart" id="ch-pres"></div>
+      <div class="panel-title">Desde 1990, por año</div>
+      <div class="chart" id="ch-pres-a"></div>
+      <div class="table-wrap" id="tb-pres" hidden></div>
+      <p class="note" id="note-pres"></p>
+    </figure>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Cuánto recauda el Estado y de qué impuestos</h2>
+          <p>Ingresos tributarios del gobierno general por impuesto, en % del PBI. Las devoluciones de impuestos restan (barras hacia abajo); el punto es el total. La última barra son los últimos 12 meses.</p>
+        </div>
+        <button class="btn" data-table="tax">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-tax"></div>
+      <div class="chart" id="ch-tax"></div>
+      <div class="table-wrap" id="tb-tax" hidden></div>
+      <p class="note" id="note-tax"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>¿Crece la recaudación?</h2>
+          <p>Variación real de los ingresos de los últimos 12 meses frente a los 12 meses previos, en %. Real quiere decir descontando la inflación: el BCRP expresa cada mes en soles de diciembre de 2021.</p>
+        </div>
+        <button class="btn" data-table="taxr">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Ingresos tributarios</span>
+        <span><i class="ln" style="background:var(--s2)"></i>Impuesto a la renta</span>
+        <span><i class="ln" style="background:var(--s3)"></i>IGV</span>
+      </div>
+      <div class="chart" id="ch-taxr"></div>
+      <div class="table-wrap" id="tb-taxr" hidden></div>
+      <p class="note" id="note-taxr"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="comp-title">De dónde vienen los ingresos</h2>
+          <p>Ingresos corrientes del gobierno general en los últimos 12 meses, en millones de soles: los tributarios (impuestos) y los no tributarios (contribuciones a la seguridad social, canon y regalías y otros).</p>
+        </div>
+        <button class="btn" data-table="comp">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--s1)"></i>Tributarios</span>
+        <span><i class="sw" style="background:var(--r1)"></i>No tributarios</span>
+      </div>
+      <div class="chart" id="ch-comp"></div>
+      <div class="table-wrap" id="tb-comp" hidden></div>
+      <p class="note" id="note-comp"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== GASTO ============================== -->
+  <div id="tab-gasto" role="tabpanel" aria-labelledby="tabbtn-gasto" hidden>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>En qué gasta el Estado</h2>
+          <p>Gasto no financiero del gobierno general por tipo, en % del PBI. El punto es el total. La última barra son los últimos 12 meses.</p>
+        </div>
+        <button class="btn" data-table="gas">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-gas"></div>
+      <div class="chart" id="ch-gas"></div>
+      <div class="table-wrap" id="tb-gas" hidden></div>
+      <p class="note" id="note-gas"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>¿Crece el gasto?</h2>
+          <p>Variación real del gasto de los últimos 12 meses frente a los 12 meses previos, en %, en soles de diciembre de 2021.</p>
+        </div>
+        <button class="btn" data-table="gr">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Gasto no financiero</span>
+        <span><i class="ln" style="background:var(--s2)"></i>Gasto corriente</span>
+        <span><i class="ln" style="background:var(--s3)"></i>Inversión pública</span>
+      </div>
+      <div class="chart" id="ch-gr"></div>
+      <div class="table-wrap" id="tb-gr" hidden></div>
+      <p class="note" id="note-gr"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="inv-title">Inversión pública por nivel de gobierno</h2>
+          <p id="inv-desc"></p>
+        </div>
+        <button class="btn" data-table="inv">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-inv"></div>
+      <div class="chart" id="ch-inv"></div>
+      <div class="table-wrap" id="tb-inv" hidden></div>
+      <p class="note" id="note-inv"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== DEUDA ============================== -->
+  <div id="tab-deuda" role="tabpanel" aria-labelledby="tabbtn-deuda" hidden>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Deuda pública bruta y neta</h2>
+          <p>Saldo de la deuda del sector público no financiero al cierre de cada trimestre, en % del PBI. La deuda neta resta a la bruta los activos del sector público (depósitos, activos en el exterior y otros).</p>
+        </div>
+        <button class="btn" data-table="debt">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Deuda bruta</span>
+        <span><i class="ln" style="background:var(--s2)"></i>Deuda neta</span>
+      </div>
+      <div class="chart" id="ch-debt"></div>
+      <div class="table-wrap" id="tb-debt" hidden></div>
+      <p class="note" id="note-debt"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Deuda externa e interna</h2>
+          <p>Deuda bruta según dónde y bajo qué ley se contrató, en % del PBI. La externa reúne los préstamos de acreedores del exterior (organismos internacionales, otros gobiernos, bancos) y los bonos emitidos bajo ley extranjera (bonos globales); la interna, los bonos bajo ley peruana (soberanos, letras) y los préstamos locales. No depende de quién tenga hoy los bonos: los no residentes poseen una parte grande de los bonos soberanos, que cuentan como deuda interna.</p>
+        </div>
+        <button class="btn" data-table="dcomp">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-dcomp"></div>
+      <div class="chart" id="ch-dcomp"></div>
+      <div class="table-wrap" id="tb-dcomp" hidden></div>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>¿Quién tiene los bonos del Perú?</h2>
+          <p>Porcentaje de los bonos soberanos (en soles y bajo ley peruana, negociados en el mercado local) y de los bonos globales (bajo ley extranjera, colocados en el mercado internacional) que está en manos de no residentes, al cierre de cada trimestre.</p>
+        </div>
+        <button class="btn" data-table="nr">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Bonos soberanos</span>
+        <span><i class="ln" style="background:var(--s2)"></i>Bonos globales</span>
+      </div>
+      <div class="chart" id="ch-nr"></div>
+      <div class="table-wrap" id="tb-nr" hidden></div>
+      <p class="note" id="note-nr"></p>
+    </figure>
+
+    <figure class="card" id="card-dmef">
+      <div class="card-head">
+        <div>
+          <h2 id="dmef-title">Riesgo de la deuda: moneda, tasa y plazo</h2>
+          <p>Porcentaje de la deuda pública en soles y a tasa fija, y su vida media y duración en años. Más deuda en soles y a tasa fija reduce la exposición a la variación del tipo de cambio y de las tasas de interés.</p>
+        </div>
+        <button class="btn" data-table="dmef">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>En soles</span>
+        <span><i class="ln" style="background:var(--s2)"></i>A tasa fija</span>
+      </div>
+      <div class="chart" id="ch-dmef"></div>
+      <div class="panel-title">Vida media y duración, en años</div>
+      <div class="legend">
+        <span><i class="ln" style="background:var(--s1)"></i>Vida media</span>
+        <span><i class="ln" style="background:var(--s3)"></i>Duración</span>
+      </div>
+      <div class="chart" id="ch-dmef2"></div>
+      <div class="table-wrap" id="tb-dmef" hidden></div>
+      <p class="note" id="note-dmef"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Lo que cuesta la deuda</h2>
+          <p>Intereses pagados por el sector público no financiero cada año, en % del PBI.</p>
+        </div>
+        <button class="btn" data-table="int">Ver tabla</button>
+      </div>
+      <div class="chart" id="ch-int"></div>
+      <div class="table-wrap" id="tb-int" hidden></div>
+      <p class="note" id="note-int"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== PRESUPUESTO (v2) ============================== -->
+  <div id="tab-presupuesto" role="tabpanel" aria-labelledby="tabbtn-presupuesto" hidden>
+    <p class="lede" id="ej-lede" style="margin-top:16px"></p>
+    <section class="kpis ej" id="ej-kpis" aria-label="Avance de la inversión pública"></section>
+    <div class="callout" id="ej-aviso" hidden></div>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>¿Cuánto del presupuesto se ejecuta, mes a mes?</h2>
+          <p>Gasto devengado acumulado desde enero, en % del presupuesto modificado (PIM) del año. El año en curso llega al último mes completo; los años anteriores, a diciembre.</p>
+        </div>
+        <div class="card-tools">
+          <div class="seg" id="ej-tipo" aria-label="Tipo de gasto"></div>
+          <button class="btn" data-table="ejc">Ver tabla</button>
+        </div>
+      </div>
+      <div class="filters" style="margin:12px 0 0"><span class="lab">Nivel de gobierno</span><div class="seg" id="ej-lv"></div></div>
+      <div class="legend" id="leg-ejc"></div>
+      <div class="chart" id="ch-ejc"></div>
+      <div class="table-wrap" id="tb-ejc" hidden></div>
+      <p class="note" id="note-ejc"></p>
+    </figure>
+
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="ejgr-title">Inversión de cada gobierno regional</h2>
+          <p id="ejgr-desc"></p>
+        </div>
+        <button class="btn" data-table="ejgr">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--s1)"></i><span id="ejgr-leg1"></span></span>
+        <span><svg width="14" height="12" aria-hidden="true"><path d="M7 1v10" stroke="var(--ink2)" stroke-width="2"/></svg><span id="ejgr-leg2"></span></span>
+      </div>
+      <div class="chart" id="ch-ejgr"></div>
+      <div class="table-wrap" id="tb-ejgr" hidden></div>
+    </figure>
+
+    <div class="reg-grid">
+      <figure class="card" style="margin-top:12px">
+        <div class="card-head">
+          <div>
+            <h2>Municipalidades, por departamento</h2>
+            <p id="ejgl-desc"></p>
+          </div>
+          <button class="btn" data-table="ejgl">Ver tabla</button>
+        </div>
+        <div class="chart" id="ch-ejgl"></div>
+        <div class="table-wrap" id="tb-ejgl" hidden></div>
+      </figure>
+      <figure class="card" style="margin-top:12px">
+        <div class="card-head">
+          <div>
+            <h2>Gobierno nacional, por sector</h2>
+            <p id="ejsec-desc"></p>
+          </div>
+          <button class="btn" data-table="ejsec">Ver tabla</button>
+        </div>
+        <div class="chart" id="ch-ejsec"></div>
+        <div class="table-wrap" id="tb-ejsec" hidden></div>
+      </figure>
+    </div>
+    <p class="note" id="note-ej"></p>
+  </div>
+
+  <!-- ============================== REGLAS FISCALES (v2) ============================== -->
+  <div id="tab-reglas" role="tabpanel" aria-labelledby="tabbtn-reglas" hidden>
+    <div class="callout" id="rg-callout" style="margin-top:16px"></div>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Déficit: lo observado, el tope legal y lo que proyecta el MEF</h2>
+          <p>Resultado económico del sector público no financiero, en % del PBI (negativo es déficit). Las marcas negras son el déficit máximo que permite la ley para cada año; las otras dos líneas son las proyecciones de los dos últimos Marcos Macroeconómicos Multianuales (MMM), el documento en que el MEF fija sus proyecciones para los próximos años.</p>
+        </div>
+        <button class="btn" data-table="rgre">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-rgre"></div>
+      <div class="chart" id="ch-rgre"></div>
+      <div class="table-wrap" id="tb-rgre" hidden></div>
+      <p class="note" id="note-rgre"></p>
+    </figure>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2>Deuda: lo observado, el límite y la meta</h2>
+          <p>Deuda bruta del sector público no financiero al cierre de cada año, en % del PBI, y su proyección en los dos últimos MMM. La línea discontinua es el límite legal (38% del PBI); la marca de 2035 es la meta de llegar a 30% o menos ese año.</p>
+        </div>
+        <button class="btn" data-table="rgdeu">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-rgdeu"></div>
+      <div class="chart" id="ch-rgdeu"></div>
+      <div class="table-wrap" id="tb-rgdeu" hidden></div>
+      <p class="note" id="note-rgdeu"></p>
+    </figure>
+    <section class="callout" id="cf-box">
+      <div class="kicker">Qué dice el Consejo Fiscal</div>
+      <ul class="srcs">
+        <li><b>Cumplimiento en 2025.</b> Se cumplieron las reglas de déficit (2.18% del PBI frente a un tope de 2.2%) y de deuda (30.1% frente a 38%), pero no las dos reglas de gasto: el gasto no financiero del gobierno general superó su límite en unos S/ 6,757 millones y el gasto corriente sin mantenimiento creció 4.9% real frente a un máximo de 2.1%. Consejo Fiscal, <a href="https://cf.gob.pe/wp-content/uploads/2026/07/INFORME-01-2026-CF.pdf">Informe N.° 01-2026-CF</a> (junio de 2026); evaluación preliminar en el <a href="https://cf.gob.pe/wp-content/uploads/2026/01/Comunicado-01-2026-vf-Reglas.pdf">Comunicado N.° 01-2026-CF</a> (enero de 2026).</li>
+        <li><b>Proyecciones del MMM 2027-2030.</b> El Gobierno anunció que modificará las reglas fiscales; mientras el cambio no se apruebe, el MMM proyecta con la senda vigente, por lo que el Consejo Fiscal considera esas proyecciones referenciales. Prevé además que en 2026 se incumplirían otra vez las reglas de gasto. <a href="https://cf.gob.pe/wp-content/uploads/2026/08/Informe-sobre-MMM-27-30-vf.pdf">Informe N.° 04-2026-CF</a> y <a href="https://cf.gob.pe/wp-content/uploads/2026/08/NP-InformeMMM-2027-30-v3.pdf">Nota de prensa N.° 03-2026-CF</a> (agosto de 2026).</li>
+        <li><b>Gobiernos regionales y locales.</b> Ningún gobierno regional incumple sus reglas fiscales desde hace seis años; alrededor de 6% de los gobiernos locales incumplió al menos una en 2025. <a href="https://cf.gob.pe/wp-content/uploads/2026/07/Informe-003-2026-CF.pdf">Informe N.° 03-2026-CF</a> (julio de 2026).</li>
+      </ul>
+      <p class="note">Resúmenes propios de los documentos del <a href="https://cf.gob.pe/">Consejo Fiscal</a>, que evalúa las finanzas públicas y el cumplimiento de las reglas fiscales.</p>
+    </section>
+  </div>
+
+  <!-- ============================== PERÚ EN LA REGIÓN (v3) ============================== -->
+  <div id="tab-region" role="tabpanel" aria-labelledby="tabbtn-region" hidden>
+    <div class="callout" id="fmi-callout" style="margin-top:16px"></div>
+    <div class="filters" role="group" aria-label="Indicador y año" style="margin-top:16px">
+      <span class="lab">Indicador</span>
+      <div class="seg" id="fmi-metric"></div>
+    </div>
+    <div class="filters" style="margin-top:8px">
+      <label for="fmi-year" class="lab">Año</label>
+      <select class="btn" id="fmi-year"></select>
+      <label for="fmi-pais" class="lab" style="margin-left:8px">Comparar con</label>
+      <select class="btn" id="fmi-pais"></select>
+      <label class="lab" style="margin-left:8px;display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="fmi-todos"> Ver todos los países</label>
+    </div>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="fmi-title"></h2>
+          <p id="fmi-desc"></p>
+        </div>
+        <button class="btn" data-table="fmir">Ver tabla</button>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--s1)"></i><span id="fmi-leg1"></span></span>
+        <span><svg width="14" height="12" aria-hidden="true"><path d="M7 1v10" stroke="var(--ink2)" stroke-width="2"/></svg><span id="fmi-leg2"></span></span>
+      </div>
+      <div class="chart" id="ch-fmir"></div>
+      <p class="note" id="note-fmir"></p>
+      <div class="table-wrap" id="tb-fmir" hidden></div>
+    </figure>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="fmi-title2"></h2>
+          <p id="fmi-desc2"></p>
+        </div>
+        <button class="btn" data-table="fmit">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-fmit"></div>
+      <div class="chart" id="ch-fmit"></div>
+      <div class="table-wrap" id="tb-fmit" hidden></div>
+      <p class="note" id="note-fmi"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== DEPARTAMENTOS ============================== -->
+  <div id="tab-regiones" role="tabpanel" aria-labelledby="tabbtn-regiones" hidden>
+    <div class="filters" role="group" aria-label="Indicador del mapa" style="margin-top:12px">
+      <span class="lab">Indicador</span>
+      <div class="seg" id="reg-metric"></div>
+      <label for="reg-year" class="lab" style="margin-left:8px">Año</label>
+      <select class="btn" id="reg-year"></select>
+    </div>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="reg-title"></h2>
+          <p id="reg-desc"></p>
+        </div>
+        <button class="btn" data-table="reg">Ver tabla</button>
+      </div>
+      <div class="scale" id="reg-scale"></div>
+      <div class="reg-grid">
+        <div class="chart map" id="ch-map"></div>
+        <div class="chart rank" id="ch-rank"></div>
+      </div>
+      <div class="table-wrap" id="tb-reg" hidden></div>
+      <p class="note" id="note-reg"></p>
+    </figure>
+    <div class="callout" id="reg-callout"></div>
+
+    <div class="section-title" id="dep-title"></div>
+    <div class="filters" style="margin-top:0">
+      <label for="dep-pick" class="lab">Departamento</label>
+      <select class="btn" id="dep-pick"></select>
+      <span class="lab" style="margin-left:4px">o haga clic en el mapa</span>
+    </div>
+    <div class="dtiles" id="dep-tiles"></div>
+    <figure class="card">
+      <div class="card-head">
+        <div>
+          <h2 id="depinv-title">Inversión pública en el departamento</h2>
+          <p id="depinv-desc"></p>
+        </div>
+        <button class="btn" data-table="dep">Ver tabla</button>
+      </div>
+      <div class="legend" id="leg-dep"></div>
+      <div class="chart" id="ch-dep"></div>
+      <div class="table-wrap" id="tb-dep" hidden></div>
+      <p class="note" id="note-dep"></p>
+    </figure>
+  </div>
+
+  <!-- ============================== CÓMO SE LEE ============================== -->
+  <div id="tab-lee" role="tabpanel" aria-labelledby="tabbtn-lee" hidden>
+    <div class="edu">
+      <section id="datos-frescura">
+        <div class="kicker">Los datos</div>
+        <h2>Frecuencia y fecha de cada dato</h2>
+        <p>Cada fuente publica con su propia frecuencia y su propio rezago, por eso no todos los gráficos llegan al mismo mes. El cuadro se calcula con los datos que tiene esta versión del tablero.</p>
+        <div class="table-wrap" style="max-height:none" id="tb-frescura"></div>
+        <p class="note" id="note-frescura"></p>
+      </section>
+      <section>
+        <div class="kicker">1 · Quién es «el Estado»</div>
+        <h2>Gobierno central, gobierno general y sector público no financiero</h2>
+        <p>El <b>gobierno general</b> reúne al gobierno nacional, a los gobiernos regionales y a los gobiernos locales (municipalidades). En las estadísticas del BCRP, el gobierno nacional comprende las entidades del presupuesto de la República (ministerios, instituciones públicas, universidades nacionales, la SUNAT, la ONP, organismos reguladores) y entidades fuera de ese presupuesto, como EsSalud, la SBS, la Caja de Pensiones Militar-Policial y las sociedades de beneficencia. El <b>sector público no financiero</b> suma al gobierno general las empresas estatales no financieras, como Petroperú, Sedapal, Electroperú y las empresas regionales de electricidad. Quedan fuera el BCRP y las empresas financieras del Estado: el Banco de la Nación, Cofide, el Fondo Mivivienda y Agrobanco.</p>
+        <p>Las reglas fiscales fijan sus límites de déficit y de deuda para el sector público no financiero; por eso el déficit fiscal que se cita habitualmente es el de ese sector. Los ingresos y gastos por tipo de este tablero son los del gobierno general.</p>
+      </section>
+      <section>
+        <div class="kicker">2 · Déficit</div>
+        <h2>Resultado primario y resultado económico</h2>
+        <p>El <b>resultado económico</b> es la diferencia entre todos los ingresos y todos los gastos del sector público no financiero, incluidos los intereses de la deuda pero no la devolución del principal (la amortización). Si es negativo hay déficit, que se financia con deuda o con depósitos acumulados. El <b>resultado primario</b> es el mismo cálculo sin los intereses de la deuda; muestra si los ingresos alcanzan para pagar el gasto propio del año.</p>
+        <p>Los flujos se suman en los últimos 12 meses y se dividen entre el PBI de esos 12 meses. Así se evita la estacionalidad: en marzo y abril, por ejemplo, entra la regularización anual del impuesto a la renta, y en diciembre se concentra el gasto.</p>
+      </section>
+      <section>
+        <div class="kicker">3 · Ingresos</div>
+        <h2>Tributarios y no tributarios</h2>
+        <p>Los <b>ingresos tributarios</b> son los impuestos: el IGV, el impuesto a la renta, el impuesto selectivo al consumo (ISC, sobre combustibles, bebidas alcohólicas y gaseosas, cigarrillos, vehículos, juegos de azar y otros), los aranceles a las importaciones y otros, menos las devoluciones (por ejemplo, del IGV a los exportadores y la restitución de aranceles o <i>drawback</i>). La <b>presión tributaria</b> es el total de impuestos en % del PBI. En la presentación del BCRP, los <b>no tributarios</b> incluyen las contribuciones a EsSalud y a la ONP, las tasas y otros recursos que recaudan las propias entidades, el canon y las regalías petroleras y gasíferas, las regalías mineras, los intereses de los depósitos del Tesoro y las utilidades que transfieren las empresas del Estado, el Banco de la Nación y el BCRP. La regularización anual del impuesto a la renta se paga principalmente entre marzo y abril.</p>
+      </section>
+      <section>
+        <div class="kicker">4 · Gasto</div>
+        <h2>Gasto corriente y gasto de capital</h2>
+        <p>El <b>gasto corriente</b> es el que se repite cada año: remuneraciones, compras de bienes y servicios y transferencias (pensiones, programas sociales, aportes a otras entidades). El <b>gasto de capital</b> es sobre todo <b>inversión pública</b> (formación bruta de capital: estudios, obras e infraestructura y bienes de capital, como carreteras, escuelas, hospitales, agua y saneamiento). El BCRP registra las compras de equipo de los sectores Defensa e Interior como bienes y servicios, no como inversión. El gasto <b>no financiero</b> excluye los intereses de la deuda.</p>
+      </section>
+      <section>
+        <div class="kicker">5 · Deuda</div>
+        <h2>Deuda bruta y deuda neta</h2>
+        <p>La <b>deuda bruta</b> es el saldo pendiente de pago del sector público no financiero, frente a residentes y no residentes: bonos del Tesoro (soberanos, bajo ley peruana, y globales, bajo ley extranjera) y de empresas públicas, letras del Tesoro, préstamos de organismos internacionales, de otros gobiernos y de bancos, y la deuda flotante (cuentas por pagar). Se mide a valor nominal. La <b>deuda neta</b> le resta los activos del sector público: depósitos en el sistema financiero, activos en el exterior y otros (fondos mutuos y de inversión, títulos del gobierno). Las dos se miden en % del PBI.</p>
+        <p>La deuda <b>externa</b> o <b>interna</b> depende de con quién y bajo qué ley se contrató, no de quién tenga hoy los bonos. Un préstamo es externo si se acuerda con no domiciliados; un bono es externo si se rige por una ley distinta de la peruana. Por eso los bonos soberanos son deuda interna aunque una parte grande esté en manos de no residentes.</p>
+      </section>
+      <section>
+        <div class="kicker">6 · Presupuesto y reglas</div>
+        <h2>Cómo se mide la ejecución del presupuesto</h2>
+        <p>El <b>presupuesto institucional de apertura (PIA)</b> es el presupuesto inicial de cada entidad; el <b>presupuesto institucional modificado (PIM)</b> es ese presupuesto actualizado con las modificaciones del año. La ley ordena el gasto en cuatro etapas: la <b>certificación</b> garantiza que hay crédito presupuestario disponible; el <b>compromiso</b> acuerda la realización del gasto; el <b>devengado</b> reconoce la obligación de pago, y el <b>pago</b> (en la Consulta Amigable, «girado») la extingue. El <b>avance</b> que publica el MEF es el devengado entre el PIM.</p>
+        <p>La Municipalidad Metropolitana de Lima aparece dos veces en la Consulta Amigable, con presupuestos separados: como gobierno local y, por sus funciones de gobierno regional, como un pliego regional. No se cuenta dos veces.</p>
+        <p>Las <b>reglas fiscales</b> ponen límites al déficit, a la deuda y al crecimiento del gasto. Los límites vigentes para 2024–2028 son los del Decreto Legislativo N.° 1621; el Consejo Fiscal evalúa cada año si se cumplieron.</p>
+      </section>
+      <section>
+        <div class="kicker">7 · Departamentos</div>
+        <h2>Cómo leer los datos por departamento</h2>
+        <p id="lee-reg"></p>
+      </section>
+      <section>
+        <div class="kicker">8 · Fuentes</div>
+        <h2>De dónde salen los datos</h2>
+        <ul class="srcs">
+          <li>Operaciones del sector público no financiero y del gobierno general, ingresos y gastos por tipo, deuda pública y tenencia de bonos: <a href="https://estadisticas.bcrp.gob.pe/estadisticas/series/">BCRPData</a> (BCRP, con información del MEF, la SUNAT, el Banco de la Nación, EsSalud y las empresas estatales).</li>
+          <li>Recaudación de la SUNAT por departamento e inversión y gasto de los gobiernos regionales y locales por departamento: BCRPData, <a href="https://estadisticas.bcrp.gob.pe/estadisticas/series/mensuales/region-sector-publico">información estadística regional, sector público</a> (fuentes: SUNAT y MEF).</li>
+          <li>PBI nominal: BCRPData (cuentas nacionales del INEI). Población por departamento: INEI, <a href="https://www.inei.gob.pe/estadisticas/indice-tematico/poblacion-y-vivienda/">Población y vivienda</a>.</li>
+          <li>Definiciones de las estadísticas fiscales del BCRP (sector público no financiero, ingresos, gastos, resultados y deuda): BCRP, <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Guia-Metodologica/2025/guia-metodologica-2025-09.pdf">Guía Metodológica de la Nota Semanal 2025, capítulo de finanzas públicas</a>.</li>
+          <li>Definiciones legales de gobierno general, sector público no financiero, gasto no financiero y gasto corriente: <a href="https://www.leyes.congreso.gob.pe/Documentos/DecretosLegislativos/01276.pdf">Decreto Legislativo N.° 1276</a>, artículo 3. Deuda externa e interna: Decreto Legislativo N.° 1437, Sistema Nacional de Endeudamiento Público, artículo 11.4 (El Peruano, 16 de setiembre de 2018).</li>
+          <li>Recaudación por departamento según el domicilio fiscal: SUNAT, <a href="https://www.sunat.gob.pe/estadisticasestudios/nota_tributaria/cdro_A13.xlsx">Nota Tributaria, cuadro A13</a>. Bienes con ISC: <a href="https://www.sunat.gob.pe/estadisticasestudios/nota_tributaria/cdro_A15.xlsx">cuadro A15</a>. Devoluciones: <a href="https://www.sunat.gob.pe/estadisticasestudios/nota_tributaria/cdro_B1.xlsx">cuadro B1</a>.</li>
+          <li>Municipalidad Metropolitana de Lima y funciones de gobierno regional: Ley N.° 27867, Ley Orgánica de Gobiernos Regionales, artículos 65 y 66.</li>
+          <li>Bonos soberanos en moneda nacional: MEF, <a href="https://cdn.www.gob.pe/uploads/document/file/2394131/Reglamento_Bonos_Soberanos_2017.pdf.pdf">Reglamento de Bonos Soberanos</a>.</li>
+          <li>Conceptos: BCRP, <a href="https://www.bcrp.gob.pe/publicaciones/glosario.html">Glosario de términos económicos</a>; MEF, <a href="https://www.mef.gob.pe/es/marco-macroeconomico">Marco Macroeconómico Multianual</a>.</li>
+          <li>Etapas del gasto (certificación, compromiso, devengado y pago): <a href="https://www.minsa.gob.pe/presupuestales/doc2021/Normas/Decreto-Legislativo_1440.pdf">Decreto Legislativo N.° 1440</a>, del Sistema Nacional de Presupuesto Público, artículos 40 a 44; definiciones de PIA, PIM, devengado, girado y avance: glosario de la Consulta Amigable del MEF.</li>
+          <li>Evaluación de las reglas fiscales: <a href="https://cf.gob.pe/">Consejo Fiscal</a>, Informes N.° 01-2026-CF, 03-2026-CF y 04-2026-CF y Comunicado N.° 01-2026-CF.</li>
+          <li>Ejecución del presupuesto (PIA, PIM, devengado y avance por nivel de gobierno, sector, gobierno regional y departamento): MEF, <a href="https://apps5.mineco.gob.pe/transparencia/Navegador/default.aspx">Consulta Amigable</a> (Transparencia Económica).</li>
+          <li>Proyecciones fiscales: MEF, Marco Macroeconómico Multianual 2026-2029 y 2027-2030, cuadros estadísticos 7 y 19.</li>
+          <li>Topes de déficit y deuda: Decreto Legislativo N.° 1621, que regula un retorno gradual a las reglas macrofiscales del sector público no financiero (El Peruano, 8 de julio de 2024), artículos 2 y 3.</li>
+          <li>Moneda, tasa, vida media y duración de la deuda: MEF, Dirección General del Tesoro Público, «Indicadores de Deuda Pública».</li>
+          <li>Comparación entre países: FMI, Perspectivas de la economía mundial (WEO) y Monitor Fiscal (ediciones de octubre de 2026), gobierno general con excepciones por país según las notas del FMI, en su <a href="https://www.imf.org/external/datamapper/">DataMapper</a>.</li>
+          <li>Definiciones de vida media y duración de la deuda: MEF, <a href="https://www.mef.gob.pe/contenidos/deuda_publ/programas/progr_anua/PAEAD_2011.pdf">Programa Anual de Endeudamiento y Administración de la Deuda 2011</a>, notas del cuadro «Deuda pública: posición e indicadores».</li>
+          <li>Moneda y tasa de la deuda y gestión de riesgos: MEF, <a href="https://www.mef.gob.pe/contenidos/tesoro_pub/gestion_act_pas/EGIAP_2021_2024.pdf">Estrategia de Gestión Integral de Activos y Pasivos 2021-2024</a>, sección 3.2.</li>
+          <li>Límites departamentales del mapa: repositorio público <a href="https://github.com/juaneladio/peru-geojson">peru-geojson</a> (solo para dibujar).</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+  <div id="tip" role="tooltip" hidden></div>
+</main>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('fin-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('fin-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const S = D.S;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 2) => v == null ? '—' : fx(v, d) + '%';
+const pp = (v, d = 2) => v == null ? '—' : (v > 0 ? '+' : '') + fx(v, d);
+const big = v => v == null ? '—' : (v < 0 ? '−' : '') + f0.format(Math.abs(v));
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const addMonths = (m, n) => { const k = +m.slice(0, 4) * 12 + (+m.slice(5, 7) - 1) + n; return Math.floor(k / 12) + '-' + String(k % 12 + 1).padStart(2, '0'); };
+const isQ = p => p.length === 7 && p[5] === 'T';
+const pLabel = p => p.length === 4 ? p : isQ(p) ? MES[+p[6] * 3 - 1] + ' ' + p.slice(0, 4) : mLabel(p);   // trimestre: mes de cierre
+const MESF = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+const mLong = m => MESF[+m.slice(5, 7) - 1] + ' de ' + m.slice(0, 4);   // para títulos y textos
+// Rampa ordinal del azul SBS al gris SBS, en el orden del cuadro; con n partes se toman n pasos equidistantes.
+const RAMP = {8: [8, 7, 6, 5, 4, 3, 2, 1], 7: [8, 7, 6, 5, 3, 2, 1], 5: [8, 6, 4, 2, 1], 4: [8, 6, 3, 1], 3: [8, 5, 1]};
+const rampOf = n => (RAMP[n] || RAMP[8]).slice(0, n).map(k => `var(--r${k})`);
+
+const MONTHS = Array.from({length: D.n}, (_, i) => addMonths(D.start, i));
+const idxOf = m => MONTHS.indexOf(m);
+const firstIdx = arr => arr ? arr.findIndex(v => v != null) : -1;
+const lastIdx = arr => arr ? arr.map(v => v != null).lastIndexOf(true) : -1;
+
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (hi === lo) { hi = lo + 1; }
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+function barPath(x, w, y0, y1, round = true) {
+  const h = Math.abs(y1 - y0);
+  if (h < 0.3) return '';
+  const r = round ? Math.min(w >= 8 ? 3 : w >= 4 ? 1.5 : 0, w / 2, h) : 0;
+  if (!r) return `M${x},${Math.min(y0, y1)}h${w}v${h}h${-w}Z`;
+  if (y1 < y0) return `M${x},${y0}V${y1 + r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 + r}V${y0}Z`;
+  return `M${x},${y0}V${y1 - r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 - r}V${y0}Z`;
+}
+function hbarPath(x0, x1, y, h) {
+  const w = Math.abs(x1 - x0);
+  if (w < 0.3) return '';
+  const r = Math.min(3, w, h / 2);
+  if (x1 >= x0) return `M${x0},${y}H${x1 - r}Q${x1},${y} ${x1},${y + r}V${y + h - r}Q${x1},${y + h} ${x1 - r},${y + h}H${x0}Z`;
+  return `M${x0},${y}H${x1 + r}Q${x1},${y} ${x1},${y + r}V${y + h - r}Q${x1},${y + h} ${x1 + r},${y + h}H${x0}Z`;
+}
+
+// ---------- Tooltip (valores primero, etiqueta después; texto con textContent) ----------
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r' + (r.em ? ' em' : '')}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+
+// ---------- Ejes de tiempo para periodos mensuales ('YYYY-MM'), trimestrales ('YYYY-Tn') o anuales ('YYYY') ----------
+function xTicks(P, plotW) {
+  const n = P.length, freq = P[0].length === 4 ? 'y' : isQ(P[0]) ? 'q' : 'm';
+  const years = n / (freq === 'm' ? 12 : freq === 'q' ? 4 : 1);
+  const maxT = Math.max(2, Math.floor(plotW / 58));
+  const pairs = P.map((p, i) => [p, i]);
+  if (freq === 'm' && years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxT) || 12;
+    return pairs.filter(([p]) => (+p.slice(5, 7) - 1) % step === 0)
+      .map(([p, i]) => ({i, text: step >= 12 || p.slice(5, 7) === '01' ? p.slice(0, 4) : MES[+p.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10, 20, 25, 50].find(s => years / s <= maxT) || 50;
+  return pairs.filter(([p]) => (freq === 'y' || (freq === 'm' ? p.slice(5) === '01' : p.slice(5) === 'T1')) && +p.slice(0, 4) % step === 0)
+    .map(([p, i]) => ({i, text: p.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmtTick) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    const tx = svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g);
+    tx.textContent = fmtTick(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    const tx = svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g);
+    tx.textContent = t.text;
+  }
+}
+const tickPct = t => t === 0 ? '0' : (t < 0 ? '−' : '') + (Math.abs(t) >= 1000 ? f0.format(Math.abs(t)) : String(+Math.abs(t).toFixed(4))) + '%';
+const tickNum = t => t === 0 ? '0' : (t < 0 ? '−' : '') + (Math.abs(t) >= 1000 ? f0.format(Math.abs(t)) : String(+Math.abs(t).toFixed(4)));
+
+// ---------- Periodo ----------
+const LAST_M = D.hasta;
+const shiftYears = (m, k) => (+m.slice(0, 4) - k) + m.slice(4);
+const RANGES = [
+  {id: '5a', label: '5 años', start: shiftYears(LAST_M, 5)},
+  {id: '10a', label: '10 años', start: shiftYears(LAST_M, 10)},
+  {id: '2007', label: 'Desde 2007', start: '2007-01'},
+  {id: 'todo', label: 'Toda la serie', start: '1900-01'},
+];
+let range = RANGES[1];
+const startYear = () => +range.start.slice(0, 4);
+// Índices visibles de un arreglo de periodos P desde el inicio del rango hasta el último dato.
+function visRange(P, arrs) {
+  const sy = range.start;
+  let a = P.findIndex(p => (p.length === 4 ? p + '-01' : isQ(p) ? p.slice(0, 4) + '-' + String((+p[6] - 1) * 3 + 1).padStart(2, '0') : p) >= sy);
+  if (a < 0) a = 0;
+  const firsts = arrs.map(firstIdx).filter(i => i >= 0);
+  if (firsts.length) a = Math.max(a, Math.min(...firsts));
+  const b = Math.max(...arrs.map(lastIdx));
+  const out = [];
+  for (let i = a; i <= b; i++) out.push(i);
+  return out;
+}
+
+// ---------- Gráfico de líneas genérico ----------
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const rows = g.charts.flatMap(c => c.rows(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, (from.titleOf || pLabel)(from.P[i]), rows);
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const P = cfg.P, idx = cfg.idx, n = idx.length;
+  if (n < 2) return null;
+  const fmt = cfg.fmt || pct, compact = !!cfg.compact, narrow = W < 600;
+  const showEnd = cfg.endLabels && !narrow;
+  const m = {l: compact ? 40 : 52, r: showEnd ? (cfg.endW || 138) : (compact ? 8 : 14), t: compact ? 8 : 12, b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const series = cfg.series.filter(s => s.arr && s.arr.some(v => v != null));
+  const refs = (cfg.refs || []).filter(r => r.arr);
+  const vals = [];
+  for (const i of idx) {
+    for (const s of series) { const v = s.arr[i]; if (v != null) vals.push(v); }
+    for (const r of refs) { const v = r.arr[i]; if (v != null) vals.push(v); }
+  }
+  for (const h of (cfg.hlines || [])) vals.push(h.v);
+  for (const b of (cfg.boxes || [])) { if (b.i1 >= idx[0] && b.i0 <= idx[n - 1]) vals.push(b.lo, b.hi); }
+  if (!vals.length) return null;
+  let lo = cfg.noZero ? Math.min(...vals) : Math.min(0, ...vals), hi = Math.max(...vals);
+  let clipped = false;
+  if (cfg.clip) {
+    // Eje robusto: percentiles 2 y 98 de lo visible; lo que se sale se recorta (y se avisa en la nota).
+    const sv = vals.slice().sort((a, b) => a - b), q = f => sv[Math.min(sv.length - 1, Math.max(0, Math.round(f * (sv.length - 1))))];
+    const a = q(0.02), b = q(0.98), pad = (b - a) * 0.15;
+    if (lo < a - pad || hi > b + pad) { clipped = true; lo = Math.min(cfg.noZero ? a - pad : 0, a - pad); hi = b + pad; }
+  }
+  if (cfg.noZero) { const pad = (hi - lo) * 0.06; lo -= pad; hi += pad; }
+  const dom = niceDomain(lo, hi, compact ? 3 : 5);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, cfg.tickFmt || tickPct);
+  drawXTicks(svg, cfg.ticks ? cfg.ticks(idx) : xTicks(idx.map(i => P[i]), pw), c => x(idx[0] + c), H - 7);
+  const clipId = 'cl' + Math.random().toString(36).slice(2);
+  if (clipped) svgEl('rect', {x: m.l - 2, y: m.t, width: pw + 4, height: ph}, svgEl('clipPath', {id: clipId}, svgEl('defs', {}, svg)));
+  const clipAttr = clipped ? {'clip-path': `url(#${clipId})`} : {};
+  // Recuadros (p. ej. el rango oficial de la brecha, por año).
+  for (const b of (cfg.boxes || [])) {
+    if (b.i1 < idx[0] || b.i0 > idx[n - 1]) continue;
+    const xa = Math.max(m.l, x(Math.max(b.i0, idx[0])) - pw / (n - 1) / 2), xb = Math.min(m.l + pw, x(Math.min(b.i1, idx[n - 1])) + pw / (n - 1) / 2);
+    const ya = y(b.hi), yb = y(b.lo);
+    if (yb - ya < 2) svgEl('line', {x1: xa, x2: xb, y1: ya, y2: ya, stroke: 'var(--s2)', 'stroke-width': 3, 'stroke-opacity': .6}, svg);
+    else svgEl('rect', {x: xa, y: ya, width: Math.max(1, xb - xa - 1), height: yb - ya, fill: 'var(--s2)', 'fill-opacity': .3}, svg);
+  }
+  for (const h of (cfg.hlines || [])) {
+    // El cero va continuo y fino (no compite con las referencias discontinuas); las demás, discontinuas y con rótulo.
+    const zero = h.v === 0 && !h.label;
+    svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(h.v), y2: y(h.v), stroke: zero ? 'var(--axis)' : 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': zero ? '' : '4 3'}, svg);
+    if (h.label) { const t = svgEl('text', {x: m.l + 4, y: y(h.v) - 4, class: 'lbl'}, svg); t.textContent = h.label; }
+  }
+  for (const k of (cfg.marks || [])) {   // marcas cortas por periodo (p. ej., el tope legal de cada año)
+    if (k.i < idx[0] || k.i > idx[n - 1] || k.v == null) continue;
+    const half = Math.max(4, pw / (n - 1) * 0.35), xm = x(k.i), ym = y(k.v);
+    const xa = Math.max(m.l, xm - half), xz = Math.min(m.l + pw, xm + half);   // dentro del área del gráfico
+    svgEl('line', {x1: xa, x2: xz, y1: ym, y2: ym, stroke: 'var(--surface)', 'stroke-width': 5}, svg);
+    svgEl('line', {x1: xa, x2: xz, y1: ym, y2: ym, stroke: 'var(--ink)', 'stroke-width': 2.5}, svg);
+    if (k.label) {   // cerca del borde derecho, el rótulo termina en la marca para no chocar con las etiquetas finales
+      const edge = xm > m.l + pw * 0.85;
+      const t = svgEl('text', {x: edge ? xz : xm, y: ym + (k.below ? 15 : -8), 'text-anchor': edge ? 'end' : 'middle', class: 'lbl'}, svg); t.textContent = k.label;
+    }
+  }
+  // Línea vertical (p. ej., inicio de las proyecciones), con un rótulo a su derecha.
+  if (cfg.vline && cfg.vline.i > idx[0] && cfg.vline.i <= idx[n - 1]) {
+    const xv = x(cfg.vline.i) - pw / (n - 1) / 2;
+    svgEl('line', {x1: xv, x2: xv, y1: m.t, y2: m.t + ph, stroke: 'var(--axis)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+    const left = xv > m.l + pw * 0.7;   // en pantallas angostas, el rótulo a la izquierda para que no se salga
+    const t = svgEl('text', {x: left ? xv - 5 : xv + 5, y: m.t + ph - 6, 'text-anchor': left ? 'end' : 'start', class: 'lbl'}, svg); t.textContent = cfg.vline.label;   // abajo, para no chocar con «eje recortado»
+  }
+  const pathOf = (arr, step) => {
+    let d = '', pen = false;
+    for (const i of idx) {
+      const v = arr[i];
+      if (v == null) { pen = false; continue; }
+      const px = x(i), yy = y(v);
+      d += !pen ? 'M' + px + ',' + yy : (step ? 'H' + px + 'V' + yy : 'L' + px + ',' + yy);
+      pen = true;
+    }
+    return d;
+  };
+  for (const r of refs) svgEl('path', {d: pathOf(r.arr), fill: 'none', stroke: 'var(--sys)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4', 'stroke-linejoin': 'round', ...clipAttr}, svg);
+  for (const s of series) {
+    svgEl('path', {d: pathOf(s.arr, s.step), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2,
+      'stroke-linejoin': 'round', 'stroke-linecap': 'round', ...clipAttr}, svg);
+  }
+  if (clipped) { const t = svgEl('text', {x: m.l + pw, y: m.t + 10, 'text-anchor': 'end', class: 'lbl'}, svg); t.textContent = 'eje recortado'; }
+  if (showEnd) {
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      let li = -1;
+      if (cfg.endIdx != null && s.arr[cfg.endIdx] != null) li = cfg.endIdx;
+      else for (let j = n - 1; j >= 0; j--) if (s.arr[idx[j]] != null) { li = idx[j]; break; }
+      return li < 0 ? null : {s, i: li, v: s.arr[li], y: y(s.arr[li])};
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (const e of ends) {
+      svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      const a = svgEl('tspan', {class: 'dval'}, t); a.textContent = fmt(e.v);
+      const b = svgEl('tspan', {}, t); b.textContent = ' ' + (e.s.short || e.s.label) + (cfg.endPeriod ? ' (' + cfg.endPeriod(P[e.i]) + ')' : '');
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los periodos'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross, P, titleOf: cfg.titleOf,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] ? s.arr[i] : null;
+        dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      if (cfg.rows) return cfg.rows(i);
+      const r = series.filter(s => !s.noTip && s.arr[i] != null).map(s => ({value: fmt(s.arr[i]), label: s.label, color: s.color}));
+      for (const rf of refs) r.push({value: fmt(rf.arr[i]), label: rf.label, color: 'var(--sys)'});
+      return r;
+    },
+  };
+  group.charts.push(chart);
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  hit.addEventListener('pointermove', evt => {
+    const r = svg.getBoundingClientRect();
+    group.show(at(idx[0] + Math.round((evt.clientX - r.left - m.l) / pw * (n - 1))), evt, chart);
+  });
+  hit.addEventListener('pointerleave', group.hide); hit.addEventListener('blur', group.hide);
+  hit.addEventListener('focus', () => group.show(group.cur == null ? idx[n - 1] : at(group.cur), null, chart));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    group.show(at((group.cur == null ? idx[n - 1] : group.cur) + (e.key === 'ArrowRight' ? 1 : -1)), null, chart);
+  });
+  return chart;
+}
+
+// ---------- Barras apiladas (aportes) con el total como punto ----------
+// rows: [{p, t, <clave>: valor}], keys: [{k, label, color}]. Positivos hacia arriba, negativos hacia abajo.
+function stackChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rows = cfg.rows, keys = cfg.keys, n = rows.length;
+  if (!n) return;
+  const m = {l: 52, r: 14, t: 12, b: 26}, H = cfg.H || 320, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  let lo = 0, hi = 0;
+  for (const r of rows) {
+    let p = 0, q = 0;
+    for (const k of keys) { const v = r[k.k]; if (v == null) continue; if (v > 0) p += v; else q += v; }
+    hi = Math.max(hi, p, r.t ?? 0); lo = Math.min(lo, q, r.t ?? 0);
+  }
+  if (cfg.domain) { lo = cfg.domain[0]; hi = cfg.domain[1]; }
+  const dom = niceDomain(lo, hi, 5);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const band = pw / n, bw = Math.max(1, Math.min(28, band * (band > 6 ? 0.72 : 0.9)));
+  const x = i => m.l + i * band + band / 2;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, cfg.tickFmt || tickNum);
+  drawXTicks(svg, xTicks(rows.map(r => r.p), pw), x, H - 7);
+  const gap = band > 8 ? 2 : band > 5 ? 1 : 0;
+  rows.forEach((r, i) => {
+    let p = 0, q = 0;
+    const segs = keys.map(k => ({k, v: r[k.k]})).filter(s => s.v != null && s.v !== 0);
+    const posLast = segs.filter(s => s.v > 0).pop(), negLast = segs.filter(s => s.v < 0).pop();
+    for (const s of segs) {
+      const a = s.v > 0 ? p : q, b = a + s.v;
+      if (s.v > 0) p = b; else q = b;
+      const d = barPath(x(i) - bw / 2, bw, y(a), y(b), s === posLast || s === negLast);
+      if (d) svgEl('path', {d, fill: s.k.color, 'fill-opacity': r.part ? 0.45 : 1, stroke: gap ? 'var(--surface)' : 'none', 'stroke-width': gap}, svg);
+    }
+    if (r.t != null && !cfg.noTotal) {
+      svgEl('circle', {cx: x(i), cy: y(r.t), r: band > 10 ? 3.5 : 2.5, fill: 'var(--ink)', stroke: 'var(--surface)', 'stroke-width': 1.5}, svg);
+    }
+  });
+  const hits = svgEl('g', {}, svg);
+  const fmt = cfg.fmt || (v => pp(v));
+  const show = (i, evt, node) => {
+    const r = rows[i];
+    const items = keys.map(k => ({value: fmt(r[k.k]), label: k.label, color: k.color, sq: true}));
+    if (!cfg.noTotal) items.push({value: cfg.totalFmt ? cfg.totalFmt(r.t) : pct(r.t), label: cfg.totalLabel || 'Crecimiento del PBI', em: true});
+    const [cx, cy] = anchorOf(evt, node);
+    showTip(cx, cy, pLabel(r.p) + (cfg.titleExtra ? cfg.titleExtra(r) : ''), items);
+  };
+  rows.forEach((r, i) => {
+    const rect = svgEl('rect', {class: 'col-hit', x: m.l + i * band, y: m.t, width: band, height: ph, tabindex: band >= 8 ? 0 : -1,
+      'aria-label': pLabel(r.p)}, hits);
+    rect.addEventListener('pointermove', e => show(i, e, rect));
+    rect.addEventListener('focus', () => show(i, null, rect));
+    rect.addEventListener('pointerleave', hideTip); rect.addEventListener('blur', hideTip);
+  });
+}
+
+// ---------- Barras horizontales ----------
+// items: [{label, v, color, ref, sel, code}]
+function hbarChart(box, items, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const rowH = cfg.rowH || 22, valW = 64;
+  const maxCh = Math.max(4, ...items.map(it => String(it.label).length));
+  const labW = Math.min(cfg.labW || 150, Math.max(70, Math.round(W * 0.42)), Math.max(70, maxCh * 6.6 + 6));
+  const fitCh = Math.floor((labW - 4) / 6.6);
+  const H = items.length * rowH + 22;
+  const x0p = labW + 8, pw = W - x0p - valW;
+  const vals = items.flatMap(it => [it.v, it.ref]).filter(v => v != null);
+  const lo = cfg.domain ? cfg.domain[0] : Math.min(0, ...vals), hi = cfg.domain ? cfg.domain[1] : Math.max(0, ...vals);
+  const dom = niceDomain(lo, hi, pw < 240 ? 2 : pw < 400 ? 3 : 4);   // menos marcas en pantallas angostas
+  const x = v => x0p + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria, class: 'hb' + (cfg.onPick ? ' pick' : '')}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: 0, y2: H - 18, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)'}, g);
+    const tx = svgEl('text', {x: x(t), y: H - 4, 'text-anchor': 'middle'}, g); tx.textContent = (cfg.tickFmt || tickNum)(t);
+  }
+  items.forEach((it, j) => {
+    const yy = j * rowH, row = svgEl('g', {class: 'row'}, svg);
+    const lb = svgEl('text', {x: labW, y: yy + rowH / 2 + 4, 'text-anchor': 'end', class: it.sel ? 'sel' : ''}, row);
+    lb.textContent = String(it.label).length > fitCh ? String(it.label).slice(0, fitCh - 1) + '…' : it.label;
+    if (it.v != null) {
+      const d = hbarPath(x(0), x(it.v), yy + 4, rowH - 8);
+      if (d) svgEl('path', {d, fill: it.color || 'var(--s1)'}, row);
+      // La cifra va junto a su barra. Si la marca de referencia cae justo donde iría la cifra, la cifra entra en la
+      // barra (en claro sobre el color) cuando cabe; si no cabe, va después de la marca. Así nunca se lee como valor de la marca.
+      const txt = (cfg.fmt || (v => fx(v, 1)))(it.v), tw = txt.length * 6.6 + 4, xb = Math.max(x(0), x(it.v));
+      const clash = it.ref != null && x(it.ref) > xb - 2 && x(it.ref) < xb + tw + 8;
+      const inside = clash && it.v > 0 && x(it.v) - x(0) > tw + 10;
+      const vt = svgEl('text', {x: inside ? xb - 5 : (clash ? x(it.ref) + 8 : xb + 6), y: yy + rowH / 2 + 4,
+        'text-anchor': inside ? 'end' : 'start', class: (it.sel ? 'sel' : '') + (inside ? ' inbar' : '')}, row);
+      vt.textContent = txt;
+    }
+    if (it.ref != null) {   // halo del color de fondo para que la marca se lea sobre la barra azul SBS
+      svgEl('line', {x1: x(it.ref), x2: x(it.ref), y1: yy + 2, y2: yy + rowH - 2, stroke: 'var(--surface)', 'stroke-width': 4.5}, row);
+      svgEl('line', {x1: x(it.ref), x2: x(it.ref), y1: yy + 2, y2: yy + rowH - 2, stroke: 'var(--ink2)', 'stroke-width': 2}, row);
+    }
+    const hit = svgEl('rect', {class: 'col-hit', x: 0, y: yy, width: W, height: rowH, tabindex: cfg.onPick ? 0 : -1, 'aria-label': it.label}, row);
+    const show = (e) => {
+      const [cx, cy] = anchorOf(e, hit);
+      const rs = [{value: (cfg.fmt || (v => fx(v, 1)))(it.v), label: cfg.vLabel || '', color: it.color || 'var(--s1)', sq: true}];
+      if (it.ref != null) rs.push({value: (cfg.fmt || (v => fx(v, 1)))(it.ref), label: cfg.refLabel || 'Perú', color: 'var(--ink2)'});
+      if (it.extra) rs.push(...it.extra);
+      showTip(cx, cy, it.full || it.label, rs);
+    };
+    hit.addEventListener('pointermove', show);
+    hit.addEventListener('focus', () => show(null));
+    hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    if (cfg.onPick) {
+      hit.addEventListener('click', () => cfg.onPick(it.code));
+      hit.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cfg.onPick(it.code); } });
+    }
+  });
+}
+
+// ====================================================================================
+// Finanzas públicas: datos y gráficos propios
+// ====================================================================================
+const A = D.A, DEBT = D.debt, R = D.regions, GEO = D.geo;
+const mon = m => MES[+m.slice(5, 7) - 1];
+const ytdTxt = m => 'ene–' + mon(m) + ' ' + m.slice(0, 4);
+const ppTxt = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : '') + fx(v, d) + ' pp';
+const pctS = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : '') + pct(v, d);
+const mill = v => v == null ? '—' : 'S/ ' + big(v) + ' millones';
+const quarterEndMonth = p => p.slice(0, 4) + '-' + String(+p[6] * 3).padStart(2, '0');
+
+// ---------- Indicadores ----------
+function renderKpis() {
+  const k = D.kpi, box = document.getElementById('kpis');
+  box.replaceChildren();
+  const tiles = [
+    {hero: true, lab: 'Resultado económico del sector público, 12 meses a ' + mLabel(k.re.m), val: pct(k.re.v, 1), unit: 'del PBI',
+      sub: (k.re.v < 0 ? 'Déficit' : 'Superávit') + ' · un año antes: ' + pct(k.re.prev, 1) + (topeAnio(+k.re.m.slice(0, 4)) != null ? ' · déficit máximo legal para ' + k.re.m.slice(0, 4) + ': ' + pct(topeAnio(+k.re.m.slice(0, 4)), 1) : ''), spark: true},
+    {lab: 'Presión tributaria, 12 meses a ' + mLabel(k.trib.m), val: pct(k.trib.v, 1), unit: 'del PBI', sub: 'ingresos tributarios del gobierno general · un año antes: ' + pct(k.trib.prev, 1)},
+    {lab: 'Ingresos corrientes, ' + ytdTxt(k.ing.m), val: pctS(k.ing.v), unit: 'real', sub: 'descontada la inflación, frente al mismo periodo de ' + (+k.ing.m.slice(0, 4) - 1)},
+    {lab: 'Gasto no financiero, ' + ytdTxt(k.gnf.m), val: pctS(k.gnf.v), unit: 'real', sub: 'descontada la inflación, frente al mismo periodo de ' + (+k.gnf.m.slice(0, 4) - 1)},
+    {lab: 'Deuda pública bruta a ' + pLabel(k.deuda.q), val: pct(k.deuda.v, 1), unit: 'del PBI', sub: 'un año antes: ' + pct(k.deuda.prev, 1) + ' · límite legal: 38%'},
+    {lab: 'Deuda pública neta a ' + pLabel(k.deuda.neta_q), val: pct(k.deuda.neta, 1), unit: 'del PBI', sub: 'deuda bruta menos activos financieros del sector público'},
+    {lab: 'Inversión pública, ' + ytdTxt(k.fbk.m), val: pctS(k.fbk.v), unit: 'real', sub: 'gobierno general, descontada la inflación, frente al mismo periodo de ' + (+k.fbk.m.slice(0, 4) - 1)},
+  ];
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: t.val}, d);
+    if (t.unit) htmlEl('span', {cls: 'unit', text: t.unit}, v);
+    htmlEl('div', {cls: 'sub', text: t.sub}, d);
+    if (t.spark) {
+      const sp = htmlEl('div', {cls: 'spark'}, d);
+      htmlEl('div', {cls: 'sub', text: 'Últimos 5 años, % del PBI (12 meses)'}, sp);
+      const c = htmlEl('div', {cls: 'chart'}, sp); c.id = 'ch-spark';
+    }
+  }
+  renderSpark();
+}
+function renderSpark() {
+  const box = document.getElementById('ch-spark');
+  if (!box) return;
+  const b = lastIdx(S.re12), idx = [];
+  for (let i = Math.max(0, b - 59); i <= b; i++) idx.push(i);
+  lineChart(box, {P: MONTHS, idx, H: 150, compact: true, series: [{arr: S.re12, label: 'Resultado económico', color: 'var(--s1)'}], fmt: v => pct(v, 1), aria: 'Resultado económico, últimos cinco años'});
+}
+function renderPanCallout() {
+  const k = D.kpi, co = document.getElementById('pan-callout');
+  co.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'En resumen'}, co);
+  // Mismo mes para todas las cifras: el último en que existen las tres series.
+  const i = Math.min(lastIdx(S.re12), lastIdx(S.ing12), lastIdx(S.gnf12)), ip = i - 12;
+  const ing = S.ing12[i], gnf = S.gnf12[i], ingP = S.ing12[ip], gnfP = S.gnf12[ip];
+  const dif = (a, b) => a == null || b == null ? null : +(a - b).toFixed(2);
+  const ppL = v => v == null ? '—' : (v > 0 ? '+' : '') + fx(v, 1) + ' puntos porcentuales';
+  const p = htmlEl('p', null, co);
+  p.textContent = `En los 12 meses a ${mLong(MONTHS[i])}, el sector público tuvo un ${S.re12[i] < 0 ? 'déficit' : 'superávit'} de ${pct(Math.abs(S.re12[i]), 1)} del PBI (${pct(Math.abs(S.re12[ip]), 1)} un año antes). ` +
+    `Los ingresos corrientes del gobierno general sumaron ${pct(ing, 1)} del PBI (${ppL(dif(ing, ingP))} en un año) y el gasto no financiero, ${pct(gnf, 1)} (${ppL(dif(gnf, gnfP))}). ` +
+    `Los intereses de la deuda costaron ${pct(S.int12[i], 1)} del PBI.`;
+  const p2 = htmlEl('p', null, co);
+  const med = FM && FM.mediana.deuda ? FM.mediana.deuda[FM.years.indexOf(String(FM.first_proj - 1))] : null;
+  p2.textContent = `La deuda pública bruta llegó a ${pct(k.deuda.v, 1)} del PBI a ${pLabel(k.deuda.q)}, lejos del límite legal de 38%` +
+    (med != null ? ` y por debajo de la mediana de diez países de la región (${pct(med, 1)} en ${FM.first_proj - 1}, según el FMI)` : '') + `; la neta, ${pct(k.deuda.neta, 1)}.`;
+  const y = +MONTHS[i].slice(0, 4), tope = topeAnio(y);
+  if (tope != null) {
+    const p3 = htmlEl('p', null, co);
+    p3.textContent = `Frente a las reglas fiscales: el déficit de los últimos 12 meses (${pct(-S.re12[i], 1)} del PBI) está ${-S.re12[i] <= tope ? 'por debajo' : 'por encima'} del máximo legal para todo ${y} (${pct(tope, 1)}), aunque el gasto suele concentrarse en diciembre. En 2025 se cumplieron las reglas de déficit y de deuda, pero no las de gasto, según el Consejo Fiscal (ver «Reglas fiscales»).`;
+  }
+}
+
+function topeAnio(y) {
+  if (!D.reglas) return null;
+  const r = D.reglas.rules.filter(x => x.regla === 'deficit_max').sort((a, b) => a.y - b.y);
+  if (!r.length || y < r[0].y) return null;
+  return (r.filter(x => x.y <= y).pop() || {}).v ?? null;
+}
+
+// ---------- Panorama ----------
+function renderRes() {
+  const idx = visRange(MONTHS, [S.re12]);
+  lineChart(document.getElementById('ch-res'), {P: MONTHS, idx, H: 300, endLabels: true, endW: 150, hlines: [{v: 0}],
+    series: [{arr: S.rp12, label: 'Resultado primario', short: 'Primario', color: 'var(--s2)'},
+             {arr: S.re12, label: 'Resultado económico', short: 'Económico', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Resultado económico y primario del sector público, 12 meses, % del PBI'});
+  document.getElementById('note-res').textContent = 'Resultado económico: serie del BCRP. Resultado primario: suma de 12 meses dividida entre el PBI de 12 meses implícito en la serie del BCRP (cálculo propio). Último dato: ' + mLabel(LAST_M) + '.';
+}
+function renderIg() {
+  const idx = visRange(MONTHS, [S.ing12]);
+  lineChart(document.getElementById('ch-ig'), {P: MONTHS, idx, H: 300, endLabels: true, endW: 150, noZero: true,
+    series: [{arr: S.ing12, label: 'Ingresos corrientes', short: 'Ingresos', color: 'var(--s1)'},
+             {arr: S.gnf12, label: 'Gasto no financiero', short: 'Gasto', color: 'var(--s3)'}],
+    fmt: v => pct(v, 1), aria: 'Ingresos corrientes y gasto no financiero del gobierno general, 12 meses, % del PBI'});
+  document.getElementById('note-ig').textContent = 'Cálculo propio con las series mensuales del BCRP en millones de soles. La diferencia entre las dos líneas no es exactamente el resultado primario: este también incluye los ingresos de capital y el resultado primario de las empresas estatales.';
+}
+const ytdNota = (que, o) => o && o.v != null ? `En ${ytdTxt(o.m)}, ${que} ${o.v >= 0 ? 'creció' : 'cayó'} ${pct(Math.abs(o.v), 1)} real frente al mismo periodo del año anterior.` : '';
+function annualRows(keys, totKey, withLast) {
+  const rows = [];
+  A.P.forEach((p, i) => {
+    if (keys.every(k => A['c_' + k.k][i] == null)) return;
+    const r = {p, t: A[totKey][i]};
+    for (const k of keys) r[k.k] = A['c_' + k.k][i];
+    rows.push(r);
+  });
+  if (withLast) {
+    const L = A.last12, r = {p: String(+L.m.slice(0, 4)), t: L[totKey], last: true};
+    for (const k of keys) r[k.k] = L['c_' + k.k];
+    if (rows.length && rows[rows.length - 1].p === r.p) rows.pop();
+    rows.push(r);
+  }
+  return rows;
+}
+function renderLong() {
+  if (!A.re) return;
+  const rows = A.P.map((p, i) => ({p, v: A.re[i]})).filter(r => r.v != null);
+  if (!rows.length) return;
+  const keys = [{k: 'v', label: 'Resultado económico', color: 'var(--s1)'}];
+  stackChart(document.getElementById('ch-long'), {rows, keys, H: 280, noTotal: true, fmt: v => pct(v, 1), tickFmt: tickPct,
+    aria: 'Resultado económico anual del sector público, % del PBI, desde ' + rows[0].p});
+  const worst = rows.reduce((a, b) => b.v < a.v ? b : a), best = rows.reduce((a, b) => b.v > a.v ? b : a);
+  document.getElementById('note-long').textContent = `Serie anual del BCRP, ${rows[0].p}–${rows[rows.length - 1].p}. Mayor déficit: ${pct(worst.v, 1)} del PBI en ${worst.p}; mayor superávit: ${pct(best.v, 1)} en ${best.p}.`;
+}
+
+// ---------- Ingresos ----------
+const TAX = [{k: 'igv', label: 'IGV'}, {k: 'ir', label: 'Impuesto a la renta'}, {k: 'isc', label: 'ISC'}, {k: 'imp', label: 'Aranceles'}, {k: 'otr', label: 'Otros tributos'}, {k: 'dev', label: 'Devoluciones'}];
+TAX.forEach((k, j) => { k.color = j < 5 ? rampOf(5)[j] : 'var(--neg)'; });
+const SPEND = [{k: 'rem', label: 'Remuneraciones'}, {k: 'bys', label: 'Bienes y servicios'}, {k: 'tra', label: 'Transferencias'}, {k: 'fbk', label: 'Inversión pública'}, {k: 'ocap', label: 'Otros gastos de capital'}];
+SPEND.forEach((k, j) => { k.color = k.k === 'fbk' ? 'var(--s3)' : rampOf(5)[j]; });   // la inversión, con color propio
+function annualStart(rows) {   // el filtro de periodo también recorta las series anuales
+  const sy = startYear();
+  const out = rows.filter(r => +r.p >= sy);
+  return out.length >= 3 ? out : rows;
+}
+function renderTax() {
+  const rows = annualStart(annualRows(TAX, 'trib', true));
+  stackChart(document.getElementById('ch-tax'), {rows, keys: TAX, H: 320, fmt: v => pct(v, 1), tickFmt: tickPct,
+    totalFmt: v => pct(v, 1), totalLabel: 'Ingresos tributarios', titleExtra: r => r.last ? ' (12 meses a ' + mLabel(A.last12.m) + ')' : '',
+    aria: 'Ingresos tributarios por impuesto, % del PBI'});
+  document.getElementById('note-tax').textContent = 'Años completos: series anuales del BCRP. Última barra: 12 meses a ' + mLabel(A.last12.m) + ', cálculo propio con las series mensuales. «Otros tributos» incluye los tributos municipales.';
+}
+function renderTaxr() {
+  const idx = visRange(MONTHS, [S.trib_r]);
+  lineChart(document.getElementById('ch-taxr'), {P: MONTHS, idx, H: 300, endLabels: true, endW: 150, hlines: [{v: 0}], clip: true,
+    series: [{arr: S.ir_r, label: 'Impuesto a la renta', short: 'Renta', color: 'var(--s2)'},
+             {arr: S.igv_r, label: 'IGV', color: 'var(--s3)'},
+             {arr: S.trib_r, label: 'Ingresos tributarios', short: 'Tributarios', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Variación real de 12 meses de la recaudación'});
+  document.getElementById('note-taxr').textContent = 'Cálculo propio con las series del BCRP en soles de diciembre de 2021 (gobierno general). Si un valor extremo aplastara al resto, el eje se recorta; la tabla tiene todos los valores. ' + ytdNota('ingresos corrientes', D.kpi.ing);
+}
+function renderComp() {
+  const C = D.comp;
+  document.getElementById('comp-title').textContent = 'De dónde vienen los ingresos: 12 meses a ' + mLong(C.m);
+  const items = C.items.map(o => ({label: o.label, v: o.v, color: o.trib ? 'var(--s1)' : 'var(--r1)',
+    extra: [{value: pct(o.v / C.total * 100, 1), label: 'del total'}]}));
+  hbarChart(document.getElementById('ch-comp'), items, {rowH: 24, labW: 230, fmt: v => big(v), vLabel: 'S/ millones', aria: 'Composición de los ingresos corrientes, últimos 12 meses'});
+  document.getElementById('note-comp').textContent = 'Total: S/ ' + big(C.total) + ' millones. Las devoluciones restan. Fuente: BCRP (series mensuales del gobierno general).';
+}
+
+// ---------- Gasto ----------
+function renderGas() {
+  const rows = annualStart(annualRows(SPEND, 'gnf', true));
+  stackChart(document.getElementById('ch-gas'), {rows, keys: SPEND, H: 320, fmt: v => pct(v, 1), tickFmt: tickPct,
+    totalFmt: v => pct(v, 1), totalLabel: 'Gasto no financiero', titleExtra: r => r.last ? ' (12 meses a ' + mLabel(A.last12.m) + ')' : '',
+    aria: 'Gasto no financiero del gobierno general por tipo, % del PBI'});
+  document.getElementById('note-gas').textContent = 'Años completos: series anuales del BCRP. Última barra: 12 meses a ' + mLabel(A.last12.m) + ', cálculo propio con las series mensuales.';
+}
+function renderGr() {
+  const idx = visRange(MONTHS, [S.gnf_r]);
+  lineChart(document.getElementById('ch-gr'), {P: MONTHS, idx, H: 300, endLabels: true, endW: 150, hlines: [{v: 0}], clip: true,
+    series: [{arr: S.corr_r, label: 'Gasto corriente', short: 'Corriente', color: 'var(--s2)'},
+             {arr: S.fbk_r, label: 'Inversión pública', short: 'Inversión', color: 'var(--s3)'},
+             {arr: S.gnf_r, label: 'Gasto no financiero', short: 'Total', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Variación real de 12 meses del gasto'});
+  document.getElementById('note-gr').textContent = 'Cálculo propio con las series del BCRP en soles de diciembre de 2021 (gobierno general). Estas variaciones comparan 12 meses con los 12 anteriores; ' + ytdNota('el gasto no financiero', D.kpi.gnf) + ' ' + ytdNota('la inversión pública', D.kpi.fbk);
+}
+const INV = [{k: 'gn', label: 'Gobierno nacional'}, {k: 'gr', label: 'Gobiernos regionales'}, {k: 'gl', label: 'Gobiernos locales'}];
+INV.forEach((k, j) => { k.color = rampOf(3)[j]; });
+function renderInv() {
+  const I = D.inv, lastY = I.P[I.P.length - 1];
+  const full = I.m.slice(5) === '12';
+  document.getElementById('inv-title').textContent = 'Inversión pública por nivel de gobierno' + (full ? '' : ', de enero a ' + MESF[+I.m.slice(5) - 1] + ' de cada año');
+  document.getElementById('inv-desc').textContent = 'Formación bruta de capital del gobierno general' + (full ? ' de cada año' : ' acumulada de enero a ' + MES[+I.m.slice(5) - 1] + ' de cada año, para comparar ' + lastY + ' con el mismo periodo de los años anteriores') + ', en millones de soles de diciembre de 2021 (descontada la inflación). El punto es el total.';
+  const rows = I.P.map((p, i) => ({p, gn: I.gn[i], gr: I.gr[i], gl: I.gl[i], t: (I.gn[i] || 0) + (I.gr[i] || 0) + (I.gl[i] || 0)}));
+  stackChart(document.getElementById('ch-inv'), {rows: annualStart(rows), keys: INV, H: 320, fmt: v => big(v), tickFmt: tickNum,
+    totalFmt: v => 'S/ ' + big(v) + ' millones', totalLabel: 'Total', aria: 'Inversión pública por nivel de gobierno'});
+  document.getElementById('note-inv').textContent = `En ${ytdTxt(I.m)}, la inversión pública ${I.var >= 0 ? 'creció' : 'cayó'} ${pct(Math.abs(I.var), 1)} en términos reales frente al mismo periodo de ${+lastY - 1}. Fuente: BCRP (series en soles de diciembre de 2021).`;
+}
+
+// ---------- Deuda ----------
+function renderDebt() {
+  const P = DEBT.P, idx = visRange(P, [DEBT.bruta]);
+  lineChart(document.getElementById('ch-debt'), {P, idx, H: 300, endLabels: true, endW: 130,
+    series: [{arr: DEBT.neta, label: 'Deuda neta', short: 'Neta', color: 'var(--s2)'},
+             {arr: DEBT.bruta, label: 'Deuda bruta', short: 'Bruta', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Deuda pública bruta y neta, % del PBI'});
+  const i = lastIdx(DEBT.bruta), mx = Math.max(...DEBT.bruta.filter(v => v != null)), imx = DEBT.bruta.indexOf(mx);
+  document.getElementById('note-debt').textContent = `Último dato: ${pLabel(P[i])}. Máximo de la serie trimestral (empieza en 1999): ${pct(mx, 1)} del PBI en ${pLabel(P[imx])}. Fuente: BCRP (saldo de la deuda del sector público no financiero, % del PBI).`;
+}
+const DCOMP = [{k: 'ext', label: 'Externa', color: 'var(--r8)'}, {k: 'int', label: 'Interna', color: 'var(--r3)'}];
+function renderDcomp() {
+  const P = DEBT.P, idx = visRange(P, [DEBT.ext]);
+  const rows = idx.map(i => ({p: P[i], ext: DEBT.ext[i], int: DEBT.int[i], t: DEBT.bruta[i]}));
+  stackChart(document.getElementById('ch-dcomp'), {rows, keys: DCOMP, H: 300, fmt: v => pct(v, 1), tickFmt: tickPct,
+    totalFmt: v => pct(v, 1), totalLabel: 'Deuda bruta', aria: 'Deuda pública externa e interna, % del PBI'});
+}
+function renderNr() {
+  if (!DEBT.nr_sob) { document.getElementById('ch-nr').replaceChildren(); return; }
+  const P = DEBT.P, idx = visRange(P, [DEBT.nr_sob, DEBT.nr_glob]);
+  lineChart(document.getElementById('ch-nr'), {P, idx, H: 280, endLabels: true, endW: 130, noZero: false,
+    series: [{arr: DEBT.nr_glob, label: 'Bonos globales', short: 'Globales', color: 'var(--s2)'},
+             {arr: DEBT.nr_sob, label: 'Bonos soberanos', short: 'Soberanos', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Participación de no residentes en los bonos del gobierno'});
+  const i = lastIdx(DEBT.nr_sob);
+  const s = DEBT.nr_sob.slice(0, i + 1), mx = Math.max(...s.filter(v => v != null));
+  document.getElementById('note-nr').textContent = `Cálculo propio: saldo en manos de no residentes entre el saldo total de cada tipo de bono (series del BCRP en millones de soles). Al ${pLabel(P[i])}, los no residentes tenían ${pct(DEBT.nr_sob[i], 1)} de los bonos soberanos (máximo de la serie: ${pct(mx, 1)}).`;
+}
+function renderInt() {
+  const rows = A.P.map((p, i) => ({p, v: A.int[i]})).filter(r => r.v != null);
+  const P = rows.map(r => r.p), arr = rows.map(r => r.v);
+  lineChart(document.getElementById('ch-int'), {P, idx: P.map((_, i) => i), H: 240, endLabels: true, endW: 110,
+    series: [{arr, label: 'Intereses', color: 'var(--s1)'}], fmt: v => pct(v, 1), aria: 'Intereses de la deuda pública, % del PBI'});
+  const note = document.getElementById('note-int');
+  if (note) note.textContent = `Serie anual del BCRP (sector público no financiero), ${P[0]}–${P[P.length - 1]}.`;
+}
+
+// ---------- Departamentos ----------
+const DEPS = R ? R.units : [], byCode = Object.fromEntries(DEPS.map(u => [u.code, u])), NAT = R ? R.nat : null;
+const yearLbl = yi => R.years[yi] + (R.partial && R.years[yi] === R.partial.y ? ' (ene–' + mon(R.partial.m) + ')' : '');
+const perCap = (u, key, yi) => u[key] && u[key][yi] != null && u.pob[yi] ? u[key][yi] * 1e6 / u.pob[yi] : null;
+const invTot = (u, yi) => ['ign', 'igr', 'igl'].some(k => u[k] && u[k][yi] != null) ? ['ign', 'igr', 'igl'].reduce((s, k) => s + (u[k] && u[k][yi] || 0), 0) : null;
+const REG_METRICS = [
+  {id: 'ri', label: 'Recaudación', title: 'Recaudación de tributos internos por habitante', unit: 'S/ por habitante',
+    desc: 'Tributos internos recaudados por la SUNAT en el departamento (IGV interno, impuesto a la renta y otros; sin los tributos aduaneros), en soles por habitante.',
+    val: (u, yi) => perCap(u, 'ri', yi), nat: yi => perCap(NAT, 'ri', yi), fmt: v => v == null ? '—' : 'S/ ' + big(v)},
+  {id: 'inv', label: 'Inversión pública', title: 'Inversión pública por habitante', unit: 'S/ por habitante',
+    desc: 'Inversión (formación bruta de capital) ejecutada en el departamento por el gobierno nacional, el gobierno regional y los gobiernos locales, en soles por habitante.',
+    val: (u, yi) => { const v = invTot(u, yi); return v == null || !u.pob[yi] ? null : v * 1e6 / u.pob[yi]; },
+    nat: yi => { const v = invTot(NAT, yi); return v == null ? null : v * 1e6 / NAT.pob[yi]; }, fmt: v => v == null ? '—' : 'S/ ' + big(v)},
+  {id: 'igr', label: 'Inversión regional', title: 'Inversión del gobierno regional por habitante', unit: 'S/ por habitante',
+    desc: 'Inversión ejecutada por el gobierno regional (en Lima, también la Municipalidad Metropolitana de Lima, que cumple funciones de gobierno regional), en soles por habitante.',
+    val: (u, yi) => perCap(u, 'igr', yi), nat: yi => perCap(NAT, 'igr', yi), fmt: v => v == null ? '—' : 'S/ ' + big(v)},
+  {id: 'igl', label: 'Inversión municipal', title: 'Inversión de los gobiernos locales por habitante', unit: 'S/ por habitante',
+    desc: 'Inversión ejecutada por las municipalidades provinciales y distritales del departamento, en soles por habitante.',
+    val: (u, yi) => perCap(u, 'igl', yi), nat: yi => perCap(NAT, 'igl', yi), fmt: v => v == null ? '—' : 'S/ ' + big(v)},
+  {id: 'ggr', label: 'Gasto regional', title: 'Gasto no financiero del gobierno regional por habitante', unit: 'S/ por habitante',
+    desc: 'Todo el gasto no financiero del gobierno regional (remuneraciones, bienes y servicios, transferencias e inversión), en soles por habitante.',
+    val: (u, yi) => perCap(u, 'ggr', yi), nat: yi => perCap(NAT, 'ggr', yi), fmt: v => v == null ? '—' : 'S/ ' + big(v)},
+];
+let regMetric = REG_METRICS[0], regYi = 0, depCode = '08';
+function quantBreaks(vals) {
+  const s = vals.filter(v => v != null).sort((a, b) => a - b), br = [];
+  if (!s.length) return [];
+  for (let k = 1; k < 6; k++) {
+    const q = s[Math.min(s.length - 1, Math.floor(k * s.length / 6))];
+    const mag = 10 ** Math.max(0, Math.floor(Math.log10(Math.abs(q) || 1)) - 1);
+    br.push(Math.round(q / mag) * mag);
+  }
+  return [...new Set(br)];
+}
+const QV = ['--m1', '--m2', '--m3', '--m4', '--m5', '--m6'];
+function setupRegions() {
+  if (!R || !GEO) { document.getElementById('tabbtn-regiones').hidden = true; return; }
+  const seg = document.getElementById('reg-metric');
+  for (const mt of REG_METRICS) {
+    const b = htmlEl('button', {type: 'button', text: mt.label, 'aria-pressed': String(mt === regMetric)}, seg);
+    b.addEventListener('click', () => { regMetric = mt; seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); renderRegions(); refreshOpenTables(); });
+  }
+  const ys = document.getElementById('reg-year');
+  R.years.forEach((y, yi) => htmlEl('option', {value: yi, text: yearLbl(yi)}, ys));
+  // Por defecto, el último año completo.
+  regYi = R.partial ? R.years.length - 2 : R.years.length - 1;
+  ys.value = regYi;
+  ys.addEventListener('change', () => { regYi = +ys.value; renderRegions(); refreshOpenTables(); });
+  const dp = document.getElementById('dep-pick');
+  for (const u of DEPS) htmlEl('option', {value: u.code, text: u.name}, dp);
+  dp.value = depCode;
+  dp.addEventListener('change', () => pickDep(dp.value));
+  document.getElementById('lee-reg').textContent = REG_TXT;
+}
+function pickDep(code) { depCode = code; document.getElementById('dep-pick').value = code; renderRegions(); refreshOpenTables(); }
+function renderRegions() {
+  if (!R || !GEO) return;
+  const mt = regMetric, yi = regYi;
+  const vals = DEPS.map(u => ({u, v: mt.val(u, yi)}));
+  const br = quantBreaks(vals.map(o => o.v));
+  const colorOf = v => v == null ? 'var(--grid)' : `var(${QV[Math.min(br.length, br.filter(b => v >= b).length)]})`;
+  document.getElementById('reg-title').textContent = mt.title + ', ' + yearLbl(yi);
+  document.getElementById('reg-desc').textContent = mt.desc + ' Colores por sextos: cada tono reúne a unos cuatro departamentos.';
+  const sc = document.getElementById('reg-scale');
+  sc.replaceChildren();
+  const edges = [null, ...br, null];
+  for (let k = 0; k < edges.length - 1; k++) {
+    const s = htmlEl('span', null, sc), i = htmlEl('i', null, s); i.style.background = `var(${QV[k]})`;
+    htmlEl('span', {text: edges[k] == null ? '< ' + mt.fmt(edges[k + 1]) : edges[k + 1] == null ? '≥ ' + mt.fmt(edges[k]) : mt.fmt(edges[k]) + ' a ' + mt.fmt(edges[k + 1])}, s);
+  }
+  const box = document.getElementById('ch-map');
+  box.replaceChildren();
+  const W = Math.min(box.clientWidth, 460), sx = W / GEO.w;
+  const svg = svgEl('svg', {viewBox: `0 0 ${GEO.w} ${GEO.h}`, width: W, height: GEO.h * sx, role: 'img', 'aria-label': 'Mapa del Perú por departamentos: ' + mt.title}, box);
+  for (const o of vals) {
+    const d = GEO.paths[o.u.code];
+    if (!d) continue;
+    const p = svgEl('path', {d, class: 'dep' + (o.u.code === depCode ? ' sel' : ''), fill: colorOf(o.v), tabindex: 0, 'aria-label': o.u.name + ': ' + mt.fmt(o.v)}, svg);
+    const show = e => { const [cx, cy] = anchorOf(e, p); showTip(cx, cy, o.u.name, [{value: mt.fmt(o.v), label: mt.unit, color: colorOf(o.v), sq: true},
+      ...(mt.nat(yi) != null ? [{value: mt.fmt(mt.nat(yi)), label: 'Perú', color: 'var(--ink2)'}] : [])]); };
+    p.addEventListener('pointermove', show); p.addEventListener('focus', () => show(null));
+    p.addEventListener('pointerleave', hideTip); p.addEventListener('blur', hideTip);
+    p.addEventListener('click', () => pickDep(o.u.code));
+    p.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickDep(o.u.code); } });
+  }
+  const sel = svg.querySelector('path.sel'); if (sel) svg.appendChild(sel);
+  const items = vals.slice().sort((a, b) => (b.v ?? -1e9) - (a.v ?? -1e9)).map(o => ({label: o.u.name, v: o.v, color: colorOf(o.v), sel: o.u.code === depCode, code: o.u.code}));
+  hbarChart(document.getElementById('ch-rank'), items, {rowH: 21, labW: 104, fmt: v => big(v), vLabel: mt.unit, aria: 'Ranking de departamentos: ' + mt.title, onPick: pickDep});
+  const s = vals.filter(o => o.v != null).sort((a, b) => b.v - a.v), top = s[0], bot = s[s.length - 1];
+  if (!s.length) { document.getElementById('reg-callout').replaceChildren(); renderDep(); return; }
+  const co = document.getElementById('reg-callout');
+  co.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'En ' + yearLbl(yi)}, co);
+  const p1 = htmlEl('p', null, co);
+  p1.textContent = `${top.u.name} encabeza el indicador (${mt.fmt(top.v)}) y ${bot.u.name} queda último (${mt.fmt(bot.v)}).` + (mt.nat(yi) != null ? ` Perú: ${mt.fmt(mt.nat(yi))}.` : '');
+  if (['inv', 'igr', 'ggr'].includes(mt.id)) {
+    const lima = byCode['15'], it = invTot(lima, yi), gn = lima.ign && lima.ign[yi];
+    if (it && gn != null) htmlEl('p', {text: `Lima aparece entre los últimos en este indicador porque en Lima la mayor parte de la inversión pública la ejecuta el gobierno nacional (${pct(gn / it * 100, 0)} en ${yearLbl(yi)}), y se divide entre toda su población.`}, co);
+  }
+  if (mt.id === 'ri') {
+    const lima = byCode['15'], tot = NAT.ri[yi];
+    const p2 = htmlEl('p', null, co);
+    p2.textContent = `Lima concentra ${pct(lima.ri[yi] / tot * 100, 1)} de los tributos internos recaudados: la SUNAT registra la recaudación donde el contribuyente tiene su domicilio fiscal, y muchas empresas que operan en otros departamentos lo tienen en Lima.`;
+  }
+  document.getElementById('note-reg').textContent = 'Fuente: BCRPData, información estadística regional (SUNAT y MEF); población: INEI.' +
+    (R.years[yi] > R.pop_last ? ' La población de ' + R.years[yi] + ' es la de ' + R.pop_last + ', la última disponible.' : '') +
+    (R.partial && R.years[yi] === R.partial.y ? ' El año en curso solo suma de enero a ' + MES[+R.partial.m.slice(5) - 1] + ': no se compara con los años completos.' : '');
+  renderDep();
+}
+const ratio = (a, b, k = 1) => a == null || b == null || !b ? null : a / b * k;   // sin dato: «—», no ceros falsos
+const DEPINV = [{k: 'ign', label: 'Gobierno nacional'}, {k: 'igr', label: 'Gobierno regional'}, {k: 'igl', label: 'Gobiernos locales'}];
+DEPINV.forEach((k, j) => { k.color = rampOf(3)[j]; });
+function renderDep() {
+  const u = byCode[depCode], yi = regYi;
+  if (!u) return;
+  document.getElementById('dep-title').textContent = u.name;
+  document.getElementById('depinv-title').textContent = 'Inversión pública en ' + u.name;
+  const tiles = document.getElementById('dep-tiles');
+  tiles.replaceChildren();
+  const it = invTot(u, yi), itN = invTot(NAT, yi);
+  const rank = key => DEPS.slice().sort((a, b) => (perCap(b, key, yi) ?? -1) - (perCap(a, key, yi) ?? -1)).findIndex(z => z.code === u.code) + 1;
+  for (const t of [
+    {lab: 'Tributos internos, ' + yearLbl(yi), val: mill(u.ri && u.ri[yi]), sub: pct(ratio(u.ri && u.ri[yi], NAT.ri[yi], 100), 1) + ' del Perú · puesto ' + rank('ri') + ' de ' + DEPS.length + ' por habitante'},
+    {lab: 'Inversión pública, ' + yearLbl(yi), val: mill(it), sub: pct(ratio(it, itN, 100), 1) + ' del Perú · S/ ' + big(ratio(it, u.pob[yi], 1e6)) + ' por habitante'},
+    {lab: 'Gasto del gobierno regional, ' + yearLbl(yi), val: mill(u.ggr && u.ggr[yi]), sub: 'S/ ' + big(perCap(u, 'ggr', yi)) + ' por habitante · Perú: S/ ' + big(perCap(NAT, 'ggr', yi))},
+    {lab: 'Población ' + Math.min(R.years[yi], R.pop_last), val: big(u.pob[yi]), sub: pct(u.pob[yi] / NAT.pob[yi] * 100, 1) + ' del Perú · INEI'},
+  ]) {
+    const d = htmlEl('div', {cls: 'tile'}, tiles);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    htmlEl('div', {cls: 'val', text: t.val}, d);
+    htmlEl('div', {cls: 'sub', text: t.sub}, d);
+  }
+  const rows = R.years.map((y, i) => ({p: String(y), ign: u.ign && u.ign[i], igr: u.igr && u.igr[i], igl: u.igl && u.igl[i], t: invTot(u, i), part: R.partial && y === R.partial.y}));
+  document.getElementById('depinv-desc').textContent = 'Inversión (formación bruta de capital) ejecutada en el departamento por el gobierno nacional, el gobierno regional y los gobiernos locales, por año, en millones de soles corrientes (sin descontar la inflación).' + (R.partial ? ` La barra de ${R.partial.y}, más clara, solo suma de enero a ${MESF[+R.partial.m.slice(5) - 1]}.` : '');
+  stackChart(document.getElementById('ch-dep'), {rows, keys: DEPINV, H: 280, fmt: v => big(v), tickFmt: tickNum, totalFmt: v => 'S/ ' + big(v) + ' millones', totalLabel: 'Total',
+    titleExtra: r => r.part ? ' (ene–' + mon(R.partial.m) + ')' : '', aria: 'Inversión pública en ' + u.name + ' por nivel de gobierno'});
+  document.getElementById('note-dep').textContent = 'Millones de soles corrientes (sin descontar la inflación).' + (R.partial ? ' ' + R.partial.y + ': enero a ' + MES[+R.partial.m.slice(5) - 1] + '.' : '');
+}
+const REG_TXT = 'La recaudación por departamento es la de los tributos internos que administra la SUNAT (sin las contribuciones a EsSalud y la ONP), asignada según el domicilio fiscal del contribuyente: por ejemplo, una empresa minera con domicilio fiscal en Lima tributa en Lima aunque produzca en otro departamento. Por eso Lima concentra la mayor parte y la recaudación no mide la actividad económica de cada departamento. La inversión y el gasto, en cambio, se asignan al departamento donde se ejecutan. En la provincia de Lima, las funciones de gobierno regional las ejerce la Municipalidad Metropolitana de Lima; el BCRP la publica junto con los gobiernos regionales y aquí se suma a Lima. El Gobierno Regional de Lima abarca las demás provincias del departamento, y el Callao tiene su propio gobierno regional. Los valores por habitante usan la población estimada por el INEI.';
+
+// ---------- Tablas ----------
+const desc = arr => arr.slice().reverse();
+const TABLES = {
+  res: () => [['Mes', 'Resultado económico', 'Resultado primario', 'Intereses'], desc(visRange(MONTHS, [S.re12])).map(i => [mLabel(MONTHS[i]), pct(S.re12[i], 2), pct(S.rp12[i], 2), pct(S.int12[i], 2)])],
+  ig: () => [['Mes', 'Ingresos corrientes', 'Ingresos tributarios', 'Gasto no financiero', 'Gasto corriente', 'Gasto de capital'], desc(visRange(MONTHS, [S.ing12])).map(i => [mLabel(MONTHS[i]), pct(S.ing12[i], 2), pct(S.trib12[i], 2), pct(S.gnf12[i], 2), pct(S.corr12[i], 2), pct(S.cap12[i], 2)])],
+  long: () => [['Año', 'Resultado económico', 'Resultado primario', 'Intereses'], desc(A.P.map((p, i) => i)).filter(i => A.re[i] != null).map(i => [A.P[i], pct(A.re[i], 2), pct(A.rp[i], 2), pct(A.int[i], 2)])],
+  tax: () => { const rows = annualRows(TAX, 'trib', true); return [['Año'].concat(TAX.map(k => k.label), ['Total']), desc(rows).map(r => [r.last ? '12 meses a ' + mLabel(A.last12.m) : r.p].concat(TAX.map(k => pct(r[k.k], 2)), [pct(r.t, 2)]))]; },
+  taxr: () => [['Mes', 'Ingresos tributarios', 'Impuesto a la renta', 'IGV', 'Ingresos corrientes'], desc(visRange(MONTHS, [S.trib_r])).map(i => [mLabel(MONTHS[i]), pctS(S.trib_r[i]), pctS(S.ir_r[i]), pctS(S.igv_r[i]), pctS(S.ing_r[i])])],
+  comp: () => [['Concepto', 'S/ millones', '% del total'], D.comp.items.map(o => [o.label, big(o.v), pct(o.v / D.comp.total * 100, 1)]).concat([['Total', big(D.comp.total), '100%']])],
+  gas: () => { const rows = annualRows(SPEND, 'gnf', true); return [['Año'].concat(SPEND.map(k => k.label), ['Total']), desc(rows).map(r => [r.last ? '12 meses a ' + mLabel(A.last12.m) : r.p].concat(SPEND.map(k => pct(r[k.k], 2)), [pct(r.t, 2)]))]; },
+  gr: () => [['Mes', 'Gasto no financiero', 'Gasto corriente', 'Inversión pública'], desc(visRange(MONTHS, [S.gnf_r])).map(i => [mLabel(MONTHS[i]), pctS(S.gnf_r[i]), pctS(S.corr_r[i]), pctS(S.fbk_r[i])])],
+  inv: () => [['Año (' + ytdTxt(D.inv.m).slice(0, -5) + ')'].concat(INV.map(k => k.label), ['Total']), desc(D.inv.P.map((p, i) => i)).map(i => [D.inv.P[i]].concat(INV.map(k => big(D.inv[k.k][i])), [big((D.inv.gn[i] || 0) + (D.inv.gr[i] || 0) + (D.inv.gl[i] || 0))]))],
+  debt: () => [['Trimestre', 'Deuda bruta', 'Deuda neta', 'Externa', 'Interna'], desc(visRange(DEBT.P, [DEBT.bruta])).map(i => [pLabel(DEBT.P[i]), pct(DEBT.bruta[i], 1), pct(DEBT.neta[i], 1), pct(DEBT.ext[i], 1), pct(DEBT.int[i], 1)])],
+  dcomp: () => TABLES.debt(),
+  nr: () => [['Trimestre', 'Bonos soberanos', 'Bonos globales'], desc(visRange(DEBT.P, [DEBT.nr_sob])).map(i => [pLabel(DEBT.P[i]), pct(DEBT.nr_sob[i], 1), pct(DEBT.nr_glob[i], 1)])],
+  int: () => [['Año', 'Intereses'], desc(A.P.map((p, i) => i)).filter(i => A.int[i] != null).map(i => [A.P[i], pct(A.int[i], 2)])],
+  reg: () => { const mt = regMetric, yi = regYi; return [['Departamento', mt.title + ' (' + yearLbl(yi) + ')', 'Tributos internos (S/ millones)', 'Inversión pública (S/ millones)', 'Gasto regional (S/ millones)', 'Población'],
+    DEPS.map(u => [u.name, mt.fmt(mt.val(u, yi)), big(u.ri && u.ri[yi]), big(invTot(u, yi)), big(u.ggr && u.ggr[yi]), big(u.pob[yi])])]; },
+  dep: () => { const u = byCode[depCode]; return [['Año'].concat(DEPINV.map(k => k.label), ['Total']), desc(R.years.map((y, i) => i)).map(i => [yearLbl(i)].concat(DEPINV.map(k => big(u[k.k] && u[k.k][i])), [big(invTot(u, i))]))]; },
+};
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  const [head, rows] = TABLES[key]();
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+}
+function refreshOpenTables() {   // las tablas abiertas siguen al gráfico cuando cambia un control
+  document.querySelectorAll('.table-wrap').forEach(w => { const k = w.id.slice(3); if (!w.hidden && TABLES[k]) fillTable(k); });
+}
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', 'tb-' + btn.dataset.table);
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+    btn.setAttribute('aria-expanded', String(open));
+  });
+});
+function legendInto(id, keys, total) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const k of keys) { const s = htmlEl('span', null, box); const i = htmlEl('i', {cls: 'sw'}, s); i.style.background = k.color; s.appendChild(document.createTextNode(k.label)); }
+  if (total) { const s = htmlEl('span', null, box); htmlEl('i', {cls: 'dot'}, s); s.appendChild(document.createTextNode(total)); }
+}
+
+
+// ====================================================================================
+// v2: ejecución presupuestal, reglas fiscales y riesgo de la deuda
+// ====================================================================================
+const EJ = D.ejec, RG = D.reglas, DM = D.deuda_mef;
+const MESL = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+const LV = [{k: 'T', label: 'Total'}, {k: 'E', label: 'Gobierno nacional'}, {k: 'R', label: 'Gobiernos regionales'}, {k: 'M', label: 'Gobiernos locales'}];
+let ejTipo = 'proyectos', ejLv = 'T';
+const ejTipoLbl = t => t === 'proyectos' ? 'inversión (proyectos)' : 'todo el gasto';
+const fechaCorte = () => dLabel(EJ.corte);
+const mfLbl = () => MESL[EJ.mes_completo - 1];
+
+function segInto(id, opts, cur, onPick) {
+  const seg = document.getElementById(id);
+  seg.replaceChildren();
+  for (const o of opts) {
+    const b = htmlEl('button', {type: 'button', text: o.label, 'aria-pressed': String(o.k === cur)}, seg);
+    b.addEventListener('click', () => { seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); onPick(o.k); });
+  }
+}
+function avgCurve(tipo, lv, years) {
+  const out = [];
+  for (let m = 0; m < 12; m++) {
+    const vals = years.map(y => (EJ.tipos[tipo].curvas[y] || {})[lv]).filter(Boolean).map(c => c[m]).filter(v => v != null);
+    out.push(vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null);
+  }
+  return out;
+}
+const avgYears = () => EJ.years.filter(y => y >= EJ.cur - 11 && y <= EJ.cur - 2).map(String);
+
+function renderEjKpis() {
+  const box = document.getElementById('ej-kpis');
+  box.replaceChildren();
+  const T = EJ.tipos.proyectos, cy = String(EJ.cur), py = String(EJ.cur - 1), mi = EJ.mes_completo - 1;
+  for (const l of LV) {
+    const c = (T.curvas[cy] || {})[l.k], p = (T.curvas[py] || {})[l.k], n = (T.nivel[cy] || {})[l.k] || {};
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: l.label + ': inversión ejecutada a fines de ' + mfLbl()}, d);
+    const v = htmlEl('div', {cls: 'val', text: pct(c ? c[mi] : null, 1)}, d);
+    htmlEl('span', {cls: 'unit', text: 'del PIM'}, v);
+    htmlEl('div', {cls: 'sub', text: 'a la misma fecha de ' + py + ': ' + pct(p ? p[mi] : null, 1) + ' (sobre su presupuesto final) · presupuesto ' + cy + ': S/ ' + big(n.pim) + ' millones'}, d);
+  }
+}
+// Aviso: si el presupuesto cambió mucho frente al año anterior, el avance no compara solo «cuánto se gastó».
+function renderEjAviso() {
+  const box = document.getElementById('ej-aviso'), T = EJ.tipos.proyectos, cy = String(EJ.cur), py = String(EJ.cur - 1), mi = EJ.mes_completo - 1;
+  const msgs = [];
+  for (const l of LV.filter(l => l.k !== 'T')) {
+    const a = (T.nivel[cy] || {})[l.k], b = (T.nivel[py] || {})[l.k], ca = (T.curvas[cy] || {})[l.k], cb = (T.curvas[py] || {})[l.k];
+    if (!a || !b || !a.pim || !b.pim || !ca || !cb || ca[mi] == null || cb[mi] == null) continue;
+    const dPim = (a.pim / b.pim - 1) * 100;
+    if (Math.abs(dPim) < 10) continue;
+    const devA = ca[mi] * a.pim / 100, devB = cb[mi] * b.pim / 100, dDev = (devA / devB - 1) * 100;
+    msgs.push(`${l.label}: su presupuesto de inversión de ${cy} es ${pct(Math.abs(dPim), 0)} ${dPim < 0 ? 'menor' : 'mayor'} que el de ${py}, y lo gastado hasta ${MESL[mi]} ${Math.abs(dDev) < 3 ? 'es casi igual' : (dDev > 0 ? 'es ' + pct(dDev, 0) + ' mayor' : 'es ' + pct(-dDev, 0) + ' menor')} (S/ ${big(devA)} millones frente a S/ ${big(devB)} millones, en soles corrientes).`);
+  }
+  box.hidden = !msgs.length;
+  box.replaceChildren();
+  if (!msgs.length) return;
+  htmlEl('div', {cls: 'kicker', text: 'Ojo al comparar'}, box);
+  htmlEl('p', {text: 'El avance es lo gastado entre el presupuesto, así que también cambia si cambia el presupuesto. Para el año anterior se usa su presupuesto final, que suele crecer en los últimos meses.'}, box);
+  msgs.forEach(t => htmlEl('p', {text: t}, box));
+}
+function renderEjc() {
+  const T = EJ.tipos[ejTipo], cy = String(EJ.cur), py = String(EJ.cur - 1), ay = avgYears();
+  const P = Array.from({length: 12}, (_, i) => String(i + 1)), idx = P.map((_, i) => i);
+  const cur = (T.curvas[cy] || {})[ejLv], prev = (T.curvas[py] || {})[ejLv], avg = avgCurve(ejTipo, ejLv, ay);
+  const leg = document.getElementById('leg-ejc');
+  leg.replaceChildren();
+  [[cy, 'var(--s1)'], [py, 'var(--s2)']].forEach(([t, c]) => { const s = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln'}, s).style.background = c; s.appendChild(document.createTextNode(t)); });
+  if (ay.length) { const s = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln dash'}, s); s.appendChild(document.createTextNode('Promedio ' + ay[0] + '–' + ay[ay.length - 1])); }
+  lineChart(document.getElementById('ch-ejc'), {P, idx, H: 300, endLabels: true, endW: 130, endIdx: EJ.mes_completo - 1, endPeriod: p => 'a ' + MES[+p - 1],
+    ticks: ix => ix.map(i => ({i, text: MES[i]})), titleOf: p => MESL[+p - 1],
+    series: [{arr: prev, label: py, color: 'var(--s2)'}, {arr: cur, label: cy, color: 'var(--s1)', w: 2.5}],
+    refs: ay.length ? [{arr: avg, label: 'Promedio ' + ay[0] + '–' + ay[ay.length - 1]}] : [],
+    fmt: v => pct(v, 1), aria: 'Avance acumulado de la ejecución, ' + ejTipoLbl(ejTipo)});
+  document.getElementById('note-ejc').textContent = `${LV.find(l => l.k === ejLv).label}, ${ejTipoLbl(ejTipo)}. Para los años cerrados se usa el PIM final del año; para ${cy}, el PIM al ${fechaCorte()}. Cálculo propio con datos de la Consulta Amigable del MEF.`;
+}
+function renderEjGr() {
+  const cy = String(EJ.cur), py = String(EJ.cur - 1), G = EJ.tipos.proyectos.gr || [];
+  document.getElementById('ejgr-title').textContent = 'Inversión de cada gobierno regional a fines de ' + mfLbl();
+  document.getElementById('ejgr-desc').textContent = `Devengado acumulado de enero a ${mfLbl()} en proyectos de inversión, en % del PIM. La marca vertical es el avance de cada gobierno regional a la misma fecha de ${py}, sobre su presupuesto final. La fila de Lima suma el Gobierno Regional de Lima y la Municipalidad Metropolitana de Lima en su función de gobierno regional, que la Consulta Amigable registra como un pliego regional aparte.`;
+  document.getElementById('ejgr-leg1').textContent = cy;
+  document.getElementById('ejgr-leg2').textContent = py + ', misma fecha';
+  const items = G.map(g => ({label: g.name, v: (EJ.gr_mismo_mes[g.code] || {})[cy], ref: (EJ.gr_mismo_mes[g.code] || {})[py], color: 'var(--s1)',
+    extra: [{value: 'S/ ' + big(g.pim), label: 'PIM ' + cy + ' (millones)'}, {value: pct(g.av, 1), label: 'avance al ' + fechaCorte()}]}))
+    .sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
+  hbarChart(document.getElementById('ch-ejgr'), items, {rowH: 22, labW: 120, domain: [0, 100], fmt: v => pct(v, 1), tickFmt: tickPct, vLabel: cy, refLabel: py, aria: 'Avance de la inversión de los gobiernos regionales a fines de ' + mfLbl()});
+}
+function renderEjList(id, list, descId, desc, title) {
+  document.getElementById(descId).textContent = desc;
+  const items = (list || []).filter(o => o.pim > 0).map(o => ({label: o.name, full: o.name, v: o.av, color: 'var(--s1)', extra: [{value: 'S/ ' + big(o.pim), label: 'PIM (millones)'}, {value: 'S/ ' + big(o.dev), label: 'devengado (millones)'}]}))
+    .sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
+  hbarChart(document.getElementById(id), items, {rowH: 21, labW: 230, domain: [0, 100], fmt: v => pct(v, 1), tickFmt: tickPct, vLabel: 'avance', aria: title || desc});
+}
+function renderEjec() {
+  if (!EJ) return;
+  document.getElementById('ej-lede').textContent = `Cuánto del presupuesto público ya se gastó en ${EJ.cur}, según la Consulta Amigable, el portal de ejecución presupuestal del MEF (datos al ${fechaCorte()}). El presupuesto institucional modificado (PIM) es el presupuesto de cada entidad actualizado con las modificaciones del año; el devengado es la fase del gasto en que se registra la obligación de pago. El avance es el devengado entre el PIM.`;
+  renderEjKpis(); renderEjc(); renderEjGr();
+  renderEjList('ch-ejgl', EJ.tipos.proyectos.gl, 'ejgl-desc', `Inversión de las municipalidades provinciales y distritales de cada departamento: devengado entre presupuesto (PIM) al ${fechaCorte()}, en %. Este gráfico no compara con ${EJ.cur - 1} a la misma fecha.`, 'Avance de la inversión municipal por departamento');
+  renderEjList('ch-ejsec', EJ.tipos[ejTipo].sector, 'ejsec-desc', `Gobierno nacional, ${ejTipoLbl(ejTipo)}: devengado entre presupuesto (PIM) al ${fechaCorte()}, en %.`, 'Avance del gobierno nacional por sector');
+  renderEjAviso();
+  document.getElementById('note-ej').textContent = 'Fuente: MEF, Consulta Amigable (Transparencia Económica), consultada el ' + fechaCorte() + '. El avance es el devengado entre el PIM.';
+}
+
+// ---------- Reglas fiscales ----------
+const yearsAxis = (a, b) => Array.from({length: b - a + 1}, (_, i) => String(a + i));
+const rgEnd = () => Math.max(2030, ...Object.values(RG.mmm).flatMap(t => Object.keys(t.re || {}).map(Number)));
+function rgSeries(key, y0, y1) {
+  const P = yearsAxis(y0, y1), M = Object.keys(RG.mmm);
+  const obs = P.map(y => RG.obs[key][y] ?? null);
+  const proj = M.map((name, j) => {
+    const t = RG.mmm[name][key] || {};
+    return {name, arr: P.map(y => +y >= EJ_firstProj(t) ? (t[y] ?? null) : null), color: j === M.length - 1 ? 'var(--s2)' : 'var(--s3)'};
+  });
+  return {P, obs, proj};
+}
+const EJ_firstProj = t => Math.min(...Object.keys(t).map(Number));   // el MMM trae el último año observado como punto de partida
+function ruleArr(P, regla, sign) {
+  if (regla === 'deficit_max') return P.map(y => { const v = topeAnio(+y); return v == null ? null : v * sign; });   // rige el último tope para los años siguientes
+  const r = Object.fromEntries(RG.rules.filter(x => x.regla === regla).map(x => [String(x.y), x.v * sign]));
+  return P.map(y => r[y] ?? null);
+}
+function renderReglas() {
+  if (!RG) return;
+  const {P, obs, proj} = rgSeries('re', 2010, rgEnd());
+  const tope = ruleArr(P, 'deficit_max', -1);
+  const leg = document.getElementById('leg-rgre');
+  leg.replaceChildren();
+  const addLeg = (lab, col, dash) => { const s = htmlEl('span', null, leg); const i = htmlEl('i', {cls: 'ln' + (dash ? ' dash' : '')}, s); if (!dash) i.style.background = col; s.appendChild(document.createTextNode(lab)); };
+  addLeg('Observado (BCRP)', 'var(--s1)'); proj.forEach(p => addLeg('Proyección ' + p.name, p.color));
+  { const s = htmlEl('span', null, leg); const sv = svgEl('svg', {width: 16, height: 10, 'aria-hidden': 'true'}, s); svgEl('line', {x1: 1, x2: 15, y1: 5, y2: 5, stroke: 'var(--ink)', 'stroke-width': 2.5}, sv); s.appendChild(document.createTextNode('Déficit máximo legal de cada año')); }
+  const marks = P.map((y, i) => ({i, v: tope[i]})).filter(k => k.v != null);
+  if (marks.length) { marks[0].label = 'Tope legal'; marks[0].below = true; }   // en la primera marca, lejos de las etiquetas finales
+  lineChart(document.getElementById('ch-rgre'), {P, idx: P.map((_, i) => i), H: 300, endLabels: true, endW: 170, hlines: [{v: 0}], marks,
+    endPeriod: p => p,
+    series: [...proj.map(p => ({arr: p.arr, label: 'Proyección ' + p.name, short: p.name, color: p.color})), {arr: obs, label: 'Observado', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Resultado económico observado, tope legal y proyecciones del MMM'});
+  // Cumplimiento de la regla de déficit en los años observados
+  const rows = RG.rules.filter(r => r.regla === 'deficit_max' && RG.obs.re[String(r.y)] != null)
+    .map(r => ({y: r.y, tope: r.v, def: -RG.obs.re[String(r.y)]}));
+  const fdef = v => fx(v, 2) + '%';   // dos decimales: el cumplimiento se decide por décimas
+  const co = document.getElementById('rg-callout');
+  co.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'Las reglas fiscales'}, co);
+  htmlEl('p', {text: 'El Decreto Legislativo N.° 1621 (julio de 2024) fija un retorno gradual a las reglas fiscales: el déficit del sector público no financiero no debe superar 2.8% del PBI en 2024, 2.2% en 2025, 1.8% en 2026, 1.4% en 2027 y 1.0% en 2028; la deuda bruta no debe exceder 38% del PBI y debe bajar a 30% o menos a más tardar en 2035. Además limita el crecimiento real del gasto corriente del gobierno general (sin mantenimiento), y el marco fiscal limita también el gasto no financiero. Según el Consejo Fiscal, en 2025 se cumplieron las reglas de déficit y de deuda pero no las de gasto; el Gobierno anunció en agosto de 2026 que propondrá cambiar las reglas.'}, co);
+  const p2 = htmlEl('p', null, co);
+  p2.textContent = rows.map(r => `En ${r.y}, el déficit fue ${fdef(r.def)} del PBI frente a un máximo de ${pct(r.tope, 1)}: ${+r.def.toFixed(1) <= r.tope ? (r.tope - r.def < 0.1 ? 'dentro del tope, por poco' : 'dentro del tope') : 'por encima del tope'}.`).join(' ') +
+    ` En los 12 meses a ${mLabel(D.kpi.re.m)}, el déficit es ${pct(-D.kpi.re.v, 1)} del PBI; el tope para todo ${D.kpi.re.m.slice(0, 4)} es ${pct(topeAnio(+D.kpi.re.m.slice(0, 4)), 1)}. El gasto suele concentrarse a fin de año, así que el dato de 12 meses no anticipa el cierre.`;
+  const mm = RG.mmm[Object.keys(RG.mmm).pop()] || {}, same = Object.keys(mm.re || {}).map(Number).filter(y => y >= +D.kpi.re.m.slice(0, 4) && topeAnio(y) != null && Math.abs(+(-mm.re[y]).toFixed(1) - topeAnio(y)) < 0.05);
+  document.getElementById('note-rgre').textContent = (same.length ? 'Redondeado a un decimal, el último MMM proyecta un déficit igual al máximo legal en ' + same.join(', ') + '. ' : '') +
+    'Observado: serie anual del BCRP. Proyecciones: MEF, Marco Macroeconómico Multianual (cuadro 7); el Consejo Fiscal considera referenciales las del MMM 2027-2030 porque se hicieron con las reglas vigentes antes del cambio anunciado. Topes: Decreto Legislativo N.° 1621, artículo 3.';
+  // Deuda
+  const metaR = RG.rules.find(r => r.regla === 'deuda_meta'), limR = RG.rules.find(r => r.regla === 'deuda_max');
+  const d = rgSeries('deuda', 2010, Math.max(rgEnd(), metaR ? metaR.y : 0));
+  const legd = document.getElementById('leg-rgdeu');
+  legd.replaceChildren();
+  const addD = (lab, col, dash) => { const s = htmlEl('span', null, legd); const i = htmlEl('i', {cls: 'ln' + (dash ? ' dash' : '')}, s); if (!dash) i.style.background = col; s.appendChild(document.createTextNode(lab)); };
+  addD('Observado (BCRP)', 'var(--s1)'); d.proj.forEach(p => addD('Proyección ' + p.name, p.color)); addD('Límite legal', null, true);
+  lineChart(document.getElementById('ch-rgdeu'), {P: d.P, idx: d.P.map((_, i) => i), H: 280, endLabels: true, endW: 170, endPeriod: p => p,
+    hlines: limR ? [{v: limR.v, label: 'Límite legal: ' + limR.v + '% del PBI'}] : [],
+    marks: metaR ? [{i: d.P.indexOf(String(metaR.y)), v: metaR.v, label: 'Meta ' + metaR.y + ': ' + metaR.v + '% o menos', below: true}] : [],
+    series: [...d.proj.map(p => ({arr: p.arr, label: 'Proyección ' + p.name, short: p.name, color: p.color})), {arr: d.obs, label: 'Observado', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Deuda pública observada y proyectada, % del PBI'});
+  document.getElementById('note-rgdeu').textContent = 'Observado: serie anual del BCRP (saldo de la deuda pública, % del PBI). Proyecciones: MEF, MMM (cuadro 19). Límite y meta: Decreto Legislativo N.° 1621, artículo 2.';
+}
+
+// ---------- Riesgo de la deuda (MEF) ----------
+function renderDeudaMef() {
+  if (!DM) { document.getElementById('card-dmef').hidden = true; return; }
+  const P = DM.P, idx = visRange(P, [DM.soles]);
+  const g = makeGroup();
+  lineChart(document.getElementById('ch-dmef'), {P, idx, H: 260, endLabels: true, endW: 130, group: g,
+    series: [{arr: DM.fija, label: 'A tasa fija', short: 'Tasa fija', color: 'var(--s2)'}, {arr: DM.soles, label: 'En soles', short: 'En soles', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Porcentaje de la deuda pública en soles y a tasa fija'});
+  lineChart(document.getElementById('ch-dmef2'), {P, idx, H: 180, endLabels: true, endW: 130, group: g, noZero: true,
+    series: [{arr: DM.vida, label: 'Vida media', color: 'var(--s1)'}, {arr: DM.dur, label: 'Duración', color: 'var(--s3)'}],
+    fmt: v => fx(v, 1) + ' años', tickFmt: tickNum, aria: 'Vida media y duración de la deuda pública'});
+  const i = lastIdx(DM.soles);
+  document.getElementById('dmef-title').textContent = 'Riesgo de la deuda: moneda, tasa y plazo (último dato: ' + pLabel(P[i]) + ')';
+  document.getElementById('note-dmef').textContent = `Fuente: MEF, Dirección General del Tesoro Público, archivo «Indicadores de Deuda Pública» (${DM.archivo}), cuyo último dato es de ${pLabel(P[i])}. El porcentaje en soles incluye las operaciones de cobertura. Vida media: plazo promedio ponderado, en años, de devolución del capital; duración: plazo promedio de pago del capital y los intereses en valor presente (definiciones del MEF).`;
+}
+
+Object.assign(TABLES, {
+  ejc: () => { const T = EJ.tipos[ejTipo], ys = EJ.years.map(String).filter(y => T.curvas[y]).reverse();
+    return [['Año'].concat(MES), ys.map(y => [y].concat((T.curvas[y][ejLv] || []).map(v => pct(v, 1))))]; },
+  ejgr: () => { const cy = String(EJ.cur), py = String(EJ.cur - 1);
+    return [['Gobierno regional', 'PIM ' + cy + ' (S/ millones)', 'Avance a fines de ' + mfLbl() + ' ' + cy, 'Avance a fines de ' + mfLbl() + ' ' + py, 'Avance al ' + fechaCorte()],
+      (EJ.tipos.proyectos.gr || []).map(g => [g.name, big(g.pim), pct((EJ.gr_mismo_mes[g.code] || {})[cy], 1), pct((EJ.gr_mismo_mes[g.code] || {})[py], 1), pct(g.av, 1)])]; },
+  ejgl: () => [['Departamento', 'PIM (S/ millones)', 'Devengado (S/ millones)', 'Avance'], (EJ.tipos.proyectos.gl || []).map(o => [o.name, big(o.pim), big(o.dev), pct(o.av, 1)])],
+  ejsec: () => [['Sector', 'PIM (S/ millones)', 'Devengado (S/ millones)', 'Avance'], (EJ.tipos[ejTipo].sector || []).map(o => [o.name, big(o.pim), big(o.dev), pct(o.av, 1)])],
+  rgre: () => { const {P, obs, proj} = rgSeries('re', 2010, rgEnd()), tope = ruleArr(P, 'deficit_max', -1);
+    return [['Año', 'Observado'].concat(proj.map(p => 'Proyección ' + p.name), ['Déficit máximo legal']), P.slice().reverse().map((y, k) => { const i = P.length - 1 - k; return [y, pct(obs[i], 2)].concat(proj.map(p => pct(p.arr[i], 2)), [pct(tope[i], 1)]); })]; },
+  rgdeu: () => { const {P, obs, proj} = rgSeries('deuda', 2010, rgEnd());
+    return [['Año', 'Observado'].concat(proj.map(p => 'Proyección ' + p.name)), P.slice().reverse().map((y, k) => { const i = P.length - 1 - k; return [y, pct(obs[i], 1)].concat(proj.map(p => pct(p.arr[i], 1))); })]; },
+  dmef: () => [['Trimestre', 'En soles', 'A tasa fija', 'Vida media (años)', 'Duración (años)'], desc(visRange(DM.P, [DM.soles])).map(i => [pLabel(DM.P[i]), pct(DM.soles[i], 1), pct(DM.fija[i], 1), fx(DM.vida[i], 1), fx(DM.dur[i], 1)])],
+});
+if (EJ) {
+  segInto('ej-tipo', [{k: 'proyectos', label: 'Inversión'}, {k: 'todo', label: 'Todo el gasto'}], ejTipo, k => { ejTipo = k; renderEjec(); refreshOpenTables(); });
+  segInto('ej-lv', LV, ejLv, k => { ejLv = k; renderEjc(); refreshOpenTables(); });
+}
+
+
+
+// ====================================================================================
+// v3: el Perú frente a la región (FMI)
+// ====================================================================================
+const FM = D.fmi;
+const FMI_MET = [
+  {k: 'res', label: 'Resultado', title: 'Resultado fiscal (gobierno general)', desc: 'Ingresos menos gasto total del gobierno general (préstamo o endeudamiento neto), en % del PBI. Negativo es déficit.'},
+  {k: 'prim', label: 'Resultado primario', title: 'Resultado primario', desc: 'El mismo resultado sin los intereses netos (pagados menos cobrados), en % del PBI. Por eso no coincide con el resultado primario del BCRP.'},
+  {k: 'deuda', label: 'Deuda bruta', title: 'Deuda pública bruta', desc: 'Deuda bruta del gobierno general, en % del PBI (para el Perú y algunos otros países, el FMI usa una cobertura más amplia).'},
+  {k: 'dneta', label: 'Deuda neta', title: 'Deuda pública neta', desc: 'Deuda bruta menos los activos financieros que son instrumentos de deuda (depósitos, títulos, préstamos y otros; no incluye acciones), en % del PBI. El FMI no la publica para todos los países y en algunos su definición varía.'},
+  {k: 'ing', label: 'Ingresos', title: 'Ingresos del Estado', desc: 'Ingresos totales del gobierno general (impuestos, contribuciones sociales, donaciones y otros), en % del PBI.'},
+  {k: 'gasto', label: 'Gasto', title: 'Gasto del Estado', desc: 'Gasto total del gobierno general, en % del PBI.'},
+];
+const FIRST_PROJ = FM ? FM.first_proj : 9999;   // año de la edición del FMI: ese año y los siguientes son proyecciones (en el WEO de oct-2026, 2025 es el último dato para los 13 países)
+const fmiFuente = s => (s || '').replace(/World Economic Outlook \((\w+) (\d{4})\)/, (_, m, y) => `Perspectivas de la economía mundial (WEO), ${({April: 'abril', October: 'octubre', January: 'enero', July: 'julio'})[m] || m} de ${y}`)
+  .replace(/Fiscal Monitor \((\w+) (\d{4})\)/, (_, m, y) => `Monitor Fiscal, ${({April: 'abril', October: 'octubre'})[m] || m} de ${y}`);
+let fmiMet = FMI_MET[0], fmiYi = 0, fmiCmp = 'CHL', fmiTodos = false;
+const fmiName = iso => (FM.paises.find(p => p.iso === iso) || {}).name || iso;
+const fmiYearLbl = y => y + (+y >= FIRST_PROJ ? ' (proyección)' : '');
+const fmiVal = (iso, yi) => (FM.m[fmiMet.k] && FM.m[fmiMet.k][iso] || [])[yi] ?? null;
+function setupFmi() {
+  if (!FM) { document.getElementById('tabbtn-region').hidden = true; return; }
+  segInto('fmi-metric', FMI_MET, fmiMet.k, k => { fmiMet = FMI_MET.find(m => m.k === k); renderFmi(); refreshOpenTables(); });
+  const ys = document.getElementById('fmi-year');
+  FM.years.forEach((y, i) => htmlEl('option', {value: i, text: fmiYearLbl(y)}, ys));
+  fmiYi = FM.years.indexOf(String(FIRST_PROJ - 1));
+  ys.value = fmiYi;
+  ys.addEventListener('change', () => { fmiYi = +ys.value; renderFmi(); refreshOpenTables(); });
+  const ps = document.getElementById('fmi-pais');
+  FM.paises.filter(p => p.iso !== 'PER').forEach(p => htmlEl('option', {value: p.iso, text: p.name}, ps));
+  ps.value = fmiCmp;
+  ps.addEventListener('change', () => { fmiCmp = ps.value; renderFmi(); refreshOpenTables(); });
+  document.getElementById('fmi-todos').addEventListener('change', e => { fmiTodos = e.target.checked; renderFmi(); refreshOpenTables(); });
+}
+function renderFmiCallout() {
+  const co = document.getElementById('fmi-callout');
+  co.replaceChildren();
+  htmlEl('div', {cls: 'kicker', text: 'Otra fuente, otra cobertura'}, co);
+  const c = FM.control;
+  htmlEl('p', {text: 'Para comparar países conviene una sola fuente con definiciones comunes. Por eso esta pestaña usa las estimaciones del FMI, que apuntan al gobierno general y son más homogéneas que las cifras oficiales de cada país (que miden el gobierno central, el sector público no financiero o el sector público con el banco central). Aun así, el FMI advierte que no son del todo comparables: para algunos países usa otra cobertura (México, sector público; Ecuador y Uruguay, sector público no financiero; en deuda, Argentina, gobierno central, y el Perú, sector público no financiero).'}, co);
+  const same = pct(c.deuda.fmi, 1) === pct(c.deuda.bcrp, 1);
+  htmlEl('p', {text: `Para el Perú, el resultado del FMI es del gobierno general, que excluye a las empresas públicas; el BCRP, que usa el resto del tablero, mide el sector público no financiero, que las incluye. En ${c.res.y}, el resultado fue ${pct(c.res.fmi, 1)} del PBI según el FMI y ${pct(c.res.bcrp, 1)} según el BCRP. La deuda del FMI para el Perú cubre, como la del BCRP, el sector público no financiero, y por eso ${same ? 'coincide: ' + pct(c.deuda.fmi, 1) + ' en ambas fuentes' : 'casi coincide (' + pct(c.deuda.fmi, 1) + ' y ' + pct(c.deuda.bcrp, 1) + ')'}. Desde ${FIRST_PROJ}, los valores son proyecciones del FMI.`}, co);
+}
+function renderFmi() {
+  if (!FM) return;
+  if (!FM.m[fmiMet.k]) fmiMet = FMI_MET.find(m => FM.m[m.k]) || fmiMet;   // indicador que el FMI dejó de publicar
+  renderFmiCallout();
+  const y = FM.years[fmiYi], y19 = FM.years.indexOf('2019');
+  document.getElementById('fmi-title').textContent = fmiMet.title + ', ' + fmiYearLbl(y);
+  document.getElementById('fmi-desc').textContent = fmiMet.desc + ' La marca vertical es el valor de 2019, antes de la pandemia. España y Estados Unidos (barras más claras) son referencias fuera de la región y no entran en la mediana.';
+  document.getElementById('fmi-leg1').textContent = y;
+  document.getElementById('fmi-leg2').textContent = '2019';
+  const items = FM.paises.map(p => ({label: p.name, v: fmiVal(p.iso, fmiYi), ref: fmiYi !== y19 ? fmiVal(p.iso, y19) : null, sel: p.iso === 'PER',
+    color: p.iso === 'PER' ? 'var(--s1)' : FM.region.includes(p.iso) ? 'var(--r3)' : 'var(--r1)', code: p.iso})).filter(it => it.v != null);
+  const med = (FM.mediana[fmiMet.k] || [])[fmiYi];
+  if (med != null) items.push({label: 'Mediana regional', v: med, color: 'var(--sys)', ref: fmiYi !== y19 ? FM.mediana[fmiMet.k][y19] : null});
+  items.sort((a, b) => b.v - a.v);
+  hbarChart(document.getElementById('ch-fmir'), items, {rowH: 22, labW: 130, fmt: v => pct(v, 1), tickFmt: tickPct, vLabel: y, refLabel: '2019',
+    aria: 'Ranking de países: ' + fmiMet.title});
+  // Países sin dato en el año elegido: no publicado nunca, o fuera del rango de su serie.
+  const sinDato = FM.paises.filter(p => fmiVal(p.iso, fmiYi) == null).map(p => {
+    const yrs = FM.years.filter((_, i) => fmiVal(p.iso, i) != null);
+    if (!yrs.length) return p.name + ' (el FMI no publica este indicador para el país)';
+    return p.name + (+yrs[yrs.length - 1] < +y ? ' (su serie llega hasta ' + yrs[yrs.length - 1] + ')' : ' (su serie empieza en ' + yrs[0] + ')');
+  });
+  document.getElementById('note-fmir').textContent = sinDato.length ? 'Sin dato del FMI para ' + y + ': ' + sinDato.join('; ') + '.' : '';
+  // Evolución: Perú, país elegido y mediana regional
+  const P = FM.years, idx = P.map((_, i) => i), cmp = fmiName(fmiCmp);
+  const per = FM.m[fmiMet.k].PER, oth = FM.m[fmiMet.k][fmiCmp] || [], md = FM.mediana[fmiMet.k];
+  document.getElementById('fmi-title2').textContent = fmiMet.title + ': el Perú, ' + cmp + ' y la región';
+  document.getElementById('fmi-desc2').textContent = fmiMet.desc + ' La mediana regional es el valor central de los otros diez países de América Latina del gráfico (sin el Perú), calculado con los que tienen dato si son al menos seis.' + (fmiTodos ? ' En gris claro, los demás países; pase el cursor para ver cada valor. Si un valor extremo aplastara al resto, el eje se recorta.' : '');
+  const leg = document.getElementById('leg-fmit');
+  leg.replaceChildren();
+  [['Perú', 'var(--s1)'], [cmp, 'var(--s2)']].forEach(([t, c]) => { const s = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln'}, s).style.background = c; s.appendChild(document.createTextNode(t)); });
+  const s = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln dash'}, s); s.appendChild(document.createTextNode('Mediana regional'));
+  if (fmiTodos) { const s2 = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln'}, s2).style.background = 'var(--r1)'; s2.appendChild(document.createTextNode('Los demás países')); }
+  const pi = P.indexOf(String(FIRST_PROJ));
+  // «Ver todos»: los demás países en gris claro, debajo; el Perú y el país elegido encima, con color.
+  const others = fmiTodos ? FM.paises.filter(p => p.iso !== 'PER' && p.iso !== fmiCmp)
+    .map(p => ({arr: FM.m[fmiMet.k][p.iso] || [], label: p.name, color: 'var(--r1)', w: 1.2, noEnd: true})) : [];
+  lineChart(document.getElementById('ch-fmit'), {P, idx, H: 300, endLabels: true, endW: 150, hlines: fmiMet.k === 'res' || fmiMet.k === 'prim' ? [{v: 0}] : [],
+    vline: pi > 0 ? {i: pi, label: 'Proyecciones del FMI'} : null, clip: fmiTodos,
+    series: [...others, {arr: oth, label: cmp, color: 'var(--s2)'}, {arr: per, label: 'Perú', color: 'var(--s1)', w: 2.5}],
+    refs: [{arr: md, label: 'Mediana regional'}], noZero: !(fmiMet.k === 'res' || fmiMet.k === 'prim'),
+    endPeriod: p => p + (+p >= FIRST_PROJ ? ', proy.' : ''),
+    fmt: v => pct(v, 1), aria: fmiMet.title + ': el Perú, ' + cmp + ' y la región'});
+  const f = FM.fuentes[fmiMet.k] || {};
+  const cmpYrs = FM.years.filter((_, i) => oth[i] != null);
+  const aviso = !cmpYrs.length ? `El FMI no publica este indicador para ${cmp}: el gráfico muestra solo el Perú y la mediana regional. `
+    : (+cmpYrs[cmpYrs.length - 1] < +P[P.length - 1] ? `La serie de ${cmp} llega hasta ${cmpYrs[cmpYrs.length - 1]}. ` : '');
+  document.getElementById('note-fmi').textContent = aviso + `Fuente: FMI, ${fmiFuente(f.source)} (actualizado por el FMI el ${f.modificado ? dLabel(f.modificado) : '—'}), consultado el ${dLabel(FM.descargado)}. Desde ${FIRST_PROJ}, proyecciones del FMI. La mediana regional es cálculo propio (se muestra cuando hay datos de al menos seis países).`;
+}
+Object.assign(TABLES, {
+  fmir: () => [['País', fmiMet.title + ' ' + FM.years[fmiYi], '2019'], FM.paises.map(p => [p.name, pct(fmiVal(p.iso, fmiYi), 1), pct(fmiVal(p.iso, FM.years.indexOf('2019')), 1)]).concat([['Mediana regional', pct(FM.mediana[fmiMet.k][fmiYi], 1), pct(FM.mediana[fmiMet.k][FM.years.indexOf('2019')], 1)]])],
+  fmit: () => [['Año', 'Perú', fmiName(fmiCmp), 'Mediana regional'], desc(FM.years.map((y, i) => i)).map(i => [fmiYearLbl(FM.years[i]), pct(FM.m[fmiMet.k].PER[i], 1), pct((FM.m[fmiMet.k][fmiCmp] || [])[i], 1), pct(FM.mediana[fmiMet.k][i], 1)])],
+});
+setupFmi();
+
+// ---------- Frecuencia y fecha de cada dato ----------
+// Antigüedad: meses entre el fin del periodo del último dato y la fecha en que se generó el tablero.
+const periodEnd = p => {   // 'YYYY', 'YYYY-Tn', 'YYYY-MM' o 'YYYY-MM-DD' → [año, mes] del último mes del periodo
+  if (p.length === 4) return [+p, 12];
+  if (isQ(p)) return [+p.slice(0, 4), +p[6] * 3];
+  return [+p.slice(0, 4), +p.slice(5, 7)];
+};
+function antig(p) {
+  const [y, m] = periodEnd(p), g = D.generado, gy = +g.slice(0, 4), gm = +g.slice(5, 7);
+  const n = (gy - y) * 12 + (gm - m) - 1;   // meses completos transcurridos desde el fin del periodo
+  if (p.length === 10) return 'al día';
+  return n <= 0 ? 'menos de 1 mes' : n === 1 ? '1 mes' : n < 24 ? n + ' meses' : fx(n / 12, 1) + ' años';
+}
+const lastNonNull = (P, arr) => { const i = lastIdx(arr); return i < 0 ? null : P[i]; };
+function renderFrescura() {
+  const rows = [];
+  const add = (bloque, fuente, frec, ult, extra) => { if (ult) rows.push([bloque, fuente, frec, (ult.length === 10 ? dLabel(ult) : pLabel(ult)) + (extra || ''), antig(ult)]); };
+  add('Ingresos, gastos y resultado fiscal (Panorama, Ingresos, Gasto)', 'BCRP', 'Mensual', D.hasta);
+  add('Deuda pública: bruta, neta, externa e interna; tenencia de bonos', 'BCRP', 'Trimestral', D.kpi.deuda.q);
+  add('Series anuales: resultado desde 1970, impuestos y gasto por tipo, intereses', 'BCRP', 'Anual', lastNonNull(A.P, A.re));
+  if (R) {
+    add('Recaudación, inversión y gasto por departamento', 'BCRP (con datos de la SUNAT y el MEF)', 'Mensual; el tablero lo suma por año', R.partial ? R.partial.m : String(R.years[R.years.length - 1]), R.partial ? ' (' + R.partial.y + ' = ene–' + mon(R.partial.m) + ')' : '');
+    add('Población por departamento', 'INEI', 'Anual', String(R.pop_last), R.years[R.years.length - 1] > R.pop_last ? ' (se usa también para ' + R.years[R.years.length - 1] + ')' : '');
+  }
+  if (EJ) add('Ejecución del presupuesto (Presupuesto)', 'MEF, Consulta Amigable', 'Continua; el tablero toma la del día de su actualización', EJ.corte, '; comparaciones al cierre de ' + MESL[EJ.mes_completo - 1]);
+  if (RG) {
+    const last = Object.keys(RG.mmm).pop();
+    if (last) rows.push(['Proyecciones de déficit y deuda (Reglas fiscales)', 'MEF, Marco Macroeconómico Multianual', 'Anual (se aprueba antes del 30 de agosto; en abril, una actualización)', last + ', proyecta hasta ' + Math.max(...Object.keys(RG.mmm[last].re || {}).map(Number)), '—']);
+    rows.push(['Topes de déficit y deuda', 'Decreto Legislativo N.° 1621', 'Cambia solo con una norma', 'vigente desde julio de 2024', '—']);
+  }
+  if (FM) rows.push(['Comparación con otros países (Perú en la región)', 'FMI, Perspectivas de la economía mundial (WEO) y Monitor Fiscal', 'Dos ediciones al año (abril y octubre)', fmiFuente((FM.fuentes.res || {}).source) + '; datos hasta ' + FM.years[FM.years.length - 1] + ' (desde ' + FIRST_PROJ + ', proyecciones)', '—']);
+  if (DM) add('Riesgo de la deuda: % en soles, a tasa fija, vida media y duración', 'MEF, Dirección General del Tesoro Público', 'Trimestral', lastNonNull(DM.P, DM.soles));
+  const wrap = document.getElementById('tb-frescura');
+  wrap.replaceChildren();
+  const t = htmlEl('table', {cls: 'txt'}, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  ['Datos', 'Fuente', 'Frecuencia', 'Último dato', 'Antigüedad del último dato'].forEach(x => htmlEl('th', {text: x, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => { const td = htmlEl('td', {text: c}, row); td.style.whiteSpace = 'normal'; }); });
+  document.getElementById('note-frescura').textContent = 'La antigüedad son los meses completos entre el fin del periodo del último dato y la fecha en que se actualizó este tablero (' + dLabel(D.generado) + '); no es el calendario oficial de publicación de cada fuente. Las evaluaciones del Consejo Fiscal se publican sin fecha fija, salvo la del MMM, que sale junto con él.';
+}
+
+
+// ---------- Presión tributaria ----------
+function renderPres() {
+  const idx = visRange(MONTHS, [S.trib12]);
+  lineChart(document.getElementById('ch-pres'), {P: MONTHS, idx, H: 260, endLabels: true, endW: 130, noZero: true,
+    series: [{arr: S.trib12, label: 'Presión tributaria', short: '12 meses', color: 'var(--s1)', w: 2.5}],
+    fmt: v => pct(v, 1), aria: 'Presión tributaria, 12 meses, % del PBI'});
+  const rows = A.P.map((p, i) => ({p, v: A.trib[i]})).filter(r => r.v != null);
+  const P = rows.map(r => r.p);
+  lineChart(document.getElementById('ch-pres-a'), {P, idx: P.map((_, i) => i), H: 200, endLabels: true, endW: 130, noZero: true,
+    series: [{arr: rows.map(r => r.v), label: 'Presión tributaria anual', short: 'Anual', color: 'var(--s1)'}],
+    fmt: v => pct(v, 1), aria: 'Presión tributaria anual desde ' + P[0]});
+  // Contexto: desde cuándo no se veía un nivel así (serie de 12 meses).
+  const i = lastIdx(S.trib12), v = S.trib12[i];
+  let j = i - 1;
+  while (j >= 0 && (S.trib12[j] == null || S.trib12[j] < v)) j--;
+  const first = firstIdx(S.trib12);
+  const ctx = j < first ? `el nivel más alto de la serie mensual (desde ${mLabel(MONTHS[first])})` : `el nivel más alto desde ${mLabel(MONTHS[j])} (${pct(S.trib12[j], 1)})`;
+  const yi = i - 12;
+  const mx = rows.reduce((a, b) => b.v > a.v ? b : a);
+  const near = rows.filter(r => r !== mx && mx.v - r.v < 0.15).map(r => r.p);   // años prácticamente empatados con el máximo
+  document.getElementById('note-pres').textContent = `En los 12 meses a ${mLabel(MONTHS[i])}, la presión tributaria fue ${pct(v, 1)} del PBI (${pct(S.trib12[yi], 1)} un año antes): ${ctx}. Máximo anual: ${pct(mx.v, 1)} en ${mx.p}${near.length ? ' (casi igual en ' + near.join(', ') + ')' : ''}. ` +
+    'Mensual: cálculo propio (suma de 12 meses entre el PBI de 12 meses implícito en la serie del BCRP). Anual: serie del BCRP.';
+}
+Object.assign(TABLES, {
+  pres: () => [['Mes', 'Presión tributaria (12 meses)', 'Ingresos corrientes (12 meses)'], desc(visRange(MONTHS, [S.trib12])).map(i => [mLabel(MONTHS[i]), pct(S.trib12[i], 2), pct(S.ing12[i], 2)])],
+});
+
+// ---------- Filtro de periodo ----------
+const seg = document.getElementById('range');
+for (const r of RANGES) {
+  const b = htmlEl('button', {type: 'button', text: r.label, 'aria-pressed': String(r === range)}, seg);
+  b.addEventListener('click', () => {
+    range = r;
+    seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    renderVisible();
+    document.querySelectorAll('.table-wrap').forEach(w => { if (!w.hidden) fillTable(w.id.slice(3)); });
+  });
+}
+
+// ---------- Pestañas ----------
+const TABS = ['panorama', 'ingresos', 'gasto', 'deuda', 'reglas', 'region', 'presupuesto', 'regiones', 'lee'];
+let tab = 'panorama';
+const RENDER = {
+  panorama: () => { renderSpark(); renderRes(); renderIg(); renderLong(); },
+  ingresos: () => { renderPres(); renderTax(); renderTaxr(); renderComp(); },
+  gasto: () => { renderGas(); renderGr(); renderInv(); },
+  presupuesto: () => renderEjec(),
+  deuda: () => { renderDebt(); renderDcomp(); renderNr(); renderDeudaMef(); renderInt(); },
+  reglas: () => renderReglas(),
+  region: () => renderFmi(),
+  regiones: () => renderRegions(),
+  lee: () => renderFrescura(),
+};
+function renderVisible() { RENDER[tab](); refreshOpenTables(); }
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('range-wrap').hidden = ['presupuesto', 'reglas', 'region', 'regiones', 'lee'].includes(id);
+  hideTip();
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+document.getElementById('lede').textContent = 'Cuánto recauda y cuánto gasta el Estado, cuánto se endeuda y cómo se reparten la recaudación y la inversión pública entre los departamentos. Datos mensuales a ' + mLabel(LAST_M) + '; deuda al ' + pLabel(D.kpi.deuda.q) + '.';
+legendInto('leg-tax', TAX, 'Ingresos tributarios');
+legendInto('leg-gas', SPEND, 'Gasto no financiero');
+legendInto('leg-inv', INV, 'Total');
+legendInto('leg-dcomp', DCOMP, 'Deuda bruta');
+legendInto('leg-dep', DEPINV, 'Total');
+const foot = document.getElementById('foot');
+[
+  'Fuentes: BCRPData (BCRP, con información del MEF, la SUNAT, el Banco de la Nación, EsSalud y las empresas estatales) para las operaciones del sector público, los ingresos, el gasto, la deuda y los datos por departamento; MEF (Consulta Amigable, Marco Macroeconómico Multianual e indicadores de deuda) para la ejecución del presupuesto, las proyecciones y el riesgo de la deuda; Decreto Legislativo N.° 1621 para las reglas fiscales; FMI (World Economic Outlook y Fiscal Monitor) para la comparación con otros países; INEI para la población.',
+  'Son cálculos propios: los flujos de 12 meses en % del PBI (salvo el resultado económico, que es del BCRP), las variaciones reales, la inversión acumulada en el año, la participación de no residentes en los bonos, los valores por habitante, el avance acumulado mes a mes del presupuesto y la mediana regional.',
+  'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, foot));
+{
+  const p = htmlEl('p', null, foot);
+  p.appendChild(document.createTextNode('Cada fuente tiene su propia frecuencia y fecha de corte: '));
+  const a = htmlEl('a', {href: '#lee', text: 'ver la frecuencia y la fecha de cada dato'}, p);
+  a.addEventListener('click', e => { e.preventDefault(); showTab('lee', true); document.getElementById('datos-frescura').scrollIntoView(); });
+  p.appendChild(document.createTextNode('.'));
+}
+
+if (!EJ) document.getElementById('tabbtn-presupuesto').hidden = true;
+if (!RG) document.getElementById('tabbtn-reglas').hidden = true;
+renderKpis();
+renderPanCallout();
+setupRegions();
+const startTab = location.hash.slice(1);
+showTab(TABS.includes(startTab) ? startTab : 'panorama', false);
+let rt;
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

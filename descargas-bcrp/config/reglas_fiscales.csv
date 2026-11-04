@@ -1,0 +1,9 @@
+regla,anio,valor_pct_pbi,fuente
+deficit_max,2024,2.8,"Decreto Legislativo N.° 1621, art. 3 (El Peruano, 08-07-2024)"
+deficit_max,2025,2.2,"Decreto Legislativo N.° 1621, art. 3 (El Peruano, 08-07-2024)"
+deficit_max,2026,1.8,"Decreto Legislativo N.° 1621, art. 3 (El Peruano, 08-07-2024)"
+deficit_max,2027,1.4,"Decreto Legislativo N.° 1621, art. 3 (El Peruano, 08-07-2024)"
+deficit_max,2028,1.0,"Decreto Legislativo N.° 1621, art. 3 (El Peruano, 08-07-2024); desde 2028 vuelve la regla del DL 1276"
+deuda_max,2024,38,"Decreto Legislativo N.° 1621, art. 2 (El Peruano, 08-07-2024): no exceder 38 % del PBI desde 2024"
+deuda_meta,2035,30,"Decreto Legislativo N.° 1621, art. 2 (El Peruano, 08-07-2024): 30 % del PBI o menos como máximo en 2035"
+deficit_max,2029,1.0,"Decreto Legislativo N.° 1276, art. 6.1 b): déficit no mayor a 1% del PBI; vuelve a regir tras el DL 1621 y se mantiene en los años siguientes"

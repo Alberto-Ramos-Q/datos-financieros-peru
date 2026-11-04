@@ -6,6 +6,10 @@ Lee lo que calcula `indicadores_datos.py` (correrlo antes):
 - `config/indicadores.csv`: catálogo (etiqueta, unidad, decimales, sentido, frecuencia, rezago, fórmula corta y
   detallada, cuadros SBS, desde y primer mes del sistema, cobertura, notas);
 - `data/_control/indicadores_validacion.csv`: comparación con lo publicado por la SBS → `valid` y `validNote`;
+- `data/processed/indicadores/repeticiones.json`: entidad-mes en que la SBS repite las cifras de otro mes (`rep`:
+  [mes, entidad, mes repetido, alcance «fila» / «ranking», motivo]) y los huecos que dejan en cada indicador de la
+  entidad (`repGap`: {entidad: {indicador: [[desde, hasta, n.º de rep]]}}, también los de 12 meses). La página
+  muestra en tablas, fichas y KPI el último dato válido con su mes y el motivo, y en los gráficos el motivo del hueco;
 y además:
 - `data/processed/clasificaciones_informes.parquet`: última clasificación vigente de cada clasificadora por
   entidad (regla de `leer_clasificadoras.py`: un informe rige desde el mes de su comité —o abril/octubre si no se
@@ -35,11 +39,13 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from visual_mora import PROJECT_DIR, SUBSYSTEMS, artifact_version, month_key, month_range  # noqa: E402
+from visual_mora import (PROJECT_DIR, SUBSYSTEMS, artifact_version, debtor_error_notes, month_key,  # noqa: E402
+                         month_range)
 from visual_solvencia import LIMITS  # noqa: E402
 from visual_eeff import encode  # noqa: E402
 from leer_clasificadoras import GRADES, VIGENCIA_MESES, add_months, known_month  # noqa: E402
-from indicadores_datos import GROUPS, OUT_DIR, OUT_LONG, OUT_SCOPES, CATALOG_CSV, CONTROL_CSV, CUADROS  # noqa: E402
+from indicadores_datos import (GROUPS, OUT_DIR, OUT_LONG, OUT_REPEATS, OUT_SCOPES, CATALOG_CSV, CONTROL_CSV,  # noqa: E402
+                               CUADROS)
 
 TEMPLATE = PROJECT_DIR / "src" / "plantillas" / "indicadores.html"
 OUT = PROJECT_DIR / "outputs" / "indicadores_ssff.html"
@@ -287,6 +293,12 @@ def build_data() -> dict:
     lg = [next((row[1] for row in reversed(LIMITS) if mm >= row[0]), None) for mm in months]
     hasta = month_key(int(long["periodo"].max()))
     valid, valid_note = build_valid(cat)
+    # Deudores con errores de origen (errores_origen.py): esos subsistema-mes quedan sin `deud` en los datos; la
+    # página explica el hueco en la nota de la celda y en el tooltip de los gráficos (mismo formato que mora_ssff).
+    deu_err, deu_tot_err = debtor_error_notes()
+    # Cifras repetidas de otro mes (errores_origen.RANKING_REPEATS): las series de entidad ya vienen sin esos valores.
+    reps = json.loads(OUT_REPEATS.read_text(encoding="utf-8")) if OUT_REPEATS.exists() else {"rep": [], "repGap": {}}
+    rep_gap = {e: g for e, g in reps["repGap"].items() if e in scopes}
     return {
         "generado": dt.date.today().isoformat(),
         "months": [month_key(mm) for mm in months],
@@ -304,6 +316,10 @@ def build_data() -> dict:
         "ratingHist": hist,
         "ratingScale": SBS_SCALE,
         "limits": {"lg": lg},
+        "deuErr": deu_err,
+        "deuTotErr": deu_tot_err,
+        "rep": [r for r in reps["rep"] if r[1] in scopes],
+        "repGap": rep_gap,
     }
 
 

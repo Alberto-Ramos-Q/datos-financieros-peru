@@ -652,6 +652,18 @@ const isEnt = k => k.includes('/');
 const scObj = k => isEnt(k) ? D.ents[k.split('/')[1]] : D.scopes[k];
 const cache = new Map();
 function memo(key, tag, fn) { const k = key + '|' + tag; if (!cache.has(k)) cache.set(k, fn()); return cache.get(k); }
+// Cifras repetidas de otro mes en la serie de una entidad (errores_origen.RANKING_REPEATS): D.rep = [[mes, ámbito, mes
+// repetido, alcance, motivo]]. «fila»: ese mes la entidad no tiene dato propio (vacío en todas las líneas); «flujo»: tiene
+// balance, pero sus cálculos de 12 meses usarían las cifras de un mes repetido. Se busca por entidad (su serie es una
+// sola aunque cambie de subsistema). Tablas y fichas muestran el último dato válido con su mes; los gráficos, el motivo.
+let REP = new Map();
+const entId = k => k && isEnt(k) ? k.split('/')[1] : null;
+const repAt = (key, j) => { const e = entId(key); return e == null || j == null || j < 0 || j >= N ? null : REP.get(e + '|' + MONTHS[j]) || null; };
+const repText = r => r[3] === 'fila' ? 'en ' + mShortE(r[0]) + ' la SBS repitió las cifras de ' + mShortE(r[2]) + ' en sus cuadros (' + r[4] + ')'
+  : 'los cálculos de 12 meses de ' + mShortE(r[0]) + ' usarían las cifras de ' + mShortE(r[2]) + ' (' + r[4] + ')';
+const mShortE = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+// Meses repetidos («fila») de la entidad: no cuentan en los promedios de 12 saldos (se promedian los demás).
+const repSkip = key => memo(key, 'rs', () => new Set((D.rep || []).filter(r => r[3] === 'fila' && r[1].split('/')[1] === entId(key)).map(r => MONTHS.indexOf(r[0]))));
 // Serie completa del nodo i (largo N; null fuera del rango). V[i] null = «cero en todo el rango»: vale 0 en los
 // meses en que el ámbito tiene ese estado (total activo para el balance, resultado neto para el EGP) y la
 // línea está vigente; null en el resto.
@@ -711,16 +723,17 @@ function FX12(key, i) {
     return flowOf(acc);
   });
 }
-// Promedio de los 12 saldos de fin de mes (t−11 … t); null si falta alguno.
-function avg12(s) {
+// Promedio de los 12 saldos de fin de mes (t−11 … t); null si falta alguno. Los meses de `skip` (cifras repetidas por la
+// SBS en la serie de una entidad) no cuentan: se promedian los demás.
+function avg12(s, skip) {
   return s.map((_, j) => {
     if (j < 11) return null;
-    let sum = 0;
-    for (let k = j - 11; k <= j; k++) { if (s[k] === null) return null; sum += s[k]; }
-    return sum / 12;
+    let sum = 0, n = 0;
+    for (let k = j - 11; k <= j; k++) { if (s[k] === null) { if (skip && skip.has(k)) continue; return null; } sum += s[k]; n++; }
+    return n ? sum / n : null;
   });
 }
-const AP = key => memo(key, 'ap', () => avg12(S(key, TA)));
+const AP = key => memo(key, 'ap', () => avg12(S(key, TA), repSkip(key)));
 const at = (arr, j) => arr && j != null && j >= 0 && j < N ? arr[j] : null;
 const sumS = (key, ks, j, fn = S) => { let t = 0; for (const k of ks) { const v = at(fn(key, NI[k]), j); if (v == null) return null; t += v; } return t; };
 const sumF = (key, ks, j) => sumS(key, ks, j, F);
@@ -904,7 +917,8 @@ function lineChart(box, cfg) {
     const xi = x(i);
     cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
     series.forEach((s, j) => { const v = s.get(i); dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible'); if (v != null) { dots[j].setAttribute('cx', xi); dots[j].setAttribute('cy', y(v)); } });
-    const rows = series.map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
+    const rows = series.map(s => { const v = s.get(i), r = v == null ? repAt(s.key || state.scope, i) : null;
+      return r ? {value: 'sin dato', label: s.label + ': ' + repText(r), color: s.color} : {value: fmt(v), label: s.label, color: s.color}; });
     showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
   }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); });
 }
@@ -953,7 +967,7 @@ function areaChart(box, cfg) {
   timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
     const xi = x(i);
     cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
-    if (!has(i)) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: 'Sin dato'}]); return; }
+    if (!has(i)) { const r = repAt(state.scope, i); showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: r ? 'sin dato' : '—', label: r ? 'Sin dato: ' + repText(r) : 'Sin dato'}]); return; }
     const rows = layers.slice().reverse().filter(l => l.get(i)).map(l => ({value: pct(share(l, i), 1), label: l.label + ' · ' + money(l.get(i)), color: l.color, sq: true}));
     rows.unshift({value: money(tot(i)), label: cfg.totalName || 'Total'});
     showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), rows);
@@ -1051,10 +1065,19 @@ function seriesTable(wrap, idx, series, fmt) {
   series.forEach(s => htmlEl('th', {text: s.label}, hr));
   const tb = htmlEl('tbody', null, t);
   for (const i of idx.slice().reverse()) {
-    if (!series.some(s => s.get(i) != null)) continue;
+    if (!series.some(s => s.get(i) != null || repAt(s.key || state.scope, i))) continue;
     const tr = htmlEl('tr', null, tb);
     htmlEl('td', {text: mLabel(MONTHS[i])}, tr);
-    series.forEach(s => htmlEl('td', {text: fmt(s.get(i))}, tr));
+    series.forEach(s => {
+      const v = s.get(i), r = v == null ? repAt(s.key || state.scope, i) : null;
+      if (!r) { htmlEl('td', {text: fmt(v)}, tr); return; }
+      // Cifras repetidas por la SBS: el último dato válido (hasta 3 meses antes), con su mes y el motivo (regla «sin huecos»).
+      for (let j = i - 1; j >= Math.max(0, i - 3); j--) {
+        const w = s.get(j);
+        if (w != null && !repAt(s.key || state.scope, j)) { htmlEl('td', {text: fmt(w) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'na', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + repText(r) + '.'}, tr); return; }
+      }
+      htmlEl('td', {text: '—', cls: 'na', title: 'Sin dato: ' + repText(r) + '.'}, tr);
+    });
   }
 }
 const TABLES = {};
@@ -1165,8 +1188,16 @@ function renderScopeNote() {
   const b = htmlEl('b', {text: nameOf(key, j ?? z)}, box);
   const parts = e.m.map(([s, x, y]) => SUB_BY[s].l + ' (' + mLabel(MONTHS[x]) + ' – ' + mLabel(MONTHS[y]) + (e.n[s] && e.n[s] !== b.textContent ? ', como ' + e.n[s] : '') + ')');
   box.append('. Datos de ' + mLabel(MONTHS[a]) + ' a ' + mLabel(MONTHS[z]) + (e.m.length > 1 ? '; estuvo en ' + parts.join(' y en ') + '. Su serie no se corta con el cambio de subsistema' : '') + '.');
+  const rp = repAt(key, state.mi);
+  // Meses repetidos que quedan entre el último dato mostrado y el mes elegido (p. ej. el último mes de una entidad disuelta).
+  const between = j == null ? [] : (D.rep || []).filter(r => r[3] === 'fila' && r[1].split('/')[1] === entId(key) && MONTHS.indexOf(r[0]) > j && MONTHS.indexOf(r[0]) <= state.mi);
   if (j == null) box.append(' No hay datos de la entidad en ' + mLabel(MONTHS[state.mi]) + ': elija un mes desde ' + mLabel(MONTHS[a]) + '.');
-  else if (j !== state.mi) box.append(' No reporta en ' + mLabel(MONTHS[state.mi]) + ': se muestra su último mes, ' + mLabel(MONTHS[j]) + '.');
+  else if (rp && rp[3] === 'fila') box.append(' Sin dato propio de ' + mLabel(MONTHS[state.mi]) + ': ' + repText(rp) + '. Se muestra su último dato válido, de ' + mLabel(MONTHS[j]) + '; en los gráficos ese mes queda como un hueco.');
+  else if (j !== state.mi) box.append(' No reporta en ' + mLabel(MONTHS[state.mi]) + ': se muestra su último mes, ' + mLabel(MONTHS[j]) + '.' + between.map(r => ' ' + mLabel(r[0]) + ' no se muestra: ' + repText(r) + '.').join(''));
+  if (rp && rp[3] === 'flujo') box.append(' Los flujos de 12 meses y la variación anual de ' + mLabel(MONTHS[state.mi]) + ' no se calculan: ' + repText(rp) + '.');
+  const reps = (D.rep || []).filter(r => r[3] === 'fila' && r[1].split('/')[1] === entId(key));
+  if (j != null && reps.some(r => j > MONTHS.indexOf(r[0]) && j <= MONTHS.indexOf(r[0]) + 11))
+    box.append(' El activo promedio de 12 meses (y los saldos promedio de los rendimientos) se calcula sin ' + reps.map(r => mLabel(r[0])).join(' ni ') + ', meses en que la SBS repitió las cifras de otro mes.');
 }
 
 // ---------- Resumen ----------
@@ -1204,7 +1235,7 @@ function renderKpis() {
     const v = t.f(j), vp = jp >= 0 ? t.f(jp) : null;
     if (v == null) {
       htmlEl('div', {cls: 'val', text: '—'}, el);
-      htmlEl('div', {cls: 'sub', text: t.flow ? (j < J2011 ? 'Disponible desde ' + mLabel(MONTHS[J2011]) : 'Sin 12 meses seguidos de datos') : 'Sin dato'}, el);
+      htmlEl('div', {cls: 'sub', text: t.flow ? (j < J2011 ? 'Disponible desde ' + mLabel(MONTHS[J2011]) : repAt(key, j) ? 'Sin dato: ' + repText(repAt(key, j)) : 'Sin 12 meses seguidos de datos') : 'Sin dato'}, el);
       continue;
     }
     const ecScope = key === 'empresas-credito' || (isEnt(key) && entSubAt(key, j) === 'empresas-credito');
@@ -1567,7 +1598,7 @@ function renderAcct() {
   $('share-title').textContent = growth ? name + ', variación anual' : name + ', % ' + denName;
   $('share-desc').textContent = growth ? cmpTxt + 'Saldo frente al mismo mes del año anterior, en soles corrientes: incluye el efecto del tipo de cambio sobre los saldos en moneda extranjera.'
     : cmpTxt + (keys.length > 1 ? 'Los porcentajes sí se pueden comparar entre entidades de distinto tamaño.' : 'Peso de la cuenta en el total, mes a mes.');
-  const s2 = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25,
+  const s2 = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), key: k, color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25,
     get: growth ? j => { const a = at(S(k, i), j), b = at(S(k, i), j - 12); return a == null || !b ? null : 100 * (a / b - 1); } : j => ratio(at(S(k, i), j), at(S(k, den), j))}));
   lineLegend('share-legend', s2, marker);
   lineChart($('ch-share'), {idx, series: s2, u: 'pct', fmt: v => pct(v, 1), marker, aria: name + ' en % ' + denName, H: 260});
@@ -1683,7 +1714,7 @@ function renderLine() {
   const keys = pctBase ? [key].concat(peersOf(key, effIdx(key) ?? N - 1)) : [key];
   $('line-desc').textContent = base === 'acc' ? 'El acumulado vuelve a empezar cada enero: por eso la serie tiene forma de serrucho. Para comparar meses distintos use las otras bases.'
     : pctBase && keys.length > 1 ? 'Comparado con ' + keys.slice(1).map(k => nameOf(k)).join(' y con el ') + '.' : 'Flujo de 12 meses de ' + nameOf(key, effIdx(key)) + '.';
-  const series = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25, get: j => { const v = egpVal(k, i, j, base); return v == null ? null : sg * v; }}));
+  const series = keys.map((k, n) => ({label: nameOf(k, effIdx(k)), key: k, color: COLOR_OF(k, n), dash: k === 'sistema' && n ? '5 3' : null, w: n ? 1.75 : 2.25, get: j => { const v = egpVal(k, i, j, base); return v == null ? null : sg * v; }}));
   lineLegend('line-legend', series, marker);
   const fmt = pctBase ? v => pct(v, 2) : money;
   lineChart($('ch-line'), {idx, series, u: pctBase ? 'pct' : 'money', fmt, marker, aria: name, H: 280});
@@ -1753,7 +1784,7 @@ const CUR = ['mn', 'me', 'tot'];
 function yParts(key, r) {
   return memo(key, 'yp' + r.id, () => {
     const fl = c => { const out = new Array(N).fill(null); for (let j = 0; j < N; j++) { let t = 0; for (const k of r.f) { const i = NI[k]; if (!vig(i, j)) continue; const v = at(c === 'me' ? FX12(key, i) : F(key, i), j); if (v == null) { t = null; break; } t += v; } out[j] = t; } return out; };
-    const bal = c => { const raw = S(key, TA).map((p, j) => { if (p == null) return null; let t = 0; for (const k of r.b.concat(r.bm || [])) { const i = NI[k], sg = (r.bm || []).includes(k) ? -1 : 1; t += sg * ((c === 'me' ? at(X(key, i), j) : at(S(key, i), j)) || 0); } return t; }); return avg12(raw); };
+    const bal = c => { const raw = S(key, TA).map((p, j) => { if (p == null) return null; let t = 0; for (const k of r.b.concat(r.bm || [])) { const i = NI[k], sg = (r.bm || []).includes(k) ? -1 : 1; t += sg * ((c === 'me' ? at(X(key, i), j) : at(S(key, i), j)) || 0); } return t; }); return avg12(raw, repSkip(key)); };
     const fT = fl('tot'), fX = fl('me'), bT = bal('tot'), bX = bal('me');
     return {f: {tot: fT, me: fX, mn: fT.map((v, j) => v == null || fX[j] == null ? null : v - fX[j])}, b: {tot: bT, me: bX, mn: bT.map((v, j) => v == null || bX[j] == null ? null : v - bX[j])}};
   });
@@ -1767,10 +1798,10 @@ function yCell(key, r, j, c) {
   const rows = r.sum ? r.sum.map(id => YBY[id]) : [r];
   for (const s of rows) {
     const p = yParts(key, s), fv = at(p.f[c], j), bv = at(p.b[c], j);
-    if (fv == null || bv == null) { if (r.sum) continue; return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : 'sin 12 meses de datos'}; }
+    if (fv == null || bv == null) { if (r.sum) continue; return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : repAt(key, j) ? 'cifras repetidas por la SBS' : 'sin 12 meses de datos'}; }
     F12 += fv; B += bv; any = true;
   }
-  if (!any) return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : 'sin 12 meses de datos'};
+  if (!any) return {why: j < J2011 ? 'desde ' + mLabel(MONTHS[J2011]) : repAt(key, j) ? 'cifras repetidas por la SBS' : 'sin 12 meses de datos'};
   if (r.pub && ecAt(key, j) && !r.sum) return {why: 'no capta depósitos'};
   if (Math.abs(B) < 100) return {why: B === 0 ? 'sin saldo' : 'saldo casi nulo'};
   const v = 100 * F12 / B;
@@ -2098,6 +2129,7 @@ addEventListener('hashchange', () => { const h = location.hash.slice(1); if (TAB
 (async function start() {
   try { D = await loadData(D_GZ); } catch (e) { $('loading').textContent = 'No se pudieron cargar los datos en este navegador (hace falta Chrome, Edge o Firefox recientes, o Safari 16.4 o posterior).'; return; }
   MONTHS = D.months; N = MONTHS.length; NODES = D.nodes; SUBS = D.subs;
+  REP = new Map((D.rep || []).map(r => [r[1].split('/')[1] + '|' + r[0], r]));
   SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
   NI = Object.fromEntries(NODES.map((n, i) => [n.k, i]));
   KIDS = NODES.map(() => []);

@@ -1,0 +1,2311 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concentración y alcance del sistema financiero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que los demás tableros de la serie (pestañas, filtros en una fila, tarjetas), con la paleta
+   de la SBS: azul #001E6B y gris #B2B4B5. Subsistemas: s1–s5 en orden fijo (validados para daltonismo); el
+   sistema en gris discontinuo. Variables de una entidad (créditos, depósitos, patrimonio, deudores): s1–s4.
+   Umbrales de referencia del HHI en gris punteado; eventos (fusiones, conversiones, salidas) como triángulos
+   del color del subsistema sobre el eje horizontal. Sin rojo ni verde. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff; --warn-bg: #eef1f8;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f; --s4: #722f9a; --s5: #5f8f91;
+  --sys: #868a93; --c-sub: #6a7ca6; --up: #001e6b; --bad: #5a2a85;
+  --q1: #b2b4b5; --q2: #8e99b4; --q3: #6a7ca6; --q4: #475d96; --q5: #243f82; --q6: #001e6b;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022; --warn-bg: #151d3b;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1; --s4: #cb91f4; --s5: #3f8080;
+  --sys: #8a8f9c; --c-sub: #6e89cc; --up: #9fb2e6; --bad: #d2b4f0;
+  --q1: #4a5573; --q2: #4f68a8; --q3: #6e89cc; --q4: #93aae0; --q5: #b9c8ee; --q6: #dce3f5;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 32px 0 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.tile.hero { grid-row: span 2; display: flex; flex-direction: column; border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 26px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tile.hero .val { font-size: 48px; font-family: var(--font-head); }
+.tile.hero .val.long { font-size: 34px; }
+.tile .unit { font-size: 14px; font-weight: 500; color: var(--ink2); margin-left: 6px; }
+.tile .sub { color: var(--ink2); font-size: 13px; }
+.tile .sub + .sub { margin-top: 2px; }
+.tile .spark { margin-top: auto; padding-top: 10px; }
+.d-bad { color: var(--bad); font-weight: 600; }
+.d-good { color: var(--up); font-weight: 600; }
+.d-flat { color: var(--ink); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; min-width: 0; max-width: 100%; }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); color: var(--ink); max-width: 100%; min-width: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+/* Muestra discontinua con degradado: un borde «dashed» de 16 px se ve continuo en Chromium. */
+.ln.dash { background: repeating-linear-gradient(90deg, var(--sys) 0 5px, transparent 5px 8px) !important; }
+.ln.mindash { background: repeating-linear-gradient(90deg, var(--bad) 0 5px, transparent 5px 8px) !important; height: 2px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.sq { border-radius: 2px; }
+.dot.hollow { background: var(--surface); box-shadow: inset 0 0 0 2px var(--muted); }
+.dot.ring { box-shadow: 0 0 0 2px var(--bad); }
+.vref { width: 2px; height: 12px; display: inline-block; background: repeating-linear-gradient(180deg, var(--ink2) 0 3px, transparent 3px 5px); }
+.vref.min { background: repeating-linear-gradient(180deg, var(--bad) 0 4px, transparent 4px 6px); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+.empty { color: var(--muted); font-size: 13.5px; padding: 32px 0; text-align: center; margin: 0; }
+.callout { color: var(--ink2); font-size: 14px; margin: 12px 0 0; max-width: 760px; }
+.callout b { color: var(--ink); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 0 0 4px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.filters .f { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filters label, .filters .lab { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 5px 12px; border: 0; background: transparent; color: var(--ink2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { background: var(--wash); }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--accent); }
+.filters select.btn { font-size: 14px; padding: 5px 8px; }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.lag { color: var(--muted); }
+th { white-space: normal; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button:hover { color: var(--ink); }
+th[aria-sort] button { color: var(--ink); }
+td.bad { color: var(--bad); font-weight: 600; }
+
+/* Ranking, dispersión y barras */
+.rank-row, .bar-seg { cursor: pointer; }
+.rank-row .bg { fill: transparent; }
+.rank-row:hover .bg, .rank-row:focus-visible .bg { fill: var(--wash); }
+.rank-row.sel .bg { fill: var(--wash); }
+.rank-row.sel .nm { font-weight: 600; fill: var(--ink); }
+.rank-row:focus-visible, .bar-seg:focus-visible { outline: none; }
+.rank-row:focus-visible .bg { stroke: var(--ink2); stroke-width: 1; }
+.bar-seg:hover rect, .bar-seg:focus-visible rect { stroke: var(--ink); stroke-width: 1.5; }
+.pt { cursor: pointer; outline: none; }
+.pt circle.m { stroke: var(--surface); stroke-width: 2; }
+.pt:hover circle.m, .pt:focus-visible circle.m, .pt.sel circle.m { stroke: var(--ink); stroke-width: 2; }
+.ptl { font-size: 11.5px; fill: var(--ink2); pointer-events: none; }
+.nm { font-size: 12.5px; fill: var(--ink); }
+.rv { font-size: 12.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rv.bad { fill: var(--bad); }
+.rs { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ent-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; margin: 14px 0 4px; }
+.ent-stats div { min-width: 0; }
+.ent-stats .lab { font-size: 12.5px; color: var(--ink2); }
+.ent-stats .val { font-size: 20px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+.ent-stats .sub { font-size: 12px; color: var(--ink2); }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dval { font-weight: 600; fill: var(--ink); }
+.minlbl { font-size: 11.5px; fill: var(--bad); font-weight: 600; }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 90ch; }
+
+/* Pestañas */
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--grid); margin: 0 0 16px; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .seg button:focus-visible, th button:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña de metodología */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 18px 0 6px; }
+.edu p, .edu li { max-width: 72ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul, .edu ol { padding-left: 20px; margin: 0 0 10px; }
+.edu li { margin: 4px 0; }
+.formula { font-variant-numeric: tabular-nums; background: var(--wash); border-radius: 8px; padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; }
+.example { border-left: 3px solid var(--axis); padding: 4px 0 4px 14px; margin: 10px 0 12px; max-width: 72ch; color: var(--ink2); }
+.example b { color: var(--ink); }
+.defs { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; margin: 14px 0 16px; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--ink2); max-width: 72ch; }
+.edu .table-wrap { max-height: none; }
+.edu td, .edu th { white-space: normal; }
+.edu a, footer a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.srcs { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.srcs li { margin: 5px 0; }
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.hero { grid-column: 1 / -1; grid-row: auto; }
+  .ent-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  main { padding-top: 18px; }
+  h1 { font-size: 24px; }
+  .top { flex-direction: column; gap: 8px; }
+  .tile { padding: 14px 14px; }
+  .tile.hero .val { font-size: 40px; }
+  .tile.hero .val.long { font-size: 28px; }
+  .tile .val { font-size: 22px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; width: 100%; }
+  .card-tools select.btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+.kpis.k3 { grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr)); }
+.kpis.k4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .kpis.k4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ln.cdash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 8px) !important; }
+.edu-inline p { margin: 8px 0; font-size: 14px; line-height: 1.55; color: var(--ink2); }
+.evlist { max-height: 420px; }
+.evlist th, .evlist td { text-align: left; vertical-align: top; }
+.evlist td:nth-child(3) { white-space: normal; min-width: 240px; }
+.evlist td:nth-child(4) { white-space: normal; min-width: 260px; color: var(--ink2); }
+.evlist td a { color: var(--accent); }
+.ev-tag { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: baseline; }
+.tri { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid var(--ink2); display: inline-block; }
+.ref-lbl { font-size: 11px; fill: var(--ink2); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.ln.refdash { background: repeating-linear-gradient(90deg, var(--ink2) 0 5px, transparent 5px 8px) !important; height: 2px; }
+.ent-events { margin: 10px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink2); }
+.ent-events li { margin: 3px 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Sistema financiero peruano · Boletín Estadístico de la SBS</p>
+      <h1>Concentración y alcance del sistema financiero</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede"></p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-concentracion" aria-controls="tab-concentracion" aria-selected="true">Concentración</button>
+    <button type="button" role="tab" id="tabbtn-entidades" aria-controls="tab-entidades" aria-selected="false" tabindex="-1">Entidades</button>
+    <button type="button" role="tab" id="tabbtn-alcance" aria-controls="tab-alcance" aria-selected="false" tabindex="-1">Deudores y depositantes</button>
+    <button type="button" role="tab" id="tabbtn-internacional" aria-controls="tab-internacional" aria-selected="false" tabindex="-1">Comparación internacional</button>
+    <button type="button" role="tab" id="tabbtn-metodologia" aria-controls="tab-metodologia" aria-selected="false" tabindex="-1">Cómo leer los datos</button>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtros">
+    <div class="f" id="fw-var"><span class="lab" id="lab-var">Variable</span><div class="seg" id="f-var" role="group" aria-labelledby="lab-var"></div></div>
+    <div class="f"><label for="f-mes">Mes</label><select class="btn" id="f-mes"></select></div>
+    <div class="f"><span class="lab" id="lab-range">Periodo de los gráficos</span><div class="seg" id="f-range" role="group" aria-labelledby="lab-range"></div></div>
+  </div>
+
+  <!-- ===================== Concentración ===================== -->
+  <div id="tab-concentracion" role="tabpanel" aria-labelledby="tabbtn-concentracion">
+    <div class="section-title">Resumen</div>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Ámbito">
+      <div class="f"><span class="lab" id="lab-scope">Ámbito</span><div class="seg" id="f-scope" role="group" aria-labelledby="lab-scope"></div></div>
+    </div>
+    <section class="kpis" id="kpis" aria-label="Indicadores del mes seleccionado"></section>
+    <p class="note" id="kpi-note" hidden></p>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-evo">
+      <div class="card-head">
+        <div>
+          <h2 id="evo-title"></h2>
+          <p id="evo-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-meas" role="group" aria-label="Medida"></div><button class="btn" data-table="evo">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="evo-legend"></div>
+      <div class="chart" id="ch-evo"></div>
+      <p class="note" id="evo-note"></p>
+      <div class="table-wrap" id="tb-evo" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-pes">
+      <div class="card-head">
+        <div>
+          <h2 id="pes-title"></h2>
+          <p id="pes-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" data-table="pes">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="pes-legend"></div>
+      <div class="chart" id="ch-pes"></div>
+      <p class="note" id="pes-note"></p>
+      <div class="table-wrap" id="tb-pes" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-evt">
+      <div class="card-head">
+        <div>
+          <h2 id="evt-title">Fusiones, conversiones, ingresos y salidas</h2>
+          <p id="evt-desc"></p>
+        </div>
+      </div>
+      <div class="table-wrap evlist" id="tb-evt"></div>
+      <p class="note" id="evt-note"></p>
+    </figure>
+  </div>
+
+  <!-- ===================== Entidades ===================== -->
+  <div id="tab-entidades" role="tabpanel" aria-labelledby="tabbtn-entidades" hidden>
+    <div class="filters" style="margin-top:4px" role="group" aria-label="Ámbito de las entidades">
+      <div class="f"><span class="lab" id="lab-sub">Ámbito</span><div class="seg" id="f-sub" role="group" aria-labelledby="lab-sub"></div></div>
+      <div class="f"><span class="lab" id="lab-evar">Participación en</span><div class="seg" id="f-evar" role="group" aria-labelledby="lab-evar"></div></div>
+    </div>
+    <figure class="card" id="card-rank">
+      <div class="card-head">
+        <div>
+          <h2 id="rank-title"></h2>
+          <p id="rank-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" data-table="rank">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="rank-legend"></div>
+      <div class="chart" id="ch-rank"></div>
+      <p class="note" id="rank-note"></p>
+      <div class="table-wrap" id="tb-rank" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-sc">
+      <div class="card-head">
+        <div>
+          <h2 id="sc-title"></h2>
+          <p id="sc-desc"></p>
+        </div>
+      </div>
+      <div class="legend" id="sc-legend"></div>
+      <div class="chart" id="ch-sc"></div>
+      <p class="note" id="sc-note"></p>
+    </figure>
+
+    <figure class="card" id="card-ent">
+      <div class="card-head">
+        <div>
+          <h2 id="ent-title" tabindex="-1">Detalle de la entidad</h2>
+          <p id="ent-desc"></p>
+        </div>
+        <div class="card-tools">
+          <label class="note" for="f-ent" style="margin:0">Entidad</label>
+          <select class="btn" id="f-ent"></select>
+          <button class="btn" data-table="ent">Ver tabla</button>
+        </div>
+      </div>
+      <div class="ent-stats" id="ent-stats"></div>
+      <h3 style="margin-top:14px">Participación en su subsistema</h3>
+      <div class="legend" id="ent-legend"></div>
+      <div class="chart" id="ch-ent"></div>
+      <h3 style="margin-top:18px">Número de deudores</h3>
+      <div class="chart" id="ch-ent-deu"></div>
+      <ul class="ent-events" id="ent-events" hidden></ul>
+      <p class="note" id="ent-note" hidden></p>
+      <div class="table-wrap" id="tb-ent" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Deudores y depositantes ===================== -->
+  <div id="tab-alcance" role="tabpanel" aria-labelledby="tabbtn-alcance" hidden>
+    <div class="section-title">Resumen</div>
+    <section class="kpis" id="akpis" aria-label="Deudores en el trimestre seleccionado"></section>
+    <p class="note" id="akpi-note" hidden></p>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-aun">
+      <div class="card-head">
+        <div>
+          <h2 id="aun-title"></h2>
+          <p id="aun-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-aview" role="group" aria-label="Qué mostrar"></div><button class="btn" data-table="aun">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="aun-legend"></div>
+      <div class="chart" id="ch-aun"></div>
+      <p class="note" id="aun-note"></p>
+      <div class="table-wrap" id="tb-aun" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-asb">
+      <div class="card-head">
+        <div>
+          <h2 id="asb-title"></h2>
+          <p id="asb-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-dview" role="group" aria-label="Qué mostrar"></div><button class="btn" data-table="asb">Ver tabla</button></div>
+      </div>
+      <div class="filters" style="margin:10px 0 0;padding:8px 10px" role="group" aria-label="Tipo de crédito">
+        <div class="f"><span class="lab" id="lab-dtype">Tipo de crédito</span><div class="seg" id="f-dtype" role="group" aria-labelledby="lab-dtype"></div></div>
+      </div>
+      <div class="legend" id="asb-legend"></div>
+      <div class="chart" id="ch-asb"></div>
+      <p class="note" id="asb-note"></p>
+      <div class="table-wrap" id="tb-asb" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-dup">
+      <div class="card-head">
+        <div>
+          <h2 id="dup-title">Deudores con créditos en más de un subsistema</h2>
+          <p id="dup-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" data-table="dup">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="dup-legend"></div>
+      <div class="chart" id="ch-dup"></div>
+      <p class="note" id="dup-note"></p>
+      <div class="table-wrap" id="tb-dup" hidden></div>
+    </figure>
+
+    <div class="section-title">Depositantes</div>
+    <section class="kpis k4" id="dkpis" aria-label="Depositantes en el mes seleccionado"></section>
+    <p class="note" id="dkpi-note"></p>
+
+    <figure class="card" id="card-dsb">
+      <div class="card-head">
+        <div>
+          <h2 id="dsb-title"></h2>
+          <p id="dsb-desc"></p>
+        </div>
+        <div class="card-tools"><div class="seg" id="f-dpview" role="group" aria-label="Qué mostrar"></div><button class="btn" data-table="dsb">Ver tabla</button></div>
+      </div>
+      <div class="filters" style="margin:10px 0 0;padding:8px 10px" role="group" aria-label="Tipo de depósito y de depositante">
+        <div class="f"><span class="lab" id="lab-dptype">Tipo de depósito</span><div class="seg" id="f-dptype" role="group" aria-labelledby="lab-dptype"></div></div>
+        <div class="f"><span class="lab" id="lab-dpper">Depositante</span><div class="seg" id="f-dpper" role="group" aria-labelledby="lab-dpper"></div></div>
+      </div>
+      <div class="legend" id="dsb-legend"></div>
+      <div class="chart" id="ch-dsb"></div>
+      <p class="note" id="dsb-note"></p>
+      <div class="table-wrap" id="tb-dsb" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-dre">
+      <div class="card-head">
+        <div>
+          <h2 id="dre-title"></h2>
+          <p id="dre-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" data-table="dre">Ver tabla</button></div>
+      </div>
+      <div class="filters" style="margin:10px 0 0;padding:8px 10px" role="group" aria-label="Ámbito y tipo de depositante">
+        <div class="f"><span class="lab" id="lab-drsc">Ámbito</span><div class="seg" id="f-drsc" role="group" aria-labelledby="lab-drsc"></div></div>
+        <div class="f"><span class="lab" id="lab-drper">Depositante</span><div class="seg" id="f-drper" role="group" aria-labelledby="lab-drper"></div></div>
+      </div>
+      <div class="legend" id="dre-legend"></div>
+      <div class="chart" id="ch-dre"></div>
+      <p class="note" id="dre-note"></p>
+      <div class="table-wrap" id="tb-dre" hidden></div>
+    </figure>
+  </div>
+
+  <!-- ===================== Cómo leer los datos ===================== -->
+  <!-- ===================== Comparación internacional ===================== -->
+  <div id="tab-internacional" role="tabpanel" aria-labelledby="tabbtn-internacional" hidden>
+    <div class="filters" style="margin-top:12px" role="group" aria-label="Filtros de la comparación">
+      <div class="f"><span class="lab" id="lab-ivar">Variable</span><div class="seg" id="f-ivar" role="group" aria-labelledby="lab-ivar"></div></div>
+      <div class="f"><span class="lab" id="lab-ivariant">Bancos</span><div class="seg" id="f-ivariant" role="group" aria-labelledby="lab-ivariant"></div></div>
+      <div class="f"><span class="lab" id="lab-imeas">Medida</span><div class="seg" id="f-imeas" role="group" aria-labelledby="lab-imeas"></div></div>
+    </div>
+    <div class="section-title">Último año</div>
+    <section class="kpis k4" id="ikpis" aria-label="Concentración por país en el último año"></section>
+
+    <div class="section-title">Evolución</div>
+    <figure class="card" id="card-intl">
+      <div class="card-head">
+        <div>
+          <h2 id="intl-title"></h2>
+          <p id="intl-desc"></p>
+        </div>
+        <div class="card-tools"><button class="btn" data-table="intl">Ver tabla</button></div>
+      </div>
+      <div class="legend" id="intl-legend"></div>
+      <div class="chart" id="ch-intl"></div>
+      <p class="note" id="intl-note"></p>
+      <div class="table-wrap" id="tb-intl" hidden></div>
+    </figure>
+
+    <figure class="card" id="card-intl-def">
+      <div class="card-head"><div><h2>Cómo se compara</h2></div></div>
+      <div class="edu-inline" id="intl-def"></div>
+    </figure>
+  </div>
+
+  <div id="tab-metodologia" role="tabpanel" aria-labelledby="tabbtn-metodologia" hidden>
+    <div class="edu">
+      <section id="que">
+        <h2>Qué muestra este tablero</h2>
+        <p>Dos preguntas sobre el crédito en el Perú. La primera: <b>qué tan concentrado está</b>, es decir, si unas pocas entidades tienen la mayor parte de los créditos, los depósitos y el patrimonio, y cómo cambió desde 2010. La segunda: <b>a cuántas personas y empresas llega</b>, cuántas tienen crédito en más de una entidad, qué parte de los deudores atiende cada una y cuántas personas tienen depósitos en cada entidad.</p>
+        <p>Cubre cinco subsistemas del Boletín Estadístico de la SBS, las empresas de operaciones múltiples: banca múltiple, empresas financieras, cajas municipales, cajas rurales y empresas de créditos. No incluye al Banco de la Nación, Agrobanco, COFIDE ni las cooperativas, salvo donde se dice.</p>
+        <p>La pestaña «Comparación internacional» compara además la concentración de la banca del Perú con la de Chile, Colombia y Brasil, de diciembre de 2015 a diciembre de 2025, con datos de cada supervisor. Ahí sí entran el Banco de la Nación y Agrobanco (en la variante «con bancos estatales»); su método está en la propia pestaña, en «Cómo se compara».</p>
+        <h3>Siglas y abreviaturas</h3>
+        <dl class="defs">
+          <dt>SBS</dt><dd>Superintendencia de Banca, Seguros y AFP.</dd>
+          <dt>CMAC / Cajas municipales</dt><dd>Cajas municipales de ahorro y crédito; el subsistema «cajas municipales» incluye también a la Caja Municipal de Crédito Popular de Lima. En los botones se abrevia «CMAC».</dd>
+          <dt>CRAC / Cajas rurales</dt><dd>Cajas rurales de ahorro y crédito.</dd>
+          <dt>EC / EDPYME</dt><dd>Empresas de créditos; hasta 2015 la mayoría eran EDPYME (entidades de desarrollo de la pequeña y microempresa).</dd>
+          <dt>HHI y CR4</dt><dd>Índice de Herfindahl-Hirschman y participación de las 4 mayores entidades (CR4, por «concentration ratio»).</dd>
+          <dt>pp</dt><dd>Puntos porcentuales: la diferencia entre dos porcentajes (de 70% a 72% son 2 pp).</dd>
+          <dt>CTS</dt><dd>Compensación por Tiempo de Servicios, un depósito que el empleador hace a nombre del trabajador.</dd>
+          <dt>FSD</dt><dd>Fondo de Seguro de Depósitos.</dd>
+        </dl>
+      </section>
+
+      <section id="hhi">
+        <h2>Índice de Herfindahl-Hirschman (HHI)</h2>
+        <p>Suma los cuadrados de las participaciones, en porcentaje, de todas las entidades:</p>
+        <div class="formula">HHI = s₁² + s₂² + … + sₙ², donde sᵢ es la participación de la entidad i (en %)</div>
+        <p>Va de casi 0, cuando hay muchas entidades pequeñas, a 10,000, cuando hay una sola. Al elevar al cuadrado, pesa más a las grandes: cuatro entidades con 40%, 20%, 20% y 20% dan 1,600 + 400 + 400 + 400 = 2,800, mientras que cuatro con 25% cada una dan 2,500 (el primer ejemplo es de los Lineamientos del INDECOPI, 2023, § 2.3.1.2).</p>
+        <div class="example" id="ex-hhi"></div>
+        <h3>El número equivalente</h3>
+        <p>10,000 ÷ HHI es el número de entidades del mismo tamaño que darían ese mismo HHI. Con un HHI de 2,000, la concentración es la de un mercado con 5 entidades iguales, aunque haya 20. Ayuda a leer los subsistemas con pocas entidades, como las cajas rurales y las empresas de créditos.</p>
+      </section>
+
+      <section id="c4">
+        <h2>Participación de las 4 mayores</h2>
+        <p>Es la suma de las participaciones de las cuatro entidades más grandes ese mes; las cuatro pueden cambiar de un mes a otro. No dice cómo se reparte esa parte entre ellas ni cómo está el resto, así que puede moverse distinto que el HHI. Por ejemplo, si las cuatro mayores pasan de 25%, 25%, 15% y 10% a 40%, 15%, 10% y 10%, siguen sumando 75%, pero el HHI sube. Y si se fusionan dos entidades pequeñas, el HHI sube y la participación de las 4 mayores no cambia, siempre que la entidad resultante no pase a estar entre las cuatro mayores. Con 4 entidades o menos, la participación de las 4 mayores es 100% por definición (las cajas rurales en 2026).</p>
+        <h3>Contraste con la cifra oficial</h3>
+        <p>La SBS publica cada trimestre, en el reporte SF-2103, la participación de los «4 bancos grandes» (BCP, BBVA, Scotiabank e Interbank) en los créditos y depósitos de los cinco subsistemas. Esos cuatro son también las cuatro mayores entidades del ranking, así que mide lo mismo que la línea del sistema de este tablero. En los trimestres revisados, las cifras difieren en 0.2 pp o menos:</p>
+        <div class="table-wrap" id="tb-big4"></div>
+      </section>
+
+      <section id="referencias">
+        <h2>Referencias, no límites</h2>
+        <p>No hay un umbral legal de concentración para el sistema financiero peruano. Las líneas de 1,500 y 2,500 de los gráficos son las que usa el INDECOPI para evaluar operaciones de concentración, como las fusiones: considera menos probable que una fusión dañe la competencia si el mercado queda con un HHI menor a 1,500, o entre 1,500 y 2,500 con un aumento menor a 200 puntos, o sobre 2,500 con un aumento menor a 100, salvo otras circunstancias que señalan los propios Lineamientos (Lineamientos para la calificación y análisis de las operaciones de concentración empresarial, § 2.3.1.2). Ese análisis se hace en mercados definidos caso por caso, no en un subsistema completo. Otras autoridades usan otros cortes:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Autoridad y documento</th><th scope="col">Referencias del HHI</th><th scope="col">Situación</th></tr></thead>
+            <tbody>
+              <tr><td>INDECOPI (Perú), Lineamientos aprobados por la Res. N.° 103-2022/CLC-INDECOPI, § 2.3.1.2</td><td>1,500 y 2,500, según el aumento que cause la fusión</td><td>Vigentes</td></tr>
+              <tr><td>Departamento de Justicia y Comisión Federal de Comercio de EE. UU., Merger Guidelines de 2023, § 2.1</td><td>Más de 1,800: «altamente concentrado»; se presume que reduce la competencia una fusión que deja el HHI sobre 1,800 y lo aumenta en más de 100 puntos</td><td>Vigentes</td></tr>
+              <tr><td>Reserva Federal de EE. UU., fusiones bancarias (orden 2026-21, nota 14), con depósitos de mercados locales</td><td>1,000 y 1,800; se revisa con más detalle una fusión que deja el HHI sobre 1,800 y lo aumenta en más de 200 puntos</td><td>Vigente</td></tr>
+              <tr><td>Comisión Europea, Directrices de 2004 (apartados 19 a 21)</td><td>1,000 y 2,000, según el aumento</td><td>En revisión</td></tr>
+              <tr><td>EE. UU., Horizontal Merger Guidelines de 2010, § 5.3</td><td>1,500 y 2,500: «no concentrado», «moderadamente concentrado» y «altamente concentrado»</td><td>Retiradas en 2023</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>El INDECOPI usa los mismos cortes de nivel que las guías de EE. UU. de 2010 (1,500 y 2,500), pero no las mismas variaciones ni sus etiquetas. Por eso el tablero dice «por debajo de 1,500», «entre 1,500 y 2,500» o «por encima de 2,500», y no «moderadamente concentrado». La Ley N.° 31112, de control previo de concentraciones, no usa el HHI: fija umbrales de notificación por ventas o activos (art. 6.1). En las entidades supervisadas por la SBS, el control de competencia lo hace el INDECOPI, que pide a la SBS un informe no vinculante sobre el nivel de concentración. La SBS además autoriza la operación por razones prudenciales, y hacen falta las dos autorizaciones (arts. 16.1 y 16.2). La excepción son las operaciones con empresas del sistema financiero que captan depósitos del público, o con aseguradoras, que presentan riesgos relevantes e inminentes para su solidez: entonces solo se requiere la autorización de la SBS (art. 16.4).</p>
+      </section>
+
+      <section id="mercado">
+        <h2>Un subsistema no es un mercado</h2>
+        <ul>
+          <li><b>Las autoridades miden la competencia por producto y zona</b> (INDECOPI, Lineamientos, § 2.2). Un subsistema agrupa entidades por tipo de licencia: una caja municipal compite en microcrédito con bancos y financieras, y la propia SBS agrupa a las entidades especializadas en créditos a la micro y pequeña empresa cruzando subsistemas (SF-2103, anexo metodológico). El HHI de un subsistema describe cómo se reparte el negocio dentro de un tipo de licencia, no el poder de mercado.</li>
+          <li><b>El sistema</b> (los cinco subsistemas juntos) describe mejor el crédito total, pero tampoco es un mercado de producto: junta créditos hipotecarios, de consumo y a grandes empresas.</li>
+          <li><b>Entidades, no grupos económicos.</b> Cada empresa cuenta por separado, aunque pertenezca a un mismo grupo. Para el INDECOPI, una operación entre empresas del mismo grupo no cambia la estructura del mercado (Lineamientos, § 1.3.1); por eso, si dos entidades de un grupo figuran por separado, el HHI por entidad subestima la concentración.</li>
+          <li><b>El patrimonio no es un mercado.</b> Su concentración mide tamaño o capacidad, no ventas a clientes; por eso los gráficos de patrimonio no muestran las referencias del INDECOPI, que se calculan con ventas o volumen.</li>
+        </ul>
+      </section>
+
+      <section id="eventos">
+        <h2>Fusiones, conversiones, ingresos y salidas</h2>
+        <p>Cuando una entidad cambia de licencia, pasa de un subsistema a otro y la concentración de ambos salta sin que haya cambiado el mercado. Por ejemplo, Compartamos (enero de 2025), Santander Consumer (junio de 2025) y Efectiva (junio de 2026) pasaron de financieras a bancos (Res. SBS N.° 348-2025, 1885-2025 y 1444-2026). El sistema no tiene ese salto, porque la entidad sigue dentro, pero sí el de las fusiones entre entidades.</p>
+        <p>Los gráficos marcan cada evento con un triángulo del color del subsistema, y la tabla de la pestaña «Concentración» los lista con su resolución y fuente. El mes es el primero en que el cambio se ve en los cuadros de la SBS. Puede ser varios meses posterior a la resolución: en los ingresos, la licencia se otorga antes de que la entidad empiece a operar. Las normas vienen de las notas al pie de los propios cuadros de la SBS y de El Peruano, y solo se enlazan fuentes oficiales (SBS, El Peruano y páginas del Estado peruano en gob.pe, como el MEF); la fecha de la intervención de Financiera TFC (2019) tiene confianza media.</p>
+      </section>
+
+      <section id="deudores">
+        <h2>Deudores</h2>
+        <dl class="defs">
+          <dt>Deudor</dt><dd>Persona natural o jurídica con al menos un crédito directo (cuadros de deudores de la SBS, con datos del Anexo 6, Reporte Crediticio de Deudores). Los créditos directos son «los financiamientos que, bajo cualquier modalidad, las empresas del sistema financiero otorguen a sus clientes, originando a cargo de éstos la obligación de entregar una suma de dinero determinada», incluidos los refinanciados y reestructurados (Res. SBS N.° 11356-2008, cap. I, num. 2 b).</dd>
+          <dt>Deudores de una entidad</dt><dd>Cuenta una sola vez a quien tiene créditos de distintos tipos en la misma entidad (nota 2/ de los cuadros).</dd>
+          <dt>Deudores de un subsistema</dt><dd>Cuenta una sola vez a quien tiene créditos en varias entidades del subsistema (nota 1/; el total coincide con el del SF-2103). Por eso los deudores de las entidades no se suman, y sus participaciones en deudores suman más de 100%.</dd>
+          <dt>Deudores únicos</dt><dd>Cada deudor «es contado una sola vez, independientemente de que tenga uno o más créditos en el sistema financiero» (SBS, SF-2103, nota 3/). Trimestral desde diciembre de 2019. Los «cinco subsistemas» son las empresas de operaciones múltiples del SF-2103; el «sistema financiero» suma además al Banco de la Nación y Agrobanco.</dd>
+          <dt>Saldo promedio por deudor</dt><dd>Créditos directos ÷ número de deudores, en soles. Es un promedio, no el crédito típico: lo elevan los créditos corporativos y a grandes empresas. Un saldo promedio bajo indica créditos pequeños, como los de consumo o microempresa.</dd>
+        </dl>
+        <div class="example" id="ex-deu"></div>
+        <p><b>Un cambio grande reciente.</b> Desde 2025 los deudores de la banca crecen sobre todo por los créditos de consumo del BCP: sus deudores de consumo pasaron de 1.97 millones en enero de 2025 a 4.20 millones en agosto de 2026 (cuadro B-230803), y su parte de los deudores de la banca subió más de 10 pp en un año. Los cuadros de la SBS no explican la causa.</p>
+      </section>
+
+      <section id="adultos">
+        <h2>Deudores por cada 100 adultos</h2>
+        <p>Son los deudores únicos de los cinco subsistemas divididos entre la población de 18 años a más, la edad que usa la SBS para sus indicadores de inclusión. La población es la del INEI al 30 de junio de cada año (Estimaciones y Proyecciones de la Población Nacional por año calendario y edad simple, base censo 2017), interpolada entre años.</p>
+        <div class="example" id="ex-pc"></div>
+        <p><b>No es el porcentaje de adultos con crédito</b>: los deudores incluyen empresas. El indicador oficial de la SBS cuenta solo personas naturales y al sistema financiero con el Banco de la Nación y Agrobanco (Reporte de Indicadores de Inclusión Financiera, «Número de deudores / población adulta»); el tablero lo muestra como referencia. La Política Nacional de Inclusión Financiera mide otra cosa: el porcentaje de adultos con algún crédito en categoría Normal o con Problemas Potenciales, con una meta de 43% al 2030 (D.S. N.° 255-2019-EF).</p>
+      </section>
+
+      <section id="varios">
+        <h2>Entidades y subsistemas por deudor</h2>
+        <ul>
+          <li><b>Entidades por deudor:</b> la suma de los deudores de todas las entidades dividida entre los deudores únicos de los cinco subsistemas. Es el número promedio de entidades en que tiene crédito cada deudor; vale 1 si nadie tiene créditos en dos entidades.</li>
+          <li><b>Subsistemas por deudor:</b> la suma de los deudores de cada subsistema dividida entre los mismos deudores únicos. No capta a quien tiene créditos en dos entidades del mismo subsistema (por ejemplo, en dos bancos), y cambia cuando una entidad pasa de un subsistema a otro aunque los deudores no cambien: por eso cae en 2025, con el paso de Compartamos y Santander Consumer a la banca. Entidades por deudor no depende de esa clasificación, aunque baja con las fusiones.</li>
+        </ul>
+        <div class="example" id="ex-dup"></div>
+      </section>
+
+      <section id="depositantes">
+        <h2>Depositantes</h2>
+        <dl class="defs">
+          <dt>Depositante</dt><dd>Persona natural o jurídica con al menos un depósito en la entidad: a la vista, de ahorro, a plazo o CTS (cuadros «Número de Personas por Tipo de Depósito» de cada subsistema, con datos del Anexo 13; en el menú del Boletín, «Número de Depositantes por Tipo de Depósito»). Las personas jurídicas incluyen a las sin fines de lucro. Aunque el cuadro dice «personas», no son personas únicas (ver abajo).</dd>
+          <dt>Depositantes de una entidad</dt><dd>Cada entidad cuenta una vez a cada depositante en cada tipo de depósito. En el total, quien tiene, por ejemplo, ahorro y CTS en la misma entidad cuenta una sola vez, así que el total es menor que la suma de los tipos (lo dice la nota de los cuadros de las cajas; en la banca y las financieras el total también es menor que esa suma).</dd>
+          <dt>Depositantes de un subsistema</dt><dd>Es la suma de los de sus entidades: la fila de total del cuadro coincide con esa suma en todos los meses. A diferencia de los deudores, no quita a quien tiene depósitos en dos entidades del subsistema. Por eso no son personas únicas, y la suma de los cuatro subsistemas tampoco lo es.</dd>
+          <dt>Depósito promedio por depositante</dt><dd>Saldo de los depósitos ÷ número de depositantes, en soles. Usa el monto y el número del cuadro «Depósitos según Escala de Montos», que la SBS publica solo por subsistema; su número de depositantes casi siempre coincide con el del cuadro de depositantes.</dd>
+        </dl>
+        <p>Cubre los cuatro subsistemas que captan depósitos (las empresas de créditos no captan). No incluye al Banco de la Nación: los cuadros de las entidades estatales del Boletín no traen su número de depositantes. El Boletín tampoco publica cuántas cuentas están activas, es decir, con movimientos; solo el número de personas con saldo.</p>
+        <p>Como los deudores, el cuadro de depositantes repite en algunos meses las cifras de otro mes de una entidad que está saliendo del mercado (las mismas entidad-mes que en el ranking, ver «Errores de origen»). Esas cifras no se usan en la serie de la entidad; el total del subsistema es el que publica la SBS. Otros errores de origen: en abril de 2026, la CMAC Piura trae 10,302 depositantes de ahorro personas jurídicas (unos 40,000 en los meses vecinos), menos que su total menos los otros tipos: ese mes las cajas municipales quedan sin dato en el ahorro de personas jurídicas. En junio de 2026, la escala de montos de las financieras todavía incluye a Efectiva, que ese mes ya figura en la banca: ese mes las financieras quedan sin depósito promedio. En julio de 2024, el BCP reporta 2.11 millones de depositantes a la vista personas naturales (1.66 millones en junio y 1.73 millones en agosto): así está en el cuadro de la SBS y no contradice otra cifra, así que se deja como se publica. En enero de 2021, el archivo del cuadro de depositantes de las cajas rurales trae otro cuadro, los montos de los depósitos por tipo y persona en miles de soles: ese mes las cajas rurales, y con ellas la suma de los cuatro subsistemas, quedan sin depositantes.</p>
+        <div class="example" id="ex-dpt"></div>
+      </section>
+
+      <section id="calculos">
+        <h2>Cálculos propios y salvedades</h2>
+        <ul>
+          <li><b>Lo que publica la SBS:</b> los créditos directos, depósitos totales y patrimonio de cada entidad con su participación en el subsistema (rankings); los deudores por entidad, por subsistema y por tipo de crédito; los depositantes por entidad y tipo de depósito; los deudores únicos (SF-2103), y la participación de los cuatro bancos grandes.</li>
+          <li><b>Lo que calcula el tablero:</b> el HHI, la participación de las 4 mayores, el número de entidades y el número equivalente; los totales y las participaciones del sistema; la participación en deudores; el saldo promedio por deudor; los deudores por cada 100 adultos; las entidades y subsistemas por deudor, y el depósito promedio por depositante. La participación de cada entidad en su subsistema reproduce la publicada, salvo en el patrimonio de las empresas de créditos de julio de 2023, donde el tablero cuenta como cero el patrimonio negativo de Acceso Crediticio.</li>
+          <li><b>Entidades contadas:</b> las que tienen saldo positivo en la variable. La SBS sigue listando en cero, por algunos meses, a entidades que ya salieron o que no tienen créditos (como Deutsche Bank). Dos entidades tuvieron patrimonio negativo un mes (Alfin Banco en noviembre de 2021 y Acceso Crediticio en julio de 2023): en el HHI de patrimonio cuentan como cero.</li>
+          <li><b>El sistema</b> tiene dato solo en los meses en que publicaron todos sus subsistemas: en créditos y patrimonio, los cinco; en depósitos, los cuatro que captan (las empresas de créditos no captan depósitos). Falta noviembre de 2010: el ranking de las cajas rurales de ese mes trae cifras inválidas y se descarta. Faltan también los meses en que un ranking repite las cifras de otro mes de una entidad grande (ver «Errores de origen»). Los subsistemas publican a distinto ritmo: el mes por defecto es el último con todos, y un ámbito que aún no publica el mes elegido muestra su último dato, con su mes.</li>
+          <li><b>Sucursales en el exterior:</b> el ranking de la banca no las incluye, así que sus créditos quedan entre 0.15% y 6% por debajo del total de créditos del balance, por el BCP (y por Interbank hasta 2015 y Scotiabank hasta 2016). El cuadro de deudores de la banca sí incluye las del BCP, así que el saldo promedio por deudor de la banca que usa el ranking (en la ficha de cada entidad, el resumen del sistema y los ejemplos) queda algo subestimado. El gráfico de saldo por deudor por subsistema usa en cambio el saldo de créditos por tipo, que sí las incluye. El cuadro de depositantes de la banca también incluye las sucursales del BCP en el exterior.</li>
+          <li><b>Saltos de un mes que no son errores:</b> en mayo de 2012, los depósitos de Edyficar casi se duplican por un aumento puntual de sus depósitos del sistema financiero (lo confirma su balance), y el HHI de depósitos de las financieras baja ese mes. Los deudores de consumo de EDPYME Marcimex (hoy Progreso) de mayo de 2015 sí son un error de origen: el cuadro los trae en cero (unos 25,000 en los meses vecinos) y el total de las empresas de créditos tampoco los incluye, así que ese mes la entidad queda sin deudores y el subsistema sin total ni consumo.</li>
+          <li><b>Errores de origen:</b> los cuadros de deudores de junio de 2016 de las cajas municipales, las cajas rurales y las empresas de créditos, y el de marzo de 2022 de las empresas de créditos, repiten las cifras de otro mes en todas las entidades: esos meses quedan sin dato. En otros meses solo la columna del total repite la de otro mes (banca y financieras en noviembre de 2015; financieras en abril y junio de 2016; cajas municipales, cajas rurales y empresas de créditos en octubre de 2019): ahí el total queda sin dato y se usan los tipos de crédito. En algunos rankings la SBS repite las cifras de un mes anterior de una entidad, casi siempre una que está saliendo del mercado y ya no reporta (la SBS lo indica en una nota al pie). Esas cifras no se usan. Si la entidad era pequeña (la Caja Pisco, de enero a abril de 2014, con 0.4% de las cajas municipales), sale del cálculo esos meses. Si pesaba (la Caja Sullana en noviembre de 2014 y junio de 2024, la Caja Señor de Luren en mayo de 2015, la Caja Chavín (luego Caja Raíz) en marzo y abril de 2016 y la Financiera TFC en noviembre de 2019, con 5% a 37% de su subsistema), ese mes su subsistema y el sistema quedan sin concentración ni participaciones: sacarla movería el HHI tanto como un cambio real del mercado. En la ficha y la tabla de la entidad, ese mes se muestra su último dato válido, con su mes y el motivo. El cuadro de deudores de las cajas municipales de junio de 2024 también repite las cifras de mayo de la Caja Sullana (con la misma nota al pie): ese mes la Caja Sullana queda sin deudores; el total de deudores de las cajas municipales se deja como lo publica la SBS.</li>
+          <li><b>Tipos de crédito a empresas:</b> desde octubre de 2024 rige una nueva clasificación (Res. SBS N.° 2368-2023), así que los deudores y saldos de corporativos, grandes, medianas, pequeñas y microempresas no son del todo comparables antes y después. La nueva clasificación solo afecta a los créditos a empresas.</li>
+          <li>Las cifras son las que publica la SBS en cada cuadro mensual. La SBS a veces corrige meses ya publicados; el tablero usa la última versión descargada.</li>
+        </ul>
+      </section>
+
+      <section id="fuentes">
+        <h2>Fuentes</h2>
+        <ul class="srcs">
+          <li>SBS, Boletín Estadístico del sistema financiero: ranking de créditos, depósitos y patrimonio (B-2332, B-3243, C-1205, C-2205 y C-4217), número de deudores por tipo de crédito (B-230803, B-3218, C-1231, C-2231 y C-4226), número de depositantes por tipo de depósito (B-2373, B-3232, C-1250 y C-2255), depósitos según escala de montos (B-2321, B-3256, C-1211 y C-2211) y créditos por tipo y situación. <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=1" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, reporte SF-2103 «Evolución del Sistema Financiero» (trimestral): deudores únicos (nota 3/) y participación de los 4 bancos grandes (tabla «Empresas de Operaciones Múltiples: Estructura por Grupo»). <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2026/Junio/SF-2103-jn2026.PDF" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>SBS, «Perú: Reporte de Indicadores de Inclusión Financiera» (CIIF-0001), junio de 2026: número de deudores / población adulta (p. 7) y notas metodológicas (p. 50), según la numeración impresa (pp. 8 y 52 del PDF). <a href="https://intranet2.sbs.gob.pe/estadistica/financiera/2026/Junio/CIIF-0001-jn2026.PDF" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>INEI, Boletín Especial N.° 24, «Perú: Estimaciones y Proyecciones de la Población Nacional, por Año Calendario y Edad Simple, 1950-2050» (cuadros 3 a 5). <a href="https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1681/libro.pdf" target="_blank" rel="noopener">inei.gob.pe</a></li>
+          <li>INDECOPI, Lineamientos para la calificación y análisis de las operaciones de concentración empresarial (Res. N.° 103-2022/CLC-INDECOPI; El Peruano, 30 de enero de 2023), §§ 1.3.1, 2.2 y 2.3.1.2. <a href="https://cdn.www.gob.pe/uploads/document/file/4076612/3862900-lineamientos-para-la-calificacion-y-analisis-de-las-operaciones-de-concentracion-1.pdf" target="_blank" rel="noopener">gob.pe</a></li>
+          <li>Ley N.° 31112, que establece el control previo de operaciones de concentración empresarial (arts. 6.1 y 16). <a href="https://leyes.congreso.gob.pe/Documentos/2016_2021/ADLP/Texto_Consolidado/31112-TXM.pdf" target="_blank" rel="noopener">congreso.gob.pe</a></li>
+          <li>U.S. Department of Justice y Federal Trade Commission, <i>Merger Guidelines</i> (2023), § 2.1 <a href="https://www.justice.gov/atr/2023-merger-guidelines" target="_blank" rel="noopener">justice.gov</a>, y <i>Horizontal Merger Guidelines</i> (2010), § 5.3 <a href="https://www.justice.gov/atr/horizontal-merger-guidelines-08192010" target="_blank" rel="noopener">justice.gov</a>. Reserva Federal, orden 2026-21 (4 de agosto de 2026), nota 14 <a href="https://www.federalreserve.gov/newsevents/pressreleases/files/orders20260804c1.pdf" target="_blank" rel="noopener">federalreserve.gov</a>.</li>
+          <li>Comisión Europea, Directrices sobre la evaluación de las concentraciones horizontales (DO C 31, 5 de febrero de 2004), apartados 19 a 21. <a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:52004XC0205(02)" target="_blank" rel="noopener">eur-lex.europa.eu</a></li>
+          <li>Res. SBS N.° 11356-2008, Reglamento para la Evaluación y Clasificación del Deudor, cap. I, num. 2 b (créditos directos). <a href="https://intranet2.sbs.gob.pe/dv_int_cn/1097/v12.0/Adjuntos/11356-2008.r.pdf" target="_blank" rel="noopener">sbs.gob.pe</a></li>
+          <li>Decreto Supremo N.° 255-2019-EF, Política Nacional de Inclusión Financiera, anexo 5. <a href="https://elperuano.pe/NormasElperuano/2019/08/05/1794201-1/1794201-1.htm" target="_blank" rel="noopener">elperuano.pe</a></li>
+          <li>Comparación internacional: SBS, balances del Banco de la Nación y de Agrobanco (B-5102 y B-5104) <a href="https://www.sbs.gob.pe/app/stats_net/stats/EstadisticaBoletinEstadistico.aspx?p=12" target="_blank" rel="noopener">sbs.gob.pe</a>; Comisión para el Mercado Financiero de Chile, Reporte Mensual de Información Financiera del Sistema Bancario <a href="https://www.cmfchile.cl/portal/estadisticas/626/w4-propertyvalue-28911.html" target="_blank" rel="noopener">cmfchile.cl</a>; Superintendencia Financiera de Colombia, CUIF por entidad en datos.gov.co <a href="https://www.datos.gov.co/resource/mxk5-ce6w.json" target="_blank" rel="noopener">datos.gov.co</a> e Indicadores gerenciales <a href="https://www.superfinanciera.gov.co/publicaciones/10084493" target="_blank" rel="noopener">superfinanciera.gov.co</a>; Banco Central do Brasil, IF.data (servicio de datos abiertos) <a href="https://olinda.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata" target="_blank" rel="noopener">bcb.gov.br</a> y Relatório de Estabilidade Financeira de mayo de 2026 <a href="https://www.bcb.gov.br/content/publicacoes/ref/202605/RELESTAB202605-refPub.pdf" target="_blank" rel="noopener">bcb.gov.br</a>.</li>
+          <li>Fusiones, conversiones, ingresos y salidas: resoluciones SBS citadas en las notas al pie de los cuadros del Boletín Estadístico y en El Peruano (ver la tabla de la pestaña «Concentración»).</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema ----------
+(function theme() {
+  const root = document.documentElement, dark = matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('mercado-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('mercado-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  dark.addEventListener('change', paint);
+  paint();
+})();
+
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = D.months, N = MONTHS.length, SC = D.scopes;
+const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const f1 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+const f2 = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+const pct = (v, d = 1) => v == null ? '—' : fx(v, d) + '%';
+const spp = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + ' pp';
+const spct = (v, d = 1) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d) + '%';
+const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
+const idxOf = m => MONTHS.indexOf(m);
+// Trimestre que cierra en el mes i («ene–mar 2026»).
+const qLabel = i => { const m = MONTHS[i], k = +m.slice(5, 7); return MES[k - 3] + '–' + MES[k - 1] + ' ' + m.slice(0, 4); };
+// Montos: los datos vienen en miles de soles (o miles de dólares en ME).
+const money = v => v == null ? '—' : (v < 0 ? '−' : '') + (Math.abs(v) >= 1e6 ? 'S/ ' + f1.format(Math.abs(v) / 1e6) + ' mil mill.' : 'S/ ' + f0.format(Math.abs(v) / 1e3) + ' mill.');
+const usd = v => v == null ? '—' : Math.abs(v) >= 1e6 ? 'US$ ' + f1.format(v / 1e6) + ' mil mill.' : 'US$ ' + f0.format(v / 1e3) + ' mill.';
+const people = v => v == null ? '—' : v >= 1e6 ? f2.format(v / 1e6) + ' millones' : f0.format(v);
+const soles = v => v == null ? '—' : 'S/ ' + f0.format(v);
+const fpt = v => v == null ? '—' : f0.format(Math.round(v));          // puntos del HHI
+const deudores = v => v == null ? '—' : v >= 1e6 ? f2.format(v / 1e6) + ' millones' : f0.format(v);
+
+const SUBS = D.subs;
+const SUB_COLOR = {'banca-multiple': 'var(--s1)', 'empresas-financieras': 'var(--s2)', 'cajas-municipales': 'var(--s3)',
+  'cajas-rurales': 'var(--s4)', 'empresas-credito': 'var(--s5)'};
+const SUB_BY = Object.fromEntries(SUBS.map(s => [s.k, s]));
+const DEP = new Set(D.dep);
+const EC = 'empresas-credito';
+const CONC = D.conc;
+const VARS = [
+  {k: 'cr', l: 'Créditos', name: 'Créditos directos', lower: 'créditos directos'},
+  {k: 'dep', l: 'Depósitos', name: 'Depósitos totales', lower: 'depósitos totales'},
+  {k: 'pat', l: 'Patrimonio', name: 'Patrimonio', lower: 'patrimonio'},
+];
+const EVARS = VARS.concat([{k: 'deu', l: 'Deudores', name: 'Número de deudores', lower: 'deudores'}]);
+const VAR_BY = Object.fromEntries(EVARS.map(x => [x.k, x]));
+const VAR_COLOR = {cr: 'var(--s1)', dep: 'var(--s2)', pat: 'var(--s3)', deu: 'var(--s4)'};
+const MEAS = [
+  {k: 'hhi', l: 'HHI', name: 'Índice de Herfindahl-Hirschman (HHI)', u: 'hhi'},
+  {k: 'c4', l: '4 mayores', name: 'Participación de las 4 mayores entidades', u: 'pct'},
+  {k: 'n', l: 'Entidades', name: 'Número de entidades', u: 'cnt'},
+];
+const MEAS_BY = Object.fromEntries(MEAS.map(x => [x.k, x]));
+const DTYPES = [
+  {k: 'total', l: 'Total'}, {k: 'consumo', l: 'Consumo'}, {k: 'microempresas', l: 'Microempresa'},
+  {k: 'pequenas_empresas', l: 'Pequeña empresa'}, {k: 'medianas_empresas', l: 'Mediana empresa'},
+  {k: 'grandes_empresas', l: 'Gran empresa'}, {k: 'corporativos', l: 'Corporativo'}, {k: 'hipotecarios', l: 'Hipotecario'},
+];
+const DT_BY = Object.fromEntries(DTYPES.map(x => [x.k, x]));
+const BUSINESS = new Set(['microempresas', 'pequenas_empresas', 'medianas_empresas', 'grandes_empresas', 'corporativos']);
+const RECLASS = idxOf(D.reclass);
+// Último mes en que publicaron los cinco subsistemas: mes por defecto (los cuadros salen a distinto ritmo).
+const ALL_LAST = D.allHasta && idxOf(D.allHasta) >= 0 ? idxOf(D.allHasta) : N - 1;
+
+// ---------- Estado ----------
+const state = {var: 'cr', meas: 'hhi', mi: ALL_LAST, range: 'todo', scope: 'sistema', sub: 'banca-multiple', evar: 'cr', ent: null,
+  aview: 'n', dview: 'n', dtype: 'total'};
+const RANGES = [
+  {id: '5a', label: '5 años', n: 60},
+  {id: '10a', label: '10 años', n: 120},
+  {id: 'todo', label: 'Desde ' + MONTHS[0].slice(0, 4), n: N},
+];
+
+// ---------- Datos ----------
+const isEnt = sc => sc.includes('/');
+function gv(o, f, i) {
+  if (!o || i == null || i < 0) return null;
+  const a = o.V[f];
+  if (!a) return null;
+  const j = i - o.a;
+  return j < 0 || j >= a.length ? null : a[j];
+}
+const cget = (sc, f, i) => gv(CONC[sc], f, i);
+const eget = (k, f, i) => gv(SC[k], f, i);
+const dget = (s, f, i) => gv(D.deu[s], f, i);
+// Mes con dato en i o, si el ámbito todavía no publica i (no hay dato en i ni después), su último mes con
+// dato (hasta `back` meses antes). Un hueco en medio de la serie no se rellena: ese dato no existe.
+function lastIdx(has, i, back = 3) {
+  if (i == null || i < 0) return null;
+  if (has(i)) return i;
+  for (let j = i + 1; j < N; j++) if (has(j)) return null;
+  for (let j = i - 1; j >= Math.max(0, i - back); j--) if (has(j)) return j;
+  return null;
+}
+const cIdx = (sc, i, v = state.var) => lastIdx(j => cget(sc, 'hhi_' + v, j) != null, i);
+const takes = sc => sc === 'sistema' || DEP.has(sc);
+const scopeLabel = sc => sc === 'sistema' ? 'Sistema' : SUB_BY[sc].l;
+const scopeOf = sc => sc === 'sistema' ? 'del sistema' : (sc === 'banca-multiple' ? 'de la ' : 'de las ') + SUB_BY[sc].l.toLowerCase();
+const inScope = sc => sc === 'sistema' ? 'en el sistema' : (sc === 'banca-multiple' ? 'en la ' : 'en las ') + SUB_BY[sc].l.toLowerCase();
+const subName = s => (s === 'banca-multiple' ? 'la ' : 'las ') + SUB_BY[s].l.toLowerCase();
+const joinY = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+const scopesFor = v => ['sistema'].concat(SUBS.map(s => s.k).filter(s => v !== 'dep' || DEP.has(s)));
+
+// Deudores únicos (SF-2103, trimestral): fila vigente en el mes i = último trimestre publicado hasta i.
+const SF = D.sf.map(r => ({...r, i: idxOf(r.m)})).filter(r => r.i >= 0);
+const SF_AT = new Map(SF.map(r => [r.i, r]));
+function sfAt(i) { let r = null; for (const x of SF) if (x.i <= i) r = x; return r; }
+const SF0 = SF.length ? SF[0].i : N;
+const dupOf = r => { if (!r) return null; const s = Object.values(r.subs || {}); return s.length === SUBS.length ? s.reduce((a, b) => a + b, 0) / r.eom : null; };
+// Población de 18 años a más (INEI, al 30 de junio): interpolación lineal entre años; fuera del rango, el año más cercano.
+const POP = D.pop || null;
+function pop18(i) {
+  if (!POP || !POP.length) return null;
+  const m = MONTHS[i], t = +m.slice(0, 4) + (+m.slice(5, 7) - 6) / 12;
+  if (t <= POP[0][0]) return POP[0][1];
+  for (let k = 1; k < POP.length; k++) if (t <= POP[k][0]) { const [a, pa] = POP[k - 1], [b, pb] = POP[k]; return pa + (pb - pa) * (t - a) / (b - a); }
+  return POP[POP.length - 1][1];
+}
+const perAdult = (n, i) => { const p = pop18(i); return n == null || !p ? null : 100 * n / p; };
+// Indicador oficial de la SBS (Reporte de Indicadores de Inclusión Financiera, junio de cada año): solo personas naturales.
+const CIIF = new Map((D.ciif || []).map(([m, v]) => [idxOf(m), v]).filter(([i]) => i >= 0));
+
+// Eventos (fusiones, absorciones, conversiones, ingresos y salidas).
+const EV = (D.events || []).map(e => ({...e, i: idxOf(e.m)})).filter(e => e.i >= 0);
+const EV_TYPE = {ingreso: 'Ingreso', salida: 'Salida', absorcion: 'Absorción', fusion: 'Fusión', cambio_subsistema: 'Cambio de subsistema',
+  intervencion: 'Intervención', transferencia_cartera: 'Transferencia de cartera'};
+const evFor = sc => sc === 'sistema' ? EV : EV.filter(e => (e.ss || [e.s]).includes(sc));
+const evMarks = sc => evFor(sc).map(e => ({i: e.i, color: SUB_COLOR[sc === 'sistema' ? e.s : sc] || 'var(--ink2)', text: e.l, ss: e.ss || [e.s]}));
+
+// ---------- Utilidades de SVG / HTML ----------
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (!(hi > lo)) hi = lo + 1;
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks};
+}
+const numTick = t => (t < 0 ? '−' : '') + String(+Math.abs(t).toFixed(2));
+// Escala del eje según la unidad.
+function axisOf(u, absMax) {
+  if (u === 'pct') return {div: 1, unit: null, tick: t => (t === 0 ? '0' : numTick(t)) + '%'};
+  if (u === 'hhi') return {div: 1, unit: 'Puntos (de 0 a 10,000)', tick: t => f0.format(t)};
+  if (u === 'cnt') return {div: 1, unit: 'Entidades', tick: numTick};
+  if (u === 'x') return {div: 1, unit: 'Veces', tick: t => fx(t, 2)};
+  if (u === 'pc') return {div: 1, unit: 'Deudores por cada 100 adultos', tick: numTick};
+  if (u === 'deu') return absMax >= 1e6 ? {div: 1e6, unit: 'Millones de deudores', tick: numTick} : {div: 1e3, unit: 'Miles de deudores', tick: numTick};
+  if (u === 'n') return absMax >= 1e6 ? {div: 1e6, unit: 'Millones de personas', tick: numTick} : {div: 1e3, unit: 'Miles de personas', tick: numTick};
+  if (u === 'dp') return absMax >= 1e6 ? {div: 1e6, unit: 'Millones de depositantes', tick: numTick} : {div: 1e3, unit: 'Miles de depositantes', tick: numTick};
+  if (u === 'soles') return absMax >= 1e7 ? {div: 1e6, unit: 'Millones de S/', tick: numTick} : {div: 1e3, unit: 'Miles de S/', tick: t => f0.format(t)};
+  const big = absMax >= 1e6;
+  return {div: big ? 1e6 : 1e3, unit: big ? 'Miles de millones de S/' : 'Millones de S/', tick: t => Math.abs(t) >= 1000 ? f0.format(t) : numTick(t)};
+}
+
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r'}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+function timeTicks(months, plotW) {
+  const n = months.length, years = n / 12;
+  const maxTicks = Math.max(2, Math.floor(plotW / 64));
+  if (years <= 3) {
+    const step = [1, 2, 3, 6, 12].find(s => n / s <= maxTicks) || 12;
+    return months.map((m, i) => [m, i]).filter(([m]) => (+m.slice(5, 7) - 1) % step === 0)
+      .map(([m, i]) => ({i, text: step >= 12 || m.slice(5, 7) === '01' ? m.slice(0, 4) : MES[+m.slice(5, 7) - 1]}));
+  }
+  const step = [1, 2, 5, 10].find(s => years / s <= maxTicks) || 10;
+  return months.map((m, i) => [m, i]).filter(([m]) => m.slice(5, 7) === '01' && +m.slice(0, 4) % step === 0)
+    .map(([m, i]) => ({i, text: m.slice(0, 4)}));
+}
+function drawYGrid(svg, ticks, y, x0, x1, fmt) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = fmt(t);
+  }
+}
+function drawXTicks(svg, ticks, x, yPos) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of ticks) svgEl('text', {x: x(t.i), y: yPos, 'text-anchor': 'middle'}, g).textContent = t.text;
+}
+function visIdx() {
+  const r = RANGES.find(z => z.id === state.range);
+  const out = [];
+  for (let i = Math.max(0, N - r.n); i < N; i++) out.push(i);
+  return out;
+}
+// Hover y teclado compartidos por los gráficos de tiempo: mueve un índice de mes.
+function timeHover(svg, hit, idx, x0, pw, onShow, onHide, step = 1) {
+  const n = idx.length;
+  let cur = null;
+  const at = i => Math.max(idx[0], Math.min(idx[n - 1], i));
+  const show = (i, evt) => { cur = i; onShow(i, evt); };
+  const fromPointer = evt => {
+    const r = svg.getBoundingClientRect();
+    show(at(idx[0] + Math.round((evt.clientX - r.left - x0) / pw * (n - 1))), evt);
+  };
+  hit.addEventListener('pointermove', fromPointer);
+  hit.addEventListener('pointerdown', fromPointer);
+  // Con el dedo, el tooltip queda hasta tocar fuera del gráfico (blur); el pointerleave del toque lo borraría.
+  hit.addEventListener('pointerleave', evt => { if (evt.pointerType !== 'touch') onHide(); });
+  hit.addEventListener('blur', onHide);
+  hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(at((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? step : -step)), null);
+  });
+}
+const trimIdx = (idx, has) => { const a = idx.findIndex(has); return a < 0 ? [] : idx.slice(a); };
+const emptyMsg = (box, msg) => htmlEl('p', {cls: 'empty', text: msg || 'No hay datos para esta combinación.'}, box);
+const legendItem = (lg, cls, color, text) => { const s = htmlEl('span', null, lg); const i = htmlEl('i', {cls}, s); if (color) i.style.background = color; s.appendChild(document.createTextNode(text)); return i; };
+// ---------- Gráfico de líneas (cruz y tooltip compartidos por grupo) ----------
+// Una serie con `sparse` (RCL trimestral) une sus puntos aunque haya meses vacíos y los marca con círculos.
+function makeGroup() {
+  const g = {charts: [], cur: null};
+  g.show = (i, evt, from) => {
+    g.cur = i;
+    g.charts.forEach(c => c.mark(i));
+    const [cx, cy] = anchorOf(evt, from.cross);
+    showTip(cx, cy, from.title ? from.title(i) : mLabel(MONTHS[i]), g.charts.flatMap(c => c.rows(i)));
+  };
+  g.hide = () => { hideTip(); g.charts.forEach(c => c.unmark()); };
+  return g;
+}
+let clipSeq = 0;
+function lineChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return null;
+  const series = cfg.series, fmt = cfg.fmt || pct;
+  const idx = cfg.keepIdx ? cfg.idx : trimIdx(cfg.idx, i => series.some(s => !s.isMin && s.get(i) != null));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return null; }
+  // cfg.zero === false: el eje no empieza en cero (series que se mueven en un rango estrecho, como un cociente).
+  let lo = cfg.zero === false ? Infinity : 0, hi = cfg.zero === false ? -Infinity : 0;
+  for (const i of idx) for (const s of series) { const v = s.get(i); if (v == null) continue; if (v > hi) hi = v; if (v < lo) lo = v; }
+  // Umbrales de referencia (cfg.refs: [{v, label}]): el eje los incluye para que siempre se vean.
+  const refs = cfg.refs || [];
+  for (const r of refs) { if (r.v > hi) hi = r.v; if (r.v < lo) lo = r.v; }
+  const clipped = cfg.clip && (lo < cfg.clip[0] || hi > cfg.clip[1]);
+  if (cfg.clip) { lo = Math.max(lo, cfg.clip[0]); hi = Math.min(hi, cfg.clip[1]); }
+  const ax = axisOf(cfg.u, Math.max(-lo, hi));
+  const compact = !!cfg.compact, narrow = W < 600;
+  const showEnd = cfg.endLabels && !narrow;
+  // ¿Alguna etiqueta final lleva su mes (último dato de hace más de 3 meses, 5 en las trimestrales)? Entonces más margen.
+  const endRef = cfg.endAt != null ? cfg.endAt : Infinity;
+  const lagEnd = showEnd && series.some(s => {
+    if (s.noEnd) return false;
+    for (let j = n - 1; j >= 0; j--) { if (idx[j] > endRef) continue; if (s.get(idx[j]) != null) return Math.min(endRef, idx[n - 1]) - idx[j] > (s.sparse ? 5 : 3); }
+    return false;
+  });
+  const m = {l: compact ? 40 : 46, r: showEnd ? (cfg.endW || 140) + (lagEnd ? 64 : 0) : (cfg.padR ?? (compact ? 8 : 14)), t: (compact ? 8 : 12) + (ax.unit && !compact ? 14 : 0), b: compact ? 22 : 26};
+  const H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const span = hi - lo || Math.abs(hi) || 1;
+  const cap = cfg.u === 'pct' && hi <= 100 ? 100 : Infinity;
+  const dom = cfg.zero === false ? niceDomain((lo - span * 0.08) / ax.div, Math.min(cap, (hi + span * 0.08) / ax.div), compact ? 3 : 5)
+    : niceDomain(lo / ax.div * 1.04, Math.min(cap, hi / ax.div * 1.04), compact ? 3 : 5);
+  const y = v => m.t + (dom.hi - Math.max(lo, Math.min(hi, v)) / ax.div) / (dom.hi - dom.lo) * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  box.dataset.mr = m.r;
+  drawYGrid(svg, dom.ticks, t => m.t + (dom.hi - t) / (dom.hi - dom.lo) * ph, m.l, m.l + pw, ax.tick);
+  if (ax.unit && !compact) svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = ax.unit;
+  drawXTicks(svg, (cfg.ticks ? cfg.ticks(idx, pw) : timeTicks(idx.map(i => MONTHS[i]), pw)).filter(t => !compact || x(idx[0] + t.i) >= m.l + 16), c => x(idx[0] + c), H - 7);
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  for (const r of refs) {
+    svgEl('line', {x1: m.l, x2: m.l + pw, y1: y(r.v), y2: y(r.v), stroke: 'var(--ink2)', 'stroke-width': 1.25, 'stroke-dasharray': '5 4', opacity: 0.8}, svg);
+    if (!compact && r.label) svgEl('text', {x: m.l + 6, y: y(r.v) - 5, class: 'ref-lbl'}, svg).textContent = r.label;
+  }
+  // Eventos (cfg.events: [{i, color, text}]): triángulos sobre el eje horizontal; el detalle sale en el tooltip.
+  const evs = (cfg.events || []).filter(e => e.i >= idx[0] && e.i <= idx[n - 1]);
+  const evAt = new Map();
+  for (const e of evs) { if (!evAt.has(e.i)) evAt.set(e.i, []); evAt.get(e.i).push(e); }
+  for (const [i, list] of evAt) list.forEach((e, k) => {
+    const xi = x(i), yb = m.t + ph - k * 7;
+    svgEl('path', {d: 'M' + (xi - 4).toFixed(1) + ',' + yb.toFixed(1) + 'L' + (xi + 4).toFixed(1) + ',' + yb.toFixed(1) + 'L' + xi.toFixed(1) + ',' + (yb - 7).toFixed(1) + 'Z',
+      fill: e.color, stroke: 'var(--surface)', 'stroke-width': 1}, svg);
+  });
+  const pathOf = s => {
+    let d = '', pen = false, py = null;
+    for (const i of idx) {
+      const v = s.get(i);
+      // Una serie trimestral (sparse) une sus puntos; con qbreak se corta si falta un cierre de trimestre.
+      if (v == null) { if (!s.sparse || (s.qbreak && +MONTHS[i].slice(5, 7) % 3 === 0)) pen = false; continue; }
+      const xi = x(i), yi = y(v);
+      if (s.step && pen && yi !== py) d += 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + py.toFixed(1) + 'L' + (xi - pw / (n - 1) / 2).toFixed(1) + ',' + yi.toFixed(1);
+      d += (pen ? 'L' : 'M') + xi.toFixed(1) + ',' + yi.toFixed(1);
+      pen = true; py = yi;
+    }
+    return d;
+  };
+  for (const s of series) {
+    const a = {d: pathOf(s), fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'};
+    if (s.dash) a['stroke-dasharray'] = s.dash;
+    svgEl('path', a, svg);
+    if (s.sparse) for (const i of idx) { const v = s.get(i); if (v != null) svgEl('circle', {cx: x(i), cy: y(v), r: 3, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 1.5}, svg); }
+  }
+  if (clipped) svgEl('text', {x: m.l + pw, y: m.t + ph - 6, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Escala cortada en ' + cfg.clip.map(v => v + '%').join(' y ');
+  if (showEnd) {
+    // Etiquetas finales: el último valor hasta el mes elegido (cfg.endAt), para que coincidan con el resumen.
+    const endAt = cfg.endAt != null ? cfg.endAt : Infinity;
+    const ends = series.filter(s => !s.noEnd).map(s => {
+      for (let j = n - 1; j >= 0; j--) { if (idx[j] > endAt) continue; const v = s.get(idx[j]); if (v != null) return {s, i: idx[j], v, y: y(v)}; }
+      return null;
+    }).filter(Boolean).sort((a, b) => a.y - b.y);
+    // Separación mínima de 15 px: primero hacia abajo y, si se salen del gráfico, de vuelta hacia arriba.
+    for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+    for (let j = ends.length - 1; j >= 0; j--) {
+      const lim = j === ends.length - 1 ? m.t + ph : ends[j + 1].y - 15;
+      if (ends[j].y > lim) ends[j].y = lim;
+    }
+    for (const e of ends) {
+      if (!e.s.isMin && !e.s.sparse) svgEl('circle', {cx: x(e.i), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: e.s.isMin ? 'minlbl' : 'dval'}, t).textContent = fmt(e.v);
+      const ref = Math.min(endAt, idx[n - 1]);
+      svgEl('tspan', {}, t).textContent = ' ' + (e.s.short || e.s.label) + (ref - e.i > (e.s.sparse ? 5 : 3) ? ' (' + mLabel(MONTHS[e.i]) + ')' : '');
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  const group = cfg.group || makeGroup();
+  const chart = {
+    cross, title: cfg.title,
+    mark(i) {
+      const xi = Math.max(m.l, Math.min(m.l + pw, x(i)));
+      cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+      series.forEach((s, j) => {
+        const v = i >= idx[0] && i <= idx[n - 1] && !s.isMin ? s.get(i) : null;
+        dots[j].setAttribute('visibility', v == null ? 'hidden' : 'visible');
+        if (v != null) { dots[j].setAttribute('cx', x(i)); dots[j].setAttribute('cy', y(v)); }
+      });
+    },
+    unmark() { cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); },
+    rows(i) {
+      // Rezago: si la serie ya no tiene dato en i ni después (la SBS aún no lo publica), su último dato, con su mes.
+      const lagOf = s => {
+        for (let j = i + 1; j < N; j++) if (s.get(j) != null) return null;
+        for (let j = i - 1; j >= Math.max(0, i - (s.sparse ? 5 : 3)); j--) { const v = s.get(j); if (v != null) return {v, j}; }
+        return null;
+      };
+      const main = series.filter(s => !s.noTip && !s.isMin).map(s => {
+        const v = s.get(i);
+        if (v != null) return {v, label: s.label, color: s.color};
+        const why = s.na ? s.na(i) : null;
+        const L = why ? null : lagOf(s);
+        return L ? {v: L.v, label: s.label + ' (' + mLabel(MONTHS[L.j]) + ', último publicado)', color: s.color} : {v: null, label: s.label + (why ? ' (' + why + ')' : ''), color: s.color};
+      }).filter(r => !cfg.skipEmpty || r.v != null)
+        .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity)).map(r => ({value: fmt(r.v), label: r.label, color: r.color}));
+      const evRows = (evAt.get(i) || []).map(e => ({value: '▲', label: e.text, color: e.color, sq: true}));
+      if (!main.length) return [{value: '—', label: cfg.naTip || 'Sin dato en este mes'}].concat(evRows);
+      const mins = series.filter(s => s.isMin && s.get(i) != null).map(s => ({value: fmt(s.get(i)), label: s.label, color: s.color}));
+      return main.concat(mins, evRows);
+    },
+  };
+  group.charts.push(chart);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => group.show(cfg.snap ? cfg.snap(i) : i, evt, chart), group.hide, cfg.step);
+  return chart;
+}
+
+// ---------- Áreas apiladas al 100% ----------
+function areaChart(box, cfg) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const layers = cfg.layers;
+  const idx = trimIdx(cfg.idx, i => layers.some(l => l.get(i) != null) && (!cfg.ok || cfg.ok(i)));
+  const n = idx.length;
+  if (n < 2) { emptyMsg(box, cfg.empty); return; }
+  const tot = i => layers.reduce((a, l) => a + Math.max(0, l.get(i) || 0), 0);
+  const has = i => tot(i) > 0 && (!cfg.ok || cfg.ok(i));
+  const narrow = W < 600;
+  const m = {l: 46, r: narrow ? 14 : 150, t: 14, b: 26}, H = cfg.H || 320, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const y = v => m.t + (100 - v) / 100 * ph;
+  const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+  drawYGrid(svg, [0, 25, 50, 75, 100], y, m.l, m.l + pw, t => t + '%');
+  drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+  const share = (l, i) => { const T = tot(i); return T > 0 ? 100 * Math.max(0, l.get(i) || 0) / T : 0; };
+  // Bandas: se cortan en los meses sin dato.
+  const segs = [];
+  let cur = [];
+  for (const i of idx) { if (has(i)) cur.push(i); else if (cur.length) { segs.push(cur); cur = []; } }
+  if (cur.length) segs.push(cur);
+  for (const seg of segs) {
+    const cum = seg.map(() => 0);
+    for (const l of layers) {
+      const lo = cum.slice(), up = seg.map((i, j) => (cum[j] += share(l, i)));
+      if (up.every((v, j) => v === lo[j])) continue;
+      let d = 'M' + seg.map((i, j) => x(i).toFixed(1) + ',' + y(up[j]).toFixed(1)).join('L');
+      d += 'L' + seg.map((i, j) => [i, j]).reverse().map(([i, j]) => x(i).toFixed(1) + ',' + y(lo[j]).toFixed(1)).join('L') + 'Z';
+      svgEl('path', {d, fill: l.color, stroke: 'var(--surface)', 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+    }
+  }
+  if (cfg.marker != null && cfg.marker >= idx[0] && cfg.marker < idx[n - 1]) {
+    svgEl('line', {x1: x(cfg.marker), x2: x(cfg.marker), y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+  }
+  if (!narrow) {
+    let j = n - 1;
+    while (j > 0 && !has(idx[j])) j--;
+    const i = idx[j], ends = [];
+    let c = 0;
+    for (const l of layers) {
+      const v = share(l, i), a = c; c += v;
+      if (v && y(a) - y(c) >= 13) ends.push({y: (y(a) + y(c)) / 2, v: pct(v, 1), t: l.short});
+    }
+    ends.sort((a, b) => a.y - b.y);
+    for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+    for (const e of ends) {
+      const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+      svgEl('tspan', {class: 'dval'}, t).textContent = e.v;
+      svgEl('tspan', {}, t).textContent = ' ' + e.t;
+    }
+  }
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: Math.max(1, pw), height: ph, tabindex: 0,
+    'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+  timeHover(svg, hit, idx, m.l, pw, (i, evt) => {
+    const xi = x(i);
+    cross.setAttribute('x1', xi); cross.setAttribute('x2', xi); cross.setAttribute('visibility', 'visible');
+    let k = i;
+    if (!has(i)) {
+      let later = false;
+      for (let j = i + 1; j < N; j++) if (has(j)) { later = true; break; }
+      k = null;
+      if (!later) for (let j = i - 1; j >= Math.max(0, i - 3); j--) if (has(j)) { k = j; break; }
+      if (k == null) { showTip(...anchorOf(evt, cross), mLabel(MONTHS[i]), [{value: '—', label: (typeof cfg.naTip === 'function' ? cfg.naTip(i) : cfg.naTip) || 'Sin dato'}]); return; }
+    }
+    const T = tot(k);
+    const title = k === i ? mLabel(MONTHS[i]) : mLabel(MONTHS[i]) + ' · último mes con todos los subsistemas: ' + mLabel(MONTHS[k]);
+    const rows = layers.slice().reverse().filter(l => l.get(k) != null && l.get(k) !== 0)
+      .map(l => ({value: pct(share(l, k), 1), label: l.label + ' · ' + money(l.get(k)), color: l.color, sq: true}));
+    rows.unshift({value: money(T), label: cfg.totalName || 'Total'});
+    showTip(...anchorOf(evt, cross), title, rows);
+  }, () => { hideTip(); cross.setAttribute('visibility', 'hidden'); });
+}
+
+// ---------- Textos dinámicos ----------
+function deltaSpan(parent, d, fmt, suffix) {
+  if (d == null) { htmlEl('span', {text: suffix == null || suffix === ' en 12 meses' ? 'sin dato de hace 12 meses' : 'sin dato para comparar'}, parent); return; }
+  const r = Math.abs(d) < 1e-9 || fmt(Math.abs(d)) === fmt(0);
+  const s = htmlEl('span', {cls: 'd-flat'}, parent);
+  s.textContent = r ? '= sin cambio' : (d > 0 ? '▲ ' : '▼ ') + fmt(Math.abs(d));
+  parent.appendChild(document.createTextNode(suffix != null ? suffix : ' en 12 meses'));
+}
+// Banda del HHI según los umbrales de referencia (D.refs: {cuts: [a, b], labels: [...], src}).
+function refBand(h) {
+  const R = D.refs;
+  if (!R || !R.cuts || h == null) return null;
+  let k = 0;
+  while (k < R.cuts.length && h >= R.cuts[k]) k++;
+  return R.labels[k];
+}
+const MDESC = {
+  hhi: 'Suma de los cuadrados de las participaciones (en %) de todas las entidades: va de casi 0, con muchas entidades pequeñas, a 10,000, con una sola.',
+  c4: 'Suma de las participaciones de las cuatro entidades más grandes.',
+  n: 'Entidades con saldo positivo en la variable ese mes.',
+};
+const fmtMeas = (m, v) => m === 'hhi' ? fpt(v) : m === 'c4' ? pct(v) : v == null ? '—' : f0.format(v);
+
+// ---------- Resumen de concentración (KPIs) ----------
+function naConc(sc, v = state.var) {
+  if (v === 'dep' && sc === EC) return 'Las empresas de créditos no captan depósitos del público.';
+  return null;
+}
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.replaceChildren();
+  const sc = state.scope, v = state.var, V = VAR_BY[v], i = state.mi;
+  const note = document.getElementById('kpi-note');
+  const na = naConc(sc, v);
+  if (na) { emptyMsg(box, na + ' Elija créditos o patrimonio, u otro ámbito.'); note.hidden = true; return; }
+  const rna = rkNa(sc, i, v);
+  if (rna) { emptyMsg(box, rna + ' Elija otro mes.'); note.hidden = true; return; }
+  const j = cIdx(sc, i, v);
+  const at = f => j == null ? null : cget(sc, f + '_' + v, j);
+  const prev = f => j == null ? null : cget(sc, f + '_' + v, j - 12);
+  const tag = j != null && j !== i ? mLabel(MONTHS[j]) : null;
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: 'Índice de concentración (HHI) de ' + V.lower + ' ' + scopeOf(sc)}, hero);
+  const hv = htmlEl('div', {cls: 'val', text: fpt(at('hhi'))}, hero);
+  htmlEl('span', {cls: 'unit', text: mLabel(MONTHS[j ?? i])}, hv);
+  const s1 = htmlEl('div', {cls: 'sub'}, hero);
+  deltaSpan(s1, at('hhi') != null && prev('hhi') != null ? at('hhi') - prev('hhi') : null, d => fpt(d) + ' puntos');
+  const band = D.refs && D.refs.vars.includes(v) ? refBand(at('hhi')) : null;
+  if (band) htmlEl('div', {cls: 'sub', text: band + ', según las referencias del INDECOPI, pensadas para fusiones en un mercado relevante (' + (sc === 'sistema' ? 'el sistema' : 'un subsistema') + ' no lo es); no son límites'}, hero);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  htmlEl('div', {cls: 'sub', text: 'Desde ' + mLabel(MONTHS[CONC[sc].a])}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  const tiles = [
+    {lab: 'Participación de las 4 mayores', val: pct(at('c4')), d: at('c4') != null && prev('c4') != null ? at('c4') - prev('c4') : null, fd: x => fx(x, 1) + ' pp'},
+    {lab: 'Entidades con ' + V.lower, val: at('n') == null ? '—' : f0.format(at('n')), d: at('n') != null && prev('n') != null ? at('n') - prev('n') : null, fd: x => f0.format(x)},
+    {lab: 'Equivale a este número de entidades del mismo tamaño', val: at('hhi') ? f1.format(10000 / at('hhi')) : '—', sub: 'es 10,000 ÷ HHI'},
+    {lab: 'Mayor entidad', val: at('t1') == null ? '—' : pct(at('t1')), sub: at('t1id') || ''},
+    {lab: V.name + ' ' + scopeOf(sc), val: money(at('tot')),
+      sub: sc !== 'sistema' && j != null && cget('sistema', 'tot_' + v, j) ? pct(100 * at('tot') / cget('sistema', 'tot_' + v, j)) + ' del sistema' : ''},
+  ];
+  // Inicio de la serie: el primer mes con dato del ámbito.
+  const a0 = CONC[sc].a, h0 = cget(sc, 'hhi_' + v, a0);
+  tiles.push({lab: 'HHI en ' + mLabel(MONTHS[a0]), val: fpt(h0), d: at('hhi') != null && h0 != null ? at('hhi') - h0 : null, fd: x => fpt(x) + ' puntos', suf: ' desde entonces'});
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const tv = htmlEl('div', {cls: 'val', text: t.val}, d);
+    if (tag && t.lab !== 'HHI en ' + mLabel(MONTHS[a0])) htmlEl('span', {cls: 'unit', text: tag}, tv);
+    if (t.fd) deltaSpan(htmlEl('div', {cls: 'sub'}, d), t.d, t.fd, t.suf);
+    if (t.sub) htmlEl('div', {cls: 'sub', text: t.sub}, d);
+  }
+  const idx = [];
+  for (let k = CONC[sc].a; k <= (j ?? i); k++) idx.push(k);
+  lineChart(spark, {idx, H: 140, compact: true, u: 'hhi', fmt: fpt, aria: 'HHI ' + scopeOf(sc) + ' desde el inicio de la serie', empty: 'Es el primer mes de la serie.',
+    series: [{label: 'HHI', color: sc === 'sistema' ? 'var(--accent)' : SUB_COLOR[sc], w: 2, get: k => cget(sc, 'hhi_' + v, k)}]});
+  const msgs = [];
+  if (sc === 'sistema') msgs.push('El sistema son los cinco subsistemas de este tablero' + (v === 'dep' ? '; en depósitos, los cuatro que captan (sin las empresas de créditos)' : '') +
+    '. Cada entidad cuenta por separado aunque pertenezca a un mismo grupo económico.');
+  if (tag) msgs.push((sc === 'sistema' ? 'El sistema llega' : (sc === 'banca-multiple' ? 'La banca múltiple llega' : 'Las ' + SUB_BY[sc].l.toLowerCase() + ' llegan')) +
+    ' hasta ' + tag + ': ' + (sc === 'sistema' ? 'algún subsistema' : 'la SBS') + ' todavía no publica ' + mLabel(MONTHS[i]) + '.');
+  note.hidden = !msgs.length; note.textContent = msgs.join(' ');
+}
+
+// ---------- Evolución de la concentración ----------
+function evoSeries() {
+  const v = state.var, m = state.meas;
+  return scopesFor(v).map(sc => sc === 'sistema'
+    ? {k: sc, label: 'Sistema', short: 'Sistema', color: 'var(--sys)', w: 2.5, dash: '5 4', get: i => cget(sc, m + '_' + v, i), na: i => rkWhy(sc, i, v)}
+    : {k: sc, label: SUB_BY[sc].l, short: SUB_BY[sc].s, color: SUB_COLOR[sc], w: 2, get: i => cget(sc, m + '_' + v, i), na: i => rkWhy(sc, i, v)});
+}
+function renderEvo() {
+  const M = MEAS_BY[state.meas], V = VAR_BY[state.var];
+  document.getElementById('evo-title').textContent = M.name + ' en ' + V.lower + ', por subsistema';
+  document.getElementById('evo-desc').textContent = MDESC[M.k] + ' La línea gris discontinua es el sistema. Los triángulos sobre el eje marcan fusiones, conversiones, ingresos y salidas de entidades (pase el cursor por el gráfico para verlos).';
+  const series = evoSeries();
+  const lg = document.getElementById('evo-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
+  if (EV.length) legendItem(lg, 'tri', null, 'Evento (del color de su subsistema)');
+  const refs = M.k === 'hhi' && D.refs && D.refs.vars.includes(state.var) ? D.refs.cuts.map((c, k) => ({v: c, label: D.refs.lines[k]})) : null;
+  if (refs) legendItem(lg, 'ln refdash', null, 'Referencias del INDECOPI para evaluar concentraciones');
+  lineChart(document.getElementById('ch-evo'), {idx: visIdx(), H: 360, endLabels: true, endAt: state.mi, series, marker: state.mi, u: M.u, fmt: v => fmtMeas(M.k, v),
+    refs, events: evMarks('sistema').filter(e => state.var !== 'dep' || e.ss.some(s => DEP.has(s))), aria: M.name + ' por subsistema'});
+  const msgs = [];
+  if (state.var === 'dep') msgs.push('Las empresas de créditos no aparecen: no captan depósitos.');
+  if (M.k === 'hhi') msgs.push('El HHI de cada subsistema mide la concentración dentro de ese grupo de entidades; los subsistemas compiten entre sí, así que no es el mercado de un producto. Las líneas de 1,500 y 2,500 son referencias del INDECOPI para evaluar concentraciones en un mercado definido caso por caso, no límites legales.' + (document.getElementById('ch-evo').clientWidth >= 600 && visIdx().includes(state.mi) ? ' Las cifras de la derecha son del mes elegido.' : '') + (state.var === 'pat' ? ' En patrimonio no se dibujan: el patrimonio mide tamaño, no un mercado.' : ''));
+  if (M.k === 'c4') msgs.push('Con 4 entidades o menos, la participación de las 4 mayores es 100% por definición.');
+  if (M.k === 'c4' && state.var !== 'pat') msgs.push('La SBS publica cada trimestre la participación de los cuatro bancos grandes en los cinco subsistemas (reporte SF-2103); casi coincide con la línea del sistema (ver «Cómo leer los datos»).');
+  if (M.k === 'n') msgs.push('Una entidad que cambia de subsistema (por ejemplo, una financiera que se convierte en banco) sale de uno y entra al otro el mismo mes.');
+  document.getElementById('evo-note').textContent = msgs.join(' ');
+}
+
+// ---------- Peso de cada subsistema ----------
+function pesLayers() {
+  const v = state.var;
+  return SUBS.filter(s => v !== 'dep' || DEP.has(s.k)).map(s => ({label: s.l, short: s.s, color: SUB_COLOR[s.k], get: i => cget(s.k, 'tot_' + v, i)}));
+}
+function renderPes() {
+  const V = VAR_BY[state.var];
+  document.getElementById('pes-title').textContent = 'Cuánto pesa cada subsistema en ' + V.lower;
+  document.getElementById('pes-desc').textContent = 'Participación de cada subsistema en el total de ' + V.lower + ' del sistema, a fin de cada mes.';
+  const L = pesLayers();
+  const lg = document.getElementById('pes-legend');
+  lg.replaceChildren();
+  for (const l of L.slice().reverse()) legendItem(lg, 'dot sq', l.color, l.label);
+  areaChart(document.getElementById('ch-pes'), {idx: visIdx(), H: 300, marker: state.mi, layers: L, totalName: V.name + ' del sistema',
+    ok: i => cget('sistema', 'tot_' + state.var, i) != null, naTip: i => rkNa('sistema', i, state.var), aria: 'Participación de cada subsistema en ' + V.lower});
+  const rkm = rkMonths('sistema', state.var);
+  document.getElementById('pes-note').textContent = 'Solo meses en que publicaron todos los subsistemas: falta nov 2010, porque el ranking de las cajas rurales de ese mes trae cifras inválidas' +
+    (rkm.length ? ', y ' + joinY(rkm.map(mLabel)) + ', porque en esos meses el ranking de un subsistema repite las cifras de otro mes de una de sus entidades grandes' : '') + '. Montos en soles corrientes.' +
+    (state.var === 'dep' ? ' Las empresas de créditos no captan depósitos.' : '');
+}
+
+// ---------- Eventos ----------
+function renderEvt() {
+  const sc = state.scope, list = evFor(sc).slice().sort((a, b) => b.i - a.i || a.s.localeCompare(b.s));
+  document.getElementById('evt-desc').textContent = (sc === 'sistema' ? 'Todos los subsistemas' : SUB_BY[sc].l) +
+    ', del más reciente al más antiguo. Son los cambios que mueven la concentración y las series por subsistema; el mes es el primero en que el cambio se ve en los cuadros de la SBS.';
+  const wrap = document.getElementById('tb-evt');
+  wrap.replaceChildren();
+  if (!list.length) { emptyMsg(wrap, 'No hay eventos registrados para este ámbito.'); return; }
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  ['Mes', 'Subsistema', 'Evento', 'Norma o fuente'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  for (const e of list) {
+    const row = htmlEl('tr', null, tb);
+    htmlEl('td', {text: mLabel(e.m)}, row);
+    const ts = htmlEl('td', null, row);
+    (e.ss || [e.s]).forEach((s, k) => {
+      if (k) ts.appendChild(document.createTextNode(' · '));
+      const tag = htmlEl('span', {cls: 'ev-tag'}, ts); tag.style.background = SUB_COLOR[s] || 'var(--ink2)';
+      ts.appendChild(document.createTextNode(SUB_BY[s] ? SUB_BY[s].s : s));
+    });
+    htmlEl('td', {text: (EV_TYPE[e.t] && !(e.t === 'ingreso' && /^Ingresa /.test(e.l)) ? EV_TYPE[e.t] + ': ' : '') + e.l}, row);
+    const tf = htmlEl('td', null, row);
+    tf.style.textAlign = 'left';
+    // La fuente puede traer varias partes separadas por « ; »: direcciones web (enlaces) y textos (p. ej. notas al pie de los cuadros).
+    const parts = [e.res].concat((e.src || '').split(/\s+;\s+/)).map(x => (x || '').trim()).filter(Boolean);
+    let nl = 0;
+    parts.forEach((x, k) => {
+      if (k) tf.appendChild(document.createTextNode(' · '));
+      if (/^https?:\/\//.test(x)) { nl++; const a = htmlEl('a', {href: x, target: '_blank', rel: 'noopener', text: 'fuente' + (nl > 1 ? ' ' + nl : '')}, tf); a.title = x; }
+      else tf.appendChild(document.createTextNode(x.charAt(0).toUpperCase() + x.slice(1)));
+    });
+    if (e.c && e.c !== 'alta') tf.appendChild(document.createTextNode(' (fecha o norma con confianza ' + e.c + ')'));
+  }
+  document.getElementById('evt-note').textContent = 'El mes es el primero en que el cambio se ve en los cuadros de la SBS: puede ser varios meses después de la resolución, porque en los ingresos la licencia se otorga antes de que la entidad empiece a operar. Solo se enlazan fuentes oficiales (SBS, El Peruano y páginas del Estado peruano en gob.pe, como el MEF).';
+}
+
+// ---------- Entidades: participación ----------
+// Fila de cada entidad del ámbito en el mes i para la variable v: participación, valor y el de 12 meses antes.
+function rankData(sc = state.sub, v = state.evar, i = state.mi) {
+  let j, den, den0, label, ents;
+  const inSc = k => sc === 'sistema' || SC[k].s === sc;
+  if (v !== 'deu') {
+    j = cIdx(sc, i, v);
+    if (j == null) return {rows: [], j: null};
+    den = cget(sc, 'tot_' + v, j); den0 = cget(sc, 'tot_' + v, j - 12);
+    label = mLabel(MONTHS[j]);
+  } else if (sc === 'sistema') {
+    const r = sfAt(i);
+    if (!r) return {rows: [], j: null};
+    j = r.i; den = r.eom; const r0 = SF_AT.get(j - 12); den0 = r0 ? r0.eom : null;
+    label = 'el trimestre que termina en ' + mLabel(MONTHS[j]);
+  } else {
+    j = lastIdx(k => dget(sc, 'n_total', k) != null, i);
+    if (j == null) return {rows: [], j: null};
+    den = dget(sc, 'n_total', j); den0 = dget(sc, 'n_total', j - 12);
+    label = mLabel(MONTHS[j]);
+  }
+  ents = D.entities.filter(inSc);
+  const rows = [];
+  for (const k of ents) {
+    const x = eget(k, v, j);
+    if (!(x > 0)) continue;
+    const x0 = eget(k, v, j - 12);
+    rows.push({k, n: SC[k].n, s: SC[k].s, x, sh: 100 * x / den, p: x0 > 0 && den0 ? 100 * x0 / den0 : null});
+  }
+  rows.sort((a, b) => b.sh - a.sh);
+  return {rows, j, den, label};
+}
+// Primer mes con deudores por entidad en cada subsistema (la serie del subsistema empieza antes).
+const DEU_FIRST = {};
+for (const k of D.entities) { const s = SC[k], a = s.V.deu ? s.V.deu.findIndex(v => v != null) : -1; if (a >= 0) DEU_FIRST[s.s] = Math.min(DEU_FIRST[s.s] ?? N, s.a + a); }
+// Por qué no hay participación en deudores en el mes i para el ámbito sc.
+function deuNa(sc, i) {
+  if (sc === 'sistema') return i < SF0 ? 'En el sistema, la participación en deudores usa los deudores únicos del SF-2103, que la SBS publica desde ' + mLabel(MONTHS[SF0]) + '. Elija un subsistema.' : null;
+  const first = Math.max(D.deu[sc] ? D.deu[sc].a : N, DEU_FIRST[sc] ?? N);
+  if (i < first) return 'La SBS publica deudores por entidad desde ' + mLabel(MONTHS[first]) + '.';
+  const m = MONTHS[i], gap = (D.deuGap || []).find(([x, s]) => x === m && s === sc);
+  if (gap) return 'Sin dato en ' + mLabel(m) + ': ' + gap[3] + ' (error de origen de la SBS).';
+  const err = (D.deuErr || []).concat(D.deuTotErr || []).find(([x, s]) => x === m && s === sc);
+  if (err) return 'Sin dato en ' + mLabel(m) + ': el cuadro de deudores de ' + subName(sc) + ' de ese mes repite cifras de otro mes (error de origen de la SBS).';
+  return null;
+}
+// Ranking: meses en que la SBS repite las cifras de otro mes de una entidad con peso en su subsistema
+// ([mes, subsistema, entidad, acción]). Ese subsistema-mes, y el sistema, quedan sin concentración ni participaciones.
+const RK_BLANK = (D.rkErr || []).filter(r => r[3] === 'blank_month');
+const rkIn = (sc, s, v) => sc === 'sistema' ? v !== 'dep' || DEP.has(s) : s === sc;
+const rkHit = (sc, i, v = state.var) => RK_BLANK.find(([m, s]) => m === MONTHS[i] && rkIn(sc, s, v));
+const rkMonths = (sc, v = state.var) => [...new Set(RK_BLANK.filter(([, s]) => rkIn(sc, s, v)).map(r => r[0]))];
+// Rankings que el lector rechaza por cifras inválidas (D.rkBad = [[mes, subsistema, motivo]]).
+const rkBadAt = (sc, i, v = state.var) => (D.rkBad || []).find(([m, s]) => m === MONTHS[i] && (sc === s || (sc === 'sistema' && (v !== 'dep' || DEP.has(s)))));
+function rkNa(sc, i, v = state.var) {
+  const b = rkBadAt(sc, i, v);
+  if (b) return 'Sin dato en ' + mLabel(b[0]) + ': ' + b[2] + ' (error de origen de la SBS), así que no se calculan ' + (sc === 'sistema' ? 'la concentración ni los totales del sistema.' : 'la concentración ni las participaciones.');
+  const h = rkHit(sc, i, v);
+  if (!h) return null;
+  return 'Sin dato en ' + mLabel(h[0]) + ': ese mes el ranking de ' + subName(h[1]) + ' repite las cifras de un mes anterior de ' + h[2] +
+    ' (error de origen de la SBS), así que no se calculan ' + (sc === 'sistema' ? 'la concentración ni los totales del sistema.' : 'la concentración ni las participaciones.');
+}
+function rkWhy(sc, i, v = state.var) {
+  if (rkBadAt(sc, i, v)) return 'sin dato: el ranking de las cajas rurales de ese mes trae cifras inválidas';
+  const h = rkHit(sc, i, v);
+  return h ? 'sin dato: el ranking repite cifras de otro mes de ' + h[2] : null;
+}
+// Por entidad (regla «sin huecos»): rkErr = [mes, subsistema, nombre, acción, entidad, mes repetido] y deuEntErr =
+// [mes, entidad, mes repetido, motivo] (deudores de una sola entidad repetidos de otro mes: CMAC Sullana 2024-06).
+// La ficha y la tabla de la entidad muestran su último dato válido con su mes y el motivo; los gráficos, el hueco con el motivo.
+const RK_ENT = new Map((D.rkErr || []).filter(r => r[4]).map(r => [r[4] + '|' + r[0], r]));
+const DEU_ENT = new Map((D.deuEntErr || []).map(r => [r[1] + '|' + r[0], r]));
+const rkEntAt = (k, i) => i == null || i < 0 || i >= N ? null : RK_ENT.get(k + '|' + MONTHS[i]) || null;
+const deuEntAt = (k, i) => i == null || i < 0 || i >= N ? null : DEU_ENT.get(k + '|' + MONTHS[i]) || null;
+const rkEntText = r => 'en ' + mLabel(r[0]) + ' la SBS repitió en el ranking las cifras de ' + mLabel(r[5]) + ' de ' + r[2];
+const deuEntText = (k, r) => r[2] == null ? 'en ' + mLabel(r[0]) + ' ' + r[3] : 'en ' + mLabel(r[0]) + ' la SBS repitió los deudores de ' + mLabel(r[2]) + ' de ' + SC[k].n + ' (' + r[3] + ')';
+const entWhy = (k, v, i) => { if (v === 'deu') { const r = deuEntAt(k, i); return r ? deuEntText(k, r) : null; } const r = rkEntAt(k, i); return r ? rkEntText(r) : null; };
+// Entidades del ámbito que ese mes no figuran en la variable v por repetir las cifras de otro mes.
+const repGone = (sc, v, i) => D.entities.filter(k => (sc === 'sistema' || SC[k].s === sc) && entWhy(k, v, i));
+const naCell = (txt, msg) => msg ? {v: txt, title: msg} : txt;
+function renderRank() {
+  const sc = state.sub, V = VAR_BY[state.evar], i = state.mi;
+  document.getElementById('rank-title').textContent = 'Participación en ' + V.lower + ' por entidad · ' + scopeLabel(sc);
+  const box = document.getElementById('ch-rank'), lg = document.getElementById('rank-legend'), note = document.getElementById('rank-note');
+  box.replaceChildren(); lg.replaceChildren();
+  if (state.evar === 'dep' && sc === EC) { emptyMsg(box, naConc(EC, 'dep')); note.textContent = ''; document.getElementById('rank-desc').textContent = ''; return; }
+  const R = rankData();
+  const MAXR = 25, rows = R.rows.slice(0, MAXR);
+  document.getElementById('rank-desc').textContent = 'Entidades ordenadas de mayor a menor participación ' + inScope(sc) + ' en ' + (R.label || mLabel(MONTHS[i])) +
+    '. El punto hueco es la participación de 12 meses antes. Haga clic en una entidad para ver su detalle abajo.';
+  if (!rows.length) { emptyMsg(box, (state.evar === 'deu' ? deuNa(sc, i) : rkNa(sc, i, state.evar)) || 'No hay entidades con datos para este mes.'); note.textContent = ''; return; }
+  const col = sc === 'sistema' ? null : SUB_COLOR[sc];
+  if (col) legendItem(lg, 'dot', col, R.label); else for (const s of SUBS) legendItem(lg, 'dot', SUB_COLOR[s.k], s.s);
+  legendItem(lg, 'dot hollow', null, '12 meses antes');
+  const msgs = [];
+  if (R.rows.length > MAXR) {
+    const rest = R.rows.slice(MAXR).reduce((a, r) => a + r.sh, 0);
+    msgs.push('Se muestran las ' + MAXR + ' mayores de ' + R.rows.length + '; las otras ' + (R.rows.length - MAXR) + ' suman ' + pct(rest) + '.');
+  }
+  if (state.evar === 'deu') msgs.push(sc === 'sistema'
+    ? 'Deudores de cada entidad entre los deudores únicos del sistema (SF-2103, trimestral). Un deudor con créditos en varias entidades cuenta en cada una, así que las participaciones suman más de 100%.'
+    : 'Deudores de cada entidad entre los deudores del subsistema (la SBS cuenta una sola vez a quien tiene créditos en varias entidades del subsistema), así que las participaciones suman más de 100%.');
+  if (box.clientWidth >= 600) msgs.push('A la derecha, ' + (state.evar === 'deu' ? 'el número de deudores' : 'el monto') + ' de la entidad.');
+  const gone = R.j == null ? [] : repGone(sc, state.evar, R.j);
+  if (gone.length) msgs.push('No figura' + (gone.length > 1 ? 'n ' : ' ') + joinY(gone.map(k => SC[k].n)) + ': ' + gone.map(k => entWhy(k, state.evar, R.j)).join('; ') +
+    '. Su cifra sí está en el total que publica la SBS.');
+  note.textContent = msgs.join(' ');
+  const W = box.clientWidth, narrow = W < 600;
+  const labW = narrow ? 112 : 210, valW = narrow ? 56 : 66, totW = narrow ? 0 : 128, rowH = 28, top = 24;
+  const x0 = labW + 8, x1 = W - valW - totW - 8, H = top + rows.length * rowH + 10;
+  const dom = niceDomain(0, Math.max(...rows.flatMap(r => [r.sh, r.p || 0])), narrow ? 3 : 5);
+  const x = v => x0 + (v - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'group', 'aria-label': 'Participación por entidad ' + inScope(sc)}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    svgEl('line', {x1: x(tk), x2: x(tk), y1: top - 4, y2: H - 8, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk), y: top - 10, 'text-anchor': 'middle'}, g).textContent = tk + '%';
+  }
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = state.evar === 'deu' ? 'Deudores' : 'Monto';
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  const nmOf = rowLabels(rows, narrow ? 15 : 30, trunc);
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2, c = col || SUB_COLOR[r.s];
+    const gr = svgEl('g', {class: 'rank-row' + (r.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': r.n + ': ' + pct(r.sh) + (r.p != null ? ', 12 meses antes ' + pct(r.p) : '')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = nmOf(r);
+    if (r.p != null) {
+      svgEl('line', {x1: x(r.p), x2: x(r.sh), y1: yc, y2: yc, stroke: 'var(--axis)', 'stroke-width': 2}, gr);
+      svgEl('circle', {cx: x(r.p), cy: yc, r: 4, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 2}, gr);
+    }
+    svgEl('circle', {cx: x(r.sh), cy: yc, r: 5.5, fill: c, stroke: 'var(--surface)', 'stroke-width': 2}, gr);
+    svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = pct(r.sh);
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = state.evar === 'deu' ? deudores(r.x) : money(r.x);
+    const show = evt => showTip(...anchorOf(evt, gr), r.n, [
+      {value: pct(r.sh), label: 'Participación en ' + V.lower, color: c, sq: true},
+      {value: pct(r.p), label: '12 meses antes'},
+      {value: state.evar === 'deu' ? deudores(r.x) : money(r.x), label: V.name}].concat(sc === 'sistema' ? [{value: SUB_BY[r.s].s, label: 'Subsistema'}] : []));
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', hideTip);
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', hideTip);
+    gr.addEventListener('click', () => pickEnt(r.k));
+    gr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(r.k, true); } });
+  });
+}
+// Etiquetas de fila: si dos nombres truncados quedan iguales, se les agrega la abreviatura del subsistema.
+function rowLabels(rows, n, trunc) {
+  const cnt = new Map();
+  for (const r of rows) { const t = trunc(r.n, n); cnt.set(t, (cnt.get(t) || 0) + 1); }
+  return r => { const t = trunc(r.n, n); if (cnt.get(t) < 2) return t; const s = SUB_BY[r.s].s; return trunc(r.n, Math.max(6, n - s.length - 1)) + ' ' + s; };
+}
+function pickEnt(k, fromKey) {
+  state.ent = k; hideTip(); renderRank(); renderScatter(); fillEntSelect(); renderEnt();
+  if (!document.getElementById('tb-ent').hidden) fillTable('ent');
+  document.getElementById('card-ent').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+  if (fromKey) document.getElementById('ent-title').focus({preventScroll: true});
+}
+
+// ---------- Entidades: créditos frente a deudores ----------
+function scatterData(sc = state.sub, i = state.mi) {
+  const D1 = rankData(sc, 'deu', i);
+  if (D1.j == null) return null;
+  const C1 = rankData(sc, 'cr', D1.j);
+  const cr = new Map(C1.rows.map(r => [r.k, r]));
+  const pts = D1.rows.filter(r => cr.has(r.k)).map(r => ({k: r.k, n: r.n, s: r.s, y: r.sh, x: cr.get(r.k).sh, deu: r.x, cr: cr.get(r.k).x}));
+  return {pts, j: D1.j, label: D1.label};
+}
+function renderScatter() {
+  const sc = state.sub, box = document.getElementById('ch-sc'), lg = document.getElementById('sc-legend');
+  box.replaceChildren(); lg.replaceChildren();
+  document.getElementById('sc-title').textContent = 'Participación en créditos y en deudores · ' + scopeLabel(sc);
+  const S = scatterData();
+  if (!S || S.pts.length < 2) {
+    document.getElementById('sc-desc').textContent = 'Cada círculo es una entidad: su participación en los créditos directos y en los deudores ' + inScope(sc) + '.';
+    document.getElementById('sc-note').textContent = '';
+    emptyMsg(box, deuNa(sc, state.mi) || rkNa(sc, S ? S.j : state.mi, 'cr') || 'No hay suficientes entidades con datos para este mes.'); return;
+  }
+  document.getElementById('sc-desc').textContent = 'Cada círculo es una entidad en ' + S.label + '. Sobre la diagonal, la entidad tiene más participación en deudores que en saldo: presta montos más pequeños que el promedio ' +
+    (sc === 'sistema' ? 'del sistema' : 'de su subsistema') + '. Debajo, presta montos más grandes. Como un deudor puede tener crédito en varias entidades, las participaciones en deudores suman más de 100% y muchas entidades quedan sobre la diagonal. Haga clic en una entidad para ver su detalle.';
+  if (sc === 'sistema') for (const s of SUBS) legendItem(lg, 'dot', SUB_COLOR[s.k], s.s); else legendItem(lg, 'dot', SUB_COLOR[sc], SUB_BY[sc].l);
+  legendItem(lg, 'ln dash', null, 'Igual participación en ambos');
+  const W = box.clientWidth, narrow = W < 600, H = narrow ? 320 : 400;
+  const m = {l: 46, r: 16, t: 18, b: 40}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const mx = Math.max(...S.pts.flatMap(p => [p.x, p.y]));
+  const d = niceDomain(0, mx, narrow ? 4 : 6), pad = 10;
+  const x = v => m.l + pad + (v - d.lo) / (d.hi - d.lo) * (pw - 2 * pad), y = v => m.t + (d.hi - v) / (d.hi - d.lo) * (ph - pad);
+  const svg = svgEl('svg', {width: W, height: H, role: 'group', 'aria-label': 'Participación en créditos y en deudores por entidad'}, box);
+  drawYGrid(svg, d.ticks, y, m.l, m.l + pw, t => t + '%');
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of d.ticks) {
+    svgEl('line', {x1: x(tk), x2: x(tk), y1: m.t, y2: m.t + ph, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x(tk), y: m.t + ph + 16, 'text-anchor': 'middle'}, g).textContent = tk + '%';
+  }
+  svgEl('line', {x1: x(0), y1: y(0), x2: x(d.hi), y2: y(d.hi), stroke: 'var(--sys)', 'stroke-width': 1.25, 'stroke-dasharray': '5 4'}, svg);
+  svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Participación en créditos directos →';
+  svgEl('text', {x: 0, y: 10, class: 'lbl'}, svg).textContent = '↑ Participación en deudores';
+  const sorted = S.pts.slice().sort((a, b) => Math.max(b.x, b.y) - Math.max(a.x, a.y));
+  const labelled = new Set(sorted.slice(0, narrow ? 3 : 6).map(p => p.k).concat(state.ent ? [state.ent] : []));
+  for (const p of sorted.slice().reverse()) {
+    const c = sc === 'sistema' ? SUB_COLOR[p.s] : SUB_COLOR[sc];
+    const gp = svgEl('g', {class: 'pt' + (p.k === state.ent ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': p.n + ': ' + pct(p.x) + ' de los créditos y ' + pct(p.y) + ' de los deudores'}, svg);
+    svgEl('circle', {class: 'm', cx: x(p.x), cy: y(p.y), r: 6, fill: c, 'fill-opacity': 0.8}, gp);
+    const avg = p.deu > 0 ? p.cr * 1000 / p.deu : null;
+    const show = evt => showTip(...anchorOf(evt, gp), p.n, [
+      {value: pct(p.x), label: 'De los créditos directos', color: c, sq: true},
+      {value: pct(p.y), label: 'De los deudores'},
+      {value: deudores(p.deu), label: 'Deudores'},
+      {value: soles(avg), label: 'Saldo promedio por deudor'}]);
+    gp.addEventListener('pointermove', show);
+    gp.addEventListener('pointerleave', hideTip);
+    gp.addEventListener('focus', () => show(null));
+    gp.addEventListener('blur', hideTip);
+    gp.addEventListener('click', () => pickEnt(p.k));
+    gp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickEnt(p.k, true); } });
+  }
+  const placed = S.pts.map(q => [x(q.x) - 6, y(q.y) - 6, 12, 12]);
+  for (const p of sorted.filter(q => labelled.has(q.k)).sort((a, b) => (b.k === state.ent) - (a.k === state.ent))) {
+    const px = x(p.x), py = y(p.y), r = 6;
+    const n = p.n.length > 20 ? p.n.slice(0, 19) + '…' : p.n, w = n.length * 6.4, h = 14;
+    const cands = [[px + r + 4, py - h / 2, 'start'], [px - r - 4 - w, py - h / 2, 'end'], [px - w / 2, py - r - h - 2, 'middle'], [px - w / 2, py + r + 2, 'middle']];
+    const ok = cands.find(([bx, by]) => bx >= m.l && bx + w <= m.l + pw && by >= m.t && by + h <= m.t + ph &&
+      !placed.some(o => bx < o[0] + o[2] && bx + w > o[0] && by < o[1] + o[3] && by + h > o[1]));
+    if (!ok) continue;
+    const [bx, by, anchor] = ok;
+    placed.push([bx, by, w, h]);
+    svgEl('text', {class: 'ptl', x: anchor === 'start' ? bx : anchor === 'end' ? bx + w : bx + w / 2, y: by + 11, 'text-anchor': anchor}, svg).textContent = n;
+  }
+  document.getElementById('sc-note').textContent = sc === 'sistema'
+    ? 'En el sistema, los deudores se comparan con los deudores únicos del SF-2103 (trimestral) y los créditos son los del mismo mes.'
+    : 'Los deudores de cada entidad se comparan con los deudores del subsistema, que la SBS cuenta una sola vez aunque tengan créditos en varias entidades.';
+}
+
+// ---------- Detalle de una entidad ----------
+function entList(sc = state.sub, i = state.mi) {
+  // En un mes sin concentración por una cifra repetida del ranking, las demás entidades sí tienen montos ese mes.
+  const j = (sc === 'sistema' ? cIdx('sistema', i, 'cr') : cIdx(sc, i, 'cr')) ?? (rkNa(sc, i, 'cr') ? i : null);
+  const all = D.entities.filter(k => sc === 'sistema' || SC[k].s === sc);
+  const active = all.filter(k => eget(k, 'cr', j) > 0 || eget(k, 'pat', j) > 0).sort((a, b) => (eget(b, 'cr', j) || 0) - (eget(a, 'cr', j) || 0));
+  const gone = all.filter(k => !active.includes(k)).sort((a, b) => SC[a].n.localeCompare(SC[b].n, 'es'));
+  return {active, gone, j};
+}
+// Primer y último mes con alguna variable positiva (hay entidades sin créditos pero con depósitos o patrimonio).
+function spanOf(k) {
+  const s = SC[k], F = ['cr', 'dep', 'pat', 'deu'], len = Math.max(...F.map(f => (s.V[f] || []).length));
+  let a = null, b = null;
+  for (let t = 0; t < len; t++) if (F.some(f => (s.V[f] || [])[t] > 0)) { if (a == null) a = t; b = t; }
+  return [MONTHS[s.a + (a ?? 0)], MONTHS[s.a + (b ?? 0)]];
+}
+function fillEntSelect() {
+  const sel = document.getElementById('f-ent');
+  const {active, gone, j} = entList();
+  if (!state.ent || (state.sub !== 'sistema' && SC[state.ent].s !== state.sub)) state.ent = active[0] || gone[0] || null;
+  sel.replaceChildren();
+  const g1 = htmlEl('optgroup', {label: 'Con datos en ' + mLabel(MONTHS[j ?? state.mi])}, sel);
+  active.forEach(k => htmlEl('option', {value: k, text: SC[k].n + (state.sub === 'sistema' ? ' (' + SUB_BY[SC[k].s].s + ')' : '')}, g1));
+  if (gone.length) {
+    const g2 = htmlEl('optgroup', {label: 'Sin datos en ese mes'}, sel);
+    gone.forEach(k => { const [a, b] = spanOf(k); htmlEl('option', {value: k, text: SC[k].n + (state.sub === 'sistema' ? ' (' + SUB_BY[SC[k].s].s + ')' : '') + ' (' + (idxOf(b) < state.mi ? 'hasta ' + mShort(b) : 'desde ' + mShort(a)) + ')'}, g2); });
+  }
+  if (state.ent) sel.value = state.ent;
+}
+// Participación de la entidad en su subsistema (deudores: entre los deudores del subsistema).
+function entShare(k, v, i) {
+  const s = SC[k].s, x = eget(k, v, i);
+  if (!(x > 0)) return null;
+  const den = v === 'deu' ? dget(s, 'n_total', i) : cget(s, 'tot_' + v, i);
+  return den ? 100 * x / den : null;
+}
+function entRank(k, i) {
+  const s = SC[k].s, x = eget(k, 'cr', i);
+  if (!(x > 0)) return null;
+  return 1 + D.entities.filter(q => SC[q].s === s && eget(q, 'cr', i) > x).length;
+}
+function renderEnt() {
+  const k = state.ent, stats = document.getElementById('ent-stats');
+  stats.replaceChildren();
+  document.getElementById('ch-ent').replaceChildren(); document.getElementById('ch-ent-deu').replaceChildren();
+  const evl = document.getElementById('ent-events'); evl.replaceChildren(); evl.hidden = true;
+  if (!k) return;
+  const E = SC[k], s = E.s, i = state.mi;
+  document.getElementById('ent-title').textContent = E.n;
+  document.getElementById('ent-desc').textContent = 'Participación de la entidad en ' + subName(s) + ' (su subsistema), su tamaño y su número de deudores.';
+  // Mes en que la SBS repitió las cifras de otro mes de la entidad: el último dato válido (hasta 3 meses antes), aunque haya
+  // datos después (lastIdx no rellena huecos en medio de la serie).
+  const back = (has, why) => { if (!why) return null; for (let t = i - 1; t >= Math.max(0, i - 3); t--) if (has(t)) return t; return null; };
+  const hasR = t => eget(k, 'cr', t) != null || eget(k, 'pat', t) != null, hasD = t => eget(k, 'deu', t) != null;
+  const j = hasR(i) ? i : back(hasR, rkEntAt(k, i)) ?? lastIdx(hasR, i, 3);
+  const jd = hasD(i) ? i : back(hasD, deuEntAt(k, i)) ?? lastIdx(hasD, i, 3);
+  const tag = t => t != null && t !== i ? ' · ' + mLabel(MONTHS[t]) : '';
+  const chg = (v, t) => { if (t == null) return ''; const a = entShare(k, v, t), b = entShare(k, v, t - 12); return a == null || b == null ? '' : spp(a - b) + ' en 12 meses'; };
+  const cr = j == null ? null : eget(k, 'cr', j), dd = jd == null ? null : eget(k, 'deu', jd);
+  // Del total del sistema: el último mes con los cinco subsistemas; saldo por deudor: el último mes con ambos datos.
+  const js = cIdx('sistema', i, 'cr'), crS = js == null ? null : eget(k, 'cr', js);
+  const sysSh = crS > 0 ? 100 * crS / cget('sistema', 'tot_cr', js) : null;
+  const ja = lastIdx(t => eget(k, 'cr', t) > 0 && eget(k, 'deu', t) > 0, i, 3);
+  const rk = j == null ? null : entRank(k, j);
+  // Mes en que la SBS repitió las cifras de otro mes de la entidad: se muestra su último dato válido y el motivo.
+  const whyR = j != null && j < i && rkEntAt(k, i) ? 'último dato válido: ' + rkEntText(rkEntAt(k, i)) : '';
+  const whyD = jd != null && jd < i && deuEntAt(k, i) ? 'último dato válido: ' + deuEntText(k, deuEntAt(k, i)) : '';
+  const items = [
+    {lab: 'De los créditos de ' + subName(s), val: pct(j == null ? null : entShare(k, 'cr', j)) + tag(j), sub: whyR || chg('cr', j) || rkWhy(s, j, 'cr')},
+    {lab: 'De los depósitos', val: DEP.has(s) ? pct(j == null ? null : entShare(k, 'dep', j)) + tag(j) : '—', sub: DEP.has(s) ? whyR || chg('dep', j) || rkWhy(s, j, 'dep') : 'no capta depósitos'},
+    {lab: 'Del patrimonio', val: pct(j == null ? null : entShare(k, 'pat', j)) + tag(j), sub: whyR || chg('pat', j) || rkWhy(s, j, 'pat')},
+    {lab: 'De los deudores', val: pct(jd == null ? null : entShare(k, 'deu', jd)) + tag(jd), sub: whyD || (jd == null ? (deuNa(s, i) ? 'sin dato este mes: el cuadro de deudores repite otro mes' : '') : chg('deu', jd) || 'entre los deudores del subsistema')},
+    {lab: 'Créditos directos', val: money(cr) + tag(j), sub: rk ? 'puesto ' + rk + ' en ' + subName(s) : ''},
+    {lab: 'Del total del sistema', val: pct(sysSh) + tag(js), sub: 'en créditos directos'},
+    {lab: 'Deudores', val: deudores(dd) + tag(jd), sub: ''},
+    {lab: 'Saldo promedio por deudor', val: ja == null ? '—' : soles(eget(k, 'cr', ja) * 1000 / eget(k, 'deu', ja)) + tag(ja), sub: 'créditos ÷ deudores'},
+  ];
+  for (const it of items) {
+    const d = htmlEl('div', null, stats);
+    htmlEl('div', {cls: 'lab', text: it.lab}, d);
+    htmlEl('div', {cls: 'val', text: it.val}, d);
+    htmlEl('div', {cls: 'sub', text: it.sub || ' '}, d);
+  }
+  const series = EVARS.filter(v => v.k !== 'dep' || DEP.has(s)).map(v => ({label: v.name, short: v.l, color: VAR_COLOR[v.k], w: v.k === 'cr' ? 2.5 : 2, get: t => entShare(k, v.k, t),
+    na: t => { const w = entWhy(k, v.k, t); return w ? 'sin dato: ' + w : v.k === 'deu' ? null : rkWhy(s, t, v.k); }}));
+  const lg = document.getElementById('ent-legend');
+  lg.replaceChildren();
+  for (const x of series) legendItem(lg, 'ln', x.color, x.label);
+  const ev = EV.filter(e => e.id === E.id || e.rel === E.id);
+  // Mismos meses en los dos gráficos: desde el primero con algún dato de la entidad.
+  const idxE = (() => { const all = visIdx(), a = all.findIndex(t => series.some(s => s.get(t) != null) || eget(k, 'deu', t) != null); return a < 0 ? all : all.slice(a); })();
+  lineChart(document.getElementById('ch-ent'), {idx: idxE, keepIdx: true, H: 300, endLabels: true, endAt: i, series, marker: i, u: 'pct', fmt: v => pct(v),
+    events: ev.map(e => ({i: e.i, color: SUB_COLOR[e.s] || 'var(--ink2)', text: e.l})), aria: 'Participación de ' + E.n + ' en su subsistema',
+    empty: 'La entidad no tiene datos en el periodo.'});
+  lineChart(document.getElementById('ch-ent-deu'), {idx: idxE, keepIdx: true, padR: +(document.getElementById('ch-ent').dataset.mr || 14), H: 220, u: 'deu', fmt: deudores, aria: 'Deudores de ' + E.n,
+    series: [{label: 'Deudores', color: VAR_COLOR.deu, w: 2, get: t => eget(k, 'deu', t), na: t => { const w = entWhy(k, 'deu', t); return w ? 'sin dato: ' + w : null; }}],
+    empty: 'La SBS no publica deudores de esta entidad en el periodo.'});
+  if (ev.length) {
+    evl.hidden = false;
+    for (const e of ev.slice().sort((a, b) => a.i - b.i)) htmlEl('li', {text: mLabel(e.m) + ': ' + e.l + (e.res ? ' (' + e.res + ')' : '')}, evl);
+  }
+  const note = document.getElementById('ent-note');
+  const why = [rkEntAt(k, i) ? 'Sin dato propio de ' + mLabel(MONTHS[i]) + ' en el ranking: ' + rkEntText(rkEntAt(k, i)) + '.' : '',
+    deuEntAt(k, i) ? 'Sin deudores propios de ' + mLabel(MONTHS[i]) + ': ' + deuEntText(k, deuEntAt(k, i)) + '.' : ''].filter(Boolean);
+  if (why.length) why.push('Las cifras de arriba son el último dato válido, con su mes; en los gráficos ese mes queda como un hueco.');
+  const msg = [E.o ? 'Esta entidad también aparece en ' + E.o.map(o => SUB_BY[SC[o].s].l.toLowerCase()).join(' y ') + ' en otros meses; cada subsistema tiene su propia serie.' : ''].concat(why).filter(Boolean).join(' ');
+  note.hidden = !msg; note.textContent = msg;
+}
+
+// ---------- Deudores y depositantes ----------
+function renderAkpis() {
+  const box = document.getElementById('akpis');
+  box.replaceChildren();
+  const i = state.mi, r = sfAt(i), note = document.getElementById('akpi-note');
+  if (!r) { emptyMsg(box, 'La SBS publica los deudores únicos del sistema desde ' + mLabel(MONTHS[SF0]) + '.'); note.hidden = true; return; }
+  const r0 = SF_AT.get(r.i - 12), rI = SF[0];
+  const hero = htmlEl('div', {cls: 'tile hero'}, box);
+  htmlEl('div', {cls: 'lab', text: 'Deudores únicos de los cinco subsistemas'}, hero);
+  const hv = htmlEl('div', {cls: 'val long', text: deudores(r.eom)}, hero);
+  htmlEl('span', {cls: 'unit', text: mLabel(r.m)}, hv);
+  const s1 = htmlEl('div', {cls: 'sub'}, hero);
+  deltaSpan(s1, r0 ? 100 * (r.eom / r0.eom - 1) : null, x => fx(x, 1) + '%', ' en 12 meses');
+  if (r.i !== i) htmlEl('div', {cls: 'sub', text: 'Trimestral: es el último trimestre publicado hasta ' + mLabel(MONTHS[i]) + '.'}, hero);
+  const sp = htmlEl('div', {cls: 'spark'}, hero);
+  htmlEl('div', {cls: 'sub', text: 'Desde ' + mLabel(MONTHS[SF0])}, sp);
+  const spark = htmlEl('div', {cls: 'chart'}, sp);
+  const pa = perAdult(r.eom, r.i), pa0 = r0 ? perAdult(r0.eom, r0.i) : null;
+  const crT = cget('sistema', 'tot_cr', r.i);
+  const tiles = [
+    {lab: 'Deudores por cada 100 adultos', val: pa == null ? '—' : f1.format(pa), d: pa != null && pa0 != null ? pa - pa0 : null, fd: x => f1.format(x), sub: POP ? 'población de 18 años a más (INEI)' : 'sin dato de población'},
+    {lab: 'Cambio frente a hace un año', val: r0 ? (r.eom - r0.eom >= 0 ? '+' : '−') + deudores(Math.abs(r.eom - r0.eom)) : '—', sub: r0 ? 'deudores únicos, frente a ' + mLabel(r0.m) : ''},
+    {lab: 'Con el Banco de la Nación y Agrobanco', val: deudores(r.sf), sub: 'deudores únicos del sistema financiero'},
+    entPerDebtor(r) == null
+      ? {lab: 'Entidades en que tiene crédito cada deudor, en promedio', val: '—', sub: 'sin dato este trimestre: el cuadro de deudores de un subsistema repite cifras de otro mes'}
+      : {lab: 'Entidades en que tiene crédito cada deudor, en promedio', val: fx(entPerDebtor(r), 2), d: entPerDebtor(r0) != null ? entPerDebtor(r) - entPerDebtor(r0) : null, fd: x => fx(x, 2)},
+    {lab: 'Saldo promedio por deudor', val: crT ? soles(crT * 1000 / r.eom) : '—', sub: crT ? 'créditos directos ÷ deudores únicos; es un promedio, no un crédito típico' : 'sin dato: el sistema no tiene créditos ese trimestre (un ranking repite cifras de otro mes)'},
+    {lab: 'Deudores únicos en ' + mLabel(rI.m), val: deudores(rI.eom), d: 100 * (r.eom / rI.eom - 1), fd: x => fx(x, 1) + '%', suf: ' desde entonces'},
+  ];
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    htmlEl('div', {cls: 'val', text: t.val}, d);
+    if (t.fd) deltaSpan(htmlEl('div', {cls: 'sub'}, d), t.d, t.fd, t.suf);
+    if (t.sub) htmlEl('div', {cls: 'sub', text: t.sub}, d);
+  }
+  const idx = [];
+  for (let k = SF0; k <= r.i; k++) idx.push(k);
+  lineChart(spark, {idx, H: 140, compact: true, u: 'deu', fmt: deudores, zero: false, aria: 'Deudores únicos desde ' + mLabel(MONTHS[SF0]), empty: 'Es el primer trimestre publicado.',
+    series: [{label: 'Deudores únicos', color: 'var(--accent)', w: 2, sparse: true, get: k => SF_AT.has(k) ? SF_AT.get(k).eom : null}]});
+  note.hidden = false;
+  note.textContent = 'Un deudor es una persona natural o jurídica con al menos un crédito directo; en los deudores únicos se cuenta una sola vez aunque tenga créditos en varias entidades. Fuente: SBS, reporte SF-2103 (trimestral).';
+}
+const AVIEWS = [{id: 'n', label: 'Número'}, {id: 'pc', label: 'Por cada 100 adultos'}];
+function aunSeries() {
+  const pc = state.aview === 'pc';
+  const f = v => (r, i) => pc ? perAdult(v(r), i) : v(r);
+  return [
+    {label: 'Cinco subsistemas', short: '5 subsist.', color: 'var(--accent)', w: 2.5, sparse: true, get: i => SF_AT.has(i) ? f(r => r.eom)(SF_AT.get(i), i) : null},
+    {label: 'Sistema financiero (con Banco de la Nación y Agrobanco)', short: 'Sist. financiero', color: 'var(--sys)', w: 2, dash: '5 4', sparse: true, get: i => SF_AT.has(i) ? f(r => r.sf)(SF_AT.get(i), i) : null},
+  ].concat(pc ? [{label: 'SBS: deudores personas naturales / población adulta (%), sistema financiero', short: 'SBS, personas', color: 'var(--s4)', w: 2, sparse: true, get: i => CIIF.get(i) ?? null}] : []);
+}
+function renderAun() {
+  const pc = state.aview === 'pc';
+  document.getElementById('aun-title').textContent = pc ? 'Deudores por cada 100 adultos' : 'Deudores únicos';
+  document.getElementById('aun-desc').textContent = (pc ? 'Deudores únicos por cada 100 personas de 18 años a más. Incluye a las empresas deudoras, así que no es el porcentaje de adultos con crédito. ' : 'Personas naturales y jurídicas con al menos un crédito, contadas una sola vez. ') + 'Trimestral, desde ' + mLabel(MONTHS[SF0]) + '.';
+  const series = aunSeries();
+  const lg = document.getElementById('aun-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, s.dash ? 'ln dash' : 'ln', s.dash ? null : s.color, s.label);
+  const idx = visIdx().filter(i => i >= SF0);
+  lineChart(document.getElementById('ch-aun'), {idx, H: 300, endLabels: true, endW: 200, series, marker: state.mi, u: pc ? 'pc' : 'deu', fmt: pc ? (v => f1.format(v)) : deudores, skipEmpty: true,
+    zero: false, naTip: 'Trimestral: solo hay dato en marzo, junio, setiembre y diciembre', aria: 'Deudores únicos del sistema',
+    empty: pc && !POP ? 'Falta la población adulta del INEI.' : 'La SBS publica los deudores únicos desde ' + mLabel(MONTHS[SF0]) + '.'});
+  document.getElementById('aun-note').textContent = (pc ? 'Población de 18 años a más al 30 de junio de cada año (INEI), interpolada entre años. La línea morada es el indicador oficial de la SBS, que cuenta solo personas naturales (Reporte de Indicadores de Inclusión Financiera, junio de cada año). ' : '') +
+    'El SF-2103 publica deudores únicos de todo el sistema (personas y empresas) desde ' + mLabel(MONTHS[SF0]) + '; los deudores por subsistema, abajo, empiezan en diciembre de 2010.';
+}
+const DVIEWS = [{id: 'n', label: 'Número'}, {id: 'avg', label: 'Saldo por deudor'}];
+function asbSeries() {
+  const t = state.dtype, avg = state.dview === 'avg';
+  return SUBS.map(s => ({k: s.k, label: s.l, short: s.s, color: SUB_COLOR[s.k], w: 2,
+    get: i => { const n = dget(s.k, 'n_' + t, i); if (!avg) return n; const b = dget(s.k, 's_' + t, i); return n > 0 && b != null ? b * 1000 / n : null; }}));
+}
+function renderAsb() {
+  const T = DT_BY[state.dtype], avg = state.dview === 'avg';
+  document.getElementById('asb-title').textContent = (avg ? 'Saldo promedio por deudor' : 'Deudores') + ' por subsistema' + (T.k === 'total' ? '' : ' · ' + T.l);
+  document.getElementById('asb-desc').textContent = (avg ? 'Saldo de créditos directos ' + (T.k === 'total' ? '' : 'de ' + T.l.toLowerCase() + ' ') + 'dividido entre el número de deudores, en soles. ' : '') +
+    'Deudores contados una vez dentro de cada subsistema (un deudor con créditos en una caja y en un banco aparece en los dos), a fin de cada mes. No se suman entre subsistemas.';
+  const series = asbSeries();
+  const lg = document.getElementById('asb-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, 'ln', s.color, s.label);
+  const evs = evMarks('sistema').filter(e => EV.find(x => x.i === e.i && (x.t === 'cambio_subsistema' || x.t === 'absorcion' || x.t === 'fusion')));
+  lineChart(document.getElementById('ch-asb'), {idx: visIdx(), H: 340, endLabels: true, endW: 160, endAt: state.mi, series, marker: BUSINESS.has(T.k) ? RECLASS : state.mi, u: avg ? 'soles' : 'deu',
+    fmt: avg ? soles : deudores, events: evs, aria: (avg ? 'Saldo promedio por deudor' : 'Deudores') + ' por subsistema'});
+  const msgs = [];
+  if (BUSINESS.has(T.k)) msgs.push('La línea punteada vertical marca ' + mLabel(D.reclass) + ': desde ese mes rige una nueva clasificación de los créditos a empresas (Res. SBS N.° 2368-2023), así que las series por tamaño de empresa no son del todo comparables antes y después.');
+  msgs.push('Los saltos coinciden con entidades que cambian de subsistema o se fusionan (triángulos sobre el eje).');
+  const listOf = errs => { const by = new Map(); for (const [m, s] of errs) { if (!by.has(m)) by.set(m, []); by.get(m).push(SUB_BY[s].l.toLowerCase()); }
+    return joinY([...by.entries()].sort().map(([m, l]) => mLabel(m) + ' (' + joinY(l) + ')')); };
+  if ((D.deuErr || []).length) msgs.push('Sin dato en ' + listOf(D.deuErr) + ': en esos meses el cuadro de deudores de la SBS repite las cifras de otro mes en todas las entidades.');
+  const gaps = (D.deuGap || []).filter(g => g[2].includes(T.k));
+  if (gaps.length) msgs.push('Sin dato en ' + gaps.map(g => mLabel(g[0]) + ' (' + SUB_BY[g[1]].l.toLowerCase() + ')').join(', ') + ': ' + gaps.map(g => g[3]).join('; ') + '.');
+  if (T.k === 'total' && (D.deuTotErr || []).length) msgs.push('El total tampoco tiene dato en ' + listOf(D.deuTotErr) + ': ese mes la columna del total repite la de otro mes (los tipos de crédito sí están bien).');
+  document.getElementById('asb-note').textContent = msgs.join(' ');
+}
+const entPerDebtor = r => r && r.ent ? r.ent / r.eom : null;
+function dupSeries() {
+  return [
+    {label: 'Entidades por deudor: suma de los deudores de cada entidad ÷ deudores únicos', short: 'Entidades', color: 'var(--accent)', w: 2.5, sparse: true, qbreak: true, get: i => SF_AT.has(i) ? entPerDebtor(SF_AT.get(i)) : null},
+    {label: 'Subsistemas por deudor: suma de los deudores de cada subsistema ÷ deudores únicos', short: 'Subsistemas', color: 'var(--s2)', w: 2, sparse: true, get: i => SF_AT.has(i) ? dupOf(SF_AT.get(i)) : null},
+  ];
+}
+function renderDup() {
+  document.getElementById('dup-desc').textContent = 'En cuántas entidades, y en cuántos subsistemas, tiene crédito en promedio cada deudor. Si fuera 1, nadie tendría créditos en dos entidades (o en dos subsistemas) a la vez. Trimestral.';
+  const lg = document.getElementById('dup-legend');
+  lg.replaceChildren();
+  const series = dupSeries();
+  for (const s of series) legendItem(lg, 'ln', s.color, s.label);
+  lineChart(document.getElementById('ch-dup'), {idx: visIdx().filter(i => i >= SF0), H: 260, endLabels: true, series, marker: state.mi, u: 'x', fmt: v => fx(v, 2), zero: false,
+    skipEmpty: true, naTip: 'Trimestral: solo hay dato en marzo, junio, setiembre y diciembre', aria: 'Deudores con créditos en más de un subsistema'});
+  document.getElementById('dup-note').textContent = 'Subsistemas por deudor no capta a quien tiene créditos en dos entidades del mismo subsistema (por ejemplo, en dos bancos), porque la SBS ya lo cuenta una sola vez dentro del subsistema; además cambia cuando una entidad pasa de un subsistema a otro aunque los deudores no cambien: por eso cae en 2025, con el paso de Compartamos y Santander Consumer a la banca. Entidades por deudor no depende de esa clasificación, aunque baja con las fusiones; le falta marzo de 2022, porque el cuadro de deudores de las empresas de créditos de ese mes repite otro mes. Deudores únicos y por subsistema: SF-2103; por entidad: cuadros mensuales de deudores.';
+}
+
+// ---------- Depositantes (2026-11-04) ----------
+// D.dpt: {subsistema | 'sistema': {a, V: {n_<tipo>_<grupo>, a_<tipo>_<grupo>}}}. n_: número de depositantes publicado (la
+// fila TOTAL del cuadro es la suma de las entidades; el «sistema», la suma de los 4 subsistemas que captan). a_: depósito
+// promedio por depositante en soles (monto ÷ número de la escala de montos). Grupos: all, pn (personas naturales), pj
+// (jurídicas). D.dptEnt: {«subsistema/entidad»: {a, V: {pn, pj}, n?}} sin las entidad-mes que repiten otro mes
+// (D.dptErr: [[mes, entidad, mes repetido, motivo]]). No son personas únicas: nunca se presentan como tales.
+const DPT = D.dpt || {}, DPE = D.dptEnt || {}, DPS = D.dep || [];
+const DPTYPES = [{k: 'total', l: 'Total', lower: ''}, {k: 'ahorro', l: 'Ahorro', lower: 'de ahorro'}, {k: 'plazo', l: 'Plazo', lower: 'a plazo'},
+  {k: 'cts', l: 'CTS', lower: 'CTS'}, {k: 'vista', l: 'Vista', lower: 'a la vista'}];
+const DPT_BY = Object.fromEntries(DPTYPES.map(x => [x.k, x]));
+const DPPER = [{k: 'all', l: 'Todos', lower: 'depositantes'}, {k: 'pn', l: 'Personas naturales', lower: 'personas naturales'},
+  {k: 'pj', l: 'Personas jurídicas', lower: 'personas jurídicas'}];
+const DPP_BY = Object.fromEntries(DPPER.map(x => [x.k, x]));
+const DPVIEWS = [{id: 'n', label: 'Número'}, {id: 'a', label: 'Depósito promedio'}];
+Object.assign(state, {dpview: 'n', dptype: 'total', dpper: 'all', drsc: 'sistema', drper: 'all'});
+const pget = (s, f, i) => gv(DPT[s], f, i);
+const dpName = k => (SC[k] && SC[k].n) || (DPE[k] && DPE[k].n) || k.split('/')[1];
+const dpEnt = (k, g, i) => { const o = DPE[k]; if (g !== 'all') return gv(o, g, i); const a = gv(o, 'pn', i), b = gv(o, 'pj', i); return a == null || b == null ? null : a + b; };
+const DPT_ERR = new Map((D.dptErr || []).map(r => [r[1] + '|' + r[0], r]));
+const dpCompact = v => v == null ? '—' : v >= 1e6 ? f2.format(v / 1e6) + ' mill.' : f0.format(v);
+const dpWho = P => P.k === 'all' ? 'depositantes' : P.lower + ' con depósitos';
+// Subsistema-mes con el cuadro equivocado (errores_origen.DEPOSITOR_SOURCE_ERRORS): D.dptSubErr = [[mes, subsistema, motivo]].
+const DPT_SUB_ERR = D.dptSubErr || [];
+const dpSubWhy = (subs, i) => DPT_SUB_ERR.filter(r => r[0] === MONTHS[i] && subs.includes(r[1])).map(r => SUB_BY[r[1]].l + ': ' + r[2]).join('; ');
+function renderDkpis() {
+  const box = document.getElementById('dkpis');
+  box.replaceChildren();
+  const j = lastIdx(t => pget('sistema', 'n_total_all', t) != null, state.mi);
+  if (j == null) { const w = dpSubWhy(DPS, state.mi); emptyMsg(box, 'No hay depositantes de los cuatro subsistemas en ' + mLabel(MONTHS[state.mi]) + (w ? ' (' + w + ').' : '.')); document.getElementById('dkpi-note').textContent = ''; return; }
+  const chg = f => { const a = pget('sistema', f, j), b = pget('sistema', f, j - 12); return a != null && b ? 100 * (a / b - 1) : null; };
+  const R = dreData('sistema', 'pn', j), top = R.rows[0];
+  const tiles = [
+    {lab: 'Depositantes personas naturales (suma de las entidades)', val: people(pget('sistema', 'n_total_pn', j)), d: chg('n_total_pn'), fd: x => fx(x, 1) + '%', suf: ' en 12 meses',
+      sub: mLabel(MONTHS[j]) + (pop18(j) ? '; equivale a ' + fx(pget('sistema', 'n_total_pn', j) / pop18(j), 1) + ' veces la población de 18 años a más: no son personas únicas' : '; no son personas únicas')},
+    {lab: 'Depositantes personas jurídicas (suma de las entidades)', val: people(pget('sistema', 'n_total_pj', j)), d: chg('n_total_pj'), fd: x => fx(x, 1) + '%', suf: ' en 12 meses',
+      sub: 'empresas, asociaciones y otras'},
+    pget('sistema', 'a_total_pn', j) == null
+      ? {lab: 'Depósito promedio por persona natural', val: '—', sub: 'sin dato este mes: la escala de montos de algún subsistema no está o tiene un error de origen'}
+      : {lab: 'Depósito promedio por persona natural', val: soles(pget('sistema', 'a_total_pn', j)), sub: 'sus depósitos ÷ número de depositantes; ' + soles(pget('sistema', 'a_total_all', j)) + ' con las personas jurídicas'},
+    top ? {lab: 'Entidad con más depositantes personas naturales', val: top.n, sub: people(top.x) + ', ' + pct(top.sh) + ' de la suma de las entidades'} : {lab: 'Entidad con más depositantes', val: '—'},
+  ];
+  for (const t of tiles) {
+    const d = htmlEl('div', {cls: 'tile'}, box);
+    htmlEl('div', {cls: 'lab', text: t.lab}, d);
+    const v = htmlEl('div', {cls: 'val', text: t.val}, d);
+    if (t.unit) htmlEl('span', {cls: 'unit', text: t.unit}, v);
+    if (t.fd) deltaSpan(htmlEl('div', {cls: 'sub'}, d), t.d, t.fd, t.suf);
+    if (t.sub) htmlEl('div', {cls: 'sub', text: t.sub}, d);
+  }
+  document.getElementById('dkpi-note').textContent = (j !== state.mi ? 'Es ' + mLabel(MONTHS[j]) + ', el último mes con los cuatro subsistemas. ' : '') +
+    'Un depositante es una persona natural o jurídica con al menos un depósito en la entidad. Cada entidad lo cuenta una vez, pero quien tiene depósitos en dos entidades aparece en las dos: ' +
+    'estas cifras suman las entidades y no quitan esa duplicación, a diferencia de los deudores únicos de arriba. Cubre la banca múltiple, las financieras y las cajas municipales y rurales; ' +
+    'no incluye al Banco de la Nación, cuyo número de depositantes no publica el Boletín. Fuente: SBS, cuadros mensuales de número de depositantes y de depósitos según escala de montos.';
+}
+function dsbSeries() {
+  const f = (state.dpview === 'a' ? 'a_' : 'n_') + state.dptype + '_' + state.dpper;
+  return DPS.filter(s => DPT[s] && DPT[s].V[f]).map(s => ({k: s, label: SUB_BY[s].l, short: SUB_BY[s].s, color: SUB_COLOR[s], w: 2, get: i => pget(s, f, i)}));
+}
+function renderDsb() {
+  const T = DPT_BY[state.dptype], P = DPP_BY[state.dpper], avg = state.dpview === 'a';
+  const what = 'depósitos' + (T.lower ? ' ' + T.lower : '');
+  document.getElementById('dsb-title').textContent = (avg ? 'Depósito promedio por depositante' : 'Depositantes') + ' por subsistema' +
+    (T.k === 'total' ? '' : ' · ' + what) + (P.k === 'all' ? '' : ' · ' + P.l.toLowerCase());
+  document.getElementById('dsb-desc').textContent = avg
+    ? 'Saldo de los ' + what + (P.k === 'all' ? '' : ' de ' + P.lower) + ' dividido entre el número de ' + dpWho(P) + ', en soles, a fin de cada mes.'
+    : 'Número de ' + dpWho(P) + (T.k === 'total' ? '' : ' ' + T.lower) + ' a fin de cada mes. El subsistema es la suma de sus entidades: quien tiene depósitos en dos entidades cuenta dos veces.';
+  const series = dsbSeries(), lg = document.getElementById('dsb-legend');
+  lg.replaceChildren();
+  for (const s of series) legendItem(lg, 'ln', s.color, s.label);
+  const evs = evMarks('sistema').filter(e => DPS.some(s => e.ss.includes(s)) && EV.find(x => x.i === e.i && (x.t === 'cambio_subsistema' || x.t === 'absorcion' || x.t === 'fusion')));
+  lineChart(document.getElementById('ch-dsb'), {idx: visIdx(), H: 320, endLabels: true, endW: 190, endAt: state.mi, series, marker: state.mi, u: avg ? 'soles' : 'dp',
+    fmt: avg ? soles : people, events: evs, aria: (avg ? 'Depósito promedio por depositante' : 'Depositantes') + ' por subsistema'});
+  const msgs = [];
+  if (T.k === 'vista') msgs.push('Las cajas municipales y rurales no tienen depósitos a la vista.');
+  else if (series.length < DPS.length) msgs.push('Sin dato para ' + joinY(DPS.filter(s => !series.some(x => x.k === s)).map(s => SUB_BY[s].l.toLowerCase())) + ' en esta combinación.');
+  const dn = (D.dptNotes || []).filter(r => r[2].includes(avg ? 'a' : 'n') && (!r[3].length || r[3].includes(T.k)) && (!r[4].length || r[4].includes(P.k)));
+  if (dn.length) msgs.push('Sin dato en ' + dn.map(r => mLabel(r[0]) + ' (' + SUB_BY[r[1]].l.toLowerCase() + ')').join(', ') + ': ' + dn.map(r => r[5]).join('; ') + '.');
+  if (!avg && DPT_SUB_ERR.length) msgs.push('Sin dato en ' + joinY(DPT_SUB_ERR.map(r => mLabel(r[0]) + ' (' + SUB_BY[r[1]].l.toLowerCase() + ')')) + ': ' + DPT_SUB_ERR.map(r => r[2]).join('; ') + '.');
+  if (T.k === 'total' && !avg) msgs.push('En el total, quien tiene, por ejemplo, ahorro y CTS en la misma entidad cuenta una vez, así que es menor que la suma de los tipos de depósito.');
+  if (avg) msgs.push('Monto y número del cuadro de depósitos según escala de montos, que la SBS publica solo por subsistema; su número de depositantes casi siempre coincide con el del cuadro de depositantes. Un promedio alto puede venir de pocos depósitos grandes.');
+  msgs.push('Los saltos coinciden con entidades que cambian de subsistema o se fusionan (triángulos sobre el eje).');
+  document.getElementById('dsb-note').textContent = msgs.join(' ');
+}
+// Entidades ordenadas por número de depositantes en el mes i (o el último con todo el ámbito publicado).
+function dreData(sc, g, i) {
+  const subs = sc === 'sistema' ? DPS : [sc], f = 'n_total_' + g;
+  const j = lastIdx(t => subs.every(s => pget(s, f, t) != null), i);
+  if (j == null) return {j: null, rows: []};
+  const sum = t => subs.every(s => pget(s, f, t) != null) ? subs.reduce((a, s) => a + pget(s, f, t), 0) : null;
+  const tot = sum(j), tot0 = j >= 12 ? sum(j - 12) : null, rows = [];
+  for (const k of Object.keys(DPE)) {
+    const s = k.split('/')[0];
+    if (!subs.includes(s)) continue;
+    const x = dpEnt(k, g, j);
+    if (!(x > 0)) continue;
+    const x0 = j >= 12 ? dpEnt(k, g, j - 12) : null;
+    rows.push({k, s, n: dpName(k), x, sh: 100 * x / tot, x0, p: x0 != null && tot0 ? 100 * x0 / tot0 : null});
+  }
+  rows.sort((a, b) => b.x - a.x);
+  return {j, tot, rows};
+}
+function renderDre() {
+  const sc = state.drsc, P = DPP_BY[state.drper], R = dreData(sc, P.k, state.mi);
+  const box = document.getElementById('ch-dre'), lg = document.getElementById('dre-legend'), note = document.getElementById('dre-note');
+  box.replaceChildren(); lg.replaceChildren();
+  const where = sc === 'sistema' ? 'de los cuatro subsistemas que captan depósitos' : scopeOf(sc);
+  document.getElementById('dre-title').textContent = (P.k === 'all' ? 'Depositantes' : P.l + ' con depósitos') + ' por entidad · ' + scopeLabel(sc);
+  if (!R.rows.length) { const w = dpSubWhy(sc === 'sistema' ? DPS : [sc], state.mi); document.getElementById('dre-desc').textContent = '';
+    emptyMsg(box, 'No hay depositantes por entidad en ' + mLabel(MONTHS[state.mi]) + (w ? ' (' + w + ').' : '.')); note.textContent = ''; return; }
+  document.getElementById('dre-desc').textContent = 'Entidades ' + where + ' ordenadas por número de ' + dpWho(P) + ' en ' + mLabel(MONTHS[R.j]) +
+    '. El punto hueco es el número de 12 meses antes' + (box.clientWidth >= 600 ? '; a la derecha, su parte de la suma de los ' + dpWho(P) + ' de esas entidades.' : '; la tabla da su parte de la suma.');
+  const MAXR = 20, rows = R.rows.slice(0, MAXR), col = sc === 'sistema' ? null : SUB_COLOR[sc];
+  if (col) legendItem(lg, 'dot sq', col, SUB_BY[sc].l); else for (const s of DPS) legendItem(lg, 'dot sq', SUB_COLOR[s], SUB_BY[s].s);
+  legendItem(lg, 'dot hollow', null, '12 meses antes');
+  const msgs = [];
+  if (R.rows.length > MAXR) msgs.push('Se muestran las ' + MAXR + ' mayores de ' + R.rows.length + '; las otras ' + (R.rows.length - MAXR) + ' suman ' + pct(R.rows.slice(MAXR).reduce((a, r) => a + r.sh, 0)) + '.');
+  msgs.push('Quien tiene depósitos en varias entidades cuenta en cada una: la parte de cada entidad es de la suma de sus depositantes, no de las personas con depósitos.');
+  if (R.j !== state.mi) msgs.push('Es ' + mLabel(MONTHS[R.j]) + ', el último mes publicado por ' + (sc === 'sistema' ? 'los cuatro subsistemas' : subName(sc)) + '.');
+  const gone = [...DPT_ERR.values()].filter(r => r[0] === MONTHS[R.j] && (sc === 'sistema' || r[1].startsWith(sc + '/')));
+  if (gone.length) msgs.push('No figura' + (gone.length > 1 ? 'n ' : ' ') + joinY(gone.map(r => dpName(r[1]))) + ': el cuadro repite sus cifras de ' + joinY(gone.map(r => mLabel(r[2]))) +
+    ' (' + gone.map(r => r[3]).join('; ') + '). Su cifra sí está en el total que publica la SBS.');
+  note.textContent = msgs.join(' ');
+  const W = box.clientWidth, narrow = W < 600;
+  const labW = narrow ? 112 : 210, valW = narrow ? 70 : 84, shW = narrow ? 0 : 56, rowH = 26, top = 24;
+  const x0 = labW + 8, x1 = W - valW - shW - 8, H = top + rows.length * rowH + 10;
+  const mx = Math.max(...rows.map(r => Math.max(r.x, r.x0 || 0))), ax = axisOf('dp', mx);
+  const dom = niceDomain(0, mx / ax.div, narrow ? 3 : 5);
+  const x = v => x0 + (v / ax.div - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+  const svg = svgEl('svg', {width: W, height: H, role: 'list', 'aria-label': 'Depositantes por entidad ' + inScope(sc)}, box);
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of dom.ticks) {
+    const xx = x0 + (tk - dom.lo) / (dom.hi - dom.lo) * (x1 - x0);
+    svgEl('line', {x1: xx, x2: xx, y1: top - 4, y2: H - 8, stroke: tk === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: xx, y: top - 10, 'text-anchor': 'middle'}, g).textContent = ax.tick(tk);
+  }
+  svgEl('text', {x: labW, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = narrow ? ax.unit.replace('Millones de', 'Mill. de') : ax.unit;
+  if (!narrow) svgEl('text', {x: W - 4, y: top - 10, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = 'Parte';
+  const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  const nmOf = rowLabels(rows, narrow ? 15 : 30, trunc);
+  rows.forEach((r, k) => {
+    const yc = top + k * rowH + rowH / 2, c = col || SUB_COLOR[r.s];
+    const gr = svgEl('g', {class: 'rank-row', tabindex: 0, role: 'listitem', style: 'cursor:default',
+      'aria-label': r.n + ': ' + people(r.x) + ' ' + dpWho(P) + ', ' + pct(r.sh) + (r.x0 != null ? '; 12 meses antes ' + people(r.x0) : '')}, svg);
+    svgEl('rect', {class: 'bg', x: 0, y: yc - rowH / 2, width: W, height: rowH, rx: 4}, gr);
+    svgEl('text', {class: 'nm', x: labW, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = nmOf(r);
+    svgEl('rect', {x: x0, y: yc - 6, width: Math.max(1, x(r.x) - x0), height: 12, rx: 2, fill: c}, gr);
+    if (r.x0 != null) svgEl('circle', {cx: x(r.x0), cy: yc, r: 4, fill: 'var(--surface)', stroke: 'var(--muted)', 'stroke-width': 2}, gr);
+    svgEl('text', {class: 'rv', x: x1 + 10, y: yc + 4}, gr).textContent = dpCompact(r.x);
+    if (!narrow) svgEl('text', {class: 'rs', x: W - 4, y: yc + 4, 'text-anchor': 'end'}, gr).textContent = pct(r.sh);
+    const show = evt => showTip(...anchorOf(evt, gr), r.n, [
+      {value: people(r.x), label: P.k === 'all' ? 'Depositantes' : P.l, color: c, sq: true},
+      {value: people(r.x0), label: '12 meses antes'},
+      {value: pct(r.sh), label: 'Parte de la suma ' + where}].concat(sc === 'sistema' ? [{value: SUB_BY[r.s].s, label: 'Subsistema'}] : []));
+    gr.addEventListener('pointermove', show);
+    gr.addEventListener('pointerleave', hideTip);
+    gr.addEventListener('focus', () => show(null));
+    gr.addEventListener('blur', hideTip);
+  });
+}
+
+// Meses posteriores al último con los cinco subsistemas: un «—» que solo falta porque el dato aún no se publica
+// muestra el último valor publicado de la columna, con su mes (nunca un hueco).
+const LABEL_IDX = new Map(MONTHS.map((m, i) => [mLabel(m), i]));
+const cellText = c => c && typeof c === 'object' ? c.v : c;
+function lagFill(head, rows) {
+  if (head[0] !== 'Mes' || ALL_LAST >= N - 1) return rows;
+  return rows.map(r => {
+    const i = LABEL_IDX.get(r[0]);
+    if (!(i > ALL_LAST)) return r;
+    return r.map((c, j) => {
+      if (j === 0 || cellText(c) !== '—') return c;
+      let src = null;
+      for (const q of rows) {
+        const k = LABEL_IDX.get(q[0]);
+        if (k < i && cellText(q[j]) !== '—' && (!src || k > src.k)) src = {k, q};
+      }
+      if (!src) return c;
+      return {v: cellText(src.q[j]) + ' (' + src.q[0] + ')', cls: 'lag', title: 'Último dato publicado, de ' + src.q[0] + '. ' +
+        (/sistema/i.test(head[j]) ? 'El sistema se calcula solo con los meses en que publicaron los cinco subsistemas.'
+          : 'La SBS todavía no publica ' + r[0] + ' para esta columna.')};
+    });
+  });
+}
+function tdCell(c, row) {
+  if (!(c && typeof c === 'object')) return htmlEl('td', {text: c}, row);
+  const p = {text: c.v, cls: c.cls || ''};
+  if (c.title) p.title = c.title;
+  return htmlEl('td', p, row);
+}
+// ---------- Comparación internacional (2026-11-03) ----------
+// D.intl: {countries: [{k, l, variants, base: {variante: base}}], rows: [{p, y, v, t, n, cr4, cr5, ihh, pe}]}.
+// Serie anual (diciembre): se dibuja sobre el índice mensual, con puntos en cada diciembre (sparse), y el cursor
+// salta al diciembre más cercano (cfg.snap / cfg.step en lineChart).
+const INTL = D.intl;
+const ICOLOR = {PER: 'var(--s1)', CHL: 'var(--s2)', COL: 'var(--s3)', BRA: 'var(--s4)'};
+const IBASE = {individual: 'estados individuales', consolidado: 'estados consolidados', conglomerado_prudencial: 'conglomerado prudencial'};
+const IVARS = [{id: 'creditos', label: 'Créditos', lower: 'los créditos'}, {id: 'depositos', label: 'Depósitos', lower: 'los depósitos'}];
+const IVARIANTS = [{id: 'con_estatales', label: 'Con bancos estatales'}, {id: 'sin_estatales', label: 'Sin bancos estatales', title: 'Sin los bancos del Estado de cada país'}];
+const IMEAS = [{id: 'cr4', label: '4 mayores (CR4)', name: 'Participación de los 4 mayores bancos (CR4)', u: 'pct'},
+  {id: 'ihh', label: 'HHI', name: 'Índice de Herfindahl-Hirschman (HHI)', u: 'hhi'}];
+const IX = new Map((INTL ? INTL.rows : []).map(r => [r.p + '|' + r.y + '|' + r.v + '|' + r.t, r]));
+const IYEARS = INTL ? [...new Set(INTL.rows.map(r => r.y))].sort((a, b) => a - b).filter(y => idxOf(y + '-12') >= 0) : [];
+state.ivar = 'creditos'; state.ivariant = 'con_estatales'; state.imeas = 'cr4';
+const irow = (p, y, v, t) => IX.get(p + '|' + y + '|' + v + '|' + t) || null;
+const ifmt = v => state.imeas === 'ihh' ? fpt(v) : pct(v);
+const ibase = (c, t) => IBASE[c.base[t]] || c.base[t] || '';
+const decOf = i => { const m = MONTHS[i]; return m && m.endsWith('-12') ? +m.slice(0, 4) : null; };
+function intlSeries() {
+  const v = state.ivar, t = state.ivariant, f = state.imeas, out = [];
+  for (const c of INTL.countries) {
+    if (c.variants.includes(t)) out.push({k: c.k, label: c.l + ' (' + ibase(c, t) + ')', short: c.l, color: ICOLOR[c.k], w: 2.25, sparse: true,
+      get: i => { const y = decOf(i), r = y == null ? null : irow(c.k, y, v, t); return r ? r[f] : null; }});
+    if (t === 'con_estatales' && c.variants.includes('oficial_con_estatales')) out.push({k: c.k + '-of', label: c.l + ': cifra oficial del BCB (todo el sistema financiero)',
+      short: c.l + ' (BCB)', color: ICOLOR[c.k], w: 2, dash: '5 4', sparse: true, cdash: true,
+      get: i => { const y = decOf(i), r = y == null ? null : irow(c.k, y, v, 'oficial_con_estatales'); return r ? r[f] : null; }});
+  }
+  return out;
+}
+function intlIdx() {
+  if (!IYEARS.length) return [];
+  const a = idxOf(IYEARS[0] + '-12'), b = idxOf(IYEARS[IYEARS.length - 1] + '-12'), out = [];
+  for (let i = a; i <= b; i++) out.push(i);
+  return out;
+}
+function renderIkpis() {
+  const box = document.getElementById('ikpis');
+  box.replaceChildren();
+  if (!INTL) { emptyMsg(box, 'Todavía no hay datos de la comparación internacional.'); return; }
+  const v = state.ivar, t = state.ivariant, f = state.imeas;
+  for (const c of INTL.countries) {
+    const tile = htmlEl('div', {cls: 'tile'}, box);
+    tile.style.borderTop = '3px solid ' + ICOLOR[c.k];
+    htmlEl('div', {cls: 'lab', text: c.l}, tile);
+    const tt = c.variants.includes(t) ? t : (t === 'con_estatales' && c.variants.includes('oficial_con_estatales') ? 'oficial_con_estatales' : null);
+    const y = tt ? IYEARS.slice().reverse().find(yy => irow(c.k, yy, v, tt) && irow(c.k, yy, v, tt)[f] != null) : null;
+    if (y == null) { htmlEl('div', {cls: 'val', text: '—'}, tile); htmlEl('div', {cls: 'sub', text: 'Sin cálculo en esta variante'}, tile); continue; }
+    const r = irow(c.k, y, v, tt), r0 = irow(c.k, y - 10, v, tt);
+    const val = htmlEl('div', {cls: 'val', text: ifmt(r[f])}, tile);
+    htmlEl('span', {cls: 'unit', text: 'dic-' + y}, val);
+    if (r0 && r0[f] != null) htmlEl('div', {cls: 'sub', text: (r[f] >= r0[f] ? '+' : '−') + (f === 'ihh' ? fpt(Math.abs(r[f] - r0[f])) + ' puntos' : fx(Math.abs(r[f] - r0[f]), 1) + ' pp') + ' frente a dic-' + (y - 10)}, tile);
+    htmlEl('div', {cls: 'sub', text: (r.n ? r.n + (c.base[tt] === 'conglomerado_prudencial' ? ' conglomerados · ' : ' bancos · ') : '') + (tt === 'oficial_con_estatales' ? 'cifra oficial del BCB' : ibase(c, tt))}, tile);
+    if (c.k === 'BRA' && v === 'creditos' && y >= 2025 && tt !== 'oficial_con_estatales') htmlEl('div', {cls: 'sub', text: 'En 2025 cambia la definición de cartera de crédito (Cosif 1.5)'}, tile);
+    if (t === 'con_estatales' && r.pe != null) htmlEl('div', {cls: 'sub', text: (tt === 'oficial_con_estatales' ? 'Instituciones públicas: ' : 'Bancos estatales: ') + pct(r.pe) + ' del total'}, tile);
+  }
+}
+function renderIntl() {
+  renderIkpis();
+  const box = document.getElementById('ch-intl'), lg = document.getElementById('intl-legend');
+  const V = IVARS.find(x => x.id === state.ivar), Mi = IMEAS.find(x => x.id === state.imeas);
+  document.getElementById('intl-title').textContent = Mi.name + ' en ' + V.lower + ' de la banca, diciembre de cada año';
+  document.getElementById('intl-desc').textContent = state.ivariant === 'con_estatales'
+    ? 'Bancos de cada país, incluidos los estatales (la CMF de Chile y el BCB también incluyen a los bancos públicos en sus cifras de concentración).'
+    : 'Sin los bancos del Estado de cada país: sin el Banco de la Nación ni Agrobanco (Perú), BancoEstado (Chile), Banco Agrario (Colombia) ni los bancos públicos de Brasil. Sí quedan los bancos de capital estatal extranjero, como ICBC y Bank of China en el Perú.';
+  lg.replaceChildren();
+  if (!INTL) { box.replaceChildren(); emptyMsg(box, 'Todavía no hay datos de la comparación internacional.'); return; }
+  const series = intlSeries();
+  for (const s of series) {
+    const it = legendItem(lg, s.cdash ? 'ln cdash' : 'ln', s.cdash ? null : s.color, s.label);
+    if (s.cdash) it.style.color = s.color;
+  }
+  const idx = intlIdx(), a = idx[0], b = idx[idx.length - 1];
+  const snap = i => { const m = MONTHS[i]; const y = +m.slice(0, 4) - (+m.slice(5, 7) < 6 ? 1 : 0); return Math.max(a, Math.min(b, idxOf(y + '-12'))); };
+  // Eje: el año de cada diciembre bajo su punto (uno de cada dos si no caben).
+  const ticks = (ix, pw) => { const d = ix.map((i, k) => [i, k]).filter(([i]) => decOf(i) != null), every = pw / d.length < 44 ? 2 : 1;
+    return d.filter((_, j) => (d.length - 1 - j) % every === 0).map(([i, k]) => ({i: k, text: String(decOf(i))})); };
+  lineChart(box, {idx, H: 360, endLabels: true, series, u: Mi.u, fmt: ifmt, zero: false, snap, step: 12, ticks,
+    title: i => 'Diciembre de ' + MONTHS[i].slice(0, 4), naTip: 'Sin dato en este año', aria: Mi.name + ' de ' + V.lower + ' por país'});
+  const miss = INTL.countries.filter(c => !c.variants.includes(state.ivariant) && !(state.ivariant === 'con_estatales' && c.variants.includes('oficial_con_estatales')));
+  const msgs = [];
+  if (miss.length) msgs.push('Sin cálculo en esta variante: ' + joinY(miss.map(c => c.l)) + '.');
+  if (state.imeas === 'ihh') msgs.push('La vista principal es el CR4 porque es la medida que publican supervisores como el BCB y es más fácil de leer. El HHI resume todas las participaciones y pesa más a los bancos grandes.');
+  msgs.push('Perú, Chile y Colombia se miden por banco; Brasil, por conglomerado. Contar bancos y no grupos subestima la concentración (ver «Entidades o grupos» abajo).');
+  document.getElementById('intl-note').textContent = msgs.join(' ');
+}
+function fillIdef() {
+  const box = document.getElementById('intl-def');
+  if (!box) return;
+  const P = [
+    '<b>Qué se mide.</b> El CR4 es la participación de los cuatro bancos más grandes en los créditos (o depósitos) de la banca de cada país. El HHI suma los cuadrados de las participaciones de todos los bancos (de 0 a 10,000). Los dos se calculan por banco (en Brasil, por conglomerado prudencial) con los datos de cada supervisor, a fin de diciembre de cada año.',
+    '<b>Con o sin bancos estatales.</b> «Con bancos estatales» son todos los bancos de cada país, incluidos los del Estado; la CMF de Chile y el Banco Central do Brasil también incluyen a los bancos públicos en sus cifras de concentración. En Perú incluye al Banco de la Nación y a Agrobanco; en Chile, a BancoEstado; en Colombia, al Banco Agrario; en Brasil, al Banco do Brasil, la Caixa y los demás bancos públicos. «Sin bancos estatales» quita a los bancos del Estado de cada país; en Perú queda la banca múltiple, que incluye bancos de capital estatal extranjero como ICBC y Bank of China.',
+    '<b>Entidades o grupos.</b> Perú, Chile y Colombia se miden por banco; Brasil, por conglomerado prudencial, que suma las entidades de un mismo grupo. En Colombia, los cuatro bancos del Grupo Aval (Bogotá, Popular, Occidente y AV Villas) van por separado: sumados como un grupo, el CR4 de créditos de 2025 con bancos estatales pasaría de 67.3% a 79.7%, por encima del 77.8% del Perú, y el de depósitos de 66.0% a 79.3% (Perú: 74.7%). En el Perú, el BCP y Mibanco, del mismo grupo, también van por separado (no se calculó el CR4 por grupos). Como en la pestaña «Concentración», contar bancos y no grupos subestima la concentración, y el orden entre países puede cambiar.',
+    '<b>Banco de la Nación.</b> Sus cifras salen de su balance general (cuadro B-5102 de la SBS) con la misma fórmula del ranking de la banca. No se usa el reporte SF-2103: hasta al menos 2023 solo incluía sus créditos de consumo e hipotecarios.',
+    '<b>Bases contables.</b> Perú y Colombia usan estados individuales. Chile publica estados consolidados, que incluyen filiales en el exterior: el City National Bank of Florida de BCI equivale al 6.6% de las colocaciones y al 9.4% de los depósitos de la banca chilena, y además están las filiales de Itaú en Colombia y Panamá y la de BTG en Colombia. Sin esas filiales, el CR4 de Chile en 2025 sería 63.1% en colocaciones (en vez de 64.4%) y 65.2% en depósitos (en vez de 67.0%) (cálculo ilustrativo con los estados auditados publicados en la CMF). Las cifras individuales de la CMF no sirven para corregirlo: quitan también las filiales chilenas, como el emisor de tarjetas de Falabella. Ese margen basta para cambiar el orden entre Chile, Colombia y Brasil, que están cerca entre sí; la distancia del Perú con los demás es mayor, salvo por lo dicho sobre los grupos.',
+    '<b>Brasil.</b> La línea continua es un cálculo propio con los datos por entidad del Banco Central do Brasil (IF.data), por conglomerado prudencial. Incluye solo a los bancos comerciales y múltiples (segmentos b1 y b2), sin cooperativas, bancos de desarrollo como el BNDES ni entidades no bancarias. Los bancos públicos son el Banco do Brasil, la Caixa y otros bancos federales y estaduales, como Banrisul, el Banco do Nordeste y el BRB. La línea punteada es la cifra oficial del BCB para todo el sistema financiero (desde 2019): como incluye a las cooperativas, a los bancos de desarrollo (como el BNDES) y a las entidades no bancarias, su CR4 queda por debajo: entre 9 y 12 puntos porcentuales en créditos y entre 5 y 9 en depósitos (2019-2025). En 2025 el BCB cambió el plan de cuentas (Cosif 1.5) y, con él, la definición de cartera de crédito, así que 2025 no es del todo comparable con los años anteriores. El BRB no entregó su balance de diciembre de 2025: el cálculo de 2025 no lo incluye (pesaba 0.7% en 2024).',
+  ];
+  box.replaceChildren();
+  for (const t of P) htmlEl('p', null, box).innerHTML = t;
+}
+fillIdef();
+
+function fillTable(key) {
+  const wrap = document.getElementById('tb-' + key);
+  wrap.replaceChildren();
+  if (key === 'rank') return fillRankTable(wrap);
+  const [head, rows0] = TABLES[key](), rows = lagFill(head, rows0);
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => tdCell(c, row)); });
+}
+function fillRankTable(wrap) {
+  const R = rankData(), V = VAR_BY[state.evar];
+  if (!R.rows.length) { emptyMsg(wrap, naConc(state.sub, state.evar) || (state.evar === 'deu' ? deuNa(state.sub, state.mi) : rkNa(state.sub, state.mi, state.evar)) || 'No hay entidades con datos para este mes.'); return; }
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  const head = ['Entidad'].concat(state.sub === 'sistema' ? ['Subsistema'] : []).concat(['Participación', '12 meses antes', V.name]);
+  head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+  R.rows.forEach(r => {
+    const row = htmlEl('tr', null, tb);
+    [r.n].concat(state.sub === 'sistema' ? [SUB_BY[r.s].s] : []).concat([pct(r.sh, 2), pct(r.p, 2), state.evar === 'deu' ? f0.format(r.x) : money(r.x)])
+      .forEach(c => htmlEl('td', {text: c}, row));
+  });
+}
+const TABLES = {
+  intl() {
+    if (!INTL) return [['Año'], []];
+    const series = intlSeries();
+    return [['Año'].concat(series.map(s => s.label)), IYEARS.slice().reverse().map(y => [String(y)].concat(series.map(s => { const v = s.get(idxOf(y + '-12')); return v == null ? '—' : ifmt(v); })))];
+  },
+  evo() {
+    const series = evoSeries(), idx = visIdx().slice().reverse(), m = state.meas;
+    return [['Mes'].concat(series.map(s => s.label)), idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => naCell(fmtMeas(m, s.get(i)), s.get(i) == null && rkNa(s.k, i, state.var)))))
+      .filter(r => r.slice(1).some(c => cellText(c) !== '—'))];
+  },
+  pes() {
+    const L = pesLayers(), idx = visIdx().slice().reverse(), v = state.var;
+    return [['Mes', VAR_BY[v].name + ' del sistema'].concat(L.map(l => l.label + ' (%)')),
+      idx.map(i => { const T = cget('sistema', 'tot_' + v, i); return T ? [mLabel(MONTHS[i]), money(T)].concat(L.map(l => pct(100 * (l.get(i) || 0) / T, 1))) : null; }).filter(Boolean)];
+  },
+  ent() {
+    const k = state.ent;
+    if (!k) return [['Mes'], []];
+    const idx = visIdx().slice().reverse(), dep = DEP.has(SC[k].s);
+    return [['Mes', 'Créditos directos', 'Participación en créditos', 'Depósitos totales', 'Participación en depósitos', 'Patrimonio', 'Participación en patrimonio', 'Deudores', 'Participación en deudores'],
+      idx.map(i => {
+        const na = rkNa(SC[k].s, i, 'cr'), rr = rkEntAt(k, i), rd = deuEntAt(k, i);
+        if (eget(k, 'cr', i) == null && eget(k, 'deu', i) == null && !rr && !rd) return null;
+        // Mes en que la SBS repitió las cifras de otro mes de la entidad: último dato válido (hasta 3 meses antes), con su mes y el motivo.
+        const fill = (v, g, fmt, plain) => {
+          const why = entWhy(k, v, i);
+          if (!why || g(i) != null) return plain;
+          for (let j = i - 1; j >= Math.max(0, i - 3); j--) { const w = g(j); if (w != null) return {v: fmt(w) + ' (' + mLabel(MONTHS[j]) + ')', cls: 'lag', title: 'Último dato válido, de ' + mLabel(MONTHS[j]) + ': ' + why + '.'}; }
+          return {v: '—', title: 'Sin dato: ' + why + '.'};
+        };
+        const amt = (v, fmt) => fill(v, t => eget(k, v, t), fmt, eget(k, v, i) == null ? '—' : fmt(eget(k, v, i)));
+        const sh = (v, n) => fill(v, t => entShare(k, v, t), x => pct(x, 2), n === undefined ? pct(entShare(k, v, i), 2) : naCell(pct(entShare(k, v, i), 2), n));
+        return [mLabel(MONTHS[i]), amt('cr', money), sh('cr', na), dep ? amt('dep', money) : '—', dep ? sh('dep', na) : '—', amt('pat', money), sh('pat', na),
+          amt('deu', x => f0.format(x)), sh('deu')];
+      }).filter(Boolean)];
+  },
+  aun() {
+    return [['Trimestre', 'Deudores únicos (5 subsistemas)', 'Sistema financiero', 'Por cada 100 adultos (5 subsistemas)', 'Población de 18 años a más'],
+      SF.slice().reverse().map(r => [mLabel(r.m), f0.format(r.eom), f0.format(r.sf), perAdult(r.eom, r.i) == null ? '—' : f1.format(perAdult(r.eom, r.i)), pop18(r.i) ? f0.format(pop18(r.i)) : '—'])];
+  },
+  asb() {
+    const series = asbSeries(), idx = visIdx().slice().reverse(), avg = state.dview === 'avg';
+    return [['Mes'].concat(series.map(s => s.label)), idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => avg ? soles(s.get(i)) : s.get(i) == null ? '—' : f0.format(s.get(i))))).filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  dup() {
+    return [['Trimestre'].concat(SUBS.map(s => s.l)).concat(['Suma de subsistemas', 'Suma de entidades', 'Deudores únicos (5 subsistemas)', 'Subsistemas por deudor', 'Entidades por deudor']),
+      SF.slice().reverse().map(r => [mLabel(r.m)].concat(SUBS.map(s => r.subs[s.k] == null ? '—' : f0.format(r.subs[s.k])))
+        .concat([f0.format(Object.values(r.subs).reduce((a, b) => a + b, 0)), r.ent ? f0.format(r.ent) : '—', f0.format(r.eom), fx(dupOf(r), 3), fx(entPerDebtor(r), 3)]))];
+  },
+  dsb() {
+    const series = dsbSeries(), idx = visIdx().slice().reverse(), avg = state.dpview === 'a';
+    return [['Mes'].concat(series.map(s => s.label)), idx.map(i => [mLabel(MONTHS[i])].concat(series.map(s => { const v = s.get(i); return v == null ? '—' : avg ? soles(v) : f0.format(v); })))
+      .filter(r => r.slice(1).some(c => c !== '—'))];
+  },
+  dre() {
+    const sc = state.drsc, R = dreData(sc, state.drper, state.mi);
+    return [['Entidad'].concat(sc === 'sistema' ? ['Subsistema'] : []).concat(['Depositantes' + (R.j == null ? '' : ', ' + mLabel(MONTHS[R.j])), '12 meses antes', 'Parte de la suma', 'Parte 12 meses antes']),
+      R.rows.map(r => [r.n].concat(sc === 'sistema' ? [SUB_BY[r.s].s] : []).concat([f0.format(r.x), r.x0 == null ? '—' : f0.format(r.x0), pct(r.sh, 2), pct(r.p, 2)]))];
+  },
+};
+document.querySelectorAll('[data-table]').forEach(btn => {
+  btn.setAttribute('aria-controls', 'tb-' + btn.dataset.table);
+  btn.setAttribute('aria-expanded', 'false');
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.table, wrap = document.getElementById('tb-' + key);
+    const open = wrap.hidden;
+    if (open) fillTable(key);
+    wrap.hidden = !open;
+    btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+    btn.setAttribute('aria-expanded', String(open));
+  });
+});
+function refreshTables() {
+  for (const k of Object.keys(TABLES).concat(['rank'])) if (!document.getElementById('tb-' + k).hidden) fillTable(k);
+}
+
+// ---------- Filtros ----------
+function segment(id, items, get0, set, onlyOwn) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const b = htmlEl('button', {type: 'button', text: it.label, 'aria-pressed': String(get0() === it.id)}, box);
+    b.dataset.k = it.id;
+    if (it.title) b.title = it.title;
+    b.addEventListener('click', () => {
+      set(it.id);
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      if (onlyOwn) onlyOwn(); else renderVisible();
+    });
+  }
+}
+segment('f-var', VARS.map(x => ({id: x.k, label: x.l, title: x.name})), () => state.var, v => { state.var = v; });
+segment('f-range', RANGES.map(r => ({id: r.id, label: r.label})), () => state.range, v => { state.range = v; });
+segment('f-scope', [{id: 'sistema', label: 'Sistema'}].concat(SUBS.map(s => ({id: s.k, label: s.s, title: s.l}))), () => state.scope, v => { state.scope = v; });
+segment('f-meas', MEAS.map(x => ({id: x.k, label: x.l, title: x.name})), () => state.meas, v => { state.meas = v; },
+  () => { hideTip(); renderEvo(); if (!document.getElementById('tb-evo').hidden) fillTable('evo'); });
+segment('f-sub', [{id: 'sistema', label: 'Sistema'}].concat(SUBS.map(s => ({id: s.k, label: s.s, title: s.l}))), () => state.sub, v => { state.sub = v; state.ent = null; });
+segment('f-evar', EVARS.map(x => ({id: x.k, label: x.l, title: x.name})), () => state.evar, v => { state.evar = v; });
+segment('f-aview', AVIEWS, () => state.aview, v => { state.aview = v; }, () => { hideTip(); renderAun(); });
+segment('f-dview', DVIEWS, () => state.dview, v => { state.dview = v; }, () => { hideTip(); renderAsb(); if (!document.getElementById('tb-asb').hidden) fillTable('asb'); });
+segment('f-ivar', IVARS, () => state.ivar, v => { state.ivar = v; }, () => { hideTip(); renderIntl(); refreshTables(); });
+segment('f-ivariant', IVARIANTS, () => state.ivariant, v => { state.ivariant = v; }, () => { hideTip(); renderIntl(); refreshTables(); });
+segment('f-imeas', IMEAS, () => state.imeas, v => { state.imeas = v; }, () => { hideTip(); renderIntl(); refreshTables(); });
+segment('f-dtype', DTYPES.map(x => ({id: x.k, label: x.l})), () => state.dtype, v => { state.dtype = v; }, () => { hideTip(); renderAsb(); if (!document.getElementById('tb-asb').hidden) fillTable('asb'); });
+const dsbRedraw = () => { hideTip(); renderDsb(); if (!document.getElementById('tb-dsb').hidden) fillTable('dsb'); };
+const dreRedraw = () => { hideTip(); renderDre(); if (!document.getElementById('tb-dre').hidden) fillTable('dre'); };
+segment('f-dpview', DPVIEWS, () => state.dpview, v => { state.dpview = v; }, dsbRedraw);
+segment('f-dptype', DPTYPES.map(x => ({id: x.k, label: x.l})), () => state.dptype, v => { state.dptype = v; }, dsbRedraw);
+segment('f-dpper', DPPER.map(x => ({id: x.k, label: x.l})), () => state.dpper, v => { state.dpper = v; }, dsbRedraw);
+segment('f-drsc', [{id: 'sistema', label: 'Sistema'}].concat(DPS.map(s => ({id: s, label: SUB_BY[s].s, title: SUB_BY[s].l}))), () => state.drsc, v => { state.drsc = v; }, dreRedraw);
+segment('f-drper', DPPER.map(x => ({id: x.k, label: x.l})), () => state.drper, v => { state.drper = v; }, dreRedraw);
+(function fillMonths() {
+  const sel = document.getElementById('f-mes');
+  for (let i = N - 1; i >= 0; i--) htmlEl('option', {value: String(i), text: mLabel(MONTHS[i]) + (i > ALL_LAST ? ' (parcial)' : '')}, sel);
+  sel.value = String(state.mi);
+  sel.addEventListener('change', () => { state.mi = +sel.value; renderVisible(); });
+})();
+document.getElementById('f-ent').addEventListener('change', e => { state.ent = e.target.value; renderRank(); renderScatter(); renderEnt(); if (!document.getElementById('tb-ent').hidden) fillTable('ent'); });
+
+// ---------- Pestañas ----------
+const TABS = ['concentracion', 'entidades', 'alcance', 'internacional', 'metodologia'];
+let tab = 'concentracion';
+function renderVisible() {
+  hideTip();
+  if (tab === 'concentracion') { renderKpis(); renderEvo(); renderPes(); renderEvt(); }
+  else if (tab === 'entidades') { fillEntSelect(); renderRank(); renderScatter(); renderEnt(); }
+  else if (tab === 'alcance') { renderAkpis(); renderAun(); renderAsb(); renderDup(); renderDkpis(); renderDsb(); renderDre(); }
+  else if (tab === 'internacional') { renderIntl(); }
+  refreshTables();
+}
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    document.getElementById('tab-' + t).hidden = t !== id;
+    const b = document.getElementById('tabbtn-' + t);
+    b.setAttribute('aria-selected', String(t === id));
+    b.tabIndex = t === id ? 0 : -1;
+  }
+  document.getElementById('filters').hidden = id === 'metodologia' || id === 'internacional';
+  document.getElementById('fw-var').hidden = id !== 'concentracion';
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  const b = document.getElementById('tabbtn-' + t);
+  b.addEventListener('click', () => showTab(t, true));
+  b.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next, true);
+    document.getElementById('tabbtn-' + next).focus();
+  });
+});
+
+// ---------- Ejemplos de «Cómo leer los datos» (salen de los datos) ----------
+(function examples() {
+  const put = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+  const BM = 'banca-multiple';
+  // HHI de la banca múltiple en créditos, último mes con dato: las 4 mayores y el resto.
+  const R = rankData(BM, 'cr', ALL_LAST);
+  if (R.rows.length > 4) {
+    const top = R.rows.slice(0, 4), rest = R.rows.slice(4);
+    const sq = a => a.reduce((t, r) => t + r.sh * r.sh, 0);
+    put('ex-hhi', '<b>Ejemplo.</b> En ' + mLabel(MONTHS[R.j]) + ', las cuatro mayores entidades de la banca múltiple tenían ' +
+      joinY(top.map(r => r.n + ' ' + pct(r.sh))) + ' de los créditos directos. Sus cuadrados suman ' + f1.format(sq(top)) + '; las otras ' + rest.length +
+      ' entidades, que juntas tienen ' + pct(rest.reduce((t, r) => t + r.sh, 0)) + ', agregan ' + f1.format(sq(rest)) + '. HHI = <b>' + fpt(sq(top) + sq(rest)) +
+      '</b>, el de ' + f1.format(10000 / (sq(top) + sq(rest))) + ' bancos del mismo tamaño.');
+  }
+  // Participación de los 4 bancos grandes (SF-2103) frente a la línea del sistema.
+  const wrap = document.getElementById('tb-big4');
+  if (wrap && D.big4) {
+    const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    ['Trimestre', 'Créditos: SBS', 'Créditos: este tablero', 'Depósitos: SBS', 'Depósitos: este tablero'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+    for (const [m, c, d] of D.big4.slice().reverse()) {
+      const i = idxOf(m), row = htmlEl('tr', null, tb);
+      [mLabel(m), pct(c), pct(cget('sistema', 'c4_cr', i)), pct(d), pct(cget('sistema', 'c4_dep', i))].forEach(x => htmlEl('td', {text: x}, row));
+    }
+  }
+  // Deudores: el BCP en la banca, participación en saldos y en deudores.
+  const bcp = D.entities.find(k => k === BM + '/bcp');
+  const jd = bcp ? lastIdx(t => eget(bcp, 'deu', t) != null && dget(BM, 'n_total', t) != null, ALL_LAST) : null;
+  if (jd != null) {
+    const sd = entShare(bcp, 'deu', jd), sc = entShare(bcp, 'cr', jd), j0 = jd - 12, sd0 = entShare(bcp, 'deu', j0);
+    const avgB = eget(bcp, 'cr', jd) * 1000 / eget(bcp, 'deu', jd), avgS = cget(BM, 'tot_cr', jd) * 1000 / dget(BM, 'n_total', jd);
+    put('ex-deu', '<b>Ejemplo.</b> En ' + mLabel(MONTHS[jd]) + ', el BCP tenía ' + deudores(eget(bcp, 'deu', jd)) + ' de deudores, ' + pct(sd) +
+      ' de los ' + deudores(dget(BM, 'n_total', jd)) + ' de deudores de la banca múltiple' + (sd0 != null ? ' (' + pct(sd0) + ' doce meses antes)' : '') +
+      ', y ' + pct(sc) + ' de los créditos de la banca. Por eso su saldo promedio por deudor (' + soles(avgB) + ') es menor que el de la banca (' + soles(avgS) + ').');
+  }
+  // Deudores por cada 100 adultos y referencia oficial.
+  const r = SF.length ? SF[SF.length - 1] : null;
+  if (r && pop18(r.i)) {
+    const ci = CIIF.get(r.i);
+    put('ex-pc', '<b>Ejemplo.</b> En ' + mLabel(r.m) + ' había ' + deudores(r.eom) + ' de deudores únicos en los cinco subsistemas y ' + deudores(Math.round(pop18(r.i))) +
+      ' de personas de 18 años a más: ' + f1.format(perAdult(r.eom, r.i)) + ' deudores por cada 100 adultos.' +
+      (ci != null ? ' La SBS informa ' + pct(ci, 1) + ' para el mismo mes (deudores personas naturales por cada 100 adultos, en todo el sistema financiero).' : ''));
+  }
+  // Entidades y subsistemas por deudor.
+  if (r) {
+    const sumS = Object.values(r.subs).reduce((a, b) => a + b, 0);
+    put('ex-dup', '<b>Ejemplo.</b> En ' + mLabel(r.m) + ', los deudores de las entidades suman ' + (r.ent ? deudores(r.ent) : '—') + ' y los de los cinco subsistemas, ' + deudores(sumS) +
+      ', frente a ' + deudores(r.eom) + ' de deudores únicos: ' + (r.ent ? fx(r.ent / r.eom, 2) + ' entidades' : '—') + ' y ' + fx(sumS / r.eom, 2) + ' subsistemas por deudor, en promedio.');
+  }
+  // Depositantes: el BCP en la banca y el depósito promedio de las personas naturales.
+  const bcpD = 'banca-multiple/bcp', jp = lastIdx(t => dpEnt(bcpD, 'pn', t) != null && pget(BM, 'n_total_pn', t) != null, ALL_LAST);
+  if (DPE[bcpD] && jp != null) {
+    const xb = dpEnt(bcpD, 'pn', jp), tb = pget(BM, 'n_total_pn', jp);
+    put('ex-dpt', '<b>Ejemplo.</b> En ' + mLabel(MONTHS[jp]) + ', el BCP reportaba ' + people(xb) + ' de depositantes personas naturales, ' + pct(100 * xb / tb) +
+      ' de los ' + people(tb) + ' que suman las entidades de la banca múltiple. Esa suma no es el número de personas con depósitos en la banca: quien tiene cuenta en el BCP y en Interbank cuenta dos veces. ' +
+      'El depósito promedio de las personas naturales en la banca era ' + soles(pget(BM, 'a_total_pn', jp)) + '.');
+  }
+})();
+
+// ---------- Pie ----------
+document.getElementById('lede').textContent =
+  'Qué tan concentrados están los créditos, los depósitos y el patrimonio de los bancos, financieras, cajas y empresas de créditos del Perú, qué parte tiene cada entidad y cuántas personas y empresas tienen crédito o depósitos. Datos de la SBS de ' + mLabel(MONTHS[0]) + ' a ' + mLabel(D.hasta) + '.';
+[
+  'Fuente: Superintendencia de Banca, Seguros y AFP (SBS), Boletín Estadístico. Ranking de créditos, depósitos y patrimonio: cuadros B-2332 (banca múltiple), B-3243 (financieras), C-1205 (cajas municipales), C-2205 (cajas rurales) y C-4217 (empresas de créditos). Deudores por tipo de crédito: B-230803, B-3218, C-1231, C-2231 y C-4226. Número de depositantes por tipo de depósito: B-2373, B-3232, C-1250 y C-2255. Depósitos según escala de montos: B-2321, B-3256, C-1211 y C-2211. Créditos directos por tipo de crédito y situación: cuadros del Boletín Estadístico. Deudores únicos: reporte SF-2103 «Evolución del Sistema Financiero» (trimestral). Población de 18 años a más: INEI. Normas y documentos citados: ver «Cómo leer los datos».',
+  'El HHI, la participación de las 4 mayores, el número de entidades, los agregados del sistema, el saldo promedio por deudor, los deudores por cada 100 adultos, las entidades y subsistemas por deudor y el depósito promedio por depositante son cálculos propios a partir de esos cuadros. La participación de cada entidad en su subsistema reproduce la que publica la SBS (salvo el patrimonio negativo, que cuenta como cero). Montos en soles corrientes.',
+].concat(INTL ? ['Comparación internacional (cálculos propios con datos oficiales de cada supervisor). ' + INTL.countries.map(c => ({
+    PER: 'Perú: SBS (ranking B-2332 y balances B-5102 y B-5104)', CHL: 'Chile: Comisión para el Mercado Financiero (CMF)',
+    COL: 'Colombia: Superintendencia Financiera (CUIF en datos.gov.co, licencia CC BY-SA 4.0, e Indicadores gerenciales)',
+    BRA: 'Brasil: Banco Central do Brasil (IF.data; Relatório de Estabilidade Financeira y Relatório de Economia Bancária)'})[c.k] || c.l).join('; ') + '.'] : [], [
+  'Actualizado el ' + dLabel(D.generado) + '.',
+]).forEach(t => htmlEl('p', {text: t}, document.getElementById('foot')));
+
+// Enlaces con hash: una pestaña (#alcance) o una sección de «Cómo leer los datos» (#hhi, #fuentes...); también al cambiar el hash.
+function goHash(first) {
+  const h = decodeURIComponent(location.hash.slice(1)), sec = h && document.getElementById(h);
+  if (TABS.includes(h)) showTab(h, false);
+  else if (sec && document.getElementById('tab-metodologia').contains(sec)) { showTab('metodologia', false); sec.scrollIntoView(); }
+  else if (first) showTab('concentracion', false);
+}
+goHash(true);
+window.addEventListener('hashchange', () => goHash(false));
+// Redibuja solo cuando cambia el ancho (el alto cambia con cada redibujo).
+let rt, lastW = 0;
+new ResizeObserver(es => {
+  const w = Math.round(es[0].contentRect.width);
+  if (w === lastW) return;
+  lastW = w; clearTimeout(rt); rt = setTimeout(renderVisible, 120);
+}).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

@@ -1,7 +1,8 @@
 # Datos financieros del Perú
 
-Datos públicos del **sistema financiero peruano (SBS)** y de la **macroeconomía (BCRP)**, listos para usar:
-tablas limpias, el código que las descarga y procesa desde la fuente oficial, y tableros para explorarlas.
+Datos públicos del **sistema financiero peruano (SBS)**, de la **macroeconomía (BCRP)**, de las **finanzas públicas
+(MEF)** y de la **pobreza por departamento (INEI)**, listos para usar: tablas limpias, el código que las descarga y
+procesa desde la fuente oficial, y tableros para explorarlas.
 
 **Corte de los datos:** Boletín Estadístico de la SBS a set-2026 · tasas activas y clasificaciones a
 oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de noviembre de 2026.
@@ -10,9 +11,9 @@ oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de n
 
 ### 1. Ver los tableros
 
-**Portada con los 11 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
+**Portada con los 14 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
 
-[![Portada con los 11 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
+[![Portada con los 14 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
 
 | Tablero | Qué muestra |
 |---|---|
@@ -24,9 +25,12 @@ oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de n
 | [Tasas activas](https://claude.ai/artifact/1qMDzGVELB7cUY7ynZg6xC) | Tasas de interés por tipo de crédito y entidad. |
 | [Crédito por departamento](https://claude.ai/artifact/BZcFnUBFmQD8yNq4dRTJKN) | Crédito por departamento y entidad; peso de Lima y Callao y crecimiento frente al resto del país. |
 | [Estados financieros](https://claude.ai/artifact/U83h9yYdcUvwwQyU2dEsBJ) | Balance y estado de resultados por subsistema y entidad. |
+| [Concentración y alcance](https://claude.ai/artifact/YcTzxb4ejH9Wmtku23U298) | Cuota de las cuatro mayores, IHH, deudores y depositantes por adulto, y comparación con Chile, Colombia y Brasil. |
 | [Reservas internacionales](https://claude.ai/artifact/SZvCtanbmzDDNEaAQUDrZD) | Cuánto compra y vende el BCRP, de qué están hechas las reservas, cómo se invierten y de quién son. |
 | [Inflación](https://claude.ai/artifact/VJnqVL64dBJqQ5P4GuwtE3) | Inflación total y subyacente, componentes y comparación con la meta. |
 | [Transmisión de la política monetaria](https://claude.ai/artifact/BibvFC8kvmrnD8qGhXPhUc) | Cómo pasa la tasa de referencia a las tasas del mercado. |
+| [Finanzas públicas](https://claude.ai/artifact/35mEqSRBxkgDCobSBXrQee) | Ingresos, gasto, deuda, ejecución del presupuesto, reglas fiscales y comparación con la región. |
+| [Pobreza por departamento](https://claude.ai/artifact/RG2JYt7DCt4APFmY5GWF6o) | Pobreza monetaria 2004–2025 con intervalos de confianza y grupos del INEI. |
 
 Los tableros en línea muestran la versión más reciente publicada. La versión de cada corte se puede descargar
 en [Releases](../../releases) (`tableros_<corte>.zip`): son archivos HTML que se abren con doble clic, sin
@@ -63,12 +67,15 @@ python -m playwright install chromium     # una sola vez: lo usa la descarga de 
 ```
 
 Después, sigue los pasos de cada fuente:
-- [`descargas-sbs/`](descargas-sbs/): Boletín Estadístico de la SBS (131 cuadros entre cinco subsistemas),
+- [`descargas-sbs/`](descargas-sbs/): Boletín Estadístico de la SBS (146 cuadros entre cinco subsistemas),
   tasas activas por entidad, deudores del sistema (SF-2103) y clasificaciones de riesgo.
-- [`descargas-bcrp/`](descargas-bcrp/): 901 series de BCRPData (actividad, precios, política monetaria,
-  tasas, tipo de cambio y reservas, sector externo y más).
+- [`descargas-bcrp/`](descargas-bcrp/): 1 567 series de BCRPData (actividad, precios, política monetaria,
+  tasas, tipo de cambio y reservas, sector externo y más) y, para el tablero de finanzas públicas, datos del MEF, el
+  Consejo Fiscal y el FMI.
+- [`descargas-enaho/`](descargas-enaho/): pobreza monetaria por departamento a partir de los microdatos de la ENAHO
+  del INEI.
 
-Los datos crudos no están en el repositorio: los scripts los descargan de la SBS y el BCRP. La descarga
+Los datos crudos no están en el repositorio: los scripts los descargan de cada fuente oficial. La descarga
 completa de la SBS tarda varias horas, porque es secuencial y con pausas para no saturar sus servidores.
 
 ## Fuentes
@@ -77,14 +84,21 @@ completa de la SBS tarda varias horas, porque es secuencial y con pausas para no
   tasas activas por tipo de crédito y el reporte SF-2103.
 - **BCRP:** [BCRPData](https://estadisticas.bcrp.gob.pe/estadisticas/series/).
 - **Clasificaciones de riesgo:** informes públicos de las clasificadoras inscritas en la SMV.
+- **INEI:** microdatos de la [Encuesta Nacional de Hogares (ENAHO)](https://proyectos.inei.gob.pe/microdatos/),
+  pobreza monetaria y población oficial.
+- **MEF:** Consulta Amigable, Marco Macroeconómico Multianual e indicadores de deuda pública.
+- **Consejo Fiscal** del Perú: informes y reportes públicos.
+- **FMI:** solo para comparar el Perú con otros países (tablero de finanzas públicas).
+- **Supervisores de Chile, Colombia y Brasil** (CMF, Superintendencia Financiera de Colombia y Banco Central do
+  Brasil): comparación internacional del tablero de concentración.
 
-Este repositorio no es una publicación de la SBS ni del BCRP, y ninguna de las dos instituciones lo ha revisado.
+Este repositorio no es una publicación de ninguna de esas instituciones, y ninguna lo ha revisado.
 Ante cualquier diferencia, vale la cifra de la fuente oficial. Los cálculos propios están señalados como tales.
 
 ## Licencia
 
 - **Código:** [MIT](LICENSE).
-- **Datos derivados:** [CC BY 4.0](LICENSE-DATA.md). Al usarlos, cita la fuente original (SBS o BCRP) y este repositorio.
+- **Datos derivados:** [CC BY 4.0](LICENSE-DATA.md). Al usarlos, cita la fuente original (SBS, BCRP, INEI, MEF u otra) y este repositorio.
 
 ## Autor
 

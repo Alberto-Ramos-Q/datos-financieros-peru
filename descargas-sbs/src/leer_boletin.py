@@ -10,6 +10,10 @@ nombre de entidad con el maestro (`entidades.py`) y escribe:
                                                              (o la regla propia del lector si
                                                              define `validar_totales(df)`)
 
+Los temas de las entidades estatales (subsistema `entidades-estatales`, temas `estatales-*`, 2026-11-03)
+van a `data/processed/boletin_estatales/` con su propio `_control/`: así `consolidar.py`, que lee todo
+`data/processed/boletin/`, no los suma a los 5 subsistemas. Un tema no puede mezclar ambos.
+
 Uso:
     python leer_boletin.py                              # todos los temas con lector
     python leer_boletin.py --tema indicadores-financieros
@@ -33,6 +37,10 @@ from lector import comun  # noqa: E402
 
 RAW_DIR = PROJECT_DIR / "data" / "raw" / "boletin"
 OUT_DIR = PROJECT_DIR / "data" / "processed" / "boletin"
+# Entidades estatales (p=12; BN, COFIDE, Agrobanco, Fondo MiVivienda; 2026-11-03): sus temas van a otra
+# carpeta para que `consolidar.py` (que lee todo `OUT_DIR`) y los tableros no los sumen a los 5 subsistemas.
+ESTATALES = "entidades-estatales"
+OUT_DIR_ESTATALES = PROJECT_DIR / "data" / "processed" / "boletin_estatales"
 SERIES_CSV = PROJECT_DIR / "config" / "series.csv"
 
 
@@ -48,9 +56,17 @@ def modulo_de(tema: str):
         return None
 
 
-def leer_tema(tema: str, series: list[dict], desde: int, hasta: int) -> pd.DataFrame:
+def carpeta_salida(tema: str, series: list[dict]) -> Path:
+    """OUT_DIR, u OUT_DIR_ESTATALES si todas las series del tema son de entidades estatales."""
+    subs = {s["subsistema"] for s in series if s["tema"] == tema}
+    if ESTATALES in subs and subs != {ESTATALES}:
+        raise ValueError(f"{tema}: mezcla entidades estatales con otros subsistemas ({sorted(subs)})")
+    return OUT_DIR_ESTATALES if subs == {ESTATALES} else OUT_DIR
+
+
+def leer_tema(tema: str, series: list[dict], desde: int, hasta: int, base: Path = OUT_DIR) -> pd.DataFrame:
     mod = modulo_de(tema)
-    control = OUT_DIR / "_control"
+    control = base / "_control"
     control.mkdir(parents=True, exist_ok=True)
     partes, log = [], []
     for s in series:
@@ -128,9 +144,13 @@ def main() -> int:
             errores += 1
             continue
         t0 = time.time()
-        df = leer_tema(tema, [s for s in series if s["tema"] == tema], args.desde, args.hasta)
-        df.to_parquet(args.destino / f"{tema}.parquet", index=False)
-        archivos = pd.read_csv(OUT_DIR / "_control" / f"{tema}_archivos.csv")
+        base = carpeta_salida(tema, series)
+        destino = args.destino if base == OUT_DIR else (
+            OUT_DIR_ESTATALES if args.destino == OUT_DIR else args.destino)
+        destino.mkdir(parents=True, exist_ok=True)
+        df = leer_tema(tema, [s for s in series if s["tema"] == tema], args.desde, args.hasta, base)
+        df.to_parquet(destino / f"{tema}.parquet", index=False)
+        archivos = pd.read_csv(base / "_control" / f"{tema}_archivos.csv")
         n_err = int(archivos["error"].notna().sum())
         errores += n_err
         sin = int((df["id_entidad"].isna() & ~df["es_total"]).sum()) if len(df) else 0

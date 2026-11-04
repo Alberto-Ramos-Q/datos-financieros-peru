@@ -38,6 +38,16 @@ Reglas de cálculo:
 - Mes por defecto (`allHasta`): último mes con todos los campos del resumen en el sistema. Si un ámbito
   no tiene un mes porque algún subsistema aún no lo publica, la plantilla muestra su último mes con dato
   y lo marca (no se rellena la serie).
+- Cifras repetidas de otro mes (2026-11-03, `errores_origen.RANKING_REPEATS`): en 9 entidad-mes la SBS repite
+  el mes anterior en casi todos los cuadros (CMAC Pisco 2014-01 → 04, CRAC Señor de Luren 2015-05, CRAC Chavín /
+  Raíz 2016-03 y 04, Financiera TFC 2019-11, CMAC Sullana 2024-06) y en CMAC Sullana 2014-11 solo en el ranking
+  (créditos de octubre junto a depósitos de noviembre del balance). La serie de la entidad queda sin dato ese mes
+  en los campos de los cuadros repetidos (`mask_repeats`; `FIELD_TEMA` dice de qué cuadro sale cada campo). Los
+  agregados siguen sumando lo publicado, como los totales de la SBS (y `build_frame`, que usa
+  `indicadores_datos.py`, no cambia), salvo el crédito de las CMAC y del sistema en 2014-11: el único mes en que la
+  cifra repetida se mezclaría con cuadros de otro mes en un mismo cociente; queda sin dato. La página recibe la lista
+  en `rep` ([mes, ámbito, mes repetido, alcance, nota]): tablas y KPI muestran el último dato válido con su mes, y
+  el tooltip del hueco da el motivo.
 
 Historia desde 2010-07 (visual_mora.START_PERIOD): las financieras publican ratios de liquidez y escala
 de montos desde 2010-10 y la estructura de adeudos desde 2015-09; el balance hasta 2012-12 sigue el Manual
@@ -63,6 +73,9 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from visual_mora import (ENTIDADES, PROJECT_DIR, START_PERIOD, SUBSYSTEMS, artifact_version, read_table,  # noqa: E402
                          month_key, month_range)
+from errores_origen import (DEPOSIT_SCALE_ERRORS, DEPOSITOR_SOURCE_ERRORS, RANKING_TEMA, repeat_footnote,  # noqa: E402
+                            repeats_tema,
+                            source_repeats)
 
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
 RAW = PROJECT_DIR / "data" / "raw" / "boletin"
@@ -131,6 +144,14 @@ AMOUNTS = LIQ + NSF + BAL_DEP + BAL_ALL + ["cr", "nd"] + ADE
 # Qué subsistemas tienen que estar para que el sistema tenga dato en cada campo.
 NEEDS_ALL5 = set(BAL_ALL + ADE + ["cr"])
 DEC = {"rcl": 1, "rcN": 1, "rcE": 1}
+# Cuadro (tema de data/processed/boletin) del que sale cada campo de entidad: para anular los meses con cifras
+# repetidas de otro mes (`mask_repeats`).
+FIELD_TEMA = {**{f: "ratios-liquidez" for f in LIQ + ["rN", "rE"]},
+              **{f: "ratio-cobertura-liquidez" for f in RCL},
+              **{f: "ratio-financiacion-neta-estable" for f in NSF + ["rfne"]},
+              **{f: "estados-financieros" for f in BAL_DEP + BAL_ALL},
+              **{f: "adeudos-obligaciones-financieras" for f in ADE},
+              "cr": RANKING_TEMA, "dtr": RANKING_TEMA, "nd": "depositantes-tipo-deposito"}
 
 
 def wide(df: pd.DataFrame, cols: list[str] = ("variable", "apertura")) -> pd.DataFrame:
@@ -239,6 +260,11 @@ def load_credit() -> pd.Series:
 def load_depositors() -> tuple[pd.Series, pd.Series]:
     d = read_table(BOLETIN / "depositantes-tipo-deposito.parquet")
     d = d[d["apertura"].str.startswith("total|")]
+    # Cuadro equivocado (errores_origen.DEPOSITOR_SOURCE_ERRORS, 2026-11-04: C-2255 de ene-2021 trae montos de
+    # «Depósitos por Tipo y Persona», no personas): ese subsistema-mes queda sin depositantes (y sin depósito promedio).
+    wrong = pd.Series(list(zip(d["periodo"], d["subsistema"])), index=d.index).isin(set(DEPOSITOR_SOURCE_ERRORS))
+    print(f"  Depositantes: {int(wrong.sum())} filas sin dato por cuadro equivocado ({len(DEPOSITOR_SOURCE_ERRORS)} subsistema-mes)")
+    d = d[~wrong]
     ent = d[~d["es_total"]].groupby(KEY)["valor"].sum(min_count=1)
     tot = d[d["es_total"]].groupby(["periodo", "subsistema"])["valor"].sum(min_count=1)
     return ent, tot
@@ -297,6 +323,9 @@ def _bounds(tramo: str) -> tuple[float, float]:
 def load_scale(cover: pd.Series) -> pd.DataFrame:
     """Escala de montos por subsistema: monto y depositantes por grupo de tramos y depósitos cubiertos."""
     d = read_table(BOLETIN / "depositos-escala-montos.parquet")
+    # Escala con el perímetro de otro mes (errores_origen.DEPOSIT_SCALE_ERRORS, 2026-11-04: financieras jun-2026 con
+    # Efectiva, que ya está en la banca): ese subsistema-mes queda sin escala (y el sistema también).
+    d = d[~pd.Series(list(zip(d["periodo"], d["subsistema"])), index=d.index).isin(set(DEPOSIT_SCALE_ERRORS))]
     parts = d["apertura"].str.split("|", expand=True)
     d = d.assign(tipo=parts[0], dep=parts[1], tramo=parts[2])
     d = d[d["tramo"] != "total"]
@@ -413,6 +442,32 @@ def checks(full: pd.DataFrame, pub: dict, scale: pd.DataFrame) -> list[str]:
     return lines
 
 
+def mask_repeats(full: pd.DataFrame) -> tuple[pd.DataFrame, list[list]]:
+    """Copia de `full` (una fila por entidad-mes) con vacíos en los campos que vienen de un cuadro en que la SBS
+    repite las cifras de otro mes (`errores_origen.RANKING_REPEATS`), y la lista para la página:
+    [mes, ámbito («subsistema/entidad»), mes repetido, alcance («fila» o «ranking»), nota al pie o motivo]."""
+    out = full.copy()
+    key = pd.Series(list(zip(out["periodo"], out["subsistema"].astype(str), out["id_entidad"].astype(str))), index=out.index)
+    rep = []
+    for k, r in source_repeats().items():
+        rows = key == k
+        if not rows.any():
+            continue
+        cols = [f for f, t in FIELD_TEMA.items() if f in out.columns and repeats_tema(r, t)]
+        out.loc[rows, cols] = np.nan
+        rep.append([month_key(k[0]), f"{k[1]}/{k[2]}", month_key(r["same_as"]),
+                    "fila" if r["row"] == "all" else "ranking", repeat_reason(r)])
+    return out, rep
+
+
+def repeat_reason(r: dict) -> str:
+    """Motivo corto para la página: la nota al pie de la SBS, o «sin nota» (Sullana 2014-11)."""
+    note = repeat_footnote(r)
+    if note:
+        return "nota al pie del cuadro: " + note
+    return "el ranking de créditos de la SBS repite las cifras sin nota al pie; los demás cuadros sí traen las del mes"
+
+
 def series(g: pd.DataFrame, months: list[int], fields: list[str]) -> dict:
     """{a: índice del primer mes, V: {campo: [valores]}} para un ámbito."""
     pos = {m: i for i, m in enumerate(months)}
@@ -447,8 +502,20 @@ def build_data() -> dict:
     scopes: dict[str, dict] = {}
     per_sub = {}
     scale_fields = SCALE + ["fsd"]
+    ent_full, rep = mask_repeats(full)
+    # Crédito del ranking repetido mientras los demás cuadros de la entidad son del mes (CMAC Sullana 2014-11): el
+    # crédito del subsistema (y del sistema) quedaría con un mes mezclado en créditos / depósitos: sin dato.
+    cr_blank = {(k[0], k[1]): r for k, r in source_repeats(RANKING_TEMA).items() if r["row"] == "ranking"}
     for sub, label, _ in SUBSYSTEMS:
         g = full[full["subsistema"] == sub].groupby("periodo")[AMOUNTS].sum(min_count=1)
+        for (per, s_), r in cr_blank.items():
+            if s_ == sub and per in g.index:
+                g.loc[per, "cr"] = np.nan
+                name = last_name.get((sub, r["id_entidad"])) or names.get(r["id_entidad"], r["id_entidad"])
+                for sc in (sub, "sistema"):
+                    rep.append([month_key(per), sc, month_key(r["same_as"]), "ranking-agregado",
+                                f"el ranking de la SBS repite los créditos de {name} de {month_key(r['same_as'])} (sin nota al "
+                                "pie) y su balance es del mes: el crédito agregado mezclaría dos meses"])
         # RCL y RFNE del subsistema: el publicado (el RCL no se puede agregar).
         if sub in DEPOSIT_TAKERS:
             g = g.join(pub["lcr"].xs(sub, level="subsistema"), how="left")
@@ -474,7 +541,7 @@ def build_data() -> dict:
     all_last = int(sysdf.set_index("periodo")[kpi_fields].dropna().index.max())
 
     entities = []
-    for (sub, ent), g in full.groupby(["subsistema", "id_entidad"]):
+    for (sub, ent), g in ent_full.groupby(["subsistema", "id_entidad"]):
         block = series(g, months, AMOUNTS + RCL + ["rN", "rE"])
         if not block["V"]:
             continue
@@ -512,6 +579,9 @@ def build_data() -> dict:
         "exLcr": example_lcr,
         "hasta": month_key(months[-1]),
         "allHasta": month_key(all_last),
+        "rep": rep,
+        "ndErr": [[month_key(m), s, why] for (m, s), why in sorted(DEPOSITOR_SOURCE_ERRORS.items())],
+        "scaleErr": [[month_key(m), s, why] for (m, s), why in sorted(DEPOSIT_SCALE_ERRORS.items())],
         "generado": dt.date.today().isoformat(),
         "_control": control,
     }

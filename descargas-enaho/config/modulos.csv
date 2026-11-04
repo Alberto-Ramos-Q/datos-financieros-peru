@@ -1,0 +1,7 @@
+modulo,activo,nombre,uso
+01,1,Características de la vivienda y del hogar,"Vivienda, servicios, NBI; llaves del hogar"
+02,1,Características de los miembros del hogar,"Edad, sexo, parentesco (segmentar por persona)"
+03,1,Educación,"Incluye uniformes y calzado escolar (P311), que entran en GRU21HD de la Sumaria"
+05,1,Empleo e ingresos,Ingresos laborales por persona
+13,1,Vestido y calzado,"Enaho01-AAAA-607: gasto por tipo de prenda y lugar de compra"
+34,1,Sumaria (variables calculadas),"Gasto e ingreso del hogar por grupo, pobreza, factor de expansión"

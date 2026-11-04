@@ -11,6 +11,8 @@ openpyxl
 xlrd
 pymupdf
 holidays
+beautifulsoup4   # ejecución presupuestal del MEF (Consulta Amigable)
+pyreadstat       # microdatos de la ENAHO (formato SPSS/Stata del INEI)
 
 # Necesario para descargar las tasas activas de la SBS (formulario web protegido contra bots).
 # Tras instalarlo, una sola vez: `python -m playwright install chromium`

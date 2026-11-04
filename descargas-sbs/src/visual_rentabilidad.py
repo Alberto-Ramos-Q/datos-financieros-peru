@@ -34,7 +34,7 @@ Todo se calcula desde los montos (miles de S/):
   los trabajadores es una línea propia hasta 2010 (en cero en 2011-2012, salvo tres entidades en 2011-01) y
   se suma a los gastos administrativos (`ga`), donde va desde 2011, para que la eficiencia sea comparable;
   así la identidad del estado de resultados sigue cuadrando. CMAC Pisco 2014-01 → 2014-04 repite las cifras
-  del 31.12.2013 y se omite (`drop_repeated`).
+  del 31.12.2013 y se omite (`drop_repeated`, con la lista común de `errores_origen.py`).
 - Partidas de la descomposición del ROA (flujo de 12 meses / activo promedio): ingresos y gastos
   financieros, provisiones para créditos directos, servicios financieros netos, gastos de operación
   (gastos administrativos + depreciación + amortización, como en el glosario de la SBS), otros
@@ -77,6 +77,21 @@ la revelan; no hay total del sistema. La página la compara con el personal prom
 SBS) y con la utilidad antes de IR de diciembre del Boletín. Los ceros inferidos (la nota no trae la
 línea) no se publican.
 
+Cifras repetidas de otro mes en la serie de la entidad (2026-11-03, `errores_origen.RANKING_REPEATS`, «row» = all): en
+CRAC Señor de Luren 2015-05, CRAC Raíz (Chavín) 2016-03 y 04, Financiera TFC 2019-11 y CMAC Sullana 2024-06 la SBS
+repite en el estado financiero y en el cuadro de personal las cifras de otro mes (CMAC Pisco 2014-01 → 04 ya se omite
+entera, `drop_repeated`). La serie de la ENTIDAD no las usa (`entity_repeats`, `entity_block`): ese mes queda vacío;
+los flujos de 12 meses que usarían el acumulado repetido también (`flow_blocked`: Raíz 2017-03 y 04, que restan el
+acumulado de 2016-03 y 04); los promedios de 12 meses (activo, patrimonio, créditos, personal) se calculan con los
+meses válidos de la ventana (Raíz 2016-05 → 2017-03 promedia 10 u 11 meses). Ojo: Raíz absorbió a Edpyme Raíz en
+may-2016, así que sin los meses previos el patrimonio promedio sube y su ROE de 2016-05 → 2017-02 queda por debajo del
+publicado por la SBS (que promedia las cifras repetidas): −27,1 % frente a −30,2 % en 2016-05, 2,6 % frente a 3,0 % en
+2017-02. La composición del personal (`mix`) de esos meses también queda vacía. Los agregados NO cambian: la SBS suma
+las cifras repetidas en sus totales y con ellas se reproduce el ROE publicado. La página recibe la lista en `rep`
+(`repeat_rows`: [mes, ámbito, mes repetido, «fila» | «flujo», motivo]): la ficha y la tabla de la entidad muestran el
+último dato válido con su mes y el motivo, el ranking, la dispersión y el conteo de entidades con pérdida la omiten
+con una nota, y el tooltip del hueco da el motivo. `check_entities` deja de comparar esas entidad-mes.
+
 Agregados: los saldos de cada subsistema son la suma de sus entidades en cada mes (coincide con la
 columna total del cuadro en todos los meses); los flujos siguen la regla de las salidas de arriba. El
 sistema aplica la misma regla a todas las entidades (no es la suma de los subsistemas, que contaría
@@ -103,6 +118,8 @@ import pandas as pd
 
 from visual_mora import (ENTIDADES, PROJECT_DIR, SUBSYSTEMS, artifact_version, month_key, month_range,
                          read_table)
+from errores_origen import (full_row_repeat_keys, income_excluded_keys, repeat_footnote,  # noqa: E402
+                            source_repeats)
 
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
 TEMPLATE = PROJECT_DIR / "src" / "plantillas" / "rentabilidad.html"
@@ -184,17 +201,24 @@ def load_statements() -> pd.DataFrame:
 
 
 def drop_repeated(w: pd.DataFrame) -> pd.DataFrame:
-    """Quita las filas de una entidad idénticas a las de su mes anterior en todas las partidas (saldos y
-    acumulados): son cifras de otro mes repetidas, no del mes. Caso conocido: CMAC Pisco 2014-01 → 2014-04,
-    que repite el 31.12.2013 (nota «La información de CMAC Pisco corresponde al 31.12.2013»; el total del
-    cuadro no la incluye). Con su acumulado de diciembre en enero, su utilidad de 12 meses se duplicaría.
-    Solo antes de 2015-01 (la historia extendida): las repeticiones posteriores (entidades que dejan de
-    reportar antes de salir, p. ej. CMAC Sullana 2024-06) se dejan como siempre, porque con ellas se
-    reproduce el ROE publicado de esos años."""
+    """Quita las filas de una entidad con cifras de otro mes que el total del estado de resultados de la SBS no
+    incluye (`errores_origen.income_excluded_keys`): CMAC Pisco 2014-01 → 2014-04, que repite el 31.12.2013 (nota
+    «La información de CMAC Pisco corresponde al 31.12.2013»; el total del cuadro no la incluye). Con su acumulado
+    de diciembre en enero, su utilidad de 12 meses se duplicaría.
+    Las demás entidad-mes con la fila repetida (`errores_origen.full_row_repeat_keys`: CRAC Señor de Luren 2015-05,
+    Raíz 2016-03/04, TFC 2019-11, CMAC Sullana 2024-06) se dejan, porque la SBS las suma en sus totales y con ellas
+    se reproduce el ROE publicado de esos años; desde el 2026-11-03 solo cuentan en los agregados: la serie de la
+    entidad las deja vacías (`entity_block`).
+    Hasta el 2026-11-03 la regla era «fila idéntica a la del mes anterior en todas las partidas, antes de 2015-01»,
+    que daba exactamente esas 4 filas; ahora la lista es la común y la detección queda como aviso."""
     cols = list(FLOWS.values()) + list(STOCKS.values())
     w = w.sort_values(["id_entidad", "periodo"])
+    key = pd.Series(list(zip(w["periodo"], w["subsistema"].astype(str), w["id_entidad"].astype(str))), index=w.index)
+    rep = key.isin(income_excluded_keys())
     prev = w.groupby("id_entidad")[cols].shift(1)
-    rep = (w[cols] == prev).all(axis=1) & (w["periodo"] < 201501)
+    same = (w[cols] == prev).all(axis=1) & ~key.isin(full_row_repeat_keys())
+    for k in key[same]:
+        print(f"  AVISO: {k}: estado financiero idéntico al del mes anterior y no está en errores_origen.RANKING_REPEATS")
     for (sub, ent), g in w[rep].groupby(["subsistema", "id_entidad"]):
         print(f"  Cifras repetidas del mes anterior (se omiten): {sub} {ent}, {len(g)} meses ({g['periodo'].min()}-{g['periodo'].max()})")
     return w[~rep].copy()
@@ -394,7 +418,102 @@ def to_block(df: pd.DataFrame, t_first: int, months_t: list[int]) -> dict:
     return {"a": a, "V": V}
 
 
-def build_mix(months: list[int], entities: list[str]) -> dict:
+# ---------------------------------------------------------------- cifras repetidas en la serie de la entidad
+REPEAT_TEMAS = ("estados-financieros", STAFF)   # cuadros de los que salen los campos de la serie de entidad
+
+
+def t_of(p: int) -> int:
+    """AAAAMM → mes correlativo (el `t` de `load_statements`)."""
+    return (p // 100) * 12 + p % 100 - 1
+
+
+def p_of(t: int) -> int:
+    """Mes correlativo → AAAAMM."""
+    return (t // 12) * 100 + t % 12 + 1
+
+
+def month_short(p: int) -> str:
+    """AAAAMM → «mar-2016» (como `mShort` de la página)."""
+    return ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "set", "oct", "nov", "dic"][p % 100 - 1] + f"-{p // 100}"
+
+
+def entity_repeats(w: pd.DataFrame) -> dict[str, dict[int, dict]]:
+    """{id_entidad: {t: entrada de RANKING_REPEATS}} de las entidad-mes de `w` en que la SBS repite las cifras de otro
+    mes en el estado financiero y el cuadro de personal (`errores_origen.source_repeats`, «row» = all). CMAC Pisco
+    2014-01 → 04 ya no está en `w` (`drop_repeated`)."""
+    keys = set(zip(w["periodo"].astype(int), w["subsistema"].astype(str), w["id_entidad"].astype(str)))
+    out: dict[str, dict[int, dict]] = {}
+    for tema in REPEAT_TEMAS:
+        for (per, sub, ent), r in source_repeats(tema).items():
+            if (per, sub, ent) in keys:
+                out.setdefault(ent, {})[t_of(per)] = r
+    return out
+
+
+def flow_blocked(ts, rep_t: set[int]) -> np.ndarray:
+    """Meses cuyo flujo de 12 meses usa el acumulado de un mes repetido: el propio mes, o (salvo en diciembre) el
+    diciembre anterior o el mismo mes del año anterior."""
+    t = np.asarray(ts)
+    month = t % 12 + 1
+    reps = list(rep_t)
+    own = np.isin(t, reps)
+    base = (month != 12) & (np.isin(t - month, reps) | np.isin(t - 12, reps))
+    return own | base
+
+
+def entity_block(g: pd.DataFrame, rep_t: set[int]) -> pd.DataFrame:
+    """`rolling_block` de UNA entidad sin las cifras que la SBS repitió de otro mes (`rep_t`, meses correlativos).
+    Regla (2026-11-03):
+    - en el mes repetido, todos los campos quedan vacíos (la página muestra el último dato válido y el motivo);
+    - flujos de 12 meses: vacíos en los meses que usan el acumulado de un mes repetido (`flow_blocked`: el mes y el
+      mismo mes del año siguiente; ninguno de los casos es un diciembre). No hay otra forma de calcularlos;
+    - promedios de 12 meses (activo, patrimonio, créditos y personal): con los meses válidos de la ventana; el mes
+      repetido no cuenta (se exigen todos los demás). Así el ROE de los 12 meses siguientes no queda vacío.
+    Los agregados no pasan por aquí: la SBS suma esas cifras en sus totales y con ellas se reproduce el ROE publicado."""
+    r = rolling_block(g)
+    if not rep_t:
+        return r
+    rep_t = set(rep_t)
+    r.loc[flow_blocked(r.index, rep_t), FLOW_KEYS + ["rw"]] = np.nan
+    gg = g.reindex(r.index)
+    is_rep = pd.Series(gg.index.isin(list(rep_t)), index=gg.index)
+    for src, dst in (("ac", "A"), ("pa", "P"), ("cd", "C"), ("np", "Ts")):
+        clean = gg[src].where(~is_rep)
+        mean = clean.rolling(12, min_periods=1).mean()
+        ok = (clean.notna() | is_rep).astype(float).rolling(12, min_periods=12).sum().eq(12)
+        r[dst] = (mean * (12 if dst == "Ts" else 1)).where(ok)
+    r.loc[is_rep.to_numpy(), :] = np.nan
+    return r
+
+
+def repeat_rows(reps: dict[str, dict[int, dict]], w: pd.DataFrame) -> list[list]:
+    """Lista para la página: [mes, «subsistema/entidad», mes repetido, alcance, motivo]. Alcance «fila»: el mes con las
+    cifras de otro mes (sin dato propio); «flujo»: un mes con balance propio cuyo flujo de 12 meses usaría el acumulado
+    repetido (en el tercer campo, ese mes repetido)."""
+    out = []
+    span = w.groupby("id_entidad")["t"].agg(["min", "max"])
+    sub_at = w.set_index(["id_entidad", "t"])["subsistema"]
+    for ent, d in sorted(reps.items()):
+        lo, hi = span.loc[ent]
+        ts = np.arange(int(lo), int(hi) + 1)
+        for t, r in sorted(d.items()):
+            note = repeat_footnote(r)
+            out.append([month_key(p_of(t)), f"{r['subsistema']}/{ent}", month_key(r["same_as"]), "fila",
+                        "nota al pie del cuadro: " + note if note else "sin nota al pie"])
+        for t in ts[flow_blocked(ts, set(d))]:
+            t = int(t)
+            if t in d or (ent, t) not in sub_at.index:
+                continue
+            base = next(b for b in sorted(d) if b in (t - 12, t - (t % 12 + 1)))
+            r = d[base]
+            note = repeat_footnote(r)
+            out.append([month_key(p_of(t)), f"{sub_at[(ent, t)]}/{ent}", month_key(p_of(base)), "flujo",
+                        f"en {month_short(p_of(base))} la SBS repitió las cifras de {month_short(r['same_as'])}"
+                        + ("; nota al pie: " + note if note else "")])
+    return out
+
+
+def build_mix(months: list[int], entities: list[str], reps: dict[str, dict[int, dict]] | None = None) -> dict:
     """Personal por categoría a fin de mes: {ámbito: {a, V: [[gerentes], [funcionarios], [empleados], [otros]]}}.
     Entidades: las filas del cuadro en los meses en que la entidad está en ese subsistema. Subsistemas:
     suma de las entidades listadas. Sistema: suma de los subsistemas, solo si los cinco tienen cuadro."""
@@ -439,6 +558,12 @@ def build_mix(months: list[int], entities: list[str]) -> dict:
         if (sub, ent) in pairs:
             b = block(e.xs((sub, ent), level=["subsistema", "id_entidad"])[MIX_CATS])
             if b:
+                # Meses en que la SBS repitió las cifras de otro mes (`entity_repeats`): sin categorías.
+                for t in (reps or {}).get(ent, {}):
+                    j = months.index(p_of(t)) - b["a"] if p_of(t) in months else -1
+                    if 0 <= j < len(b["V"][0]):
+                        for v in b["V"]:
+                            v[j] = None
                 out[k] = b
     return {k: v for k, v in out.items() if v}
 
@@ -527,8 +652,10 @@ def build_data() -> dict:
                             columns=["periodo", "subsistema", "id_entidad", "nombre_entidad"])
     last_name = panel.sort_values("periodo").groupby(["subsistema", "id_entidad"])["nombre_entidad"].last()
     entities = []
+    # Serie de la entidad sin las cifras repetidas de otro mes (`entity_block`); los agregados de arriba las suman.
+    reps = entity_repeats(w)
     for ent, g in w.groupby("id_entidad"):
-        r = rolling_block(g.set_index("t")[base_cols])
+        r = entity_block(g.set_index("t")[base_cols], set(reps.get(ent, {})))
         for sub in g["subsistema"].unique():
             ts = set(g.loc[g["subsistema"] == sub, "t"])
             rr = r.copy()
@@ -562,10 +689,12 @@ def build_data() -> dict:
         "scopes": scopes,
         "entities": entities,
         "pub": published,
-        "mix": build_mix(months, entities),
+        "mix": build_mix(months, entities, reps),
         "ptu": build_ptu(w),
         "hasta": month_key(months[-1]),
         "allHasta": month_key(sys_end),   # último mes con los cinco subsistemas (el del sistema); mes inicial del tablero
+        # Cifras repetidas de otro mes en la serie de la entidad: [mes, ámbito, mes repetido, «fila» | «flujo», motivo].
+        "rep": repeat_rows(reps, w),
         "generado": dt.date.today().isoformat(),
     }
 

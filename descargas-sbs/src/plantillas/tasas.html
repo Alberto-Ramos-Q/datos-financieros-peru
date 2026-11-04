@@ -580,7 +580,7 @@ const CLIP = [0, 150];   // % anual: escala de los gráficos por entidad; el nú
 const BREAKS = {reactiva: {i: idxOf('2020-05'), label: 'Reactiva Perú'}, tipos: {i: idxOf('2024-10'), label: 'Nuevos tipos de crédito'}};
 
 // ---------- Estado ----------
-const state = {tipo: 'consumo', prod: 'consumo|total', mi: ALL_LAST, range: '5a', scope: 'banca-multiple', sub: 'banca-multiple', ent: null, scx: 'mora', scAll: false};
+const state = {tipo: 'consumo', prod: 'consumo|total', mi: N - 1, range: '5a', scope: 'banca-multiple', sub: 'banca-multiple', ent: null, scx: 'mora', scAll: false};
 const RANGES = [
   {id: '3a', label: '3 años', n: 36},
   {id: '5a', label: '5 años', n: 60},

@@ -47,6 +47,14 @@ contingentes deudoras (= acreedoras) y las cuentas de orden, que el cuadro trae 
   mismo criterio que `visual_rentabilidad.drop_repeated`). Cada entidad tiene UNA serie con toda su
   historia (aunque cambie de subsistema) y la lista de tramos en que perteneció a cada subsistema (`m`):
   sus flujos de 12 meses no se cortan con el traspaso, igual que en el tablero de rentabilidad.
+- Cifras repetidas de otro mes (2026-11-03): en CRAC Señor de Luren 2015-05, CRAC Raíz 2016-03 y 04, Financiera TFC
+  2019-11 y CMAC Sullana 2024-06 la SBS repite las cifras de otro mes en todo el cuadro. La serie de la entidad queda
+  vacía ese mes en todas las líneas (lista común con rentabilidad: `visual_rentabilidad.entity_repeats`), así que la
+  página no calcula con ellas flujos de 12 meses (Raíz 2017-03 y 04 quedan sin flujo) ni variaciones anuales; el
+  activo promedio y los saldos promedio de los rendimientos se calculan con los otros meses de la ventana. Los
+  agregados siguen sumándolas (como el total de la SBS). `rep` del JSON ([mes, ámbito, mes repetido, «fila» | «flujo»,
+  motivo]): la nota del ámbito, las tablas («Ver tabla») y los tooltips dan el último dato válido con su mes y el
+  motivo. `check_profit` no compara esas entidad-mes.
 - Subsistemas y sistema: suma de las entidades presentes cada mes (controlada contra el total del cuadro).
   El sistema suma todas las entidades (no los subsistemas).
 - Dentro de su vigencia, una línea que la entidad no reporta es cero (el cuadro no trae la fila: p. ej.
@@ -114,6 +122,7 @@ líneas × 78 series de entidad × 194 meses). Esquema del JSON, cifras enteras 
 - `ents`: {id: {n: {subsistema: nombre}, a, V, X, m: [[subsistema, desde, hasta], …]}}: índices de mes
   absolutos en `m`; meses sin dato de la entidad, null en todas sus series.
 - `entities`: ["subsistema/id", …] para los selectores (como en rentabilidad).
+- `rep`: [[mes, "subsistema/id", mes repetido, "fila" | "flujo", motivo]], cifras repetidas de otro mes (ver arriba).
 
 Genera además `outputs/eeff_ssff_artifact.html`, la versión para publicar como Artifact de claude.ai
 (sin <html>/<head>/<body>), si existe la plantilla `src/plantillas/eeff.html`.
@@ -136,6 +145,8 @@ import pandas as pd
 
 from visual_mora import (ENTIDADES, PROJECT_DIR, SUBSYSTEMS, artifact_version, month_key, month_range,
                          read_table)
+from errores_origen import income_excluded_keys  # noqa: E402
+import visual_rentabilidad as vr  # noqa: E402   (entity_repeats, repeat_rows: misma regla en los dos tableros)
 
 BOLETIN = PROJECT_DIR / "data" / "processed" / "boletin"
 TEMPLATE = PROJECT_DIR / "src" / "plantillas" / "eeff.html"
@@ -496,11 +507,11 @@ def clean(w: pd.DataFrame, me: pd.DataFrame, vig: dict) -> tuple[pd.DataFrame, p
         for (s, e), g in z.groupby(["subsistema", "id_entidad"]):
             print(f"  Activo cero (se omite): {s} {e}, {len(g)} meses ({g['periodo'].min()}-{g['periodo'].max()})")
     w = w[w["total_activo"].isna() | (w["total_activo"] != 0)]
-    # Mismo criterio que visual_rentabilidad.drop_repeated: fila idéntica a la del mes anterior en TODAS
-    # las partidas, solo antes de 2015-01.
+    # Mismo criterio que visual_rentabilidad.drop_repeated: las entidad-mes con cifras de otro mes que el total del
+    # estado de resultados de la SBS no incluye (errores_origen.income_excluded_keys: CMAC Pisco 2014-01 → 04).
     r = w.reset_index().sort_values(["id_entidad", "periodo"])
-    prev = r.groupby("id_entidad")[KEYS].shift(1)
-    same = ((r[KEYS] == prev) | (r[KEYS].isna() & prev.isna())).all(axis=1) & (r["periodo"] < 201501)
+    rkey = pd.Series(list(zip(r["periodo"], r["subsistema"].astype(str), r["id_entidad"].astype(str))), index=r.index)
+    same = rkey.isin(income_excluded_keys())
     for (s, e), g in r[same].groupby(["subsistema", "id_entidad"]):
         print(f"  Cifras repetidas del mes anterior (se omiten): {s} {e}, {len(g)} meses ({g['periodo'].min()}-{g['periodo'].max()})")
     drop = pd.MultiIndex.from_frame(r.loc[same, ["periodo", "subsistema", "id_entidad"]])
@@ -611,9 +622,17 @@ def build_data() -> tuple[dict, dict]:
                        columns=["periodo", "subsistema", "id_entidad", "nombre_entidad"])
     last_name = panel.sort_values("periodo").groupby(["subsistema", "id_entidad"])["nombre_entidad"].last()
     ents, entities = {}, []
+    # Serie de la entidad sin las cifras que la SBS repitió de otro mes (Luren 2015-05, Raíz 2016-03/04, TFC 2019-11,
+    # CMAC Sullana 2024-06; misma lista y regla que `visual_rentabilidad.entity_repeats`): ese mes queda vacío en todas
+    # las líneas (la página no calcula flujos de 12 meses con él). Los agregados de arriba las suman, como la SBS.
+    reps = vr.entity_repeats(r)
     for ent, g in r.groupby("id_entidad"):
         g = g.set_index("t").sort_index()
-        b = block(g[KEYS], rme[rme["id_entidad"] == ent].set_index("t")[FX], t0)
+        vals, gx = g[KEYS].copy(), rme[rme["id_entidad"] == ent].set_index("t")[FX].copy()
+        bad = list(reps.get(ent, {}))
+        vals.loc[vals.index.isin(bad)] = np.nan
+        gx.loc[gx.index.isin(bad)] = np.nan
+        b = block(vals, gx, t0)
         spans = []
         for sub, gs in g.groupby("subsistema"):
             ts = sorted(gs.index)
@@ -638,10 +657,13 @@ def build_data() -> tuple[dict, dict]:
         "scopes": scopes,
         "ents": ents,
         "entities": entities,
+        # Cifras repetidas de otro mes en la serie de la entidad: [mes, «subsistema/entidad», mes repetido,
+        # «fila» | «flujo», motivo] (`visual_rentabilidad.repeat_rows`).
+        "rep": vr.repeat_rows(reps, r),
         "hasta": month_key(months[-1]),
         "generado": dt.date.today().isoformat(),
     }
-    controls.update({"w": w, "me": me, "mn": mn, "tot": tot, "r": r, "t0": t0, "months": months})
+    controls.update({"w": w, "me": me, "mn": mn, "tot": tot, "r": r, "t0": t0, "months": months, "reps": reps})
     return data, controls
 
 
@@ -736,6 +758,8 @@ def check_profit(data: dict, ctl: dict) -> None:
     t0, r = ctl["t0"], ctl["r"]
     k = POS["resultado_neto_ejercicio"]
     own = r.pivot_table(index="t", columns="id_entidad", values="resultado_neto_ejercicio", aggfunc="sum")
+    for ent, d in ctl["reps"].items():   # la serie de la entidad no usa las cifras repetidas (en rentabilidad tampoco)
+        own.loc[own.index.isin(list(d)), ent] = np.nan
 
     def mine(key: str, rounded: bool) -> dict[str, float]:
         if "/" in key:
