@@ -55,7 +55,18 @@ macro = pd.read_csv(f"{base}/bcrp/bcrp_panel_mensual.csv")           # series me
 - Las tablas más pesadas (el dataset maestro del boletín, con más de 10 millones de filas, y los estados
   financieros por entidad) se publican en formato parquet en [**Releases**](../../releases), un paquete por corte.
 
-### 3. Reproducirlo todo desde la fuente oficial
+### 3. Reproducirlo desde la fuente oficial
+
+> **Antes de empezar, dos avisos:**
+>
+> - **Descargar de nuevo trae los datos más recientes de cada fuente, no los del corte indicado arriba.** Las
+>   instituciones agregan meses y a veces corrigen cifras ya publicadas. Las cifras exactas de cada corte quedan
+>   congeladas en [`datos/`](datos/) y en [Releases](../../releases).
+> - **Dos tableros tienen secciones que todavía no se reproducen solo con este repositorio:** en *Inflación*, la
+>   comparación de Lima con el promedio nacional y la evolución en la región; en *Transmisión de la política
+>   monetaria*, las tasas de política de la región y la tasa de la Fed. Esas secciones usan una base de series
+>   oficiales de bancos centrales e institutos de estadística de otros países que aún no está en el repositorio.
+>   Sin ella, los scripts generan los dos tableros sin esas secciones (avisan en pantalla). Se está incorporando.
 
 Requiere **Python 3.11 o superior**.
 
