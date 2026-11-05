@@ -14,7 +14,8 @@ Descarga, lee y consolida los reportes públicos de la Superintendencia de Banca
 ## Cómo correrlo
 
 Requiere Python 3.11 o superior y las dependencias de [`../requirements.txt`](../requirements.txt) (incluido
-`python -m playwright install chromium`, que usa la descarga de tasas). Desde esta carpeta (`descargas-sbs/`),
+`python -m playwright install chromium`, que usa la descarga de tasas) y el programa `pdftotext` (xpdf o poppler),
+que lee los informes de las clasificadoras. Desde esta carpeta (`descargas-sbs/`),
 en este orden:
 
 ```bash
@@ -47,7 +48,8 @@ python src/visual_indicadores.py
 python src/eventos_mercado.py                # entradas, salidas y fusiones de entidades (control)
 python src/internacional/descargar_chile.py
 python src/internacional/descargar_colombia.py
-python src/internacional/descargar_brasil.py
+python src/internacional/descargar_brasil.py pdf
+python src/internacional/descargar_brasil.py ifdata --anios 2015-2025
 python src/internacional/construir_peru.py
 python src/internacional/construir_chile.py
 python src/internacional/construir_colombia.py
@@ -62,6 +64,10 @@ python src/visual_mercado.py
 - La población adulta del INEI viene en `config/insumo_poblacion_adulta.csv`.
 - Los errores de origen de la SBS (meses en que un cuadro repite cifras de otro mes) están listados en
   `src/errores_origen.py`. Todos los tableros los aplican.
+
+**Mensaje esperado:** `leer_boletin.py` termina con código 1 y «1 con error» en dos temas. Son dos Excel de la SBS
+que se rechazan a propósito por errores de origen: `B-2305` de nov-2023 trae la fecha de otro mes y `C-2205` de
+nov-2010 trae el valor centinela -999999,99999. Todo lo demás se lee.
 
 Opciones útiles:
 

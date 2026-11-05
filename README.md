@@ -57,27 +57,35 @@ macro = pd.read_csv(f"{base}/bcrp/bcrp_panel_mensual.csv")           # series me
 
 ### 3. Reproducirlo desde la fuente oficial
 
-> **Antes de empezar, dos avisos:**
->
-> - **Descargar de nuevo trae los datos más recientes de cada fuente, no los del corte indicado arriba.** Las
->   instituciones agregan meses y a veces corrigen cifras ya publicadas. Las cifras exactas de cada corte quedan
->   congeladas en [`datos/`](datos/) y en [Releases](../../releases).
-> - **Dos tableros tienen secciones que todavía no se reproducen solo con este repositorio:** en *Inflación*, la
->   comparación de Lima con el promedio nacional y la evolución en la región; en *Transmisión de la política
->   monetaria*, las tasas de política de la región y la tasa de la Fed. Esas secciones usan una base de series
->   oficiales de bancos centrales e institutos de estadística de otros países que aún no está en el repositorio.
->   Sin ella, los scripts generan los dos tableros sin esas secciones (avisan en pantalla). Se está incorporando.
+> **Antes de empezar:** descargar de nuevo trae los datos más recientes de cada fuente, no los del corte indicado
+> arriba. Las instituciones agregan meses y a veces corrigen cifras ya publicadas. Las cifras exactas de cada
+> corte quedan congeladas en [`datos/`](datos/) y en [Releases](../../releases). Además, la capa comparable de
+> `data_macro_paises/` se arma hasta el mes en que se corre, así que, con los mismos datos crudos, un tablero
+> regenerado más tarde puede mostrar un mes más en las tasas de política de la región.
 
-Requiere **Python 3.11 o superior**.
+Probado con **Python 3.13** en Windows. `requirements.txt` fija las versiones exactas con que se generaron los
+tableros publicados. Con otras versiones (por ejemplo, pandas 3) algunos pasos fallan, así que conviene un entorno
+virtual propio:
 
 ```bash
 git clone https://github.com/Alberto-Ramos-Q/datos-financieros-peru.git
 cd datos-financieros-peru
+python -m venv .venv
+.venv\Scripts\activate                    # en Linux o macOS: source .venv/bin/activate
 pip install -r requirements.txt
 python -m playwright install chromium     # una sola vez: lo usa la descarga de tasas activas
 ```
 
-Después, sigue los pasos de cada fuente:
+Además, dos programas externos:
+- **`pdftotext`** (xpdf o poppler): lee los informes de las clasificadoras de riesgo. En Windows viene con Git for
+  Windows; en Linux, `apt install poppler-utils`; en macOS, `brew install poppler`.
+- **`curl`**: lo usa el descargador de Paraguay en `data_macro_paises/`. Viene con Windows 10 o posterior, Linux y
+  macOS.
+
+Después, sigue los pasos de cada fuente **en este orden**. Los tableros de inflación y transmisión usan datos de
+los dos primeros proyectos:
+- [`data_macro_paises/`](data_macro_paises/): series oficiales de bancos centrales e institutos de estadística de 13
+  países, para las comparaciones regionales de inflación y transmisión.
 - [`descargas-sbs/`](descargas-sbs/): Boletín Estadístico de la SBS (146 cuadros entre cinco subsistemas),
   tasas activas por entidad, deudores del sistema (SF-2103) y clasificaciones de riesgo.
 - [`descargas-bcrp/`](descargas-bcrp/): 1 567 series de BCRPData (actividad, precios, política monetaria,
@@ -102,6 +110,9 @@ completa de la SBS tarda varias horas, porque es secuencial y con pausas para no
 - **FMI:** solo para comparar el Perú con otros países (tablero de finanzas públicas).
 - **Supervisores de Chile, Colombia y Brasil** (CMF, Superintendencia Financiera de Colombia y Banco Central do
   Brasil): comparación internacional del tablero de concentración.
+- **Bancos centrales, institutos de estadística y ministerios de economía de 13 países** (`data_macro_paises/`):
+  comparaciones regionales de los tableros de inflación y transmisión. La lista de fuentes de cada país está en
+  [`data_macro_paises/docs/fuentes/`](data_macro_paises/docs/fuentes/).
 
 Este repositorio no es una publicación de ninguna de esas instituciones, y ninguna lo ha revisado.
 Ante cualquier diferencia, vale la cifra de la fuente oficial. Los cálculos propios están señalados como tales.

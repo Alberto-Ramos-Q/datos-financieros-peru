@@ -1,0 +1,29 @@
+indicador_comun,tema,frecuencia_preferida,unidad_esperada,descripcion
+pbi_real_trim,actividad,trimestral,moneda local constante (millones) o índice,"PBI real en niveles, sin desestacionalizar (cuentas nacionales trimestrales)"
+pbi_real_var12m_trim,actividad,trimestral,%,"PBI real, variación % respecto al mismo trimestre del año anterior"
+pbi_desest_trim,actividad,trimestral,moneda local constante (millones) o índice,"PBI real desestacionalizado, niveles"
+actividad_mensual_indice,actividad,mensual,índice,"Indicador mensual de actividad económica (IMACEC, IGAE, EMAE, ISE, IBC-Br, IMAE, índice mensual del PBI…)"
+actividad_mensual_var12m,actividad,mensual,%,"Indicador mensual de actividad, variación % interanual"
+pbi_nominal_anual,actividad,anual,moneda local corriente (millones),PBI a precios corrientes
+ipc_indice,precios,mensual,índice,Índice de precios al consumidor nacional (o la cobertura oficial principal)
+inflacion_mensual,precios,mensual,%,"IPC, variación % mensual"
+inflacion_12m,precios,mensual,%,"IPC, variación % en 12 meses"
+inflacion_subyacente_12m,precios,mensual,%,"Inflación subyacente (core) oficial, variación % en 12 meses"
+tasa_politica,monetario,mensual,% anual,"Tasa de política monetaria (fin de periodo). En economías dolarizadas o sin banco central propio: no aplica, o la del banco central de la unión monetaria (BCE para España)"
+tasa_interbancaria,monetario,mensual,% anual,"Tasa interbancaria / overnight en moneda local, promedio del mes"
+tasa_activa_promedio,monetario,mensual,% anual,Tasa activa promedio del sistema bancario en moneda local
+tasa_pasiva_promedio,monetario,mensual,% anual,Tasa pasiva promedio del sistema bancario en moneda local
+credito_privado,monetario,mensual,moneda local (millones),"Crédito al sector privado, saldo fin de periodo"
+m2,monetario,mensual,moneda local (millones),"Agregado monetario M2 (o el equivalente oficial más cercano), saldo"
+expectativa_inflacion_12m,monetario,mensual,%,Expectativa de inflación a 12 meses de la encuesta oficial del banco central
+tc_usd_promedio,externo,mensual,moneda local por USD,"Tipo de cambio oficial frente al dólar, promedio del mes (España: USD por EUR, anotar en notas)"
+tc_usd_diario,externo,diaria,moneda local por USD,Tipo de cambio oficial frente al dólar diario
+reservas_internacionales,externo,mensual,millones USD,"Reservas internacionales (netas o brutas, anotar cuál), fin de periodo"
+exportaciones,externo,mensual,millones USD,"Exportaciones de bienes FOB"
+importaciones,externo,mensual,millones USD,"Importaciones de bienes (FOB o CIF, anotar cuál)"
+balanza_comercial,externo,mensual,millones USD,Balanza comercial de bienes
+cuenta_corriente,externo,trimestral,millones USD,"Saldo de la cuenta corriente de la balanza de pagos (España: millones EUR)"
+resultado_fiscal_pct_pbi,fiscal,anual,% PBI,"Resultado económico (global) del sector público no financiero, gobierno general o central (anotar cuál)"
+deuda_publica_pct_pbi,fiscal,anual,% PBI,"Deuda pública bruta (anotar cobertura)"
+desempleo,laboral,mensual,%,"Tasa de desempleo nacional (o urbana si es la oficial principal; anotar cobertura)"
+salario_minimo,laboral,mensual,moneda local,Salario mínimo legal mensual nominal

@@ -23,6 +23,8 @@ Para las demás fuentes, cambia la primera línea por la que corresponda:
 - FMI: «Fuente: Fondo Monetario Internacional (FMI)».
 - Comparación internacional: «Fuente: Comisión para el Mercado Financiero (Chile), Superintendencia Financiera de
   Colombia y Banco Central do Brasil».
+- Series de otros países (`data_macro_paises/`): la institución oficial de cada serie, indicada en
+  `data/processed/macro_series.csv` y en `data_macro_paises/docs/fuentes/`.
 
 ## Excepción: geometría del mapa
 
@@ -36,8 +38,9 @@ https://www.mozilla.org/en-US/MPL/2.0/ (detalle en `descargas-sbs/config/geo/REA
 ## Alcance
 
 La licencia cubre el trabajo de recopilación, limpieza y estructuración. Los datos originales son
-información pública de la SBS, el BCRP, el INEI, el MEF, el Consejo Fiscal, el FMI y los supervisores de Chile,
-Colombia y Brasil, y se rigen por las condiciones de esas instituciones. En particular, los microdatos de la ENAHO
+información pública de la SBS, el BCRP, el INEI, el MEF, el Consejo Fiscal, el FMI, los supervisores de Chile,
+Colombia y Brasil, y los bancos centrales, institutos de estadística y ministerios de los 13 países de
+`data_macro_paises/`, y se rigen por las condiciones de esas instituciones. En particular, los microdatos de la ENAHO
 se rigen por las condiciones de uso del INEI y los datos del FMI, por sus propios términos. Este repositorio no
 redistribuye los microdatos de la ENAHO: solo el código que los descarga y las estimaciones que salen de ellos.
 Este repositorio no es una publicación oficial: ante cualquier diferencia, vale la cifra de la fuente.

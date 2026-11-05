@@ -1,0 +1,118 @@
+grupo,pais,cobertura,nota
+ipc,ARG,nacional,IPC nacional INDEC base dic-2016
+ipc,BOL,nacional,
+ipc,BRA,nacional,IPCA (13 áreas urbanas; índice oficial de la meta)
+ipc,CHL,nacional,
+ipc,COL,nacional,
+ipc,ECU,nacional,
+ipc,ESP,nacional,
+ipc,MEX,nacional,INPC
+ipc,PAN,nacional,base 2024
+ipc,PER,capital,IPC Lima Metropolitana (índice de la meta)
+ipc,PRY,capital,IPC Área Metropolitana de Asunción (índice de la meta)
+ipc,URY,nacional,
+ipc,USA,urbano,CPI-U (~93 % de la población)
+actividad_mensual,ARG,conciliado,EMAE
+actividad_mensual,BOL,proxy,IGAE base 1990 no conciliado con el PIB 2017; discontinuado en 2024-12
+actividad_mensual,BRA,proxy,IBC-Br (proxy del BCB por el lado de la oferta)
+actividad_mensual,CHL,conciliado,IMACEC
+actividad_mensual,COL,conciliado,ISE
+actividad_mensual,ECU,conciliado,IMAEc (desde 2018)
+actividad_mensual,ESP,produccion_industrial,IPI: solo industria
+actividad_mensual,MEX,conciliado,IGAE
+actividad_mensual,PAN,proxy,IMAE no conciliado con el PIB 2018
+actividad_mensual,PER,conciliado,PBI mensual
+actividad_mensual,PRY,proxy,IMAEP no conciliado del todo
+actividad_mensual,URY,conciliado,IMAE
+actividad_mensual,USA,produccion_industrial,G.17: manufactura + minería + servicios públicos
+credito,ARG,sistema_financiero,
+credito,BOL,sistema_financiero,
+credito,BRA,sistema_financiero,
+credito,CHL,sistema_bancario,
+credito,COL,sistema_financiero,
+credito,ECU,sistema_financiero,
+credito,ESP,ifm_y_otras_if,incluye intermediarios financieros no monetarios; quiebres 2005-06 y 2012-12
+credito,MEX,banca_comercial,solo banca comercial (~20 % del PIB)
+credito,PAN,sistema_bancario,SBP
+credito,PER,sociedades_creadoras_deposito,
+credito,PRY,sistema_bancario,
+credito,URY,sistema_bancario,
+credito,USA,banca_comercial,H.8: solo bancos comerciales; promedio mensual
+dinero,ARG,estrecho,M2 BCRA = M1 + cajas de ahorro en pesos (sin plazo fijo); se reemplaza por m3_amplio si existe
+dinero,BOL,estrecho,M2 solo MN y UFV sin DPF; se reemplaza por m3_amplio (M'3) si existe
+dinero,BRA,amplio,M2 novo
+dinero,CHL,amplio,M2
+dinero,COL,amplio,M2
+dinero,ECU,amplio,liquidez total M2 en USD
+dinero,ESP,contribucion_uem,contribución española al M2 de la UEM sin efectivo
+dinero,MEX,amplio,M2 metodología 2018
+dinero,PAN,no_aplica,
+dinero,PER,amplio,liquidez total MN + ME
+dinero,PRY,estrecho,M2 solo MN; se reemplaza por m3_amplio (M3) si existe
+dinero,URY,estrecho,M2 solo pesos; se reemplaza por m3_amplio (M3) si existe
+dinero,USA,amplio,M2 H.6 (promedio mensual)
+reservas,ARG,bruta,incluye swap con China y encajes
+reservas,BOL,neta,RIN; reservas_brutas si existe
+reservas,BRA,bruta,concepto liquidez
+reservas,CHL,bruta,
+reservas,COL,neta,RIN; reservas_brutas si existe
+reservas,ECU,bruta,
+reservas,ESP,bruta,activos de reserva del BdE (en EUR en la fuente)
+reservas,MEX,neta,reserva según Ley Banxico; reservas_brutas si existe
+reservas,PAN,no_aplica,
+reservas,PER,neta,RIN (incluye encajes; cercana a bruta)
+reservas,PRY,neta,RIN
+reservas,URY,bruta,
+reservas,USA,bruta,activos de reserva PII trimestrales; oro a valor de mercado
+importaciones,ARG,cif,
+importaciones,BOL,fob,
+importaciones,BRA,fob,
+importaciones,CHL,fob,
+importaciones,COL,fob,
+importaciones,ECU,fob,
+importaciones,ESP,cif,aduanas en EUR
+importaciones,MEX,fob,
+importaciones,PAN,cif_sin_zlc,sin Zona Libre de Colón ni zonas francas
+importaciones,PER,fob,
+importaciones,PRY,fob,
+importaciones,URY,fob_sin_zf,sin zonas francas
+importaciones,USA,fob,Census base balanza de pagos
+fiscal,ARG,spn_no_financiero,"Sector Público Nacional no financiero, sin provincias; base caja"
+fiscal,BOL,spnf,
+fiscal,BRA,spc_con_bc,"sector público consolidado (incluye BCB y estatales, sin Petrobras ni Eletrobras)"
+fiscal,CHL,gobierno_central,"Gobierno Central Total, devengado"
+fiscal,COL,gobierno_nacional_central,base caja
+fiscal,ECU,spnf,devengado
+fiscal,ESP,gobierno_general,"SEC 2010, devengado"
+fiscal,MEX,sector_publico_presupuestario,se reemplaza por RFSP (sector público amplio) si existe
+fiscal,PAN,spnf,
+fiscal,PER,spnf,
+fiscal,PRY,administracion_central,
+fiscal,URY,spc_con_bc,sector público consolidado (incluye BCU)
+fiscal,USA,gobierno_federal,"año fiscal oct-sep, base caja"
+deuda,ARG,administracion_central_bruta,no consolidada
+deuda,BOL,no_aplica,
+deuda,BRA,gobierno_general_bruta,DBGG metodología BCB 2008
+deuda,CHL,gobierno_central_bruta,
+deuda,COL,gobierno_nacional_central_bruta,
+deuda,ECU,sector_publico_bruta,no consolidada
+deuda,ESP,gobierno_general_bruta,PDE / Maastricht
+deuda,MEX,spea_neta,se reemplaza por SHRFSP si existe
+deuda,PAN,no_aplica,
+deuda,PER,spnf_bruta,
+deuda,PRY,sector_publico_total_bruta,se recalcula con deuda_publica_usd / PBI en USD si existe
+deuda,URY,spc_con_bc_bruta,
+deuda,USA,gobierno_federal_bruta,se reemplaza por deuda en manos del público si existe
+desempleo,ARG,urbano,EPH 31 aglomerados
+desempleo,BOL,urbano,
+desempleo,BRA,nacional,PNAD Contínua 14+
+desempleo,CHL,nacional,ENE 15+
+desempleo,COL,nacional,GEIH
+desempleo,ECU,nacional,ENEMDU
+desempleo,ESP,nacional,EPA 16+
+desempleo,MEX,sin_dato,requiere INEGI_TOKEN
+desempleo,PAN,nacional,anual
+desempleo,PER,capital,Lima Metropolitana 14+
+desempleo,PRY,nacional,EPHC sin Boquerón ni Alto Paraguay
+desempleo,URY,nacional,ECH
+desempleo,USA,nacional,CPS 16+

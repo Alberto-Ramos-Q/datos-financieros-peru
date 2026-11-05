@@ -1,0 +1,6 @@
+pais,indicadores,tipo,desde,hasta,motivo
+ARG,expectativa_inflacion_12m,mantener,2016-06-01,,El tramo 2004-2012 pronosticaba el IPC intervenido y hay un hueco 2012-10 a 2016-05
+ARG,"tasa_real_exante,diferencial_fed_pp",mantener,2016-06-01,,Depende de expectativas comparables (REM desde 2016-06)
+CHL,"tasa_politica_tea,tasa_real_exante,diferencial_fed_pp",mantener,2001-08-01,,Antes de 2001-08 la TPM era una tasa real sobre la UF
+ARG,"dinero_amplio*",mantener,1980-01-01,,Valores previos dominados por el redondeo de la reexpresión a pesos actuales
+PRY,"dinero_amplio*",excluir,1975-03-01,1975-04-30,Error en la fuente (−36 % y +68 % al mes siguiente)

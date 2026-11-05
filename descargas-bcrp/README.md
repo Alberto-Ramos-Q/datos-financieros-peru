@@ -10,7 +10,9 @@ en `config/series.csv`, y el catálogo del BCRP, en `docs/catalogo_bcrp.csv`.
 
 ## Cómo correrlo
 
-Desde esta carpeta (`descargas-bcrp/`):
+Antes, correr `../data_macro_paises/` (inflación y transmisión usan sus comparaciones regionales) y
+`../descargas-sbs/` (transmisión usa sus tasas activas). Sin ellos, esos dos tableros salen sin esas secciones y lo
+avisan. Desde esta carpeta (`descargas-bcrp/`):
 
 ```bash
 python src/descargar_series.py               # descarga o actualiza todas las series activas
@@ -30,7 +32,9 @@ python src/visual_finanzas.py
 ```
 
 **Finanzas públicas:**
-- Los indicadores de riesgo de la deuda del MEF se bajan a mano a `data/manual/mef/`
+- Los indicadores de riesgo de la deuda del MEF se bajan a mano, porque el sitio del MEF bloquea las descargas
+  automáticas: archivo «Indicadores de Deuda Pública» (.xlsx) de la página de reportes de deuda pública del MEF
+  (https://www.mef.gob.pe/es/estadisticas-sp-18642/reportes). Se guarda en `data/manual/mef/`
   (`Indicadores_Deuda_Publica_<MM>_<AAAA>.xlsx`).
 - La población por departamento del INEI viene en `config/insumo_inei_departamentos.csv`.
 - Las reglas fiscales vigentes están en `config/reglas_fiscales.csv`.
