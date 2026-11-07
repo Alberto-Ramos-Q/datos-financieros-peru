@@ -309,6 +309,17 @@ def committee_date(text: str) -> tuple[pd.Timestamp | None, str | None]:
     return None, None
 
 
+# Retiro de la clasificación de entidad (2026-11-06): Moody's Local escribe «afirma y retira la clasificación C otorgada
+# como Entidad» y pone «RET» en la fila «Entidad» del cuadro (Qapaq 2026-07, CMAC Cusco 202601). Solo cuenta si el
+# informe no trae categoría: GNB 202501 tiene «Entidad … RET» en el cuadro de otro instrumento y sí trae su A.
+WITHDRAWAL = [r"retira\w* (?:la|las) clasificaci\w+[^.]{0,80}entidad", r"^\s*entidad\s+ret\b"]
+
+
+def is_withdrawal(text: str) -> bool:
+    f = fold(text)
+    return any(re.search(p, f, re.M) for p in WITHDRAWAL)
+
+
 def parse_report(path: Path, agency: str) -> dict:
     text = pdf_text(path)
     # Las reglas devuelven (categoría, regla, perspectiva) y algunas también la categoría anterior que trae el informe.
@@ -318,6 +329,7 @@ def parse_report(path: Path, agency: str) -> dict:
     grade = grade if grade in GRADE_NUM else None
     comm, comm_rule = committee_date(text)
     return {"rating": grade, "rating_num": GRADE_NUM.get(grade), "regla_rating": rule,
+            "retiro": int(grade is None and is_withdrawal(text)),
             "rating_anterior_informe": prev if grade else None,
             "perspectiva": outlook(text, rule_out), "fecha_comite": comm, "regla_comite": comm_rule,
             "texto_vacio": int(len(text.strip()) < 200)}
@@ -353,6 +365,11 @@ def add_months(p: int, k: int) -> int:
 
 
 def build_panel(rep: pd.DataFrame, last_month: int) -> pd.DataFrame:
+    # Un informe de retiro cierra la vigencia de la clasificadora desde el mes en que se conoce (2026-11-06).
+    ret = rep[rep.get("retiro", 0) == 1].copy() if "retiro" in rep else rep.iloc[0:0]
+    stops = {}
+    for r in ret.itertuples():
+        stops.setdefault((r.id_entidad, r.clasificadora), []).append(known_month(ret.loc[r.Index]))
     ok = rep[rep["rating"].notna()].copy()
     ok["desde"] = ok.apply(known_month, axis=1)
     # Si hay dos informes del mismo periodo (preliminar y final), manda el último número de archivo.
@@ -365,6 +382,9 @@ def build_panel(rep: pd.DataFrame, last_month: int) -> pd.DataFrame:
             end = add_months(r["desde"], VIGENCIA_MESES - 1)
             if i + 1 < len(g):
                 end = min(end, add_months(g.at[i + 1, "desde"], -1))
+            later_stops = [s for s in stops.get((ent, ag), []) if s > r["desde"]]
+            if later_stops:
+                end = min(end, add_months(min(later_stops), -1))
             # Rebaja: peor que el informe previo de la misma clasificadora o que la categoría anterior que trae el
             # propio informe (cubre los semestres sin informe en la extranet).
             prevs = [g.at[i - 1, "rating_num"] if i > 0 else None,

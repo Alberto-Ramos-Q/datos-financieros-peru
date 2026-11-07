@@ -767,7 +767,7 @@ table.txt th, table.txt td { text-align: left; }
           <li>Proyecciones fiscales: MEF, Marco Macroeconómico Multianual 2026-2029 y 2027-2030, cuadros estadísticos 7 y 19.</li>
           <li>Topes de déficit y deuda: Decreto Legislativo N.° 1621, que regula un retorno gradual a las reglas macrofiscales del sector público no financiero (El Peruano, 8 de julio de 2024), artículos 2 y 3.</li>
           <li>Moneda, tasa, vida media y duración de la deuda: MEF, Dirección General del Tesoro Público, «Indicadores de Deuda Pública».</li>
-          <li>Comparación entre países: FMI, Perspectivas de la economía mundial (WEO) y Monitor Fiscal (ediciones de octubre de 2026), gobierno general con excepciones por país según las notas del FMI, en su <a href="https://www.imf.org/external/datamapper/">DataMapper</a>.</li>
+          <li>Comparación entre países: International Monetary Fund (FMI), World Economic Outlook Database y Fiscal Monitor (ediciones de octubre de 2026), <a href="https://www.imf.org/external/datamapper/">https://www.imf.org/external/datamapper/</a>; gobierno general con excepciones por país según las notas del FMI. Los datos del FMI se muestran sin alterar; la mediana regional es cálculo propio. Su uso se rige por los <a href="https://www.imf.org/en/about/copyright-and-terms">términos de datos del FMI</a>.</li>
           <li>Definiciones de vida media y duración de la deuda: MEF, <a href="https://www.mef.gob.pe/contenidos/deuda_publ/programas/progr_anua/PAEAD_2011.pdf">Programa Anual de Endeudamiento y Administración de la Deuda 2011</a>, notas del cuadro «Deuda pública: posición e indicadores».</li>
           <li>Moneda y tasa de la deuda y gestión de riesgos: MEF, <a href="https://www.mef.gob.pe/contenidos/tesoro_pub/gestion_act_pas/EGIAP_2021_2024.pdf">Estrategia de Gestión Integral de Activos y Pasivos 2021-2024</a>, sección 3.2.</li>
           <li>Límites departamentales del mapa: repositorio público <a href="https://github.com/juaneladio/peru-geojson">peru-geojson</a> (solo para dibujar).</li>
@@ -1923,7 +1923,7 @@ function renderFmi() {
   const cmpYrs = FM.years.filter((_, i) => oth[i] != null);
   const aviso = !cmpYrs.length ? `El FMI no publica este indicador para ${cmp}: el gráfico muestra solo el Perú y la mediana regional. `
     : (+cmpYrs[cmpYrs.length - 1] < +P[P.length - 1] ? `La serie de ${cmp} llega hasta ${cmpYrs[cmpYrs.length - 1]}. ` : '');
-  document.getElementById('note-fmi').textContent = aviso + `Fuente: FMI, ${fmiFuente(f.source)} (actualizado por el FMI el ${f.modificado ? dLabel(f.modificado) : '—'}), consultado el ${dLabel(FM.descargado)}. Desde ${FIRST_PROJ}, proyecciones del FMI. La mediana regional es cálculo propio (se muestra cuando hay datos de al menos seis países).`;
+  document.getElementById('note-fmi').textContent = aviso + `Fuente: International Monetary Fund (FMI), ${fmiFuente(f.source)}, https://www.imf.org/external/datamapper/ (actualizado por el FMI el ${f.modificado ? dLabel(f.modificado) : '—'}), consultado el ${dLabel(FM.descargado)}. Desde ${FIRST_PROJ}, proyecciones del FMI. La mediana regional es cálculo propio (se muestra cuando hay datos de al menos seis países).`;
 }
 Object.assign(TABLES, {
   fmir: () => [['País', fmiMet.title + ' ' + FM.years[fmiYi], '2019'], FM.paises.map(p => [p.name, pct(fmiVal(p.iso, fmiYi), 1), pct(fmiVal(p.iso, FM.years.indexOf('2019')), 1)]).concat([['Mediana regional', pct(FM.mediana[fmiMet.k][fmiYi], 1), pct(FM.mediana[fmiMet.k][FM.years.indexOf('2019')], 1)]])],

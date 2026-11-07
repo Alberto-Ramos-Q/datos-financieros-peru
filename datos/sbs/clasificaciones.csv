@@ -5822,7 +5822,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202602,bcp,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2025-10) · Moody's Local A+ (estable, desde 2025-09)",A+,False
 202602,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2025-10) · PCR A+ (estable, desde 2025-09)",A+,False
 202602,cmac-arequipa,4.0,3.0,2,False,"Apoyo B+ (estable, desde 2025-03) · PCR A- (estable, desde 2025-09)",B+,False
-202602,cmac-cusco,4.0,4.0,3,False,"Apoyo B+ (estable, desde 2025-10) · Moody's Local B+ (estable, desde 2025-09) · PCR B+ (positiva, desde 2025-03)",B+,False
+202602,cmac-cusco,4.0,4.0,2,False,"Apoyo B+ (estable, desde 2025-10) · PCR B+ (positiva, desde 2025-03)",B+,False
 202602,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2025-09) · MicroRate D+ (estable, desde 2025-10)",D+,False
 202602,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2025-09)",B+,False
 202602,cmac-ica,5.0,5.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B (estable, desde 2025-09)",B,False
@@ -5867,7 +5867,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202603,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2025-10) · Moody's Local A+ (estable, desde 2026-03) · PCR A+ (estable, desde 2026-03)",A+,False
 202603,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2025-10) · PCR A+ (estable, desde 2026-03)",A+,False
 202603,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202603,cmac-cusco,4.0,3.0,3,False,"Apoyo B+ (estable, desde 2025-10) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202603,cmac-cusco,4.0,3.0,2,False,"Apoyo B+ (estable, desde 2025-10) · PCR A- (estable, desde 2026-03)",B+,False
 202603,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202603,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202603,cmac-ica,5.0,5.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B (estable, desde 2025-09)",B,False
@@ -5912,7 +5912,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202604,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-04) · Moody's Local A+ (estable, desde 2026-03) · PCR A+ (estable, desde 2026-03)",A+,False
 202604,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-04) · PCR A+ (estable, desde 2026-03)",A+,False
 202604,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202604,cmac-cusco,4.0,3.0,3,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202604,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · PCR A- (estable, desde 2026-03)",A-,False
 202604,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202604,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202604,cmac-ica,5.0,4.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B+ (estable, desde 2026-04)",B,False
@@ -5957,7 +5957,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202605,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-04) · Moody's Local A+ (estable, desde 2026-03) · PCR A+ (estable, desde 2026-03)",A+,False
 202605,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-04) · PCR A+ (estable, desde 2026-03)",A+,False
 202605,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202605,cmac-cusco,4.0,3.0,3,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202605,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · PCR A- (estable, desde 2026-03)",A-,False
 202605,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202605,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202605,cmac-ica,5.0,4.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B+ (estable, desde 2026-04)",B,False
@@ -6002,7 +6002,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202606,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-04) · Moody's Local A+ (estable, desde 2026-03) · PCR A+ (estable, desde 2026-03)",A+,False
 202606,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-04) · PCR A+ (estable, desde 2026-03)",A+,False
 202606,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202606,cmac-cusco,4.0,3.0,3,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202606,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · PCR A- (estable, desde 2026-03)",A-,False
 202606,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202606,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202606,cmac-ica,5.0,4.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B+ (estable, desde 2026-04)",B,False
@@ -6047,7 +6047,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202607,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-04) · Moody's Local A+ (estable, desde 2026-03) · PCR A+ (estable, desde 2026-03)",A+,False
 202607,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-04) · PCR A+ (estable, desde 2026-03)",A+,False
 202607,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202607,cmac-cusco,4.0,3.0,3,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202607,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · PCR A- (estable, desde 2026-03)",A-,False
 202607,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202607,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202607,cmac-ica,5.0,4.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B+ (estable, desde 2026-04)",B,False
@@ -6074,7 +6074,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202607,mitsui-auto-finance,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A- (estable, desde 2026-03)",A-,False
 202607,pichincha,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local A- (estable, desde 2026-03)",A-,False
 202607,proempresa,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-04) · Moody's Local C (estable, desde 2026-03)",C,True
-202607,qapaq,8.0,7.0,3,False,"Apoyo C+ (estable, desde 2026-03) · Moody's Local C (estable, desde 2026-03) · PCR C (estable, desde 2026-03)",C,False
+202607,qapaq,8.0,7.0,2,False,"Apoyo C+ (estable, desde 2026-03) · PCR C (estable, desde 2026-03)",C,False
 202607,ripley-peru,4.0,4.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR B+ (positiva, desde 2026-03)",B+,False
 202607,santander-consumer,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A (estable, desde 2026-03)",A,False
 202607,santander-consumo,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A- (estable, desde 2026-03)",A-,False
@@ -6092,7 +6092,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202608,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-04) · Moody's Local A+ (estable, desde 2026-08) · PCR A+ (estable, desde 2026-03)",A+,False
 202608,citibank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-04) · PCR A+ (estable, desde 2026-03)",A+,False
 202608,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
-202608,cmac-cusco,4.0,3.0,3,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local B+ (estable, desde 2025-09) · PCR A- (estable, desde 2026-03)",B+,False
+202608,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · PCR A- (estable, desde 2026-03)",A-,False
 202608,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-03) · MicroRate D+ (estable, desde 2026-03)",D+,False
 202608,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-03)",B+,False
 202608,cmac-ica,5.0,4.0,2,False,"Apoyo B (estable, desde 2025-10) · PCR B+ (estable, desde 2026-04)",B,False
@@ -6119,7 +6119,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202608,mitsui-auto-finance,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A- (estable, desde 2026-03)",A-,False
 202608,pichincha,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-04) · Moody's Local A- (estable, desde 2026-08)",A-,False
 202608,proempresa,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-04) · Moody's Local C (estable, desde 2026-03)",C,True
-202608,qapaq,8.0,7.0,3,False,"Apoyo C+ (estable, desde 2026-03) · Moody's Local C (estable, desde 2026-03) · PCR C (estable, desde 2026-03)",C,False
+202608,qapaq,8.0,7.0,2,False,"Apoyo C+ (estable, desde 2026-03) · PCR C (estable, desde 2026-03)",C,False
 202608,ripley-peru,4.0,4.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR B+ (positiva, desde 2026-03)",B+,False
 202608,santander-consumer,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A (estable, desde 2026-03)",A,False
 202608,santander-consumo,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-08) · Moody's Local A- (estable, desde 2026-08)",A-,False
@@ -6163,7 +6163,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202609,mitsui-auto-finance,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-03) · Moody's Local A- (estable, desde 2026-09)",A-,False
 202609,pichincha,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · Moody's Local A- (estable, desde 2026-08)",A-,False
 202609,proempresa,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-09) · Moody's Local C (estable, desde 2026-09)",C,False
-202609,qapaq,8.0,7.0,3,False,"Apoyo C+ (positiva, desde 2026-09) · Moody's Local C (estable, desde 2026-03) · PCR C (positiva, desde 2026-09)",C,False
+202609,qapaq,8.0,7.0,2,False,"Apoyo C+ (positiva, desde 2026-09) · PCR C (positiva, desde 2026-09)",C,False
 202609,ripley-peru,4.0,4.0,2,False,"Moody's Local B+ (estable, desde 2026-09) · PCR B+ (positiva, desde 2026-09)",B+,False
 202609,santander-consumer,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-09) · Moody's Local A (estable, desde 2026-09)",A,False
 202609,santander-consumo,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-08) · Moody's Local A- (estable, desde 2026-08)",A-,False
@@ -6207,7 +6207,7 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202610,mitsui-auto-finance,3.0,2.0,2,False,"Apoyo A (sin perspectiva, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
 202610,pichincha,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · Moody's Local A- (estable, desde 2026-08)",A-,False
 202610,proempresa,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-09) · Moody's Local C (estable, desde 2026-09)",C,False
-202610,qapaq,8.0,7.0,3,False,"Apoyo C+ (positiva, desde 2026-09) · Moody's Local C (estable, desde 2026-03) · PCR C (positiva, desde 2026-09)",C,False
+202610,qapaq,8.0,7.0,2,False,"Apoyo C+ (positiva, desde 2026-09) · PCR C (positiva, desde 2026-09)",C,False
 202610,ripley-peru,4.0,4.0,2,False,"Moody's Local B+ (estable, desde 2026-09) · PCR B+ (positiva, desde 2026-09)",B+,False
 202610,santander-consumer,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-09) · Moody's Local A (estable, desde 2026-09)",A,False
 202610,santander-consumo,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-08) · Moody's Local A- (estable, desde 2026-08)",A-,False
@@ -6216,3 +6216,47 @@ periodo,id_entidad,cl_peor_num,cl_mejor_num,cl_n,cl_perspectiva_negativa,cl_deta
 202610,surgir,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
 202610,total-servicios-financieros,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
 202610,vivela,4.0,4.0,1,False,"PCR B+ (estable, desde 2026-10)",B+,False
+202611,alfin-banco,4.0,4.0,1,False,"PCR B+ (positiva, desde 2026-09)",B+,False
+202611,banbif,2.0,1.0,2,False,"Moody's Local A (estable, desde 2026-09) · PCR A+ (estable, desde 2026-09)",A,False
+202611,bancom,4.0,4.0,3,False,"Apoyo B+ (estable, desde 2026-09) · Moody's Local B+ (estable, desde 2026-09) · PCR B+ (estable, desde 2026-03)",B+,False
+202611,bank-of-china-peru,2.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-09) · Moody's Local A (estable, desde 2026-09) · PCR A (estable, desde 2026-03)",A,False
+202611,bbva-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-10) · Moody's Local A+ (estable, desde 2026-08)",A+,False
+202611,bci-peru,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-10) · Moody's Local A (estable, desde 2026-09)",A,False
+202611,bcp,1.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-10) · Moody's Local A+ (estable, desde 2026-08) · PCR A+ (estable, desde 2026-09)",A+,False
+202611,citibank-peru,2.0,1.0,2,False,"Apoyo A (estable, desde 2026-10) · PCR A+ (estable, desde 2026-09)",A,True
+202611,cmac-arequipa,3.0,3.0,1,False,"PCR A- (estable, desde 2026-09)",A-,False
+202611,cmac-cusco,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · PCR A- (estable, desde 2026-09)",A-,False
+202611,cmac-del-santa,10.0,9.0,2,True,"Apoyo C- (negativa, desde 2026-09) · MicroRate D+ (estable, desde 2026-10)",D+,False
+202611,cmac-huancayo,4.0,3.0,2,False,"Moody's Local B+ (estable, desde 2026-03) · PCR A- (estable, desde 2026-09)",B+,False
+202611,cmac-ica,4.0,4.0,1,False,"PCR B+ (estable, desde 2026-10)",B+,False
+202611,cmac-maynas,6.0,6.0,2,True,"Apoyo B- (estable, desde 2026-10) · Moody's Local B- (negativa, desde 2026-09)",B-,False
+202611,cmac-paita,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-09) · MicroRate C (estable, desde 2026-09)",C,False
+202611,cmac-piura,5.0,4.0,2,False,"MicroRate B+ (estable, desde 2026-09) · Moody's Local B (estable, desde 2026-09)",B,False
+202611,cmac-tacna,7.0,7.0,1,False,"Moody's Local C+ (estable, desde 2026-09)",C+,False
+202611,cmac-trujillo,4.0,4.0,2,False,"Apoyo B+ (estable, desde 2026-10) · Moody's Local B+ (estable, desde 2026-09)",B+,False
+202611,cmcp-lima,6.0,6.0,1,False,"MicroRate B- (estable, desde 2026-09)",B-,False
+202611,compartamos,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,confianza,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,crac-cencosud-scotia,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,crac-incasur,9.0,9.0,2,False,"Apoyo C- (positiva, desde 2026-10) · Moody's Local C- (estable, desde 2026-09)",C-,False
+202611,crac-los-andes,7.0,7.0,1,False,"MicroRate C+ (positiva, desde 2026-09)",C+,False
+202611,crac-prymera,8.0,8.0,1,False,"Apoyo C (estable, desde 2026-09)",C,False
+202611,efectiva,3.0,3.0,2,False,"Moody's Local A- (estable, desde 2026-09) · PCR A- (estable, desde 2026-09)",A-,False
+202611,falabella-peru,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-10) · Moody's Local A (estable, desde 2026-09)",A,False
+202611,gnb-peru,2.0,2.0,2,False,"Moody's Local A (estable, desde 2026-09) · PCR A (estable, desde 2026-09)",A,False
+202611,icbc-peru,2.0,1.0,3,False,"Apoyo A+ (estable, desde 2026-09) · Moody's Local A (estable, desde 2026-03) · PCR A (estable, desde 2026-09)",A,False
+202611,infinance-xp,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,interbank,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-09) · Moody's Local A+ (estable, desde 2026-09)",A+,False
+202611,mibanco,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-10) · Moody's Local A (estable, desde 2026-09)",A,False
+202611,mitsui-auto-finance,3.0,2.0,2,False,"Apoyo A (sin perspectiva, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,pichincha,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-09) · Moody's Local A- (estable, desde 2026-08)",A-,False
+202611,proempresa,8.0,8.0,2,False,"Apoyo C (estable, desde 2026-09) · Moody's Local C (estable, desde 2026-09)",C,False
+202611,qapaq,8.0,7.0,2,False,"Apoyo C+ (positiva, desde 2026-09) · PCR C (positiva, desde 2026-09)",C,False
+202611,ripley-peru,4.0,4.0,2,False,"Moody's Local B+ (estable, desde 2026-09) · PCR B+ (positiva, desde 2026-09)",B+,False
+202611,santander-consumer,2.0,2.0,2,False,"Apoyo A (estable, desde 2026-09) · Moody's Local A (estable, desde 2026-09)",A,False
+202611,santander-consumo,3.0,2.0,2,False,"Apoyo A (estable, desde 2026-08) · Moody's Local A- (estable, desde 2026-08)",A-,False
+202611,santander-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-10) · Moody's Local A+ (estable, desde 2026-09)",A+,False
+202611,scotiabank-peru,1.0,1.0,2,False,"Apoyo A+ (estable, desde 2026-10) · Moody's Local A+ (estable, desde 2026-09)",A+,False
+202611,surgir,3.0,3.0,2,False,"Apoyo A- (estable, desde 2026-10) · Moody's Local A- (estable, desde 2026-09)",A-,False
+202611,total-servicios-financieros,3.0,3.0,1,False,"PCR A- (estable, desde 2026-03)",A-,False
+202611,vivela,4.0,4.0,1,False,"PCR B+ (estable, desde 2026-10)",B+,False

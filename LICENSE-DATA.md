@@ -35,12 +35,21 @@ CC BY 4.0. Provienen del repositorio [juaneladio/peru-geojson](https://github.co
 (límites del INEI, 2007) y se distribuyen bajo la **Mozilla Public License 2.0**:
 https://www.mozilla.org/en-US/MPL/2.0/ (detalle en `descargas-sbs/config/geo/README.md`).
 
+## Excepción: datos del FMI
+
+Los datos del Fondo Monetario Internacional que aparecen en el tablero de finanzas públicas (World Economic Outlook y
+Fiscal Monitor, usados para comparar al Perú con otros países) **no** están bajo CC BY 4.0. Se rigen por los términos
+de datos del FMI (https://www.imf.org/en/about/copyright-and-terms). Esos términos permiten redistribuirlos y crear
+derivados citando la fuente y sin alterar los datos, y piden permiso del FMI (copyright@imf.org) para cualquier uso
+comercial. Cita: «Source: International Monetary Fund, World Economic Outlook Database / Fiscal Monitor,
+https://www.imf.org/external/datamapper/». La mediana regional que muestra el tablero es cálculo propio.
+
 ## Alcance
 
 La licencia cubre el trabajo de recopilación, limpieza y estructuración. Los datos originales son
 información pública de la SBS, el BCRP, el INEI, el MEF, el Consejo Fiscal, el FMI, los supervisores de Chile,
 Colombia y Brasil, y los bancos centrales, institutos de estadística y ministerios de los 13 países de
 `data_macro_paises/`, y se rigen por las condiciones de esas instituciones. En particular, los microdatos de la ENAHO
-se rigen por las condiciones de uso del INEI y los datos del FMI, por sus propios términos. Este repositorio no
+se rigen por las condiciones de uso del INEI y los datos del FMI, por sus propios términos (ver la excepción de arriba). Este repositorio no
 redistribuye los microdatos de la ENAHO: solo el código que los descarga y las estimaciones que salen de ellos.
 Este repositorio no es una publicación oficial: ante cualquier diferencia, vale la cifra de la fuente.

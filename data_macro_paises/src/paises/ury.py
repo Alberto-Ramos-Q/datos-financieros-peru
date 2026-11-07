@@ -721,7 +721,17 @@ def process(series: list[dict], today: dt.date) -> int:
             errors += 1
             log.error("  %s: sin observaciones tras procesar", name)
             continue
+        df = df.reset_index(drop=True)
         dup = df.duplicated("fecha")
+        # Error de origen: el BCU repite la fecha del último mes en una fila nueva al final de la serie
+        # (Creditos.xlsx de nov-2026: dos filas «2026-08», la primera idéntica a la versión anterior).
+        # No se imputa el mes que falta: se conserva la primera fila del periodo y se descartan las
+        # repetidas, solo si están al final; cualquier otra repetición sigue siendo error.
+        if dup.any() and dup[dup].index.min() > df.index[~dup].max():
+            log.warning("  %s: error de origen, %d fila(s) final(es) con el periodo %s repetido; se "
+                        "descartan sin imputar", name, int(dup.sum()), df[dup].fecha.dt.date.tolist())
+            df = df[~dup]
+            dup = df.duplicated("fecha")
         if dup.any():
             errors += 1
             log.error("  %s: %d periodos repetidos tras normalizar fechas, p. ej. %s", name,

@@ -165,3 +165,10 @@ python src/paises/ury.py                    # descarga todo y reconstruye el par
 python src/paises/ury.py --solo-procesar    # solo reprocesa data/raw/URY
 python src/paises/ury.py --serie tc_usd_diario tasa_politica   # descarga solo esas series
 ```
+
+## Error de origen: fecha repetida en Creditos.xlsx (2026-11-05)
+La versión de `Creditos.xlsx` bajada el 2026-11-05 trae dos filas «2026-08» al final de la hoja «Total Sist. Banc.»
+(y en los anexos por moneda). La primera es idéntica a la de la versión anterior (guardada en
+`data/_control/historial/URY/bcu/Creditos__20261105.xlsx`); la segunda es nueva y probablemente es setiembre mal fechado,
+pero no se imputa. `ury.py` conserva la primera fila del periodo y descarta las repetidas **solo si están al final** de la
+serie, con un aviso en el log; cualquier otra repetición sigue siendo error. Revisar en la próxima descarga si el BCU lo corrigió.

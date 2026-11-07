@@ -5,7 +5,7 @@ Datos públicos del **sistema financiero peruano (SBS)**, de la **macroeconomía
 procesa desde la fuente oficial, y tableros para explorarlas.
 
 **Corte de los datos:** Boletín Estadístico de la SBS a set-2026 · tasas activas y clasificaciones a
-oct-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 2 de noviembre de 2026.
+nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 4 de noviembre de 2026.
 
 ## Tres formas de usarlo
 

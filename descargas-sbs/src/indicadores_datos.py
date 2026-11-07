@@ -313,8 +313,7 @@ CATALOG = [
      "Financiación estable disponible / requerida",
      "Financiación estable disponible / financiación estable requerida, con saldos de fin de mes (Anexo 16-C), en %. "
      "Agregados: Σ disponible / Σ requerida.", "rfne", DEPOSIT_TAKERS, "sum",
-     "La SBS lo publica desde diciembre de 2025, en veces (aquí, en %). No publicó el de agosto de 2026 (sí el de "
-     "setiembre): con ese corte se muestra el de julio de 2026. Mínimo 80% desde diciembre de 2024, 90% desde "
+     "La SBS lo publica desde diciembre de 2025, en veces (aquí, en %). Mínimo 80% desde diciembre de 2024, 90% desde "
      "diciembre de 2025 y 100% desde diciembre de 2026 (Res. SBS N.º 4221-2023). Las empresas de créditos no tienen "
      "límite y la SBS no publica su ratio."),
     ("disp_act", "liq", "Disponible / activo", "%", 1, 1, "m", 2, "Disponible / activo total",

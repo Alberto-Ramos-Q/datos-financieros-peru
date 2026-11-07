@@ -141,27 +141,27 @@ PM06175MA,rin_flujo_dep_sector_publico_anual,anual,tipo-cambio-reservas,Flujo de
 PM06176MA,rin_flujo_intereses_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Intereses Netos,17,2003-01-01,2019-01-01
 PM06177MA,rin_flujo_otros_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Otros Flujos,23,2003-01-01,2025-01-01
 PM06178MA,rin_flujo_total_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Total,66,1960-01-01,2025-01-01
-PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7429,1997-01-02,2026-10-30
-PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7437,1997-01-02,2026-10-30
-PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6938,1999-01-04,2026-10-29
-PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4952,1995-01-04,2026-10-29
-PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6938,1999-01-04,2026-10-29
-PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6939,1999-01-04,2026-10-29
-PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6939,1999-01-04,2026-10-29
-PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6456,1995-01-04,2026-10-29
-PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3197,1999-01-06,2026-10-29
-PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3330,1999-01-13,2026-10-29
-PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5922,2003-09-05,2026-10-30
-PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",7997,1995-04-03,2026-10-29
-PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1431,2021-05-10,2026-11-02
-PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5302,2005-05-13,2026-10-30
+PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7430,1997-01-02,2026-11-02
+PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7438,1997-01-02,2026-11-02
+PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6939,1999-01-04,2026-10-30
+PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4954,1995-01-04,2026-11-02
+PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6939,1999-01-04,2026-10-30
+PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6940,1999-01-04,2026-10-30
+PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6940,1999-01-04,2026-10-30
+PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6458,1995-01-04,2026-11-02
+PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3199,1999-01-06,2026-11-02
+PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3332,1999-01-13,2026-11-02
+PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5924,2003-09-05,2026-11-03
+PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",7999,1995-04-03,2026-11-02
+PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1433,2021-05-10,2026-11-04
+PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5304,2005-05-13,2026-11-03
 PD04709XD,embig_peru_diario,diaria,mercados,Tasas de interés: EMBIG (variación en pbs) - Spread - EMBIG Perú (pbs),7481,1998-01-01,2026-09-03
-PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5355,2006-01-02,2026-10-29
-PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7613,1997-01-14,2026-10-29
-PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7654,1997-01-02,2026-10-29
-PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7718,1997-01-02,2026-10-29
-PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7639,1997-01-02,2026-10-29
-PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1431,2021-05-10,2026-11-02
+PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5357,2006-01-02,2026-11-02
+PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7615,1997-01-14,2026-11-02
+PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7656,1997-01-02,2026-11-02
+PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7720,1997-01-02,2026-11-02
+PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7641,1997-01-02,2026-11-02
+PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1433,2021-05-10,2026-11-04
 PN07843NM,tasa_bancos_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
 PN07844NM,tasa_bancos_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
 PN07845NM,tasa_bancos_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,194,2010-08-01,2026-09-01
@@ -833,11 +833,11 @@ PN00488MM,emision_primaria_fin_var12m,mensual,politica-monetaria,Emisión primar
 PN00491MM,emision_primaria_prom_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Promedio Mes,405,1993-01-01,2026-09-01
 PN00483MM,emision_primaria_encaje,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Encaje,416,1992-01-01,2026-08-01
 PN00494MM,multiplicador_monetario,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Multiplicador Monetario,416,1992-01-01,2026-08-01
-PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6944,1999-01-04,2026-10-29
-PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4881,1997-09-22,2026-10-29
-PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6944,1999-01-04,2026-10-29
-PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4881,1997-09-22,2026-10-29
-PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),2997,1999-01-04,2026-10-29
+PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6946,1999-01-04,2026-11-02
+PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4883,1997-09-22,2026-11-02
+PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6946,1999-01-04,2026-11-02
+PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4883,1997-09-22,2026-11-02
+PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),2999,1999-01-04,2026-11-02
 PN07801NM,tasa_bancos_corporativo_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,194,2010-08-01,2026-09-01
 PN07802NM,tasa_bancos_grandes_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
 PN07803NM,tasa_bancos_medianas_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
@@ -881,10 +881,10 @@ PN01125MM,tasa_bonos_tesoro_5a10a,mensual,tasas,Bonos del sector privado por mon
 PN01126MM,tasa_bonos_tesoro_10a15a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 10 hasta 15 años,205,2005-07-01,2026-09-01
 PN01127MM,tasa_bonos_tesoro_15a20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 15 hasta 20 años,206,2006-05-01,2026-09-01
 PN01128MM,tasa_bonos_tesoro_mas20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Más de 20 años,209,2007-07-01,2026-09-01
-PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7327,1995-04-03,2026-10-29
-PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6001,2002-08-01,2026-10-29
-PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3141,2012-12-31,2026-10-29
-PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4284,2009-07-30,2026-11-02
+PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7329,1995-04-03,2026-11-02
+PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6003,2002-08-01,2026-11-02
+PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3143,2012-12-31,2026-11-02
+PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4285,2009-07-30,2026-11-03
 PN00496MM,credito_privado_mn_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito MN (millones S/),417,1992-01-01,2026-09-01
 PN00499MM,credito_privado_me_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito ME (millones US$),417,1992-01-01,2026-09-01
 PN00498MM,credito_privado_mn_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Crédito MN,405,1993-01-01,2026-09-01

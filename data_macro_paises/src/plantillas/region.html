@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Perú frente a la región: crecimiento, crédito y fortaleza externa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Misma familia que la serie de tableros (inflación, transmisión): paleta SBS, azul #001E6B y gris #B2B4B5.
+   Perú siempre en azul SBS (s1); el país que el lector resalta, en azul medio (s2); los demás países en gris
+   (gris SBS #B2B4B5 en líneas y barras, sys en puntos). Cuando un gráfico trae varias series de un mismo país, el orden
+   fijo es s1 · s2 · sys · s3 (azul SBS, azul medio, gris, verde azulado). Sin naranjas ni rojos.
+   Tema claro por defecto; el oscuro solo con el botón. */
+:root {
+  color-scheme: light;
+  --page: #f6f7f9; --surface: #ffffff; --ink: #111a30; --ink2: #3a4258; --muted: #646a77;
+  --grid: #eceef1; --axis: #c8cbd1; --border: rgba(17,26,48,.12); --wash: rgba(0,30,107,.06);
+  --accent: #001e6b; --accent-ink: #ffffff;
+  --s1: #001e6b; --s2: #1c7ce5; --s3: #25624f;
+  --sys: #868a93; --other: #b2b4b5;
+  --font-head: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0b1022; --surface: #111833; --ink: #e6e9f0; --ink2: #c4c9d6; --muted: #9a9fac;
+  --grid: #1d2445; --axis: #2f385c; --border: rgba(230,233,240,.12); --wash: rgba(159,178,230,.09);
+  --accent: #9fb2e6; --accent-ink: #0b1022;
+  --s1: #ced8ec; --s2: #2482eb; --s3: #4abba1;
+  --sys: #8a8f9c; --other: #4a5378;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font-ui); }
+main { max-width: 1120px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, .edu h3 { font-family: var(--font-head); }
+h1 { font-size: 30px; line-height: 1.18; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; margin: 0; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 14px; margin: 0; font-weight: 600; }
+.top { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+.top > div { min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--ink2); margin: 6px 0 20px; max-width: 780px; }
+.theme { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex: none; }
+.theme button { font: inherit; font-size: 12.5px; border: 0; background: transparent; color: var(--ink2); padding: 4px 10px; cursor: pointer; }
+.theme button + button { border-left: 1px solid var(--border); }
+.theme button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.section-title { margin: 36px 0 12px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.section-title:first-child { margin-top: 4px; }
+
+/* Indicadores */
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 12px; margin-top: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.tile.lead { border-top: 3px solid var(--accent); }
+.tile .lab { color: var(--ink2); font-size: 13px; }
+.tile .val { font-size: 28px; font-weight: 600; line-height: 1.15; margin: 6px 0 4px; }
+.tile .unit { display: inline-block; line-height: 1.25; font-size: 13.5px; font-weight: 500; color: var(--ink2); margin-left: 5px; }
+.tile .sub { color: var(--ink2); font-size: 12.5px; }
+.tile .per { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+/* Tarjetas de gráficos */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 14px; margin: 12px 0 0; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.card-head > div:first-child { min-width: 0; }
+.card-head p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 760px; }
+.card-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; flex: none; }
+.card-tools label { font-size: 13px; color: var(--ink2); }
+.btn { font: inherit; font-size: 13px; color: var(--ink2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--wash); color: var(--ink); }
+select.btn { padding: 4px 6px; background: var(--surface); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 4px; font-size: 13px; color: var(--ink2); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.ln { width: 16px; height: 2px; border-radius: 1px; display: inline-block; flex: none; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+/* Botones de país (mostrar u ocultar) */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 4px; align-items: center; }
+.chips .lab { font-size: 12.5px; color: var(--muted); margin-right: 2px; }
+.cc { font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; color: var(--ink2); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px 2px 8px; cursor: pointer; }
+.cc:hover { background: var(--wash); }
+.cc[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
+.cc[aria-pressed="false"] .ln { opacity: .35; }
+.cc.per { font-weight: 600; color: var(--ink); }
+.cc.lnk { border-style: dashed; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; max-width: 90ch; }
+.src { color: var(--muted); font-size: 12px; margin: 4px 0 0; max-width: 90ch; }
+
+.table-wrap { max-height: 440px; overflow: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+.table-wrap.full { max-height: none; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td.txt { text-align: left; white-space: normal; min-width: 14em; max-width: 26em; }
+th { white-space: normal; vertical-align: bottom; min-width: 5.5em; }
+th:first-child, td:first-child { text-align: left; }
+thead th { position: sticky; top: 0; background: var(--surface); color: var(--ink2); font-weight: 600; z-index: 1; }
+/* Primera columna fija al desplazar la tabla a lo ancho (móvil). */
+th:first-child, td:first-child { position: sticky; left: 0; background: var(--surface); }
+thead th:first-child { z-index: 2; }
+td.na { color: var(--muted); }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; display: inline-flex; gap: 4px; align-items: flex-end; }
+th button:hover { color: var(--ink); }
+th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+th .arr { color: var(--muted); font-size: 10px; min-width: 8px; }
+th.l, td.l { text-align: left; }
+tr.em td { font-weight: 600; color: var(--ink); background: linear-gradient(var(--wash), var(--wash)), var(--surface); }
+tr.em td.na { color: var(--muted); font-weight: 400; }
+
+.axis text, .lbl { font-size: 11.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.dlbl { font-size: 12px; fill: var(--ink2); }
+.dlbl.per, .dval { font-weight: 600; fill: var(--ink); }
+.dper { fill: var(--muted); font-weight: 400; }
+.plbl { font-size: 11.5px; fill: var(--ink2); }
+.plbl.per { font-weight: 600; fill: var(--ink); }
+.hit { fill: transparent; cursor: crosshair; outline: none; }
+.hit:focus-visible { stroke: var(--ink2); stroke-width: 1; }
+.col-hit { fill: transparent; outline: none; }
+.col-hit:hover, .col-hit:focus-visible { fill: var(--wash); }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; max-width: 320px; }
+#tip .t { color: var(--ink2); margin-bottom: 4px; }
+#tip .r { display: flex; align-items: center; gap: 8px; line-height: 1.6; }
+#tip .k { width: 12px; height: 3px; border-radius: 1px; flex: none; }
+#tip .k.sq { height: 10px; border-radius: 2px; }
+#tip strong { font-variant-numeric: tabular-nums; min-width: 56px; }
+#tip .l { color: var(--ink2); }
+#tip .r.em strong, #tip .r.em .l { color: var(--ink); font-weight: 600; }
+footer { margin-top: 32px; color: var(--muted); font-size: 12.5px; }
+footer p { margin: 4px 0; max-width: 100ch; }
+
+.callout { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 12px; }
+.callout .kicker, .edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.callout p { margin: 6px 0 0; color: var(--ink2); max-width: 80ch; }
+.callout ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink2); }
+.callout li { margin: 5px 0; max-width: 85ch; }
+.callout .more { margin-top: 12px; }
+.block-head { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+details.adv { margin-top: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; }
+details.adv summary { cursor: pointer; font-weight: 600; color: var(--ink2); font-size: 14px; }
+details.adv ul { margin: 10px 0 4px; padding-left: 18px; color: var(--ink2); font-size: 14px; }
+details.adv li { margin: 5px 0; max-width: 85ch; }
+
+/* Pestañas */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin: 0 0 24px; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { font: inherit; font-size: 14.5px; color: var(--ink2); background: transparent; border: 0; white-space: nowrap;
+  border-bottom: 2px solid transparent; padding: 8px 12px 10px; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button:focus-visible, .btn:focus-visible, .cc:focus-visible, .theme button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pestaña «Cómo leer» */
+.edu { display: grid; gap: 12px; }
+.edu section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px 18px; min-width: 0; }
+.edu h2 { font-size: 20px; margin-bottom: 10px; }
+.edu h3 { font-size: 15px; margin: 20px 0 6px; }
+.edu p, .edu li { max-width: 78ch; }
+.edu p { margin: 0 0 10px; }
+.edu ul { margin: 6px 0 10px; padding-left: 18px; }
+.edu li { margin: 5px 0; color: var(--ink2); }
+.keyrow { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+
+@media (max-width: 600px) {
+  .edu section { padding: 16px 14px 12px; }
+}
+@media (max-width: 480px) {
+  .tabs { flex-wrap: wrap; overflow: visible; }
+  .tabs button { padding: 6px 8px 8px; font-size: 14px; }
+  main { padding-top: 18px; }
+  h1 { font-size: 23px; }
+  .top { flex-direction: column; gap: 8px; }
+  .kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { padding: 12px 12px; }
+  .tile .val { font-size: 22px; }
+  .tile .unit { font-size: 12.5px; }
+  .card { padding: 14px 12px 10px; }
+  .card-head { flex-direction: column; gap: 8px; }
+  .card-tools { justify-content: flex-start; }
+  .callout { padding: 14px 14px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <p class="eyebrow">Comparación regional · Series oficiales de cada país</p>
+      <h1>El Perú frente a la región: crecimiento, crédito y fortaleza externa</h1>
+    </div>
+    <span class="theme" role="group" aria-label="Tema"><button type="button" data-theme-set="light">Claro</button><button type="button" data-theme-set="dark">Oscuro</button></span>
+  </div>
+  <p class="lede" id="lede">Cómo se compara la economía peruana con la de los países de la región, con España y Estados Unidos como referencia, a partir de las publicaciones oficiales de cada país.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones" id="tabs"></div>
+  <div id="panels"></div>
+
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+
+// ---------- Tema: claro por defecto; el oscuro solo si el lector lo elige ----------
+(function theme() {
+  const root = document.documentElement;
+  const current = () => root.dataset.theme || 'light';
+  const paint = () => document.querySelectorAll('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === current())));
+  try { const s = localStorage.getItem('region-tema'); if (s === 'light' || s === 'dark') root.dataset.theme = s; } catch (e) { /* sin almacenamiento */ }
+  document.querySelectorAll('[data-theme-set]').forEach(b => b.addEventListener('click', () => {
+    root.dataset.theme = b.dataset.themeSet;
+    try { localStorage.setItem('region-tema', b.dataset.themeSet); } catch (e) { /* sin almacenamiento */ }
+    paint();
+  }));
+  paint();
+})();
+
+const NS = 'http://www.w3.org/2000/svg';
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const BLOCKS = D.bloques;
+
+// ---------- Formato numérico en español: coma decimal, espacio fino para miles, signo menos tipográfico ----------
+const zr = (v, d) => Math.abs(v) < 0.5 * 10 ** -d ? 0 : v;
+function nf(v, d = 1, sign = false) {
+  if (v == null || !isFinite(v)) return '—';
+  v = zr(v, d);
+  const r = Math.round((Math.abs(v) + Number.EPSILON) * 10 ** d) / 10 ** d;   // 0,345 → 0,35 en gráficos, tablas y recuadros
+  const [i, f] = r.toFixed(d).split('.');
+  const ig = i.length > 4 ? i.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : i;
+  return (v < 0 ? '−' : sign && v > 0 ? '+' : '') + ig + (f ? ',' + f : '');
+}
+// Periodo de una fecha de inicio de periodo según la frecuencia (A, Q, M, D).
+function per(s, f) {
+  if (typeof s !== 'string' || s.length < 7) return String(s ?? '');
+  const y = s.slice(0, 4), m = +s.slice(5, 7);
+  if (f === 'A') return y;
+  if (f === 'Q') return y + '-T' + (Math.floor((m - 1) / 3) + 1);
+  if (f === 'D' && s.length >= 10) return +s.slice(8, 10) + ' ' + MES[m - 1] + ' ' + y;
+  return MES[m - 1] + '-' + y;
+}
+const dLabel = s => +s.slice(8, 10) + ' de ' + ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','setiembre','octubre','noviembre','diciembre'][+s.slice(5, 7) - 1] + ' de ' + s.slice(0, 4);
+const tOf = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +(s.slice(8, 10) || 1));
+
+// Valor de un indicador: la unidad que empieza con «%» o «pp» se pega al número; el resto va aparte.
+function kpiParts(k) {
+  const d = k.fmt === 'pct2' ? 2 : k.fmt === 'num0' ? 0 : 1;
+  let u = (k.unit || '').trim(), v = nf(k.val, d, k.fmt === 'pp1');
+  if (u.startsWith('%')) { v += '%'; u = u.slice(1).trim(); }
+  else if (/^pp\b/.test(u)) { v += ' pp'; u = u.slice(2).trim(); }
+  else if (k.fmt === 'pct1' || k.fmt === 'pct2') v += '%';
+  else if (k.fmt === 'pp1') v += ' pp';
+  return [v, u];
+}
+
+// Formato de los valores de un gráfico: decimales según la magnitud; sufijo según la unidad.
+function chartFmt(g) {
+  let mx = 0;
+  for (const s of g.series) for (const p of s.puntos) { if (typeof p[1] === 'number') mx = Math.max(mx, Math.abs(p[1])); }
+  const u = (g.unidad || '').trim();
+  const dec = g.decimales ?? (/correlaci|coeficiente/i.test(u) || mx < 2 ? 2 : mx >= 1000 ? 0 : 1);
+  const suf = /^%/.test(u) ? '%' : /^pp\b/.test(u) ? ' pp' : '';
+  const f = v => nf(v, dec, suf === ' pp') + suf;
+  f.dec = dec; f.suf = suf;
+  return f;
+}
+
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function htmlEl(tag, props, parent) {
+  const e = document.createElement(tag);
+  if (props) for (const k in props) {
+    if (k === 'text') e.textContent = props[k]; else if (k === 'cls') e.className = props[k]; else e.setAttribute(k, props[k]);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = 10 ** Math.floor(Math.log10(raw)), e = raw / mag;
+  return (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+}
+function niceDomain(lo, hi, count) {
+  if (hi === lo) { hi = lo + 1; lo = lo - (lo === 0 ? 0 : 1); }
+  const st = niceStep(hi - lo, count);
+  const a = Math.floor(lo / st + 1e-9) * st, b = Math.ceil(hi / st - 1e-9) * st, ticks = [];
+  for (let v = a; v <= b + st / 1e6; v += st) ticks.push(+v.toFixed(6));
+  return {lo: a, hi: b, ticks, step: st};
+}
+const stepDec = st => st >= 1 ? 0 : Math.min(3, Math.ceil(-Math.log10(st) - 1e-9));
+const tickTxt = (t, st, suf) => t === 0 ? '0' : nf(t, stepDec(st), suf === ' pp') + (suf === '%' ? '%' : '');
+function barPath(x, w, y0, y1) {
+  const h = Math.abs(y1 - y0);
+  if (h < 0.5) return '';
+  const r = Math.min(4, w / 2, h);
+  if (y1 < y0) return `M${x},${y0}V${y1 + r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 + r}V${y0}Z`;
+  return `M${x},${y0}V${y1 - r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 - r}V${y0}Z`;
+}
+// Barra horizontal desde la base x0 hasta el dato x1 (hacia la derecha o la izquierda); extremo de dato redondeado.
+function hbarPath(x0, x1, y, h) {
+  const w = Math.abs(x1 - x0);
+  if (w < 0.5) return '';
+  const r = Math.min(4, w, h / 2), s = x1 > x0 ? 1 : -1;
+  return `M${x0},${y}H${x1 - s * r}Q${x1},${y} ${x1},${y + r}V${y + h - r}Q${x1},${y + h} ${x1 - s * r},${y + h}H${x0}Z`;
+}
+const textW = (s, px = 12) => String(s).length * px * 0.56;
+
+// ---------- Tooltip (valor primero, etiqueta después; siempre con textContent) ----------
+const tip = document.getElementById('tip');
+function showTip(x, y, title, rows) {
+  tip.replaceChildren();
+  htmlEl('div', {cls: 't', text: title}, tip);
+  for (const r of rows) {
+    const row = htmlEl('div', {cls: 'r' + (r.em ? ' em' : '')}, tip);
+    const k = htmlEl('span', {cls: 'k' + (r.sq ? ' sq' : '')}, row);
+    k.style.background = r.color || 'transparent';
+    if (r.dot) k.style.borderRadius = '50%';
+    htmlEl('strong', {text: r.value}, row);
+    htmlEl('span', {cls: 'l', text: r.label}, row);
+  }
+  tip.hidden = false;
+  const b = tip.getBoundingClientRect();
+  let tx = x + 16, ty = y + 16;
+  if (tx + b.width > innerWidth - 8) tx = x - b.width - 16;
+  if (ty + b.height > innerHeight - 8) ty = y - b.height - 16;
+  tip.style.left = Math.max(8, tx) + 'px';
+  tip.style.top = Math.max(8, ty) + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+function anchorOf(evt, node) {
+  if (evt && evt.clientX != null) return [evt.clientX, evt.clientY];
+  const b = node.getBoundingClientRect();
+  return [b.left + b.width / 2, b.top];
+}
+
+// ---------- Identidad y color de las series ----------
+// Modo país: Perú en azul SBS, el país resaltado en azul medio, los demás en gris.
+// Modo series: si un país se repite en el gráfico, cada serie toma un color del orden fijo y la leyenda usa su nombre.
+const SERIES_COLORS = ['var(--s1)', 'var(--s2)', 'var(--sys)', 'var(--s3)'];
+function prepChart(g) {
+  if (g._prep) return;
+  g._prep = true;
+  const isos = g.series.map(s => s.pais);
+  g.byName = new Set(isos).size < isos.length;
+  g.series.forEach((s, j) => {
+    s.key = g.byName ? 'n' + j : s.pais || 'n' + j;
+    s.isPer = !g.byName && s.pais === 'PER';
+    s.base = g.byName ? SERIES_COLORS[j % SERIES_COLORS.length] : s.isPer ? 'var(--s1)' : null;
+    s.timeX = typeof s.puntos[0][0] === 'string';
+    s.pts = s.puntos.map(p => s.timeX ? {d: p[0], t: tOf(p[0]), v: p[1]} : {x: p[0], v: p[1], d: typeof p[2] === 'string' ? p[2] : null});
+  });
+  g.fmt = chartFmt(g);
+  g.st = {hidden: new Set(), pick: ''};
+}
+function colorOf(g, s, kind) {
+  if (s.base) return s.base;
+  if (g.st.pick && s.key === g.st.pick) return 'var(--s2)';
+  return kind === 'dot' ? 'var(--sys)' : 'var(--other)';
+}
+const isEm = (g, s) => g.byName || s.isPer || (g.st.pick && s.key === g.st.pick);
+// Periodo de referencia para barras: el del Perú; si no está, el más frecuente.
+function refPeriod(g, items) {
+  const p = items.find(o => o.s.isPer);
+  if (p) return p.per;
+  const c = {};
+  items.forEach(o => { c[o.per] = (c[o.per] || 0) + 1; });
+  return Object.entries(c).sort((a, b) => b[1] - a[1])[0][0];
+}
+
+// ---------- Ejes de tiempo ----------
+function yearTicks(t0, t1, pw) {
+  const y0 = new Date(t0).getUTCFullYear(), y1 = new Date(t1).getUTCFullYear();
+  const maxN = Math.max(2, Math.floor(pw / 58));
+  const span = y1 - y0 + 1;
+  if (span <= 2) {   // tramos cortos: marcas trimestrales
+    const out = [];
+    for (let y = y0; y <= y1; y++) for (let q = 0; q < 4; q++) {
+      const t = Date.UTC(y, q * 3, 1);
+      if (t >= t0 && t <= t1) out.push({t, text: q === 0 ? String(y) : MES[q * 3]});
+    }
+    return out;
+  }
+  const step = [1, 2, 5, 10, 20, 25, 50].find(s => span / s <= maxN) || 50;
+  const out = [];
+  for (let y = Math.ceil(y0 / step) * step; y <= y1; y += step) { const t = Date.UTC(y, 0, 1); if (t >= t0 && t <= t1) out.push({t, text: String(y)}); }
+  return out;
+}
+function drawYGrid(svg, dom, y, x0, x1, suf) {
+  const g = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+    svgEl('text', {x: x0 - 8, y: y(t) + 4, 'text-anchor': 'end'}, g).textContent = tickTxt(t, dom.step, suf);
+  }
+}
+function unitLabel(svg, g, x) {
+  if (!g.unidad) return;
+  svgEl('text', {x, y: 11, class: 'lbl'}, svg).textContent = g.unidad;
+}
+
+// ---------- Líneas ----------
+function lineChart(box, g) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600;
+  const vis = g.series.filter(s => !g.st.hidden.has(s.key) && s.pts.length);
+  if (!vis.length) { htmlEl('p', {cls: 'note', text: 'Elija al menos una serie con los botones de arriba.'}, box); return; }
+  const ends = narrow ? [] : vis.filter(s => isEm(g, s));
+  // Etiqueta final: «corto» si la serie lo trae; si no, el nombre, recortado por palabras enteras si no cabe.
+  const cap = W < 900 ? 170 : 240;
+  const endTxt = new Map();
+  let endW = 0;
+  if (ends.length) {
+    const ms = svgEl('svg', {width: 10, height: 10, style: 'position:absolute;visibility:hidden'}, box);
+    const mt = svgEl('text', {class: 'dlbl'}, ms);
+    const tsV = svgEl('tspan', {class: 'dval'}, mt), tsN = svgEl('tspan', {}, mt);
+    const measure = (v, n) => { tsV.textContent = v; tsN.textContent = ' ' + n; return mt.getComputedTextLength(); };
+    for (const s of ends) {
+      const v = g.fmt(s.pts[s.pts.length - 1].v);
+      let words = (s.corto || s.nombre).split(' '), txt = words.join(' ');
+      while (words.length > 1 && 18 + measure(v, txt) > cap) {
+        words = words.slice(0, -1);
+        // Sin paréntesis abiertos a medias: «… (TC» se recorta antes del paréntesis.
+        let head = words.join(' ');
+        if (head.lastIndexOf('(') > head.lastIndexOf(')')) { head = head.slice(0, head.lastIndexOf('(')).trim(); words = head.split(' '); }
+        txt = head.replace(/[,;:]$/, '') + '…';
+      }
+      endTxt.set(s, txt);
+      endW = Math.max(endW, Math.min(cap, 18 + measure(v, txt)));
+    }
+    ms.remove();
+  }
+  const H = narrow ? 260 : 320;
+  const m = {l: 46, r: ends.length ? endW : 14, t: 22, b: 26};
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  let t0 = Infinity, t1 = -Infinity, lo = Infinity, hi = -Infinity;
+  for (const s of vis) for (const p of s.pts) { t0 = Math.min(t0, p.t); t1 = Math.max(t1, p.t); lo = Math.min(lo, p.v); hi = Math.max(hi, p.v); }
+  if (t1 === t0) t1 = t0 + 864e5;
+  const dom = niceDomain(lo, hi, narrow ? 4 : 5);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const x = t => m.l + (t - t0) / (t1 - t0) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': g.titulo}, box);
+  drawYGrid(svg, dom, y, m.l, m.l + pw, g.fmt.suf);
+  unitLabel(svg, g, 0);
+  const ax = svgEl('g', {class: 'axis'}, svg);
+  for (const tk of yearTicks(t0, t1, pw)) svgEl('text', {x: x(tk.t), y: H - 7, 'text-anchor': 'middle'}, ax).textContent = tk.text;
+
+  // Orden de dibujo: grises al fondo, luego el país resaltado y el Perú encima.
+  const order = vis.slice().sort((a, b) => (isEm(g, a) ? 1 : 0) - (isEm(g, b) ? 1 : 0) || (a.isPer ? 1 : 0) - (b.isPer ? 1 : 0));
+  for (const s of order) {
+    let d = '', pen = false;
+    for (const p of s.pts) { if (p.v == null) { pen = false; continue; } d += (pen ? 'L' : 'M') + x(p.t).toFixed(1) + ',' + y(p.v).toFixed(1); pen = true; }
+    const em = isEm(g, s);
+    svgEl('path', {d, fill: 'none', stroke: colorOf(g, s), 'stroke-width': s.isPer ? 2.5 : em ? 2 : 1.25, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+  }
+  // Etiquetas al final (valor + nombre) para el Perú y el país resaltado, separadas para que no se pisen.
+  const lab = ends.map(s => { const p = s.pts[s.pts.length - 1]; return {s, p, y: y(p.v)}; }).sort((a, b) => a.y - b.y);
+  for (let j = 1; j < lab.length; j++) if (lab[j].y - lab[j - 1].y < 15) lab[j].y = lab[j - 1].y + 15;
+  for (const e of lab) {
+    svgEl('circle', {cx: x(e.p.t), cy: y(e.p.v), r: 4, fill: colorOf(g, e.s), stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+    const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+    svgEl('tspan', {class: 'dval'}, t).textContent = g.fmt(e.p.v);
+    svgEl('tspan', {}, t).textContent = ' ' + endTxt.get(e.s);
+  }
+
+  // Cruz y tooltip: fechas de todas las series visibles.
+  const dates = [...new Set(vis.flatMap(s => s.pts.map(p => p.t)))].sort((a, b) => a - b);
+  const maps = vis.map(s => new Map(s.pts.map(p => [p.t, p])));
+  const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+  const dots = vis.map(s => svgEl('circle', {r: 4, fill: colorOf(g, s), stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+  const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+    'aria-label': g.titulo + '; use las flechas para recorrer las fechas'}, svg);
+  let cur = null;
+  const show = (k, evt) => {
+    cur = k;
+    const t = dates[k], cx = x(t);
+    cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+    const rows = [];
+    vis.forEach((s, j) => {
+      const p = maps[j].get(t);
+      dots[j].setAttribute('visibility', p ? 'visible' : 'hidden');
+      if (p) { dots[j].setAttribute('cx', cx); dots[j].setAttribute('cy', y(p.v)); rows.push({v: p.v, value: g.fmt(p.v), label: s.nombre, color: colorOf(g, s), em: isEm(g, s)}); }
+    });
+    if (!g.byName) rows.sort((a, b) => b.v - a.v);
+    const [ex, ey] = anchorOf(evt, cross);
+    showTip(ex, ey, per(new Date(t).toISOString().slice(0, 10), g.frec), rows);
+  };
+  const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(c => c.setAttribute('visibility', 'hidden')); };
+  const nearest = tt => { let a = 0, b = dates.length - 1; while (b - a > 1) { const c = (a + b) >> 1; if (dates[c] < tt) a = c; else b = c; } return Math.abs(dates[a] - tt) <= Math.abs(dates[b] - tt) ? a : b; };
+  hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(nearest(t0 + (evt.clientX - r.left - m.l) / pw * (t1 - t0)), evt); });
+  hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+  hit.addEventListener('focus', () => show(cur ?? dates.length - 1, null));
+  hit.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    show(Math.max(0, Math.min(dates.length - 1, (cur ?? dates.length - 1) + (e.key === 'ArrowRight' ? 1 : -1))), null);
+  });
+}
+
+// ---------- Barras: un punto por país, cada uno con su periodo ----------
+function barItems(g) {
+  return g.series.map(s => { const p = s.pts[s.pts.length - 1]; return {s, v: p.v, d: p.d, per: p.d ? per(p.d, g.frec) : ''}; }).filter(o => o.v != null);
+}
+// Unidad sin la parte que ya va pegada al número (« % del PBI» → «del PBI»).
+const unitRest = g => { const u = (g.unidad || '').trim(), k = g.fmt.suf.trim(); return k && u.startsWith(k) ? u.slice(k.length).trim() : u; };
+function barTip(g, o, ref, evt, node) {
+  const [cx, cy] = anchorOf(evt, node);
+  const rows = [{value: g.fmt(o.v), label: unitRest(g), color: colorOf(g, o.s), sq: true, em: isEm(g, o.s)}];
+  if (o.per) rows.push({value: o.per, label: o.per !== ref ? 'último dato (ref. ' + ref + ')' : 'periodo'});
+  showTip(cx, cy, o.s.nombre, rows);
+}
+function bindTip(hit, fn) {
+  hit.addEventListener('pointermove', fn); hit.addEventListener('focus', fn);
+  hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+}
+function hbarChart(box, g) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const items = barItems(g);
+  if (!items.length) return;
+  const ref = refPeriod(g, items);
+  const narrow = W < 560;
+  const labW = Math.min(narrow ? 96 : 170, 16 + Math.max(...items.map(o => textW(o.s.nombre, 12))));
+  // En móvil el periodo distinto se marca con «*» y se explica debajo del gráfico (y en el tooltip).
+  const late = o => o.per && o.per !== ref;
+  const lblOf = o => g.fmt(o.v) + (late(o) ? (narrow ? '*' : ' · ' + o.per) : '');
+  // Espacio para la etiqueta de valor a cada lado: el de las barras negativas a la izquierda, el de las positivas a la derecha.
+  const sideW = arr => arr.length ? Math.min(narrow ? 64 : 150, 12 + Math.max(...arr.map(o => textW(lblOf(o), 12)))) : 0;
+  // En pantallas angostas la etiqueta de las barras negativas va a la derecha del cero, para dar más ancho al gráfico.
+  const negW = narrow ? 0 : sideW(items.filter(o => o.v < 0)), posW = sideW(items.filter(o => o.v >= 0 || narrow)) || 12;
+  const rowH = 28, H = items.length * rowH + 26;
+  const x0p = labW + negW, pw = Math.max(60, W - posW - x0p);
+  const dom = niceDomain(Math.min(0, ...items.map(o => o.v)), Math.max(0, ...items.map(o => o.v)), Math.max(2, Math.min(5, Math.floor(pw / 70))));
+  const x = v => x0p + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': g.titulo}, box);
+  const ax = svgEl('g', {class: 'axis'}, svg);
+  for (const t of dom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: 0, y2: H - 22, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, ax);
+    svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, ax).textContent = tickTxt(t, dom.step, g.fmt.suf);
+  }
+  items.forEach((o, j) => {
+    const top = j * rowH, by = top + 6, bh = 16;
+    svgEl('text', {x: labW - 10, y: by + 12, 'text-anchor': 'end', class: 'dlbl' + (o.s.isPer ? ' per' : '')}, svg).textContent = o.s.nombre;
+    svgEl('path', {d: hbarPath(x(0), x(o.v), by, bh), fill: colorOf(g, o.s)}, svg);
+    const right = o.v >= 0 || narrow;
+    const t = svgEl('text', {x: o.v >= 0 ? x(o.v) + 7 : narrow ? x(0) + 7 : x(o.v) - 7, y: by + 12, 'text-anchor': right ? 'start' : 'end', class: 'dlbl'}, svg);
+    svgEl('tspan', {class: 'dval'}, t).textContent = g.fmt(o.v);
+    if (late(o)) svgEl('tspan', {class: 'dper'}, t).textContent = narrow ? '*' : ' · ' + o.per;
+    const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: rowH, tabindex: 0,
+      'aria-label': `${o.s.nombre}: ${g.fmt(o.v)}${o.per ? ', ' + o.per : ''}`}, svg);
+    bindTip(hit, evt => barTip(g, o, ref, evt, hit));
+  });
+  const lates = items.filter(late);
+  if (narrow && lates.length) htmlEl('p', {cls: 'note', text: '* Último dato: ' + lates.map(o => o.s.nombre + ', ' + o.per).join('; ') + ' (referencia: ' + ref + ').'}, box);
+}
+function vbarChart(box, g) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const items = barItems(g);
+  const band = (W - 50) / Math.max(1, items.length);
+  if (W < 600 || band < 60) { hbarChart(box, g); return; }   // en pantallas angostas, barras horizontales
+  const ref = refPeriod(g, items);
+  const H = 330, m = {l: 46, r: 8, t: 30, b: 54};
+  const pw = W - m.l - m.r, ph = H - m.t - m.b, bw = pw / items.length;
+  const vmin = Math.min(0, ...items.map(o => o.v)), vmax = Math.max(0, ...items.map(o => o.v)), span = vmax - vmin || 1;
+  // Holgura de 12 % bajo la barra más negativa y 8 % sobre la más alta, para las etiquetas de valor.
+  const dom = niceDomain(vmin < 0 ? vmin - span * 0.12 : 0, vmax > 0 ? vmax + span * 0.08 : 0, 5);
+  const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': g.titulo}, box);
+  drawYGrid(svg, dom, y, m.l, m.l + pw, g.fmt.suf);
+  unitLabel(svg, g, 0);
+  const w = Math.min(24, bw * 0.5);
+  items.forEach((o, j) => {
+    const cx = m.l + bw * (j + 0.5);
+    svgEl('path', {d: barPath(cx - w / 2, w, y(0), y(o.v)), fill: colorOf(g, o.s)}, svg);
+    const vt = svgEl('text', {x: cx, y: o.v >= 0 ? y(o.v) - 6 : y(o.v) + 15, 'text-anchor': 'middle', class: 'dlbl dval'}, svg);
+    vt.textContent = g.fmt(o.v);
+    // Nombre del país (en dos líneas si no cabe) y, debajo, el periodo cuando difiere del de referencia.
+    const words = o.s.nombre.split(' ');
+    const lines = textW(o.s.nombre, 12) > bw - 6 && words.length > 1 ? [words.slice(0, Math.ceil(words.length / 2)).join(' '), words.slice(Math.ceil(words.length / 2)).join(' ')] : [o.s.nombre];
+    if (o.per && o.per !== ref) lines.push('(' + o.per + ')');
+    lines.forEach((ln, k) => {
+      const t = svgEl('text', {x: cx, y: H - m.b + 20 + k * 13, 'text-anchor': 'middle', class: 'dlbl' + (o.s.isPer ? ' per' : '') + (ln.startsWith('(') ? ' dper' : '')}, svg);
+      t.textContent = ln;
+      if (ln.startsWith('(')) t.setAttribute('style', 'font-size:11px');
+    });
+    const hit = svgEl('rect', {class: 'col-hit', x: m.l + bw * j, y: m.t - 22, width: bw, height: ph + 22 + m.b, tabindex: 0,
+      'aria-label': `${o.s.nombre}: ${g.fmt(o.v)}${o.per ? ', ' + o.per : ''}`}, svg);
+    bindTip(hit, evt => barTip(g, o, ref, evt, hit));
+  });
+}
+
+// ---------- Dispersión ----------
+function scatterChart(box, g) {
+  box.replaceChildren();
+  const W = box.clientWidth;
+  if (!W) return;
+  const narrow = W < 600;
+  const vis = g.series.filter(s => !g.st.hidden.has(s.key));
+  const timeX = vis.some(s => s.timeX);
+  const pts = vis.flatMap(s => s.pts.map(p => ({s, p, xv: timeX ? p.t : p.x})));
+  if (!pts.length) return;
+  const H = narrow ? 300 : 360, m = {l: 50, r: 16, t: 22, b: g.eje_x ? 42 : 28};
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const ydom = niceDomain(Math.min(...pts.map(o => o.p.v)), Math.max(...pts.map(o => o.p.v)), 5);
+  let xlo = Math.min(...pts.map(o => o.xv)), xhi = Math.max(...pts.map(o => o.xv));
+  const xdom = timeX ? {lo: xlo, hi: xhi === xlo ? xlo + 864e5 : xhi} : niceDomain(xlo, xhi, narrow ? 4 : 6);
+  const x = v => m.l + (v - xdom.lo) / (xdom.hi - xdom.lo) * pw;
+  const y = v => m.t + (ydom.hi - v) / (ydom.hi - ydom.lo) * ph;
+  const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': g.titulo}, box);
+  drawYGrid(svg, ydom, y, m.l, m.l + pw, g.fmt.suf);
+  svgEl('text', {x: 0, y: 11, class: 'lbl'}, svg).textContent = g.eje_y || g.unidad || '';
+  const ax = svgEl('g', {class: 'axis'}, svg);
+  if (timeX) for (const tk of yearTicks(xdom.lo, xdom.hi, pw)) svgEl('text', {x: x(tk.t), y: m.t + ph + 18, 'text-anchor': 'middle'}, ax).textContent = tk.text;
+  else for (const t of xdom.ticks) {
+    svgEl('line', {x1: x(t), x2: x(t), y1: m.t, y2: m.t + ph, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, ax);
+    svgEl('text', {x: x(t), y: m.t + ph + 18, 'text-anchor': 'middle'}, ax).textContent = tickTxt(t, xdom.step, '');
+  }
+  if (g.eje_x) svgEl('text', {x: m.l + pw, y: H - 4, 'text-anchor': 'end', class: 'lbl'}, svg).textContent = g.eje_x;
+  const order = pts.slice().sort((a, b) => (isEm(g, a.s) ? 1 : 0) - (isEm(g, b.s) ? 1 : 0));
+  const placed = [];
+  const fits = (bx) => !placed.some(q => bx.x < q.x + q.w && q.x < bx.x + bx.w && bx.y < q.y + q.h && q.y < bx.y + bx.h);
+  for (const o of order) {
+    const cx = x(o.xv), cy = y(o.p.v), em = isEm(g, o.s);
+    svgEl('circle', {cx, cy, r: em ? 6 : 5, fill: colorOf(g, o.s, 'dot'), stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+    placed.push({x: cx - 6, y: cy - 6, w: 12, h: 12});
+  }
+  // Nombres junto a los puntos (sin cifras): Perú siempre; los demás si no se pisan.
+  const lastOf = new Map();
+  for (const o of pts) lastOf.set(o.s.key, o);
+  const named = [...lastOf.values()].sort((a, b) => (isEm(g, b.s) ? 1 : 0) - (isEm(g, a.s) ? 1 : 0));
+  for (const o of named) {
+    const cx = x(o.xv), cy = y(o.p.v), w = textW(o.s.nombre, 11.5), right = cx + 9 + w < m.l + pw;
+    const bx = {x: right ? cx + 8 : cx - 8 - w, y: cy - 8, w, h: 14};
+    if (!isEm(g, o.s) && !fits(bx)) continue;
+    placed.push(bx);
+    svgEl('text', {x: right ? cx + 9 : cx - 9, y: cy + 4, 'text-anchor': right ? 'start' : 'end', class: 'plbl' + (isEm(g, o.s) ? ' per' : '')}, svg).textContent = o.s.nombre;
+  }
+  for (const o of pts) {
+    const hit = svgEl('circle', {class: 'col-hit', cx: x(o.xv), cy: y(o.p.v), r: 11, tabindex: 0, 'aria-label': o.s.nombre}, svg);
+    bindTip(hit, evt => {
+      const [ex, ey] = anchorOf(evt, hit);
+      const rows = [{value: g.fmt(o.p.v), label: g.eje_y || unitRest(g), color: colorOf(g, o.s, 'dot'), sq: true, dot: true, em: isEm(g, o.s)}];
+      if (!timeX) rows.push({value: nf(o.p.x, g.fmt.dec), label: g.eje_x || 'eje horizontal'});
+      if (o.p.d) rows.push({value: per(o.p.d, g.frec), label: 'periodo'});
+      showTip(ex, ey, o.s.nombre, rows);
+    });
+  }
+}
+
+// ---------- Tabla equivalente de cada gráfico ----------
+function chartTable(g) {
+  if (g.tipo === 'lineas' || (g.tipo === 'dispersion' && g.series.every(s => s.timeX))) {
+    const ss = g.series.slice().sort((a, b) => (b.isPer ? 1 : 0) - (a.isPer ? 1 : 0));
+    const dates = [...new Set(ss.flatMap(s => s.pts.map(p => p.d)))].sort().reverse();
+    const maps = ss.map(s => new Map(s.pts.map(p => [p.d, p.v])));
+    // Sin huecos: después del último dato de un país se repite su último valor con su periodo; antes de su
+    // primer dato, «sin serie».
+    const cell = (s, mp, d) => {
+      if (mp.has(d)) return g.fmt(mp.get(d));
+      const last = s.pts[s.pts.length - 1];
+      if (d > last.d) return {na: g.fmt(last.v) + ' (' + per(last.d, g.frec) + ')'};
+      return {na: d < s.pts[0].d ? 'sin serie' : 'sin dato'};
+    };
+    return {cols: ['Periodo'].concat(ss.map(s => s.nombre)), rows: dates.map(d => [per(d, g.frec)].concat(ss.map((s, j) => cell(s, maps[j], d)))), sortable: false};
+  }
+  if (g.tipo === 'dispersion') {
+    return {cols: ['País', g.eje_x || 'Eje horizontal', g.eje_y || g.unidad || 'Eje vertical', 'Periodo'],
+      rows: g.series.flatMap(s => s.pts.map(p => [s.nombre, p.x, p.v, p.d ? per(p.d, g.frec) : null])), sortable: true};
+  }
+  const items = barItems(g);
+  return {cols: ['País', g.unidad ? 'Valor (' + g.unidad + ')' : 'Valor', 'Periodo'], rows: items.map(o => [o.s.nombre, o.v, o.per || null]), sortable: true, dec: g.fmt.dec};
+}
+
+// ---------- Tablas ordenables ----------
+const isDate = v => typeof v === 'string' && /^\d{4}-\d{2}(-\d{2})?$/.test(v);
+const NA = 'no aplica';
+function cellText(v, dec, head) {
+  if (v == null || v === '' || v === '—') return NA;
+  if (typeof v === 'object') return v.na;
+  if (typeof v === 'number') return nf(v, dec);
+  if (isDate(v)) return /año/i.test(head) ? v.slice(0, 4) : per(v.length === 7 ? v + '-01' : v, 'M');
+  return String(v);
+}
+function colDecimals(rows, j) {
+  let d = 0;
+  for (const r of rows) { const v = r[j]; if (typeof v === 'number' && isFinite(v)) { const s = String(v); const k = s.includes('.') ? s.split('.')[1].length : 0; d = Math.max(d, Math.min(2, k)); } }
+  return d;
+}
+function sortKey(v) {
+  if (v == null || v === '' || v === '—' || typeof v === 'object') return null;
+  if (typeof v === 'number') return v;
+  const s = String(v).replace(/ /g, '').replace('−', '-');
+  if (/^[+-]?\d+(,\d+)?\s*(%|pp)?$/.test(s)) return parseFloat(s.replace(',', '.'));
+  return s;
+}
+function buildTable(wrap, cols, rows, opts = {}) {
+  wrap.replaceChildren();
+  const decs = cols.map((_, j) => opts.dec != null && rows.some(r => typeof r[j] === 'number') ? opts.dec : colDecimals(rows, j));
+  // Columnas de texto (no números ni periodos) alineadas a la izquierda.
+  const isPerTxt = v => /^\d{4}(-T[1-4]|-\d{2}(-\d{2})?)?$/.test(v) || /^\d{4}-T[1-4] a \d{4}-T[1-4]$/.test(v) || /^\d{4}[-–]\d{4}$/.test(v);
+  const txtCol = cols.map((_, j) => { const vs = rows.map(r => r[j]).filter(v => v != null && v !== '' && typeof v !== 'object'); return vs.length > 0 && vs.filter(v => typeof v === 'string' && !isPerTxt(v)).length > vs.length / 2; });
+  // Columna de texto largo: si alguna celda pasa de 40 caracteres, toda la columna se ajusta en varias líneas.
+  const longCol = cols.map((_, j) => rows.some(r => typeof r[j] === 'string' && r[j].length > 40));
+  const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+  const state = {j: -1, dir: -1};
+  const fill = () => {
+    tb.replaceChildren();
+    let rs = rows.slice();
+    if (state.j >= 0) rs.sort((a, b) => {
+      const ka = sortKey(a[state.j]), kb = sortKey(b[state.j]);
+      if (ka == null && kb == null) return 0;
+      if (ka == null) return 1;
+      if (kb == null) return -1;
+      return (typeof ka === 'number' && typeof kb === 'number' ? ka - kb : String(ka).localeCompare(String(kb), 'es')) * state.dir;
+    });
+    for (const r of rs) {
+      const row = htmlEl('tr', {cls: r[0] === 'Perú' ? 'em' : ''}, tb);
+      r.forEach((c, j) => {
+        const na = c == null || c === '' || c === '—' || typeof c === 'object';
+        htmlEl('td', {text: cellText(c, decs[j], cols[j]), cls: [txtCol[j] ? 'l' : '', longCol[j] ? 'txt' : '', na ? 'na' : ''].join(' ').trim()}, row);
+      });
+    }
+  };
+  cols.forEach((h, j) => {
+    const th = htmlEl('th', {scope: 'col', cls: txtCol[j] ? 'l' : ''}, tr);
+    if (opts.sortable === false) { th.textContent = h; return; }
+    const b = htmlEl('button', {type: 'button', title: 'Ordenar por esta columna'}, th);
+    htmlEl('span', {text: h}, b);
+    const arr = htmlEl('span', {cls: 'arr', 'aria-hidden': 'true'}, b);
+    b.addEventListener('click', () => {
+      state.dir = state.j === j ? -state.dir : (typeof sortKey(rows[0] && rows[0][j]) === 'number' ? -1 : 1);
+      state.j = j;
+      tr.querySelectorAll('th').forEach(x => { x.removeAttribute('aria-sort'); const a = x.querySelector('.arr'); if (a) a.textContent = ''; });
+      th.setAttribute('aria-sort', state.dir > 0 ? 'ascending' : 'descending');
+      arr.textContent = state.dir > 0 ? '▲' : '▼';
+      fill();
+    });
+  });
+  fill();
+}
+
+// ---------- Tarjeta de un gráfico ----------
+const RENDER = {lineas: lineChart, barras: vbarChart, barras_h: hbarChart, dispersion: scatterChart};
+const CARDS = [];   // {g, box, panel}
+function chartCard(g, parent, panelId) {
+  prepChart(g);
+  const card = htmlEl('figure', {cls: 'card', id: 'card-' + g.id}, parent);
+  const head = htmlEl('div', {cls: 'card-head'}, card);
+  const hd = htmlEl('div', null, head);
+  htmlEl('h2', {text: g.titulo}, hd);
+  if (g.subtitulo) htmlEl('p', {text: g.subtitulo}, hd);
+  const tools = htmlEl('div', {cls: 'card-tools'}, head);
+  const box = htmlEl('div', {cls: 'chart'});
+  const redraw = () => RENDER[g.tipo](box, g);
+  const toggleMode = !g.byName && (g.tipo === 'lineas' || g.tipo === 'dispersion') && g.series.length > 2;
+
+  // «Resaltar»: pinta un país en azul medio, para compararlo con el Perú.
+  if (!g.byName && g.series.length > 2) {
+    const id = 'pick-' + g.id;
+    htmlEl('label', {for: id, text: 'Resaltar'}, tools);
+    const sel = htmlEl('select', {cls: 'btn', id}, tools);
+    htmlEl('option', {value: '', text: 'Ninguno'}, sel);
+    g.series.filter(s => !s.isPer).slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+      .forEach(s => htmlEl('option', {value: s.key, text: s.nombre}, sel));
+    sel.addEventListener('change', () => { g.st.pick = sel.value; if (g.st.pick) g.st.hidden.delete(g.st.pick); paintChips(); paintLegend(); redraw(); });
+  }
+  const tbtn = htmlEl('button', {cls: 'btn', type: 'button', text: 'Ver tabla'}, tools);
+
+  // Leyenda: en líneas y dispersión con varios países, botones para mostrar u ocultar cada uno.
+  let paintChips = () => {}, paintLegend = () => {};
+  if (toggleMode) {
+    const chips = htmlEl('div', {cls: 'chips', role: 'group', 'aria-label': 'Países visibles'}, card);
+    htmlEl('span', {cls: 'lab', text: 'Países:'}, chips);
+    const order = g.series.slice().sort((a, b) => (b.isPer ? 1 : 0) - (a.isPer ? 1 : 0) || a.nombre.localeCompare(b.nombre, 'es'));
+    const btns = order.map(s => {
+      const b = htmlEl('button', {type: 'button', cls: 'cc' + (s.isPer ? ' per' : '')}, chips);
+      const key = htmlEl('i', {cls: g.tipo === 'dispersion' ? 'dot' : 'ln'}, b);
+      b.appendChild(document.createTextNode(s.nombre));
+      b.addEventListener('click', () => {
+        if (g.st.hidden.has(s.key)) g.st.hidden.delete(s.key); else g.st.hidden.add(s.key);
+        paintChips(); redraw();
+      });
+      return {s, b, key};
+    });
+    const all = htmlEl('button', {type: 'button', cls: 'cc lnk', text: 'Todos'}, chips);
+    all.addEventListener('click', () => { g.st.hidden.clear(); paintChips(); redraw(); });
+    const solo = htmlEl('button', {type: 'button', cls: 'cc lnk', text: 'Solo Perú'}, chips);
+    solo.addEventListener('click', () => { g.series.forEach(s => { if (!s.isPer && s.key !== g.st.pick) g.st.hidden.add(s.key); }); paintChips(); redraw(); });
+    if (!g.series.some(s => s.isPer)) solo.hidden = true;
+    paintChips = () => btns.forEach(({s, b, key}) => {
+      b.setAttribute('aria-pressed', String(!g.st.hidden.has(s.key)));
+      // En la clave del botón el gris va un paso más oscuro que en el gráfico, para que se distinga.
+      key.style.background = s.isPer || s.key === g.st.pick ? colorOf(g, s) : 'var(--sys)';
+    });
+    paintChips();
+  } else if (g.byName) {
+    const leg = htmlEl('div', {cls: 'legend'}, card);
+    g.series.forEach(s => { const sp = htmlEl('span', null, leg); const i = htmlEl('i', {cls: g.tipo === 'lineas' ? 'ln' : 'sw'}, sp); i.style.background = s.base; sp.appendChild(document.createTextNode(s.nombre)); });
+  } else if (g.series.length > 1) {
+    // Perú, el país resaltado y el resto. Sin Perú ni país resaltado, todo es de un color: no hace falta leyenda.
+    const leg = htmlEl('div', {cls: 'legend'}, card);
+    const shape = g.tipo === 'lineas' ? 'ln' : g.tipo === 'dispersion' ? 'dot' : 'sw';
+    const hasPer = g.series.some(s => s.isPer);
+    paintLegend = () => {
+      leg.replaceChildren();
+      const pick = g.series.find(s => s.key === g.st.pick);
+      leg.hidden = !hasPer && !pick;
+      const add = (c, t) => { const sp = htmlEl('span', null, leg); const i = htmlEl('i', {cls: shape}, sp); i.style.background = c; sp.appendChild(document.createTextNode(t)); };
+      if (hasPer) add('var(--s1)', 'Perú');
+      if (pick) add('var(--s2)', pick.nombre);
+      add(g.tipo === 'dispersion' ? 'var(--sys)' : 'var(--other)', 'Otros países');
+    };
+    paintLegend();
+  }
+  card.appendChild(box);
+  const wrap = htmlEl('div', {cls: 'table-wrap', hidden: ''}, card);
+  tbtn.addEventListener('click', () => {
+    const open = wrap.hidden;
+    if (open) { const tt = chartTable(g); buildTable(wrap, tt.cols, tt.rows, tt); }
+    wrap.hidden = !open;
+    tbtn.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+  });
+  if (g.nota) htmlEl('p', {cls: 'note', text: g.nota}, card);
+  if (g.fuente) htmlEl('p', {cls: 'src', text: 'Fuente: ' + g.fuente}, card);
+  CARDS.push({panel: panelId, redraw});
+}
+function tableCard(t, parent) {
+  const card = htmlEl('figure', {cls: 'card', id: 'tabla-' + t.id}, parent);
+  const head = htmlEl('div', {cls: 'card-head'}, card);
+  const hd = htmlEl('div', null, head);
+  htmlEl('h2', {text: t.titulo}, hd);
+  htmlEl('p', {text: 'Pulse el título de una columna para ordenar.'}, hd);
+  const wrap = htmlEl('div', {cls: 'table-wrap full'}, card);
+  buildTable(wrap, t.columnas, t.filas);
+  if (t.nota) htmlEl('p', {cls: 'note', text: t.nota}, card);
+}
+
+// ---------- Indicadores ----------
+function kpiGrid(b, parent) {
+  if (!b.kpis.length) return;
+  const box = htmlEl('section', {cls: 'kpis', 'aria-label': 'Indicadores: ' + b.titulo}, parent);
+  for (const k of b.kpis) {
+    const d = htmlEl('div', {cls: 'tile' + (parent.querySelector('.tile') ? '' : ' lead')}, box);
+    htmlEl('div', {cls: 'lab', text: k.lab}, d);
+    const [v, u] = kpiParts(k);
+    const vv = htmlEl('div', {cls: 'val', text: v}, d);
+    if (u) htmlEl('span', {cls: 'unit', text: u}, vv);
+    if (k.sub) htmlEl('div', {cls: 'sub', text: k.sub}, d);
+    if (k.per && k.show_per) htmlEl('div', {cls: 'per', text: 'Dato de ' + k.per}, d);
+  }
+}
+
+// ---------- Pestañas ----------
+const TABS = [{id: 'resumen', name: 'Resumen'}].concat(BLOCKS.map(b => ({id: b.id, name: b.tab, b})), [{id: 'leer', name: 'Cómo leer'}]);
+const tabsEl = document.getElementById('tabs'), panels = document.getElementById('panels');
+let tab = 'resumen';
+for (const t of TABS) {
+  const b = htmlEl('button', {type: 'button', role: 'tab', id: 'tabbtn-' + t.id, 'aria-controls': 'tab-' + t.id, 'aria-selected': 'false', tabindex: '-1', text: t.name}, tabsEl);
+  t.btn = b;
+  t.panel = htmlEl('div', {id: 'tab-' + t.id, role: 'tabpanel', 'aria-labelledby': 'tabbtn-' + t.id, hidden: ''}, panels);
+}
+
+// Resumen: lo principal de cada bloque y una remisión a los tableros de inflación y de transmisión.
+(function buildResumen() {
+  const p = TABS[0].panel;
+  for (const b of BLOCKS) {
+    htmlEl('div', {cls: 'section-title', text: b.titulo}, p);
+    if (b.resumen.length) {
+      const c = htmlEl('div', {cls: 'callout'}, p);
+      htmlEl('div', {cls: 'kicker', text: 'Lo principal'}, c);
+      const ul = htmlEl('ul', null, c);
+      b.resumen.forEach(x => htmlEl('li', {text: x}, ul));
+      const more = htmlEl('button', {cls: 'btn more', type: 'button', text: 'Ver gráficos y tablas: ' + b.tab}, c);
+      more.addEventListener('click', () => { showTab(b.id, true); window.scrollTo({top: 0}); });
+    }
+    kpiGrid(b, p);
+  }
+  htmlEl('div', {cls: 'section-title', text: 'Inflación y tasas'}, p);
+  const c = htmlEl('div', {cls: 'callout'}, p);
+  htmlEl('div', {cls: 'kicker', text: 'En otros tableros de la serie'}, c);
+  htmlEl('h2', {text: 'La inflación y la política monetaria tienen tableros propios'}, c);
+  htmlEl('p', {text: 'La inflación del Perú frente a la meta del BCRP, qué rubros la explican y cómo se compara con la de los países de la región se ven en el tablero «Inflación en el Perú». Cómo pasan los cambios de la tasa de referencia del BCRP a las tasas del mercado, de los depósitos y del crédito, y cómo se compara con la región, se ven en el tablero «Transmisión de la política monetaria en el Perú».'}, c);
+  htmlEl('p', {text: 'Este informe no repite esas cifras: se concentra en el crecimiento, el crédito y la fortaleza externa.'}, c);
+})();
+
+// Pestañas de cada bloque: gráficos, tablas y sus advertencias.
+for (const t of TABS.filter(x => x.b)) {
+  const b = t.b, p = t.panel;
+  htmlEl('div', {cls: 'section-title', text: b.titulo}, p);
+  b.graficos.forEach(g => chartCard(g, p, t.id));
+  if (b.tablas.length) {
+    htmlEl('div', {cls: 'section-title', text: 'Tablas'}, p);
+    b.tablas.forEach(tb => tableCard(tb, p));
+  }
+  if (b.advertencias.length) {
+    const d = htmlEl('details', {cls: 'adv'}, p);
+    htmlEl('summary', {text: 'Advertencias de comparabilidad de este bloque (' + b.advertencias.length + ')'}, d);
+    const ul = htmlEl('ul', null, d);
+    b.advertencias.forEach(x => htmlEl('li', {text: x}, ul));
+  }
+}
+
+// Cómo leer: guía de lectura, advertencias de todos los bloques y fuentes.
+(function buildLeer() {
+  const p = TABS[TABS.length - 1].panel;
+  const edu = htmlEl('div', {cls: 'edu'}, p);
+  const s1 = htmlEl('section', null, edu);
+  htmlEl('div', {cls: 'kicker', text: 'Guía'}, s1);
+  htmlEl('h2', {text: 'Cómo leer este informe'}, s1);
+  const ul = htmlEl('ul', null, s1);
+  const li = (parts) => { const l = htmlEl('li', null, ul); parts.forEach(x => typeof x === 'string' ? l.appendChild(document.createTextNode(x)) : l.appendChild(x)); };
+  const key = (c, cls = 'ln') => { const s = htmlEl('span', {cls: 'keyrow'}); const i = htmlEl('i', {cls}, s); i.style.background = c; return s; };
+  li([key('var(--s1)'), ' El Perú va siempre en azul oscuro y encima de los demás. Los otros países van en gris, para dar contexto sin competir con el Perú.']);
+  li([key('var(--s2)'), ' Con «Resaltar» se pinta un país en azul medio para compararlo con el Perú. En los gráficos de líneas, los botones con el nombre de cada país lo muestran u ocultan, y la escala se ajusta a los países visibles.']);
+  li(['Cuando un gráfico trae varias series del Perú (por ejemplo, distintas tasas de interés), cada una tiene su color y su nombre en la leyenda.']);
+  li(['Al pasar el cursor (o con el teclado: Tab y las flechas) se leen los valores de cada fecha o de cada país. «Ver tabla» muestra los datos del gráfico; las tablas se ordenan pulsando el título de cada columna.']);
+  li(['Cada cifra lleva su periodo. Los países no publican al mismo ritmo: cuando uno no tiene el dato del periodo de referencia se muestra su último dato publicado, con su fecha al lado (por ejemplo, «· 2025-T4»). No se estiman datos faltantes.']);
+  li(['Los trimestres se escriben como 2026-T2 (abril a junio de 2026); los meses, como set-2026; los años, como 2025. «a/a» es la variación frente al mismo periodo del año anterior y «pp», puntos porcentuales. Los números usan coma decimal.']);
+
+  const advBlocks = BLOCKS.filter(b => b.advertencias.length);
+  if (advBlocks.length) {
+    const s2 = htmlEl('section', null, edu);
+    htmlEl('div', {cls: 'kicker', text: 'Comparabilidad'}, s2);
+    htmlEl('h2', {text: 'Qué hay que tener en cuenta al comparar países'}, s2);
+    htmlEl('p', {text: 'Cada país mide con sus propias definiciones, coberturas y calendarios. Estas son las diferencias que importan para leer cada bloque.'}, s2);
+    for (const b of advBlocks) {
+      htmlEl('h3', {text: b.titulo}, s2);
+      const u = htmlEl('ul', null, s2);
+      b.advertencias.forEach(x => htmlEl('li', {text: x}, u));
+    }
+  }
+
+  const s3 = htmlEl('section', null, edu);
+  htmlEl('div', {cls: 'kicker', text: 'Fuentes'}, s3);
+  htmlEl('h2', {text: 'De dónde salen los datos'}, s3);
+  const names = [...new Set(BLOCKS.flatMap(b => b.graficos.flatMap(g => g.byName ? [] : g.series.map(s => s.nombre))))].sort((a, b) => a.localeCompare(b, 'es'));
+  htmlEl('p', {text: 'Solo publicaciones oficiales de cada país: bancos centrales, institutos de estadística, ministerios de economía o hacienda y superintendencias. No se usan bases de datos de organismos internacionales ni de terceros, que recopilan y a veces ajustan esas cifras. Cada serie se descarga de su fuente original con toda la historia que esta publica.'}, s3);
+  if (names.length) htmlEl('p', {text: 'Países comparados (' + names.length + '): ' + names.join(', ') + '. España y Estados Unidos sirven de referencia fuera de la región.'}, s3);
+  htmlEl('p', {text: 'Las variaciones, promedios, cocientes sobre el PBI, conversiones a dólares, índices y correlaciones son cálculos propios a partir de esas series, según se indica en cada gráfico.'}, s3);
+  for (const b of BLOCKS) {
+    const fu = [...new Set(b.graficos.map(g => g.fuente).filter(Boolean))];
+    if (!fu.length) continue;
+    htmlEl('h3', {text: b.titulo}, s3);
+    const u = htmlEl('ul', null, s3);
+    fu.forEach(x => htmlEl('li', {text: x}, u));
+  }
+})();
+
+function renderVisible() { CARDS.filter(c => c.panel === tab).forEach(c => c.redraw()); }
+function showTab(id, fromUser) {
+  tab = id;
+  for (const t of TABS) {
+    t.panel.hidden = t.id !== id;
+    t.btn.setAttribute('aria-selected', String(t.id === id));
+    t.btn.tabIndex = t.id === id ? 0 : -1;
+  }
+  hideTip();
+  renderVisible();
+  if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
+}
+TABS.forEach((t, k) => {
+  t.btn.addEventListener('click', () => showTab(t.id, true));
+  t.btn.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+    showTab(next.id, true);
+    next.btn.focus();
+  });
+});
+
+if (D.corte_lab) document.getElementById('lede').textContent =
+  'Cómo se compara la economía peruana con la de los países de la región, con España y Estados Unidos como referencia, a partir de las publicaciones oficiales de cada país. Información publicada hasta ' + D.corte_lab + '; cada cifra lleva su propio periodo.';
+const foot = document.getElementById('foot');
+[
+  'Fuentes: publicaciones oficiales de los bancos centrales, institutos de estadística, ministerios de economía o hacienda y superintendencias de cada país. Variaciones, promedios, cocientes e índices: cálculos propios sobre esas series.',
+  D.corte_lab ? 'Información publicada hasta ' + D.corte_lab + '. Actualizado el ' + dLabel(D.generado) + '.' : 'Actualizado el ' + dLabel(D.generado) + '.',
+].forEach(t => htmlEl('p', {text: t}, foot));
+
+const startTab = location.hash.slice(1);
+showTab(TABS.some(t => t.id === startTab) ? startTab : 'resumen', false);
+let rt;
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+</script>
+</body>
+</html>

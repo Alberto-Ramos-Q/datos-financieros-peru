@@ -206,6 +206,12 @@ def scope_block(x: pd.DataFrame, pos: dict, dec: dict) -> dict:
 def build_ratings(entities: set[str], months: list[int]) -> tuple[dict, dict]:
     """Última clasificación vigente de cada clasificadora y la peor categoría por mes."""
     rep = pd.read_parquet(RATINGS)
+    # Retiros (2026-11-06): un informe de retiro posterior al último con categoría deja sin clasificación vigente a esa
+    # clasificadora (p. ej., Moody's Local retiró la de Qapaq en 2026-07). Mismo criterio que leer_clasificadoras.
+    ret = rep[(rep.get("retiro", 0) == 1) & rep["id_entidad"].isin(entities)].copy() if "retiro" in rep else rep.iloc[0:0]
+    if len(ret):
+        ret["desde"] = ret.apply(known_month, axis=1)
+    last_ret = ret.groupby(["id_entidad", "clasificadora"])["desde"].max().to_dict() if len(ret) else {}
     rep = rep[rep["rating"].notna() & rep["id_entidad"].isin(entities)].copy()
     rep["desde"] = rep.apply(known_month, axis=1)
     rep = rep.sort_values(["id_entidad", "clasificadora", "desde", "num_archivo"])
@@ -218,6 +224,9 @@ def build_ratings(entities: set[str], months: list[int]) -> tuple[dict, dict]:
             continue
         r = g.iloc[-1]
         if add_months(int(r["desde"]), VIGENCIA_MESES - 1) < today:   # vencido: no se renovó en 12 meses
+            continue
+        stop = last_ret.get((ent, ag))
+        if stop is not None and int(r["desde"]) < stop <= today:     # retirada después de este informe
             continue
         fc = r["fecha_comite"]
         ratings.setdefault(ent, []).append({

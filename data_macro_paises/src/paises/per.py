@@ -38,9 +38,10 @@ MONTHS["set"] = 9  # el BCRP a veces escribe «Set.» por setiembre
 INEI_BASE = "https://www.inei.gob.pe"
 INEI_PAGE = INEI_BASE + "/estadisticas/indice-tematico/price-indexes/"
 # Archivo estable en data/raw/PER/inei -> patrón del enlace vigente en INEI_PAGE.
+# Desde nov-2026 el INEI agrega a veces un sufijo de versión («..._oct26_1.xlsx»): se acepta `_N` opcional.
 INEI_FILES = {
     "n02_ipc_nacional.xlsx":
-        r"/media/MenuRecursivo/indices_tematicos/n02_indice-precios_al_consumidor-nivel_nacional_[a-z]+\d{2}\.xlsx",
+        r"/media/MenuRecursivo/indices_tematicos/n02_indice-precios_al_consumidor-nivel_nacional_[a-z]+\d{2}(?:_\d+)?\.xlsx",
 }
 
 log = comun.log

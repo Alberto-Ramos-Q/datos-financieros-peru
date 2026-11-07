@@ -131,7 +131,7 @@ Clasificaciones de riesgo de cada entidad por mes (peor y mejor clasificación v
 
 | Columna | Tipo | Ejemplo |
 |---|---|---|
-| `periodo` | int64 | 202610 |
+| `periodo` | int64 | 202611 |
 | `id_entidad` | object | vivela |
 | `cl_peor_num` | float64 | 4.0 |
 | `cl_mejor_num` | float64 | 4.0 |
@@ -1756,34 +1756,34 @@ Panel de series diarias.
 
 | Columna | Tipo | Ejemplo |
 |---|---|---|
-| `fecha` | object | 2026-11-02 |
-| `tc_interbancario_venta_diario` | float64 | 3.46392857142857 |
-| `tc_sbs_venta_diario` | float64 | 3.467 |
-| `rin_diario` | float64 | 93752.47535091 |
+| `fecha` | object | 2026-11-04 |
+| `tc_interbancario_venta_diario` | float64 | 3.46057142857143 |
+| `tc_sbs_venta_diario` | float64 | 3.466 |
+| `rin_diario` | float64 | 93525.0624457 |
 | `compras_netas_bcrp_diario` | float64 | 0.0 |
-| `posicion_cambio_diario` | float64 | 68941.49706386 |
-| `dep_sist_financiero_bcrp_diario` | float64 | 18102.81526214 |
-| `dep_sector_publico_bcrp_diario` | float64 | 4442.2011777 |
-| `op_cambiarias_bcrp_diario` | float64 | 0.0 |
+| `posicion_cambio_diario` | float64 | 68920.00395495 |
+| `dep_sist_financiero_bcrp_diario` | float64 | 17847.06309533 |
+| `dep_sector_publico_bcrp_diario` | float64 | 4442.40240841 |
+| `op_cambiarias_bcrp_diario` | float64 | 0.20865771 |
 | `swaps_netos_bcrp_diario` | float64 | 0.0 |
-| `op_sector_publico_bcrp_diario` | float64 | 0.0 |
+| `op_sector_publico_bcrp_diario` | float64 | 0.20865771 |
 | `tasa_referencia_diario` | float64 | 4.25 |
 | `tasa_interbancaria_mn_diario` | float64 | 4.25 |
 | `tasa_maxima_consumo_mype_mn_diario` | float64 | 114.68 |
-| `bono_soberano_10a_soles_diario` | float64 | 6.73 |
+| `bono_soberano_10a_soles_diario` | float64 | 6.65 |
 | `embig_peru_diario` | float64 | 107.0 |
-| `igbvl_diario` | float64 | 57057.81 |
-| `ust_10a_diario` | float64 | 4.939 |
-| `cobre_diario` | float64 | 660.430497265156 |
-| `oro_diario` | float64 | 4021.52 |
-| `petroleo_wti_diario` | float64 | 102.0 |
+| `igbvl_diario` | float64 | 55486.46 |
+| `ust_10a_diario` | float64 | 4.914 |
+| `cobre_diario` | float64 | 652.26583452424 |
+| `oro_diario` | float64 | 3946.33 |
+| `petroleo_wti_diario` | float64 | 96.46 |
 | `tasa_maxima_consumo_mype_me_diario` | float64 | 103.14 |
 | `tasa_cd_bcrp_saldo_diario` | float64 | 4.0922375258346 |
-| `tasa_repos_bcrp_diario` | float64 | 4.62266666666662 |
+| `tasa_repos_bcrp_diario` | float64 | 4.55283582089549 |
 | `cd_bcrp_saldo_diario` | float64 | 26286.0 |
-| `repos_bcrp_saldo_diario` | float64 | 4500.0 |
+| `repos_bcrp_saldo_diario` | float64 | 6700.0 |
 | `creditos_regulacion_monetaria_saldo_diario` | float64 | 0.0 |
 | `tasa_interbancaria_me_diario` | float64 | 4.0 |
-| `tasa_bancos_prestamos_hasta360_mn_diario` | float64 | 21.0465919235023 |
-| `tasa_bancos_prestamos_hasta360_me_diario` | float64 | 5.47033604491371 |
-| `bono_soberano_10a_usd_diario` | float64 | 5.947 |
+| `tasa_bancos_prestamos_hasta360_mn_diario` | float64 | 20.8569532149381 |
+| `tasa_bancos_prestamos_hasta360_me_diario` | float64 | 5.53685483193781 |
+| `bono_soberano_10a_usd_diario` | float64 | 5.987 |
