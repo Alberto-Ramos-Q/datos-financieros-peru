@@ -109,11 +109,11 @@ def name(iso: str) -> str:
 
 
 def num(x: float, dec: int = 1, sign: bool = False) -> str:
-    """Número en formato español (coma decimal, signo menos tipográfico)."""
-    s = f"{abs(x):.{dec}f}".replace(".", ",")
-    if x < 0 and float(s.replace(",", ".")) != 0:
+    """Número con punto decimal, coma de miles y signo menos tipográfico."""
+    s = f"{abs(x):,.{dec}f}"
+    if x < 0 and round(abs(x), dec) != 0:
         return "−" + s
-    return ("+" + s) if sign and float(s.replace(",", ".")) != 0 else s
+    return ("+" + s) if sign and round(abs(x), dec) != 0 else s
 
 
 def month_text(d: pd.Timestamp) -> str:
@@ -310,7 +310,7 @@ def build(comparable_dir: Path) -> dict:
                     + "; se muestra ese valor, fuera de la mediana y del puesto.")
     if "PAN" in cc_out:
         nota_cc += (" Panamá queda fuera: sus revisiones son grandes (por ejemplo, el saldo de "
-                    "2023-T3 pasó de −5 855 a −990 millones de USD) y compila la balanza de pagos "
+                    "2023-T3 pasó de −5,855 a −990 millones de USD) y compila la balanza de pagos "
                     "con el manual anterior (MBP5).")
     graficos.append({
         "id": "cc_pct_pbi_ultimo", "titulo": "Cuenta corriente",
@@ -711,7 +711,7 @@ def build(comparable_dir: Path) -> dict:
         adv.append(txt)
     if "PAN" in cc_out:
         adv.append("Cuenta corriente: Panamá queda fuera porque sus revisiones son grandes (el "
-                   "saldo de 2023-T3 pasó de −5 855 a −990 millones de USD) y compila la balanza "
+                   "saldo de 2023-T3 pasó de −5,855 a −990 millones de USD) y compila la balanza "
                    "de pagos con el manual anterior (MBP5). España se convierte de euros a dólares.")
     if cc_lag:
         t = ("Cuenta corriente. Último año publicado: " + lag_text(cc_vals, cc_lag)

@@ -11,9 +11,9 @@ nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 4 de n
 
 ### 1. Ver los tableros
 
-**Portada con los 14 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
+**Portada con los 17 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
 
-[![Portada con los 14 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
+[![Portada con los 17 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
 
 | Tablero | Qué muestra |
 |---|---|
@@ -26,10 +26,13 @@ nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 4 de n
 | [Crédito por departamento](https://claude.ai/artifact/BZcFnUBFmQD8yNq4dRTJKN) | Crédito por departamento y entidad; peso de Lima y Callao y crecimiento frente al resto del país. |
 | [Estados financieros](https://claude.ai/artifact/U83h9yYdcUvwwQyU2dEsBJ) | Balance y estado de resultados por subsistema y entidad. |
 | [Concentración y alcance](https://claude.ai/artifact/YcTzxb4ejH9Wmtku23U298) | Cuota de las cuatro mayores, IHH, deudores y depositantes por adulto, y comparación con Chile, Colombia y Brasil. |
+| [Las AFP en datos](https://claude.ai/artifact/MVrJPDFEhaCCZcStmS9WLW) | Afiliados, cotizantes, retiros, fondos, rentabilidad, pensiones y las AFP desde 1996; retiros extraordinarios frente a la mora de consumo. |
 | [Reservas internacionales](https://claude.ai/artifact/SZvCtanbmzDDNEaAQUDrZD) | Cuánto compra y vende el BCRP, de qué están hechas las reservas, cómo se invierten y de quién son. |
 | [Inflación](https://claude.ai/artifact/VJnqVL64dBJqQ5P4GuwtE3) | Inflación total y subyacente, componentes y comparación con la meta. |
 | [Transmisión de la política monetaria](https://claude.ai/artifact/BibvFC8kvmrnD8qGhXPhUc) | Cómo pasa la tasa de referencia a las tasas del mercado. |
+| [PBI del Perú](https://claude.ai/artifact/FEzPx1uETy1GufSNk8v4zZ) | Crecimiento por sectores y por gasto, ingreso nacional, brecha del producto, proyecciones del BCRP y del MEF, y PBI por departamento. |
 | [Finanzas públicas](https://claude.ai/artifact/35mEqSRBxkgDCobSBXrQee) | Ingresos, gasto, deuda, ejecución del presupuesto, reglas fiscales y comparación con la región. |
+| [El Perú frente a la región](https://claude.ai/artifact/W1bjbzArxP2LzBaZL24gfU) | Crecimiento, crédito y fortaleza externa del Perú frente a América Latina, con series oficiales de cada país. |
 | [Pobreza por departamento](https://claude.ai/artifact/RG2JYt7DCt4APFmY5GWF6o) | Pobreza monetaria 2004–2025 con intervalos de confianza y grupos del INEI. |
 
 Los tableros en línea muestran la versión más reciente publicada. La versión de cada corte se puede descargar

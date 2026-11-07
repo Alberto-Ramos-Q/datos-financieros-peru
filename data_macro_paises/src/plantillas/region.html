@@ -224,16 +224,18 @@ const D = /*__DATA__*/null;
 const NS = 'http://www.w3.org/2000/svg';
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
 const BLOCKS = D.bloques;
+// Aviso que piden varias fuentes (Chile, INEGI, Banco de España, INE de España y Paraguay).
+const AVISO = 'Este informe es una elaboración propia e independiente. La información de origen pertenece a cada institución citada; las adaptaciones y los cálculos son propiedad y responsabilidad exclusiva del autor. No es una publicación oficial ni cuenta con la participación, el patrocinio o el respaldo de esas instituciones.';
 
-// ---------- Formato numérico en español: coma decimal, espacio fino para miles, signo menos tipográfico ----------
+// ---------- Formato numérico, igual que el resto de la serie de tableros: punto decimal, coma de miles, signo menos tipográfico ----------
 const zr = (v, d) => Math.abs(v) < 0.5 * 10 ** -d ? 0 : v;
 function nf(v, d = 1, sign = false) {
   if (v == null || !isFinite(v)) return '—';
   v = zr(v, d);
-  const r = Math.round((Math.abs(v) + Number.EPSILON) * 10 ** d) / 10 ** d;   // 0,345 → 0,35 en gráficos, tablas y recuadros
+  const r = Math.round((Math.abs(v) + Number.EPSILON) * 10 ** d) / 10 ** d;   // 0.345 → 0.35 en gráficos, tablas y recuadros
   const [i, f] = r.toFixed(d).split('.');
-  const ig = i.length > 4 ? i.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : i;
-  return (v < 0 ? '−' : sign && v > 0 ? '+' : '') + ig + (f ? ',' + f : '');
+  const ig = i.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return (v < 0 ? '−' : sign && v > 0 ? '+' : '') + ig + (f ? '.' + f : '');
 }
 // Periodo de una fecha de inicio de periodo según la frecuencia (A, Q, M, D).
 function per(s, f) {
@@ -688,7 +690,7 @@ const NA = 'no aplica';
 function cellText(v, dec, head) {
   if (v == null || v === '' || v === '—') return NA;
   if (typeof v === 'object') return v.na;
-  if (typeof v === 'number') return nf(v, dec);
+  if (typeof v === 'number') return /^(último )?año$/i.test(head) ? String(v) : nf(v, dec);   // los años no llevan coma de miles
   if (isDate(v)) return /año/i.test(head) ? v.slice(0, 4) : per(v.length === 7 ? v + '-01' : v, 'M');
   return String(v);
 }
@@ -701,7 +703,8 @@ function sortKey(v) {
   if (v == null || v === '' || v === '—' || typeof v === 'object') return null;
   if (typeof v === 'number') return v;
   const s = String(v).replace(/ /g, '').replace('−', '-');
-  if (/^[+-]?\d+(,\d+)?\s*(%|pp)?$/.test(s)) return parseFloat(s.replace(',', '.'));
+  const sinMiles = s.replace(/,/g, '');
+  if (/^[+-]?\d+(\.\d+)?\s*(%|pp)?$/.test(sinMiles)) return parseFloat(sinMiles);
   return s;
 }
 function buildTable(wrap, cols, rows, opts = {}) {
@@ -926,7 +929,7 @@ for (const t of TABS.filter(x => x.b)) {
   li(['Cuando un gráfico trae varias series del Perú (por ejemplo, distintas tasas de interés), cada una tiene su color y su nombre en la leyenda.']);
   li(['Al pasar el cursor (o con el teclado: Tab y las flechas) se leen los valores de cada fecha o de cada país. «Ver tabla» muestra los datos del gráfico; las tablas se ordenan pulsando el título de cada columna.']);
   li(['Cada cifra lleva su periodo. Los países no publican al mismo ritmo: cuando uno no tiene el dato del periodo de referencia se muestra su último dato publicado, con su fecha al lado (por ejemplo, «· 2025-T4»). No se estiman datos faltantes.']);
-  li(['Los trimestres se escriben como 2026-T2 (abril a junio de 2026); los meses, como set-2026; los años, como 2025. «a/a» es la variación frente al mismo periodo del año anterior y «pp», puntos porcentuales. Los números usan coma decimal.']);
+  li(['Los trimestres se escriben como 2026-T2 (abril a junio de 2026); los meses, como set-2026; los años, como 2025. «a/a» es la variación frente al mismo periodo del año anterior y «pp», puntos porcentuales. Los números usan punto decimal y coma de miles.']);
 
   const advBlocks = BLOCKS.filter(b => b.advertencias.length);
   if (advBlocks.length) {
@@ -944,10 +947,25 @@ for (const t of TABS.filter(x => x.b)) {
   const s3 = htmlEl('section', null, edu);
   htmlEl('div', {cls: 'kicker', text: 'Fuentes'}, s3);
   htmlEl('h2', {text: 'De dónde salen los datos'}, s3);
-  const names = [...new Set(BLOCKS.flatMap(b => b.graficos.flatMap(g => g.byName ? [] : g.series.map(s => s.nombre))))].sort((a, b) => a.localeCompare(b, 'es'));
+  const names = [...new Set(BLOCKS.flatMap(b => b.graficos.flatMap(g => g.byName ? [] : g.series.map(s => s.nombre.replace(/ \(referencia\)$/, '')))))].sort((a, b) => a.localeCompare(b, 'es'));
   htmlEl('p', {text: 'Solo publicaciones oficiales de cada país: bancos centrales, institutos de estadística, ministerios de economía o hacienda y superintendencias. No se usan bases de datos de organismos internacionales ni de terceros, que recopilan y a veces ajustan esas cifras. Cada serie se descarga de su fuente original con toda la historia que esta publica.'}, s3);
   if (names.length) htmlEl('p', {text: 'Países comparados (' + names.length + '): ' + names.join(', ') + '. España y Estados Unidos sirven de referencia fuera de la región.'}, s3);
   htmlEl('p', {text: 'Las variaciones, promedios, cocientes sobre el PBI, conversiones a dólares, índices y correlaciones son cálculos propios a partir de esas series, según se indica en cada gráfico.'}, s3);
+  htmlEl('p', {text: AVISO}, s3);
+  if ((D.fuentes || []).length) {
+    htmlEl('h3', {text: 'Instituciones y forma de citarlas'}, s3);
+    const w = htmlEl('div', {cls: 'table-wrap full'}, s3), tbl = htmlEl('table', null, w);
+    const hr = htmlEl('tr', null, htmlEl('thead', null, tbl));
+    ['País', 'Institución', 'Cita', 'Última descarga'].forEach(h => htmlEl('th', {text: h, style: 'text-align:left'}, hr));
+    const body = htmlEl('tbody', null, tbl);
+    for (const f of D.fuentes) {
+      const tr = htmlEl('tr', null, body);
+      htmlEl('td', {text: f.pais, style: 'text-align:left;white-space:nowrap'}, tr);
+      htmlEl('a', {text: f.institucion, href: f.url, target: '_blank', rel: 'noopener'}, htmlEl('td', {style: 'text-align:left;white-space:normal'}, tr));
+      htmlEl('td', {text: f.cita, style: 'text-align:left;white-space:normal'}, tr);
+      htmlEl('td', {text: f.consulta ? dLabel(f.consulta) : 'no aplica', style: 'text-align:left;white-space:nowrap'}, tr);
+    }
+  }
   for (const b of BLOCKS) {
     const fu = [...new Set(b.graficos.map(g => g.fuente).filter(Boolean))];
     if (!fu.length) continue;
@@ -984,6 +1002,7 @@ if (D.corte_lab) document.getElementById('lede').textContent =
 const foot = document.getElementById('foot');
 [
   'Fuentes: publicaciones oficiales de los bancos centrales, institutos de estadística, ministerios de economía o hacienda y superintendencias de cada país. Variaciones, promedios, cocientes e índices: cálculos propios sobre esas series.',
+  'Instituciones y forma de citarlas, con enlaces: pestaña «Cómo leer». ' + AVISO,
   D.corte_lab ? 'Información publicada hasta ' + D.corte_lab + '. Actualizado el ' + dLabel(D.generado) + '.' : 'Actualizado el ' + dLabel(D.generado) + '.',
 ].forEach(t => htmlEl('p', {text: t}, foot));
 

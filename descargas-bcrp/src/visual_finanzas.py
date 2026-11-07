@@ -662,9 +662,23 @@ def build_deuda_mef() -> dict | None:
             if isinstance(v, (int, float)):
                 s[f"{y}-T{(mth - 1) // 3 + 1}"] = v
         series[key] = s
+    excel_hasta = max(series["soles"])
+    # Trimestres que el Excel todavía no trae: cifras de los reportes trimestrales del MEF. Si el Excel ya tiene el
+    # trimestre, manda el Excel. Fuente de cada fila: config/deuda_mef_boletines.csv; PDF en data/manual/mef/boletines/.
+    boletines = []
+    extra_p = PROJECT_DIR / "config" / "deuda_mef_boletines.csv"
+    if extra_p.exists():
+        for r in pd.read_csv(extra_p, encoding="utf-8").to_dict("records"):
+            if r["periodo"] in series["soles"]:
+                continue
+            for key in series:
+                series[key][r["periodo"]] = float(r[key])
+            boletines.append(r["periodo"])
     P = sorted(set().union(*[set(s) for s in series.values()]))
-    out = {"P": P, "archivo": files[-1].name, **{k: [num(s.get(p), 4) for p in P] for k, s in series.items()}}
-    print(f"  deuda MEF ({files[-1].name}): {P[0]} a {P[-1]}; en soles {out['soles'][-1]} %, tasa fija {out['fija'][-1]} %")
+    out = {"P": P, "archivo": files[-1].name, "excel_hasta": excel_hasta, "boletin_desde": min(boletines) if boletines else None,
+           **{k: [num(s.get(p), 4) for p in P] for k, s in series.items()}}
+    print(f"  deuda MEF ({files[-1].name} hasta {excel_hasta}; reportes trimestrales: {boletines}): {P[0]} a {P[-1]}; "
+          f"en soles {out['soles'][-1]} %, tasa fija {out['fija'][-1]} %")
     return out
 
 

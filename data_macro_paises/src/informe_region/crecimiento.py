@@ -106,9 +106,9 @@ def iso(ts) -> str:
 
 
 def num(x: float, dec: int = 1, sign: bool = False) -> str:
-    """Número con coma decimal (convención en español)."""
-    s = f"{x:+.{dec}f}" if sign else f"{x:.{dec}f}"
-    return s.replace("-", "−").replace(".", ",")
+    """Número con punto decimal, como el resto de la serie de tableros."""
+    s = f"{x:+,.{dec}f}" if sign else f"{x:,.{dec}f}"
+    return s.replace("-", "−")
 
 
 def rnd(x, dec: int = 2):

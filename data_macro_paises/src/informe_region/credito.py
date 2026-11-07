@@ -90,8 +90,8 @@ WAGE_SOURCES = ("Salario mínimo: BCRP, BanRep, BCB (Brasil), Banxico, BCP (Para
 
 # ---------------------------------------------------------------- utilidades de formato
 def fmt_num(x: float, dec: int = 1) -> str:
-    """Número con coma decimal, punto de miles y signo menos tipográfico (U+2212)."""
-    s = f"{abs(x):,.{dec}f}".replace(",", " ").replace(".", ",").replace(" ", ".")
+    """Número con punto decimal, coma de miles y signo menos tipográfico (U+2212)."""
+    s = f"{abs(x):,.{dec}f}"
     return ("−" + s) if (x < 0 and round(abs(x), dec) != 0) else s
 
 
@@ -621,7 +621,7 @@ def build(comparable_dir: Path) -> dict:
                       f"con datos de casi toda la región" if month_w is not None else "USD por mes"),
         "tipo": "barras_h", "unidad": "USD por mes",
         "series": bars_wage,
-        "nota": ("México: salario diario × 30,4. Chile, sin serie oficial descargable; Panamá fija mínimos "
+        "nota": ("México: salario diario × 30.4. Chile, sin serie oficial descargable; Panamá fija mínimos "
                  "por región y actividad. Argentina queda fuera de la comparación (ver tabla). España (14 pagas llevadas a 12) se muestra en la tabla como referencia. "
                  "El nivel en USD depende del tipo de cambio." + fx_txt
                  + (" " + rmv_txt if rmv_txt else "")
@@ -670,7 +670,7 @@ def build(comparable_dir: Path) -> dict:
                     f"{fmt_num(abs(per_rv[1]))} % a/a con el IPC nacional")
             sub = f"IPC nacional; índice 2019 = 100: {fmt_num(per_ri[1])}" if per_ri else "IPC nacional"
             if rmv_txt:
-                sub += f"; dato anterior al reajuste de oct-2026 (RMV S/ 1 230)"
+                sub += f"; dato anterior al reajuste de oct-2026 (RMV S/ 1,230)"
             kpis.append({"lab": "Salario mínimo real, Perú", "val": r1(per_rv[1]), "fmt": "pct1",
                          "unit": "% a/a", "sub": sub, "fecha": iso(per_rv[0])})
         if per_ri is not None:

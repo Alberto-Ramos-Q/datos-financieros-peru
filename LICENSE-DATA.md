@@ -44,6 +44,14 @@ derivados citando la fuente y sin alterar los datos, y piden permiso del FMI (co
 comercial. Cita: «Source: International Monetary Fund, World Economic Outlook Database / Fiscal Monitor,
 https://www.imf.org/external/datamapper/». La mediana regional que muestra el tablero es cálculo propio.
 
+## Excepción: series oficiales de otros países
+
+Las series de los 13 países que usa el informe «El Perú frente a la región» y las comparaciones regionales de otros
+tableros (`data_macro_paises/`) **no** están bajo CC BY 4.0. Se rigen por las condiciones de cada institución, que varían:
+por ejemplo, algunas restringen el uso comercial o la redistribución. Antes de reutilizarlas, revisa las condiciones de
+la fuente. El informe indica en «Cómo leer» cada institución y su cita. Los cálculos propios (variaciones, medianas,
+índices) son responsabilidad del autor y no cuentan con el respaldo de esas instituciones.
+
 ## Alcance
 
 La licencia cubre el trabajo de recopilación, limpieza y estructuración. Los datos originales son

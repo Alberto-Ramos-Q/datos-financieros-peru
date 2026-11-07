@@ -18,6 +18,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
 import importlib
 import json
@@ -47,7 +48,8 @@ FREQ_WORDS = {"año": "A", "trimestre": "Q", "mes": "M"}
 MONTH_NAMES = r"(enero|febrero|marzo|abril|mayo|junio|julio|agosto|setiembre|septiembre|octubre|noviembre|diciembre)"
 MONTH_ABBR = r"\b(ene|feb|mar|abr|may|jun|jul|ago|set|sep|oct|nov|dic)-\d{4}\b"
 # Lo que no debe aparecer nunca en la página publicada.
-FORBIDDEN = [r"[A-Za-z]:\\", r"\.py\b", r"scratchpad", r"\bagentes?\b", r"/Users/", r"\\Users\\"]
+FORBIDDEN = [r"[A-Za-z]:\\", r"(?<!\.gov)\.py\b",   # .gov.py es el dominio del Estado paraguayo, no un script
+ r"scratchpad", r"\bagentes?\b", r"/Users/", r"\\Users\\"]
 
 
 def warn(msg: str) -> None:
@@ -266,7 +268,7 @@ def normalize_block(raw: dict, block_id: str, tab_name: str) -> dict:
 
 
 def unify_pct(obj):
-    """Porcentaje pegado al número, como en el resto de la serie de tableros: «2,6 %» → «2,6%»."""
+    """Porcentaje pegado al número, como en el resto de la serie de tableros: «2.6 %» → «2.6%»."""
     if isinstance(obj, str):
         return re.sub(r"(\d)[ \u00a0\u202f]%", r"\1%", obj)
     if isinstance(obj, list):
@@ -278,6 +280,30 @@ def unify_pct(obj):
 
 def long_month(d: dt.date) -> str:
     return f"{MES_LARGO[d.month - 1]} de {d.year}"
+
+
+def load_sources() -> list[dict]:
+    """Instituciones del informe y cómo se citan (config/fuentes_informe.csv), con la fecha de la última
+    descarga registrada en data/_control/manifest_<ISO3>.csv. El manifiesto solo anota archivos nuevos o
+    actualizados, así que la fecha puede quedar antes de la última revisión, nunca después.
+    El INE de Bolivia se bajó a mano desde 2026-11-07: lleva su propia fecha, no la del resto del país."""
+    path = PROJECT_DIR / "config" / "fuentes_informe.csv"
+    if not path.exists():
+        warn("sin config/fuentes_informe.csv; se omite la tabla de fuentes.")
+        return []
+    with path.open(encoding="utf-8-sig", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    for r in rows:
+        manifest = PROJECT_DIR / "data" / "_control" / f"manifest_{r['iso3']}.csv"
+        r["consulta"] = None
+        if manifest.exists():
+            with manifest.open(encoding="utf-8-sig", newline="") as fh:
+                filas = list(csv.DictReader(fh))
+            if r["iso3"] == "BOL" and "(INE)" in r["institucion"]:
+                filas = [f for f in filas if f["fuente"].upper() == "INE"]
+            fechas = [f["descargado_en"][:10] for f in filas if f.get("descargado_en")]
+            r["consulta"] = max(fechas) if fechas else None
+    return rows
 
 
 def main() -> int:
@@ -308,7 +334,8 @@ def main() -> int:
     corte = max(cortes) if cortes else None
     today = dt.date.today()
     data = {"generado": today.isoformat(), "corte": corte.isoformat() if corte else None,
-            "corte_lab": long_month(corte) if corte else None, "bloques": unify_pct(blocks)}
+            "corte_lab": long_month(corte) if corte else None, "bloques": unify_pct(blocks),
+            "fuentes": load_sources()}
 
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"), allow_nan=False).replace("</", "<\\/")
     for pat in FORBIDDEN:

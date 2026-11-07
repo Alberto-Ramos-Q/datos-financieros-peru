@@ -58,6 +58,13 @@ Por eso `tasa_politica` **no aplica** para Bolivia.
 - **Páginas UTF-8 sin charset** (sitio `referencia2017` del INE): `requests` las decodifica como
   latin-1 y los títulos quedan como `VARIACIÃ\x93N`. Se decodifican a mano como UTF-8 y los enlaces
   se buscan por título normalizado (sin tildes).
+- **INE sin descarga automática (desde el 2026-11-07).** Los términos del INE prohíben el «scraping no
+  autorizado», así que el script ya no entra a su sitio y usa la última versión de `data/raw/BOL/INE/`.
+  Para actualizar, bajar los cuadros desde `https://www.ine.gob.bo/` con el navegador y dejarlos en
+  `data/manual/BOL_ine/`, con estos nombres: `ine_ipc_serie_empalmada.xlsx`, `ine_pib_trim_volumen.xlsx`,
+  `ine_pib_trim_variacion.xlsx`, `ine_pib_anual_corrientes.xlsx`, `ine_igae_indice.xlsx`,
+  `ine_igae_variacion.xlsx`, `ine_empleo_urbano_mensual.xlsx` y `ine_salario_minimo.xlsx`. La siguiente corrida
+  los incorpora. Mientras tanto, las cifras de Bolivia que vienen del INE quedan en su último dato.
 - **Enlaces del INE en Nextcloud** (`nube.ine.gob.bo/index.php/s/<token>/download`): el token cambia
   al republicar. Se buscan por el título del cuadro en la página, no por URL fija.
 - **Cambio de base del PIB.** El INE publicó cuentas nacionales con **año de referencia 2017**

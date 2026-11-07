@@ -766,7 +766,7 @@ table.txt th, table.txt td { text-align: left; }
           <li>Ejecución del presupuesto (PIA, PIM, devengado y avance por nivel de gobierno, sector, gobierno regional y departamento): MEF, <a href="https://apps5.mineco.gob.pe/transparencia/Navegador/default.aspx">Consulta Amigable</a> (Transparencia Económica).</li>
           <li>Proyecciones fiscales: MEF, Marco Macroeconómico Multianual 2026-2029 y 2027-2030, cuadros estadísticos 7 y 19.</li>
           <li>Topes de déficit y deuda: Decreto Legislativo N.° 1621, que regula un retorno gradual a las reglas macrofiscales del sector público no financiero (El Peruano, 8 de julio de 2024), artículos 2 y 3.</li>
-          <li>Moneda, tasa, vida media y duración de la deuda: MEF, Dirección General del Tesoro Público, «Indicadores de Deuda Pública».</li>
+          <li>Moneda, tasa, vida media y duración de la deuda: MEF, Dirección General del Tesoro Público, «Indicadores de Deuda Pública», <a href="https://www.mef.gob.pe/es/reporte-trimestral-de-deuda-publica">«Reporte trimestral: análisis de la deuda pública bruta»</a> e <a href="https://www.mef.gob.pe/contenidos/deuda_publ/documentos/Informe_Deuda_Publica_2025.pdf">Informe Anual de Deuda Pública 2025</a>.</li>
           <li>Comparación entre países: International Monetary Fund (FMI), World Economic Outlook Database y Fiscal Monitor (ediciones de octubre de 2026), <a href="https://www.imf.org/external/datamapper/">https://www.imf.org/external/datamapper/</a>; gobierno general con excepciones por país según las notas del FMI. Los datos del FMI se muestran sin alterar; la mediana regional es cálculo propio. Su uso se rige por los <a href="https://www.imf.org/en/about/copyright-and-terms">términos de datos del FMI</a>.</li>
           <li>Definiciones de vida media y duración de la deuda: MEF, <a href="https://www.mef.gob.pe/contenidos/deuda_publ/programas/progr_anua/PAEAD_2011.pdf">Programa Anual de Endeudamiento y Administración de la Deuda 2011</a>, notas del cuadro «Deuda pública: posición e indicadores».</li>
           <li>Moneda y tasa de la deuda y gestión de riesgos: MEF, <a href="https://www.mef.gob.pe/contenidos/tesoro_pub/gestion_act_pas/EGIAP_2021_2024.pdf">Estrategia de Gestión Integral de Activos y Pasivos 2021-2024</a>, sección 3.2.</li>
@@ -1390,7 +1390,7 @@ function renderGr() {
              {arr: S.fbk_r, label: 'Inversión pública', short: 'Inversión', color: 'var(--s3)'},
              {arr: S.gnf_r, label: 'Gasto no financiero', short: 'Total', color: 'var(--s1)', w: 2.5}],
     fmt: v => pct(v, 1), aria: 'Variación real de 12 meses del gasto'});
-  document.getElementById('note-gr').textContent = 'Cálculo propio con las series del BCRP en soles de diciembre de 2021 (gobierno general). Estas variaciones comparan 12 meses con los 12 anteriores; ' + ytdNota('el gasto no financiero', D.kpi.gnf) + ' ' + ytdNota('la inversión pública', D.kpi.fbk);
+  document.getElementById('note-gr').textContent = 'Cálculo propio con las series del BCRP en soles de diciembre de 2021 (gobierno general). Estas variaciones comparan 12 meses con los 12 anteriores. ' + ytdNota('el gasto no financiero', D.kpi.gnf) + ' ' + ytdNota('la inversión pública', D.kpi.fbk);
 }
 const INV = [{k: 'gn', label: 'Gobierno nacional'}, {k: 'gr', label: 'Gobiernos regionales'}, {k: 'gl', label: 'Gobiernos locales'}];
 INV.forEach((k, j) => { k.color = rampOf(3)[j]; });
@@ -1810,7 +1810,7 @@ function renderDeudaMef() {
     fmt: v => fx(v, 1) + ' años', tickFmt: tickNum, aria: 'Vida media y duración de la deuda pública'});
   const i = lastIdx(DM.soles);
   document.getElementById('dmef-title').textContent = 'Riesgo de la deuda: moneda, tasa y plazo (último dato: ' + pLabel(P[i]) + ')';
-  document.getElementById('note-dmef').textContent = `Fuente: MEF, Dirección General del Tesoro Público, archivo «Indicadores de Deuda Pública» (${DM.archivo}), cuyo último dato es de ${pLabel(P[i])}. El porcentaje en soles incluye las operaciones de cobertura. Vida media: plazo promedio ponderado, en años, de devolución del capital; duración: plazo promedio de pago del capital y los intereses en valor presente (definiciones del MEF).`;
+  document.getElementById('note-dmef').textContent = `Fuente: MEF, Dirección General del Tesoro Público: archivo «Indicadores de Deuda Pública» (${DM.archivo}) hasta ${pLabel(DM.excel_hasta)}${DM.boletin_desde ? ` y, desde ${pLabel(DM.boletin_desde)}, «Reporte trimestral: análisis de la deuda pública bruta» (la tasa fija de dic 2025 viene del Informe Anual de Deuda Pública 2025). En los trimestres de 2025 que publican las dos fuentes, difieren hasta 0.2 puntos en soles y 0.2 años en duración` : ''}. El porcentaje en soles del archivo incluye las operaciones de cobertura. Vida media: plazo promedio ponderado, en años, de devolución del capital; duración: plazo promedio de pago del capital y los intereses en valor presente (definiciones del MEF).`;
 }
 
 Object.assign(TABLES, {

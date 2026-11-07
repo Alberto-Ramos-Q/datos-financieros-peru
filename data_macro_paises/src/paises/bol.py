@@ -16,6 +16,9 @@ Dos pasos separados (ver `src/comun.py`):
    archivo tal cual en `data/raw/BOL/<fuente>/` con un nombre estable.
 2. Procesar: lee SOLO `data/raw/BOL/` y escribe `data/interim/BOL_observaciones.parquet`.
 
+INE: desde el 2026-11-07 no se descarga de forma automática. Sus archivos se dejan a mano en
+`data/manual/BOL_ine/`, con el nombre estable de `RAW_FILES`; ver `docs/fuentes/BOL.md`.
+
 Trampas:
 - www.economiayfinanzas.gob.bo no envía el certificado intermedio (Sectigo DV R36): falla la
   verificación TLS. Se arma un bundle = certifi + el intermedio descargado de la URL AIA del
@@ -602,6 +605,23 @@ def selected_series(only: list[str] | None) -> list[dict]:
     return rows
 
 
+def import_manual_ine(key: str) -> None:
+    """INE de Bolivia: sin descarga automática (sus términos prohíben el «scraping no autorizado»).
+
+    Toma el archivo de `data/manual/BOL_ine/<key>` si el usuario lo dejó ahí; si no, se sigue usando
+    la última versión de `data/raw/BOL/INE/`.
+    """
+    manual = comun.PROJECT_DIR / "data" / "manual" / "BOL_ine" / key
+    if not manual.exists():
+        log.info("  %-40s INE: sin archivo manual; se usa la versión guardada", key)
+        return
+    content = manual.read_bytes()
+    if content[:2] != b"PK":
+        raise ValueError(f"{key}: el archivo manual no es un .xlsx ({content[:60]!r})")
+    action = comun.save_raw(ISO3, "INE", key, content, "descarga manual del sitio del INE")
+    log.info("  %-40s %-11s archivo manual", key, action)
+
+
 def download(rows: list[dict], pause: float) -> int:
     keys: list[str] = []
     for r in rows:
@@ -613,7 +633,10 @@ def download(rows: list[dict], pause: float) -> int:
     log.info("Descargando %d archivos/grupos oficiales", len(keys))
     for k in keys:
         try:
-            dl.fetch(RAW_FILES[k])
+            if RAW_FILES[k].fuente == "INE":
+                import_manual_ine(k)
+            else:
+                dl.fetch(RAW_FILES[k])
         except Exception as e:
             errors += 1
             log.error("  %s: %s", k, e)
