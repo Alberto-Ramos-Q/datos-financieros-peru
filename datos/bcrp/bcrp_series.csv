@@ -16,24 +16,24 @@ PN01726AM,pbi_otros_servicios_var12m,mensual,actividad,Producto bruto interno y 
 PD37966AM,electricidad_gwh,mensual,actividad,Indicadores de coyuntura - Electricidad (GWH),350,1997-07-01,2026-08-01
 PD37967GM,consumo_cemento_var12m,mensual,actividad,Indicadores de coyuntura - Consumo interno de cemento (var% 12 meses),392,1994-01-01,2026-08-01
 PD37982GM,inversion_minera_var12m,mensual,actividad,Indicadores de coyuntura - Inversión minera (var% real 12 meses),306,2001-01-01,2026-06-01
-PN38705PM,ipc_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - Índice de Precios al Consumidor (IPC),429,1991-01-01,2026-09-01
-PN38708PM,ipc_subyacente_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - IPC Subyacente,417,1992-01-01,2026-09-01
-PN01271PM,ipc_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC,932,1949-02-01,2026-09-01
-PN01273PM,ipc_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC,921,1950-01-01,2026-09-01
-PN01277PM,ipc_sin_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Sin Alimentos y Energía,405,1993-01-01,2026-09-01
-PN01279PM,ipc_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Subyacente,405,1993-01-01,2026-09-01
-PN01281PM,ipc_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Transables,405,1993-01-01,2026-09-01
-PN01283PM,ipc_no_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Transables,405,1993-01-01,2026-09-01
-PN01287PM,ipm_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - Índice de Precios al por Mayor,405,1993-01-01,2026-09-01
+PN38705PM,ipc_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - Índice de Precios al Consumidor (IPC),430,1991-01-01,2026-10-01
+PN38708PM,ipc_subyacente_indice,mensual,precios,Índice de precios Lima Metropolitana (índice Dic.2021 = 100) - IPC Subyacente,418,1992-01-01,2026-10-01
+PN01271PM,ipc_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC,933,1949-02-01,2026-10-01
+PN01273PM,ipc_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC,922,1950-01-01,2026-10-01
+PN01277PM,ipc_sin_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Sin Alimentos y Energía,406,1993-01-01,2026-10-01
+PN01279PM,ipc_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Subyacente,406,1993-01-01,2026-10-01
+PN01281PM,ipc_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Transables,406,1993-01-01,2026-10-01
+PN01283PM,ipc_no_transables_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Transables,406,1993-01-01,2026-10-01
+PN01287PM,ipm_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - Índice de Precios al por Mayor,406,1993-01-01,2026-10-01
 PD04722MM,tasa_referencia,mensual,tasas,Tasas de interés del Banco Central de Reserva - Tasa de Referencia de la Política Monetaria,278,2003-09-01,2026-10-01
-PN07819NM,tasa_interbancaria_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Tasa Interbancaria Promedio,372,1995-10-01,2026-09-01
-PN07839NM,tasa_interbancaria_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Tasa Interbancaria Promedio,372,1995-10-01,2026-09-01
-PN07807NM,tamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - TAMN,416,1992-02-01,2026-09-01
-PN07808NM,ftamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - FTAMN,194,2010-08-01,2026-09-01
-PN07827NM,tamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - TAMEX,416,1992-02-01,2026-09-01
-PN07816NM,tipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - TIPMN,416,1992-02-01,2026-09-01
-PN07836NM,tipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - TIPMEX,416,1992-02-01,2026-09-01
-PN07809NM,tasa_preferencial_corp_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,194,2010-08-01,2026-09-01
+PN07819NM,tasa_interbancaria_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Tasa Interbancaria Promedio,373,1995-10-01,2026-10-01
+PN07839NM,tasa_interbancaria_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Tasa Interbancaria Promedio,373,1995-10-01,2026-10-01
+PN07807NM,tamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - TAMN,417,1992-02-01,2026-10-01
+PN07808NM,ftamn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - FTAMN,195,2010-08-01,2026-10-01
+PN07827NM,tamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - TAMEX,417,1992-02-01,2026-10-01
+PN07816NM,tipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - TIPMN,417,1992-02-01,2026-10-01
+PN07836NM,tipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - TIPMEX,417,1992-02-01,2026-10-01
+PN07809NM,tasa_preferencial_corp_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,195,2010-08-01,2026-10-01
 PN00535MM,credito_privado_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos (millones S/)",309,2001-01-01,2026-09-01
 PN00539MM,credito_privado_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Tasas de Crecimiento Anual (%)",297,2002-01-01,2026-09-01
 PN00532MM,credito_empresas_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito - Saldos - A Empresas (millones S/)",309,2001-01-01,2026-09-01
@@ -46,37 +46,37 @@ PN00511MM,dolarizacion_credito,mensual,credito-liquidez,Crédito de las sociedad
 PN00193MM,liquidez_total,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Liquidez Total a Tipo de Cambio Corriente (millones S/),417,1992-01-01,2026-09-01
 PN00178MM,circulante,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Circulante (millones S/),417,1992-01-01,2026-09-01
 PN00025MM,dolarizacion_liquidez,mensual,credito-liquidez,Liquidez de las sociedades creadoras de depósito (fin de periodo) - Coeficiente de Dolarización de la Liquidez (%),417,1992-01-01,2026-09-01
-PN01207PM,tc_interbancario_prom,mensual,tipo-cambio-reservas,Tipo de cambio - promedio del periodo (S/ por US$) - Interbancario - Promedio,381,1995-01-01,2026-09-01
-PN01216PM,tc_interbancario_fin,mensual,tipo-cambio-reservas,Tipo de cambio - fin de periodo (S/ por US$) - Interbancario - Promedio,381,1995-01-01,2026-09-01
-PN01259PM,tcr_multilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Multilateral,429,1991-01-01,2026-09-01
-PN01251PM,tcr_bilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Bilateral,429,1991-01-01,2026-09-01
-PN00027MM,rin,mensual,tipo-cambio-reservas,Cuentas monetarias del Banco Central de Reserva del Perú - Reservas Internacionales Netas (millones US$),382,1994-12-01,2026-09-01
-PN06483IM,posicion_cambio,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio (millones US$),417,1992-01-01,2026-09-01
-PN01031MM,rin_variacion,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Variación de RIN,345,1998-01-01,2026-09-01
-PN01032MM,rin_var_op_cambiarias,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias,345,1998-01-01,2026-09-01
-PN01033MM,rin_var_compras_netas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa,345,1998-01-01,2026-09-01
-PN01034MM,rin_var_compras_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Compras,345,1998-01-01,2026-09-01
-PN01035MM,rin_var_ventas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Ventas,345,1998-01-01,2026-09-01
-PN01036MM,rin_var_sector_publico,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Sector Público,345,1998-01-01,2026-09-01
-PN01039MM,rin_var_op_cambiarias_otros,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Otros,345,1998-01-01,2026-09-01
-PN01040MM,rin_var_resto,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones,345,1998-01-01,2026-09-01
-PN01041MM,rin_var_dep_intermediarios,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos de Intermediarios Financieros,345,1998-01-01,2026-09-01
-PN01045MM,rin_var_dep_publicos,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos Públicos,345,1998-01-01,2026-09-01
-PN06479IM,rin_activos_brutos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Activos Internacionales (Reservas Brutas) (millones US$),417,1992-01-01,2026-09-01
-PN06480IM,rin_obligaciones_cp,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Obligaciones Corto Plazo Internacionales (millones US$),261,2005-01-01,2026-09-01
-PN06482IM,posicion_cambio_oblig_residentes,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio - Obligaciones Corto Plazo con Residentes (Neto) (millones US$),261,2005-01-01,2026-09-01
-PN06473IM,liquidez_intl_depositos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Depósitos (millones US$),261,2005-01-01,2026-09-01
-PN06474IM,liquidez_intl_valores,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Valores (millones US$),261,2005-01-01,2026-09-01
-PN06475IM,liquidez_intl_oro_plata,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Oro y Plata (millones US$),261,2005-01-01,2026-09-01
-PN06476IM,liquidez_intl_fmi_bis_flar,mensual,tipo-cambio-reservas,"Liquidez internacional del BCRP - Liquidez Total - Suscripciones FMI, BIS y FLAR (millones US$)",261,2005-01-01,2026-09-01
-PN06477IM,liquidez_intl_otros,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Otros (millones US$),261,2005-01-01,2026-09-01
-PN06478IM,liquidez_intl_total,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total (millones US$),261,2005-01-01,2026-09-01
-PN06484IM,oro_valuacion_contable,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Valuación Contable del Oro (US$ por onzas troy),261,2005-01-01,2026-09-01
-PN09495TM,bcrp_contado_compras,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras,225,2008-01-01,2026-09-01
-PN09496TM,bcrp_contado_ventas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Ventas,225,2008-01-01,2026-09-01
-PN09497TM,bcrp_contado_compras_netas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras Netas,225,2008-01-01,2026-09-01
-PN09500TM,bcrp_cdr_emision_neta,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Certificados de Depósito Reajustables del BCRP - Emisión Neta,225,2008-01-01,2026-09-01
-PN09506TM,bcrp_swap_venta_neto,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - SWAP Cambiarios del BCRP Venta - Pactado Neto,225,2008-01-01,2026-09-01
+PN01207PM,tc_interbancario_prom,mensual,tipo-cambio-reservas,Tipo de cambio - promedio del periodo (S/ por US$) - Interbancario - Promedio,382,1995-01-01,2026-10-01
+PN01216PM,tc_interbancario_fin,mensual,tipo-cambio-reservas,Tipo de cambio - fin de periodo (S/ por US$) - Interbancario - Promedio,382,1995-01-01,2026-10-01
+PN01259PM,tcr_multilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Multilateral,430,1991-01-01,2026-10-01
+PN01251PM,tcr_bilateral,mensual,tipo-cambio-reservas,Índice del tipo de cambio real (base 2009=100) - Bilateral,430,1991-01-01,2026-10-01
+PN00027MM,rin,mensual,tipo-cambio-reservas,Cuentas monetarias del Banco Central de Reserva del Perú - Reservas Internacionales Netas (millones US$),383,1994-12-01,2026-10-01
+PN06483IM,posicion_cambio,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio (millones US$),418,1992-01-01,2026-10-01
+PN01031MM,rin_variacion,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Variación de RIN,346,1998-01-01,2026-10-01
+PN01032MM,rin_var_op_cambiarias,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias,346,1998-01-01,2026-10-01
+PN01033MM,rin_var_compras_netas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa,346,1998-01-01,2026-10-01
+PN01034MM,rin_var_compras_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Compras,346,1998-01-01,2026-10-01
+PN01035MM,rin_var_ventas_mesa,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Compras Netas en Mesa - Ventas,346,1998-01-01,2026-10-01
+PN01036MM,rin_var_sector_publico,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Sector Público,346,1998-01-01,2026-10-01
+PN01039MM,rin_var_op_cambiarias_otros,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Operaciones Cambiarias - Otros,346,1998-01-01,2026-10-01
+PN01040MM,rin_var_resto,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones,346,1998-01-01,2026-10-01
+PN01041MM,rin_var_dep_intermediarios,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos de Intermediarios Financieros,346,1998-01-01,2026-10-01
+PN01045MM,rin_var_dep_publicos,mensual,tipo-cambio-reservas,Variación RIN del BCRP (millones US$) - Restos de Operaciones - Depósitos Públicos,346,1998-01-01,2026-10-01
+PN06479IM,rin_activos_brutos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Activos Internacionales (Reservas Brutas) (millones US$),418,1992-01-01,2026-10-01
+PN06480IM,rin_obligaciones_cp,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - RIN - Obligaciones Corto Plazo Internacionales (millones US$),262,2005-01-01,2026-10-01
+PN06482IM,posicion_cambio_oblig_residentes,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Posición de Cambio - Obligaciones Corto Plazo con Residentes (Neto) (millones US$),262,2005-01-01,2026-10-01
+PN06473IM,liquidez_intl_depositos,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Depósitos (millones US$),262,2005-01-01,2026-10-01
+PN06474IM,liquidez_intl_valores,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Valores (millones US$),262,2005-01-01,2026-10-01
+PN06475IM,liquidez_intl_oro_plata,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Oro y Plata (millones US$),262,2005-01-01,2026-10-01
+PN06476IM,liquidez_intl_fmi_bis_flar,mensual,tipo-cambio-reservas,"Liquidez internacional del BCRP - Liquidez Total - Suscripciones FMI, BIS y FLAR (millones US$)",262,2005-01-01,2026-10-01
+PN06477IM,liquidez_intl_otros,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total - Otros (millones US$),262,2005-01-01,2026-10-01
+PN06478IM,liquidez_intl_total,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Liquidez Total (millones US$),262,2005-01-01,2026-10-01
+PN06484IM,oro_valuacion_contable,mensual,tipo-cambio-reservas,Liquidez internacional del BCRP - Valuación Contable del Oro (US$ por onzas troy),262,2005-01-01,2026-10-01
+PN09495TM,bcrp_contado_compras,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras,226,2008-01-01,2026-10-01
+PN09496TM,bcrp_contado_ventas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Ventas,226,2008-01-01,2026-10-01
+PN09497TM,bcrp_contado_compras_netas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras Netas,226,2008-01-01,2026-10-01
+PN09500TM,bcrp_cdr_emision_neta,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Certificados de Depósito Reajustables del BCRP - Emisión Neta,226,2008-01-01,2026-10-01
+PN09506TM,bcrp_swap_venta_neto,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - SWAP Cambiarios del BCRP Venta - Pactado Neto,226,2008-01-01,2026-10-01
 PN38714BM,exportaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones,368,1996-01-01,2026-08-01
 PN38715BM,exportaciones_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos Tradicionales,176,2012-01-01,2026-08-01
 PN38716BM,exportaciones_no_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos no Tradicionales,176,2012-01-01,2026-08-01
@@ -84,14 +84,14 @@ PN38718BM,importaciones,mensual,sector-externo,Balanza comercial - valores FOB (
 PN38723BM,balanza_comercial,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Balanza Comercial,176,2012-01-01,2026-08-01
 PN38923BM,terminos_intercambio_indice,mensual,sector-externo,Términos de intercambio de comercio exterior (índice 2007 = 100) - Términos de Intercambio,368,1996-01-01,2026-08-01
 PN38926BM,terminos_intercambio_var12m,mensual,sector-externo,Términos de intercambio de comercio exterior (var% 12 meses) - Términos de Intercambio,356,1997-01-01,2026-08-01
-PN01652XM,cobre,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Cobre - LME (¢US$ por libras),321,2000-01-01,2026-09-01
-PN01654XM,oro,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Oro - LME (US$ por onzas troy),321,2000-01-01,2026-09-01
-PN01655XM,plata,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Plata - H. Harman (US$ por onzas troy),321,2000-01-01,2026-09-01
-PN01657XM,zinc,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Zinc - LME (¢US$ por libras),309,2001-01-01,2026-09-01
-PN01660XM,petroleo_wti,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Petróleo - WTI (US$ por barriles),321,2000-01-01,2026-09-01
+PN01652XM,cobre,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Cobre - LME (¢US$ por libras),322,2000-01-01,2026-10-01
+PN01654XM,oro,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Oro - LME (US$ por onzas troy),322,2000-01-01,2026-10-01
+PN01655XM,plata,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Plata - H. Harman (US$ por onzas troy),322,2000-01-01,2026-10-01
+PN01657XM,zinc,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Zinc - LME (¢US$ por libras),310,2001-01-01,2026-10-01
+PN01660XM,petroleo_wti,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Petróleo - WTI (US$ por barriles),322,2000-01-01,2026-10-01
 PN01129XM,embig_peru,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Diferencial de Rendimientos del Índice de Bonos de Mercados Emergentes (EMBIG) - Perú,242,2006-08-01,2026-09-01
 PN01137XM,embig_latam,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Latin EMBIG Países Latinoamericanos,242,2006-08-01,2026-09-01
-PN01142MM,igbvl,mensual,mercados,Bolsa de Valores de Lima - Índices Bursátiles - Índice General BVL (base 31/12/91 = 100),330,1999-01-01,2026-09-01
+PN01142MM,igbvl,mensual,mercados,Bolsa de Valores de Lima - Índices Bursátiles - Índice General BVL (base 31/12/91 = 100),331,1999-01-01,2026-10-01
 PN02204FM,ingresos_corrientes_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General,249,2006-01-01,2026-09-01
 PN02205FM,ingresos_tributarios_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios,249,2006-01-01,2026-09-01
 PN02221FM,gasto_no_financiero_gc,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros,381,1995-01-01,2026-09-01
@@ -104,10 +104,10 @@ PN31879GM,puestos_formales,mensual,empleo,Puestos de trabajo e ingresos del sect
 PN31885GM,masa_salarial_formal,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (millones S/),140,2015-01-01,2026-08-01
 PN31886GM,masa_salarial_formal_var12m,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (var.% 12 meses),128,2016-01-01,2026-08-01
 PN02124PM,rmv,mensual,empleo,Remuneraciones - Remuneración Mínima Vital - Nominal (S/),428,1991-01-01,2026-08-01
-PD12912AM,expectativa_inflacion_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de Inflación a 12 meses,297,2002-01-01,2026-09-01
-PD38048AM,expectativa_pbi_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de PBI a 12 meses,238,2006-12-01,2026-09-01
-PD38049AM,expectativa_tc_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de TC a 12 meses,238,2006-12-01,2026-09-01
-PD37981AM,expectativa_economia_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 12 meses,220,2008-06-01,2026-09-01
+PD12912AM,expectativa_inflacion_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de Inflación a 12 meses,298,2002-01-01,2026-10-01
+PD38048AM,expectativa_pbi_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de PBI a 12 meses,239,2006-12-01,2026-10-01
+PD38049AM,expectativa_tc_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de TC a 12 meses,239,2006-12-01,2026-10-01
+PD37981AM,expectativa_economia_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 12 meses,221,2008-06-01,2026-10-01
 PN02526AQ,pbi_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - PBI,186,1980-01-01,2026-04-01
 PN37939AQ,pbi_desest_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - PBI - desestacionalizado,77,2007-04-01,2026-04-01
 PN02517AQ,demanda_interna_var_trim,trimestral,actividad,Producto bruto interno por tipo de gasto (variaciones porcentuales reales anualizadas) - Demanda Interna,186,1980-01-01,2026-04-01
@@ -141,37 +141,37 @@ PM06175MA,rin_flujo_dep_sector_publico_anual,anual,tipo-cambio-reservas,Flujo de
 PM06176MA,rin_flujo_intereses_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Intereses Netos,17,2003-01-01,2019-01-01
 PM06177MA,rin_flujo_otros_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Otros Flujos,23,2003-01-01,2025-01-01
 PM06178MA,rin_flujo_total_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Total,66,1960-01-01,2025-01-01
-PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7430,1997-01-02,2026-11-02
-PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7438,1997-01-02,2026-11-02
-PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6939,1999-01-04,2026-10-30
-PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4954,1995-01-04,2026-11-02
-PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6939,1999-01-04,2026-10-30
-PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6940,1999-01-04,2026-10-30
-PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6940,1999-01-04,2026-10-30
-PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6458,1995-01-04,2026-11-02
-PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3199,1999-01-06,2026-11-02
-PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3332,1999-01-13,2026-11-02
-PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5924,2003-09-05,2026-11-03
-PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",7999,1995-04-03,2026-11-02
-PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1433,2021-05-10,2026-11-04
-PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5304,2005-05-13,2026-11-03
+PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7434,1997-01-02,2026-11-06
+PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7442,1997-01-02,2026-11-06
+PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6944,1999-01-04,2026-11-06
+PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4958,1995-01-04,2026-11-06
+PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6944,1999-01-04,2026-11-06
+PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6945,1999-01-04,2026-11-06
+PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6945,1999-01-04,2026-11-06
+PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6462,1995-01-04,2026-11-06
+PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3203,1999-01-06,2026-11-06
+PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3336,1999-01-13,2026-11-06
+PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5928,2003-09-05,2026-11-09
+PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",8003,1995-04-03,2026-11-06
+PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1436,2021-05-10,2026-11-09
+PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5307,2005-05-13,2026-11-06
 PD04709XD,embig_peru_diario,diaria,mercados,Tasas de interés: EMBIG (variación en pbs) - Spread - EMBIG Perú (pbs),7481,1998-01-01,2026-09-03
-PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5357,2006-01-02,2026-11-02
-PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7615,1997-01-14,2026-11-02
-PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7656,1997-01-02,2026-11-02
-PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7720,1997-01-02,2026-11-02
-PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7641,1997-01-02,2026-11-02
-PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1433,2021-05-10,2026-11-04
-PN07843NM,tasa_bancos_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
-PN07844NM,tasa_bancos_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
-PN07845NM,tasa_bancos_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,194,2010-08-01,2026-09-01
-PN07846NM,tasa_bancos_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
-PN07847NM,tasa_bancos_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
-PN07852NM,tasa_bancos_pyme_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
-PN07853NM,tasa_bancos_pyme_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
-PN07854NM,tasa_bancos_consumo_tarjeta_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Tarjeta de Crédito,194,2010-08-01,2026-09-01
-PN07855NM,tasa_bancos_consumo_prest_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Hasta 360 días,194,2010-08-01,2026-09-01
-PN07856NM,tasa_bancos_consumo_prest_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Más 360 días,194,2010-08-01,2026-09-01
+PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5361,2006-01-02,2026-11-06
+PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7619,1997-01-14,2026-11-06
+PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7660,1997-01-02,2026-11-06
+PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7724,1997-01-02,2026-11-06
+PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7645,1997-01-02,2026-11-06
+PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1436,2021-05-10,2026-11-09
+PN07843NM,tasa_bancos_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
+PN07844NM,tasa_bancos_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
+PN07845NM,tasa_bancos_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,195,2010-08-01,2026-10-01
+PN07846NM,tasa_bancos_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
+PN07847NM,tasa_bancos_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
+PN07852NM,tasa_bancos_pyme_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
+PN07853NM,tasa_bancos_pyme_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
+PN07854NM,tasa_bancos_consumo_tarjeta_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Tarjeta de Crédito,195,2010-08-01,2026-10-01
+PN07855NM,tasa_bancos_consumo_prest_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
+PN07856NM,tasa_bancos_consumo_prest_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
 PN07861NM,tasa_cmac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
 PN07862NM,tasa_cmac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
 PN07863NM,tasa_cmac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,195,2010-07-01,2026-09-01
@@ -184,49 +184,49 @@ PN07882NM,tasa_crac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés ac
 PN07883NM,tasa_crac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
 PN00541MM,credito_consumo_mn_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - MN - Consumo (millones S/)",309,2001-01-01,2026-09-01
 PN00544MM,credito_consumo_me_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - ME - Consumo (millones US$)",309,2001-01-01,2026-09-01
-PN01278PM,ipc_subyacente_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Subyacente,416,1992-02-01,2026-09-01
-PN01276PM,ipc_sin_alim_energia_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Sin Alimentos y Energía,416,1992-02-01,2026-09-01
-PN01296PM,ipc_sub_bienes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes,416,1992-02-01,2026-09-01
-PN01297PM,ipc_sub_bienes_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Alimentos y Bebidas,416,1992-02-01,2026-09-01
-PN01298PM,ipc_sub_bienes_textiles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Textiles y Calzado,416,1992-02-01,2026-09-01
-PN01299PM,ipc_sub_bienes_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Aparatos Electrodomésticos,416,1992-02-01,2026-09-01
-PN01300PM,ipc_sub_bienes_resto_industriales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Resto de Productos Industriales,416,1992-02-01,2026-09-01
-PN01301PM,ipc_sub_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios,416,1992-02-01,2026-09-01
-PN01302PM,ipc_sub_serv_comidas_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Comidas Fuera del Hogar,416,1992-02-01,2026-09-01
-PN01303PM,ipc_sub_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Educación,416,1992-02-01,2026-09-01
-PN01304PM,ipc_sub_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Salud,416,1992-02-01,2026-09-01
-PN01305PM,ipc_sub_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Alquileres,416,1992-02-01,2026-09-01
-PN01306PM,ipc_sub_serv_resto_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Resto de Servicios,416,1992-02-01,2026-09-01
-PN01308PM,ipc_nosub_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Alimentos,416,1992-02-01,2026-09-01
-PN01309PM,ipc_nosub_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Combustibles,416,1992-02-01,2026-09-01
-PN01310PM,ipc_nosub_transportes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Transportes,416,1992-02-01,2026-09-01
-PN01311PM,ipc_nosub_servicios_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Servicios Públicos,416,1992-02-01,2026-09-01
-PN01366PM,ipc_trans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Alimentos,416,1992-02-01,2026-09-01
-PN01367PM,ipc_trans_textil_calzado_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Textil y Calzado,416,1992-02-01,2026-09-01
-PN01368PM,ipc_trans_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Combustibles,416,1992-02-01,2026-09-01
-PN01369PM,ipc_trans_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Aparatos Electrodomésticos,416,1992-02-01,2026-09-01
-PN01370PM,ipc_trans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Otros Transables,416,1992-02-01,2026-09-01
-PN01372PM,ipc_notrans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Alimentos,416,1992-02-01,2026-09-01
-PN01373PM,ipc_notrans_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios,416,1992-02-01,2026-09-01
-PN01374PM,ipc_notrans_serv_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios Públicos,416,1992-02-01,2026-09-01
-PN01375PM,ipc_notrans_serv_personales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios Personales,416,1992-02-01,2026-09-01
-PN01376PM,ipc_notrans_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Salud,416,1992-02-01,2026-09-01
-PN01377PM,ipc_notrans_serv_transporte_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Transporte,416,1992-02-01,2026-09-01
-PN01378PM,ipc_notrans_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Educación,416,1992-02-01,2026-09-01
-PN01379PM,ipc_notrans_serv_comida_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Comida Fuera del Hogar,416,1992-02-01,2026-09-01
-PN01380PM,ipc_notrans_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Alquileres,416,1992-02-01,2026-09-01
-PN01381PM,ipc_notrans_serv_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios,416,1992-02-01,2026-09-01
-PN01382PM,ipc_notrans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Otros No Transables,416,1992-02-01,2026-09-01
-PN42107PM,ipc_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC,297,2002-01-01,2026-09-01
-PN42108PM,ipc_sae_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía,297,2002-01-01,2026-09-01
-PN42109PM,ipc_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC -  Var. % Promedio móvil 3 meses anualizada,293,2002-05-01,2026-09-01
-PN42110PM,ipc_sae_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía - Var. % Promedio móvil 3 meses anualizada,293,2002-05-01,2026-09-01
-PN09819PM,ipc_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Energía,418,1991-12-01,2026-09-01
-PN09820PM,ipc_no_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Subyacente,418,1991-12-01,2026-09-01
-PN09821PM,ipc_importado_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Importado,418,1991-12-01,2026-09-01
-PN09822PM,ipc_alim_bebidas_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Bebidas,405,1993-01-01,2026-09-01
-PN40410PM,ipc_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros vinculados a tipo de cambio, IPM y cotizaciones",309,2001-01-01,2026-09-01
-PN40411PM,ipc_no_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros no vinculados a tipo de cambio, IPM y cotizaciones",309,2001-01-01,2026-09-01
+PN01278PM,ipc_subyacente_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Subyacente,417,1992-02-01,2026-10-01
+PN01276PM,ipc_sin_alim_energia_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Sin Alimentos y Energía,417,1992-02-01,2026-10-01
+PN01296PM,ipc_sub_bienes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes,417,1992-02-01,2026-10-01
+PN01297PM,ipc_sub_bienes_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Alimentos y Bebidas,417,1992-02-01,2026-10-01
+PN01298PM,ipc_sub_bienes_textiles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Textiles y Calzado,417,1992-02-01,2026-10-01
+PN01299PM,ipc_sub_bienes_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Aparatos Electrodomésticos,417,1992-02-01,2026-10-01
+PN01300PM,ipc_sub_bienes_resto_industriales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Bienes - Resto de Productos Industriales,417,1992-02-01,2026-10-01
+PN01301PM,ipc_sub_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios,417,1992-02-01,2026-10-01
+PN01302PM,ipc_sub_serv_comidas_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Comidas Fuera del Hogar,417,1992-02-01,2026-10-01
+PN01303PM,ipc_sub_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Educación,417,1992-02-01,2026-10-01
+PN01304PM,ipc_sub_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Salud,417,1992-02-01,2026-10-01
+PN01305PM,ipc_sub_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Alquileres,417,1992-02-01,2026-10-01
+PN01306PM,ipc_sub_serv_resto_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación Subyacente - Servicios - Resto de Servicios,417,1992-02-01,2026-10-01
+PN01308PM,ipc_nosub_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Alimentos,417,1992-02-01,2026-10-01
+PN01309PM,ipc_nosub_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Combustibles,417,1992-02-01,2026-10-01
+PN01310PM,ipc_nosub_transportes_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Transportes,417,1992-02-01,2026-10-01
+PN01311PM,ipc_nosub_servicios_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación sectorial (variación porcentual) - Inflación No Subyacente - Servicios Públicos,417,1992-02-01,2026-10-01
+PN01366PM,ipc_trans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Alimentos,417,1992-02-01,2026-10-01
+PN01367PM,ipc_trans_textil_calzado_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Textil y Calzado,417,1992-02-01,2026-10-01
+PN01368PM,ipc_trans_combustibles_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Combustibles,417,1992-02-01,2026-10-01
+PN01369PM,ipc_trans_electrodomesticos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Aparatos Electrodomésticos,417,1992-02-01,2026-10-01
+PN01370PM,ipc_trans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos Transables - Otros Transables,417,1992-02-01,2026-10-01
+PN01372PM,ipc_notrans_alimentos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Alimentos,417,1992-02-01,2026-10-01
+PN01373PM,ipc_notrans_servicios_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios,417,1992-02-01,2026-10-01
+PN01374PM,ipc_notrans_serv_publicos_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios Públicos,417,1992-02-01,2026-10-01
+PN01375PM,ipc_notrans_serv_personales_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios Personales,417,1992-02-01,2026-10-01
+PN01376PM,ipc_notrans_serv_salud_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Salud,417,1992-02-01,2026-10-01
+PN01377PM,ipc_notrans_serv_transporte_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Transporte,417,1992-02-01,2026-10-01
+PN01378PM,ipc_notrans_serv_educacion_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Servicios de Educación,417,1992-02-01,2026-10-01
+PN01379PM,ipc_notrans_serv_comida_fuera_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Comida Fuera del Hogar,417,1992-02-01,2026-10-01
+PN01380PM,ipc_notrans_serv_alquileres_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Alquileres,417,1992-02-01,2026-10-01
+PN01381PM,ipc_notrans_serv_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Servicios - Otros Servicios,417,1992-02-01,2026-10-01
+PN01382PM,ipc_notrans_otros_var_mensual,mensual,precios,Índice de precios al consumidor Lima Metropolitana: clasificación transables - no transables (variación porcentual) - Productos No Transables - Otros No Transables,417,1992-02-01,2026-10-01
+PN42107PM,ipc_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC,298,2002-01-01,2026-10-01
+PN42108PM,ipc_sae_desest_indice,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía,298,2002-01-01,2026-10-01
+PN42109PM,ipc_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC -  Var. % Promedio móvil 3 meses anualizada,294,2002-05-01,2026-10-01
+PN42110PM,ipc_sae_desest_var3m_anualizada,mensual,precios,Índices de Precios al Consumidor Lima Metropolitana (Índice Dic.2021=100) - Desestacionalizados  - IPC Sin Alimentos y Energía - Var. % Promedio móvil 3 meses anualizada,294,2002-05-01,2026-10-01
+PN09819PM,ipc_alim_energia_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Energía,419,1991-12-01,2026-10-01
+PN09820PM,ipc_no_subyacente_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC No Subyacente,419,1991-12-01,2026-10-01
+PN09821PM,ipc_importado_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Importado,419,1991-12-01,2026-10-01
+PN09822PM,ipc_alim_bebidas_var12m,mensual,precios,Índice de precios Lima Metropolitana (var% 12 meses) - IPC Alimentos y Bebidas,406,1993-01-01,2026-10-01
+PN40410PM,ipc_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros vinculados a tipo de cambio, IPM y cotizaciones",310,2001-01-01,2026-10-01
+PN40411PM,ipc_no_vinculados_tc_var12m,mensual,precios,"Índice de precios Lima Metropolitana (var% 12 meses) - IPC rubros no vinculados a tipo de cambio, IPM y cotizaciones",310,2001-01-01,2026-10-01
 PN01755AM,pbi_agropecuario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario,392,1994-01-01,2026-08-01
 PN01756AM,pbi_agricola_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario - Agrícola,392,1994-01-01,2026-08-01
 PN01757AM,pbi_pecuario_indice,mensual,actividad,Producto bruto interno y demanda interna (índice 2007 = 100) - Agropecuario - Pecuario,392,1994-01-01,2026-08-01
@@ -629,41 +629,41 @@ RD17093DA,pea_ocupada_dpto_tacna_anual,anual,actividad,Población económicament
 RD17094DA,pea_ocupada_dpto_tumbes_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Tumbes,15,2007-01-01,2021-01-01
 RD17095DA,pea_ocupada_dpto_ucayali_anual,anual,actividad,Población económicamente activa ocupada (miles de personas) - Ucayali,15,2007-01-01,2021-01-01
 PD39598DA,pea_nacional_anual,anual,actividad,PBI y demografía - PEA (Miles Personas),100,1922-01-01,2021-01-01
-PD38045AM,expectativa_economia_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 3 meses,294,2002-04-01,2026-09-01
-PD38046AM,expectativa_sector_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 3 meses,292,2002-06-01,2026-09-01
-PD39752AM,expectativa_sector_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 12 meses,213,2009-01-01,2026-09-01
-PD39754AM,expectativa_mineria_hidrocarburos_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
-PD39755AM,expectativa_mineria_hidrocarburos_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
-PD39757AM,expectativa_mineria_hidrocarburos_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
-PD39758AM,expectativa_mineria_hidrocarburos_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Minería e Hidrocarburos,201,2010-01-01,2026-09-01
-PD39763AM,expectativa_manufactura_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Manufactura,201,2010-01-01,2026-09-01
-PD39764AM,expectativa_manufactura_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Manufactura,201,2010-01-01,2026-09-01
-PD39766AM,expectativa_manufactura_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Manufactura,201,2010-01-01,2026-09-01
-PD39767AM,expectativa_manufactura_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Manufactura,201,2010-01-01,2026-09-01
-PD39772AM,expectativa_construccion_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Construcción,201,2010-01-01,2026-09-01
-PD39773AM,expectativa_construccion_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Construcción,201,2010-01-01,2026-09-01
-PD39775AM,expectativa_construccion_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Construcción,201,2010-01-01,2026-09-01
-PD39776AM,expectativa_construccion_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Construcción,201,2010-01-01,2026-09-01
-PD39781AM,expectativa_comercio_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Comercio,201,2010-01-01,2026-09-01
-PD39782AM,expectativa_comercio_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Comercio,201,2010-01-01,2026-09-01
-PD39784AM,expectativa_comercio_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Comercio,201,2010-01-01,2026-09-01
-PD39785AM,expectativa_comercio_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Comercio,201,2010-01-01,2026-09-01
-PD39789AM,expectativa_servicios_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Servicios,201,2010-01-01,2026-09-01
-PD39790AM,expectativa_servicios_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Servicios,201,2010-01-01,2026-09-01
-PD39792AM,expectativa_servicios_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Servicios,201,2010-01-01,2026-09-01
-PD39793AM,expectativa_servicios_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Servicios,201,2010-01-01,2026-09-01
-PD39875AM,expectativa_zona_norte_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
-PD39876AM,expectativa_zona_norte_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
-PD39877AM,expectativa_zona_norte_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
-PD39878AM,expectativa_zona_norte_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
-PD39896AM,expectativa_zona_centro_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
-PD39897AM,expectativa_zona_centro_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
-PD39898AM,expectativa_zona_centro_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
-PD39899AM,expectativa_zona_centro_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
-PD39917AM,expectativa_zona_sur_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 3 meses,72,2020-10-01,2026-09-01
-PD39918AM,expectativa_zona_sur_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 12 meses,72,2020-10-01,2026-09-01
-PD39919AM,expectativa_zona_sur_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 3 meses,72,2020-10-01,2026-09-01
-PD39920AM,expectativa_zona_sur_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 12 meses,72,2020-10-01,2026-09-01
+PD38045AM,expectativa_economia_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas de la economía a 3 meses,295,2002-04-01,2026-10-01
+PD38046AM,expectativa_sector_3m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 3 meses,293,2002-06-01,2026-10-01
+PD39752AM,expectativa_sector_12m,mensual,expectativas,Expectativas empresariales totales - Índice de expectativas del sector a 12 meses,214,2009-01-01,2026-10-01
+PD39754AM,expectativa_mineria_hidrocarburos_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Minería e Hidrocarburos,202,2010-01-01,2026-10-01
+PD39755AM,expectativa_mineria_hidrocarburos_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Minería e Hidrocarburos,202,2010-01-01,2026-10-01
+PD39757AM,expectativa_mineria_hidrocarburos_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Minería e Hidrocarburos,202,2010-01-01,2026-10-01
+PD39758AM,expectativa_mineria_hidrocarburos_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Minería e Hidrocarburos,202,2010-01-01,2026-10-01
+PD39763AM,expectativa_manufactura_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Manufactura,202,2010-01-01,2026-10-01
+PD39764AM,expectativa_manufactura_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Manufactura,202,2010-01-01,2026-10-01
+PD39766AM,expectativa_manufactura_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Manufactura,202,2010-01-01,2026-10-01
+PD39767AM,expectativa_manufactura_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Manufactura,202,2010-01-01,2026-10-01
+PD39772AM,expectativa_construccion_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Construcción,202,2010-01-01,2026-10-01
+PD39773AM,expectativa_construccion_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Construcción,202,2010-01-01,2026-10-01
+PD39775AM,expectativa_construccion_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Construcción,202,2010-01-01,2026-10-01
+PD39776AM,expectativa_construccion_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Construcción,202,2010-01-01,2026-10-01
+PD39781AM,expectativa_comercio_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Comercio,202,2010-01-01,2026-10-01
+PD39782AM,expectativa_comercio_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Comercio,202,2010-01-01,2026-10-01
+PD39784AM,expectativa_comercio_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Comercio,202,2010-01-01,2026-10-01
+PD39785AM,expectativa_comercio_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Comercio,202,2010-01-01,2026-10-01
+PD39789AM,expectativa_servicios_economia_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 3 meses - Servicios,202,2010-01-01,2026-10-01
+PD39790AM,expectativa_servicios_sector_3m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 3 meses - Servicios,202,2010-01-01,2026-10-01
+PD39792AM,expectativa_servicios_economia_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas de la economía a 12 meses - Servicios,202,2010-01-01,2026-10-01
+PD39793AM,expectativa_servicios_sector_12m,mensual,expectativas,Expectativas empresariales sectoriales - Índice de expectativas del sector a 12 meses - Servicios,202,2010-01-01,2026-10-01
+PD39875AM,expectativa_zona_norte_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 3 meses,73,2020-10-01,2026-10-01
+PD39876AM,expectativa_zona_norte_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - La economía a 12 meses,73,2020-10-01,2026-10-01
+PD39877AM,expectativa_zona_norte_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 3 meses,73,2020-10-01,2026-10-01
+PD39878AM,expectativa_zona_norte_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Norte - Expectativas de - El sector a 12 meses,73,2020-10-01,2026-10-01
+PD39896AM,expectativa_zona_centro_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 3 meses,73,2020-10-01,2026-10-01
+PD39897AM,expectativa_zona_centro_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - La economía a 12 meses,73,2020-10-01,2026-10-01
+PD39898AM,expectativa_zona_centro_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 3 meses,73,2020-10-01,2026-10-01
+PD39899AM,expectativa_zona_centro_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Centro - Expectativas de - El sector a 12 meses,73,2020-10-01,2026-10-01
+PD39917AM,expectativa_zona_sur_economia_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 3 meses,73,2020-10-01,2026-10-01
+PD39918AM,expectativa_zona_sur_economia_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - La economía a 12 meses,73,2020-10-01,2026-10-01
+PD39919AM,expectativa_zona_sur_sector_3m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 3 meses,73,2020-10-01,2026-10-01
+PD39920AM,expectativa_zona_sur_sector_12m,mensual,expectativas,Expectativas empresariales por zonas - Zona Sur - Expectativas de - El sector a 12 meses,73,2020-10-01,2026-10-01
 PM05060AA,agro_trigo_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Trigo,21,2005-01-01,2025-01-01
 PM05061AA,agro_frijol_grano_seco_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Frijol Grano Seco,21,2005-01-01,2025-01-01
 PM05064AA,agro_maiz_choclo_miles_t_anual,anual,actividad,Producción agropecuaria por principales productos (miles de toneladas) - Agricola - Mercado Interno - Maíz Choclo,21,2005-01-01,2025-01-01
@@ -788,36 +788,36 @@ RD13041DM,mineria_dpto_zinc_pasco_t,mensual,actividad,Producción de productos m
 RD13042DM,mineria_dpto_zinc_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Puno (tm.f),306,2001-01-01,2026-06-01
 PD04723MM,tasa_creditos_regulacion_monetaria_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Créditos de Regulación Monetaria en MN,303,2001-08-01,2026-10-01
 PD04724MM,tasa_depositos_overnight_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Depósitos Overnight en MN,310,2001-01-01,2026-10-01
-PN06503OM,tasa_cd_bcrp_saldo,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Saldo CD BCRP,407,1992-06-01,2026-09-01
-PN06504OM,tasa_cd_bcrp_colocacion,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Colocación del mes CD BCRP,284,2003-01-01,2026-09-01
-PN06536OM,tasa_cd_bcrp_hasta3m,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 1 día - 3 meses - promedio ponderada,257,2003-01-01,2026-09-01
+PN06503OM,tasa_cd_bcrp_saldo,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Saldo CD BCRP,408,1992-06-01,2026-10-01
+PN06504OM,tasa_cd_bcrp_colocacion,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Colocación del mes CD BCRP,285,2003-01-01,2026-10-01
+PN06536OM,tasa_cd_bcrp_hasta3m,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 1 día - 3 meses - promedio ponderada,258,2003-01-01,2026-10-01
 PN06539OM,tasa_cd_bcrp_4a6m,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 4 - 6 meses - promedio ponderada,235,2003-01-01,2026-08-01
-PN06542OM,tasa_cd_bcrp_7m_1a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 7 meses - 1 año - promedio ponderada,213,2003-01-01,2026-09-01
-PN06545OM,tasa_cd_bcrp_1a_2a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - Mayor a 1 - 2 años - promedio ponderada,152,2003-01-01,2026-09-01
-PN06502OM,cd_bcrp_plazos_saldo_total,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Total - Saldo,412,1992-06-01,2026-09-01
-PN06487OM,cd_bcrp_hasta3m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 1 dia a 3 meses - Saldo,285,2003-01-01,2026-09-01
-PN06490OM,cd_bcrp_4a6m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 4 meses a 6 meses - Saldo,285,2003-01-01,2026-09-01
-PN06493OM,cd_bcrp_7m_1a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 7 meses a 1 año - Saldo,285,2003-01-01,2026-09-01
-PN06496OM,cd_bcrp_1a_2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 1 año a 2 años - Saldo,285,2003-01-01,2026-09-01
-PN06499OM,cd_bcrp_mas2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 2 años - Saldo,285,2003-01-01,2026-09-01
-PN06519TM,depositos_plazo_bcrp_saldo,mensual,politica-monetaria,Monto nominal de certificados y depósitos del Banco Central (millones S/) - Depósito a Plazo del BCRP - Saldo,201,2010-01-01,2026-09-01
-PN06525TM,repo_monedas_regular_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Regular - Saldo,201,2010-01-01,2026-09-01
-PN06528TM,repo_monedas_sustitucion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Sustitución - Saldo,201,2010-01-01,2026-09-01
-PN06531TM,repo_monedas_expansion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Expansión - Saldo,201,2010-01-01,2026-09-01
-PN06534TM,subasta_depositos_publicos_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Depósitos Públicos - Saldo,201,2010-01-01,2026-09-01
-PN01014MM,op_bcrp_sistema_financiero_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero,382,1994-12-01,2026-09-01
-PN01016MM,repo_valores_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Compra Temporal de Títulos Valores,349,1997-09-01,2026-09-01
-PN01017MM,repo_monedas_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Operaciones de Reporte de Monedas,382,1994-12-01,2026-09-01
-PN39863MM,repo_cartera_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte de cartera,105,2018-01-01,2026-09-01
-PN39864MM,repo_cartera_garantia_estatal_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte con garantía,105,2018-01-01,2026-09-01
-PN01019MM,valores_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP,345,1998-01-01,2026-09-01
-PN01020MM,cd_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos del BCRP (CDBCRP),345,1998-01-01,2026-09-01
-PN01023MM,cdr_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos Reajustables del BCRP (CDR),345,1998-01-01,2026-09-01
-PN01025MM,cdv_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos con Tasa variable del BCRP (CDV BCRP),345,1998-01-01,2026-09-01
-PN01027MM,depositos_intermediarios_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros,345,1998-01-01,2026-09-01
-PN01028MM,depositos_overnight_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Facilidades de Depósitos,345,1998-01-01,2026-09-01
-PN01029MM,depositos_intermediarios_otros_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Otras Depósitos,345,1998-01-01,2026-09-01
-PN01030MM,depositos_publicos_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos Públicos,345,1998-01-01,2026-09-01
+PN06542OM,tasa_cd_bcrp_7m_1a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - 7 meses - 1 año - promedio ponderada,214,2003-01-01,2026-10-01
+PN06545OM,tasa_cd_bcrp_1a_2a,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Plazo - Mayor a 1 - 2 años - promedio ponderada,153,2003-01-01,2026-10-01
+PN06502OM,cd_bcrp_plazos_saldo_total,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Total - Saldo,413,1992-06-01,2026-10-01
+PN06487OM,cd_bcrp_hasta3m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 1 dia a 3 meses - Saldo,286,2003-01-01,2026-10-01
+PN06490OM,cd_bcrp_4a6m_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 4 meses a 6 meses - Saldo,286,2003-01-01,2026-10-01
+PN06493OM,cd_bcrp_7m_1a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - 7 meses a 1 año - Saldo,286,2003-01-01,2026-10-01
+PN06496OM,cd_bcrp_1a_2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 1 año a 2 años - Saldo,286,2003-01-01,2026-10-01
+PN06499OM,cd_bcrp_mas2a_saldo,mensual,politica-monetaria,Saldo de los certificados de depósito del BCRP (millones S/) - CD BCRP - Plazo - mas de 2 años - Saldo,286,2003-01-01,2026-10-01
+PN06519TM,depositos_plazo_bcrp_saldo,mensual,politica-monetaria,Monto nominal de certificados y depósitos del Banco Central (millones S/) - Depósito a Plazo del BCRP - Saldo,202,2010-01-01,2026-10-01
+PN06525TM,repo_monedas_regular_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Regular - Saldo,202,2010-01-01,2026-10-01
+PN06528TM,repo_monedas_sustitucion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Sustitución - Saldo,202,2010-01-01,2026-10-01
+PN06531TM,repo_monedas_expansion_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Repo Monedas Expansión - Saldo,202,2010-01-01,2026-10-01
+PN06534TM,subasta_depositos_publicos_saldo,mensual,politica-monetaria,Repos del Banco Central y depósitos públicos (millones S/) - Depósitos Públicos - Saldo,202,2010-01-01,2026-10-01
+PN01014MM,op_bcrp_sistema_financiero_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero,383,1994-12-01,2026-10-01
+PN01016MM,repo_valores_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Compra Temporal de Títulos Valores,350,1997-09-01,2026-10-01
+PN01017MM,repo_monedas_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Sistema Financiero - Operaciones de Reporte de Monedas,383,1994-12-01,2026-10-01
+PN39863MM,repo_cartera_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte de cartera,106,2018-01-01,2026-10-01
+PN39864MM,repo_cartera_garantia_estatal_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Sistema Financiero - Operaciones de reporte con garantía,106,2018-01-01,2026-10-01
+PN01019MM,valores_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP,346,1998-01-01,2026-10-01
+PN01020MM,cd_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos del BCRP (CDBCRP),346,1998-01-01,2026-10-01
+PN01023MM,cdr_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos Reajustables del BCRP (CDR),346,1998-01-01,2026-10-01
+PN01025MM,cdv_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Valores del BCRP - Certificados Depósitos con Tasa variable del BCRP (CDV BCRP),346,1998-01-01,2026-10-01
+PN01027MM,depositos_intermediarios_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros,346,1998-01-01,2026-10-01
+PN01028MM,depositos_overnight_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Facilidades de Depósitos,346,1998-01-01,2026-10-01
+PN01029MM,depositos_intermediarios_otros_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos de Intermediarios Financieros - Otras Depósitos,346,1998-01-01,2026-10-01
+PN01030MM,depositos_publicos_bcrp_saldo,mensual,politica-monetaria,Fuentes de la emisión primaria (millones S/) - Saldos Depósitos Públicos,346,1998-01-01,2026-10-01
 PN07683NM,encaje_exigible_mn_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - MN (%) - MN - Tasa de encaje (%) - Exigible,298,2001-12-01,2026-09-01
 PN07684NM,encaje_efectivo_mn_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - MN (%) - MN - Tasa de encaje (%) - Efectivo,298,2001-12-01,2026-09-01
 PN07691NM,encaje_exigible_me_pct,mensual,politica-monetaria,Tasa de encaje de las empresas bancarias total - ME (%) - ME - Tasa de encaje (%) - Exigible,298,2001-12-01,2026-09-01
@@ -826,65 +826,65 @@ PN07682NM,encaje_excedente_mn_pct_tose,mensual,politica-monetaria,Encaje de las 
 PN07690NM,encaje_excedente_me_pct_tose,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - ME - Excedente / (Deficit) - % del TOSE,298,2001-12-01,2026-09-01
 PN07678NM,encaje_tose_mn,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - MN - TOSE (millones S/),298,2001-12-01,2026-09-01
 PN07685NM,encaje_tose_me,mensual,politica-monetaria,Encaje de las empresas bancarias (promedios diarios) - ME - TOSE (millones US$),298,2001-12-01,2026-09-01
-PN00493MM,tasa_encaje_bcrp,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de Encaje,416,1992-01-01,2026-08-01
-PN00486MM,emision_primaria_fin,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Fin de Periodo,417,1992-01-01,2026-09-01
-PN00489MM,emision_primaria_prom,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Promedio Mes,417,1992-01-01,2026-09-01
-PN00488MM,emision_primaria_fin_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Fin de Periodo,405,1993-01-01,2026-09-01
-PN00491MM,emision_primaria_prom_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Promedio Mes,405,1993-01-01,2026-09-01
-PN00483MM,emision_primaria_encaje,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Encaje,416,1992-01-01,2026-08-01
-PN00494MM,multiplicador_monetario,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Multiplicador Monetario,416,1992-01-01,2026-08-01
-PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6946,1999-01-04,2026-11-02
-PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4883,1997-09-22,2026-11-02
-PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6946,1999-01-04,2026-11-02
-PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4883,1997-09-22,2026-11-02
-PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),2999,1999-01-04,2026-11-02
-PN07801NM,tasa_bancos_corporativo_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,194,2010-08-01,2026-09-01
-PN07802NM,tasa_bancos_grandes_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
-PN07803NM,tasa_bancos_medianas_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
-PN07804NM,tasa_bancos_corporativo_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,194,2010-08-01,2026-09-01
-PN07805NM,tasa_bancos_grandes_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
-PN07806NM,tasa_bancos_medianas_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
-PN07841NM,tasa_bancos_corp_grandes_medianas_hasta360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",194,2010-08-01,2026-09-01
-PN07842NM,tasa_bancos_corp_grandes_medianas_mas360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",194,2010-08-01,2026-09-01
-PN07848NM,tasa_bancos_hipotecario_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Hipotecario,298,2001-12-01,2026-09-01
-PN07849NM,tasa_bancos_estructura_constante_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Promedio estructura constante,194,2010-08-01,2026-09-01
-PN07821NM,tasa_bancos_corporativo_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,194,2010-08-01,2026-09-01
-PN07822NM,tasa_bancos_grandes_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
-PN07823NM,tasa_bancos_medianas_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
-PN07824NM,tasa_bancos_corporativo_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,194,2010-08-01,2026-09-01
-PN07825NM,tasa_bancos_grandes_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,194,2010-08-01,2026-09-01
-PN07826NM,tasa_bancos_medianas_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,194,2010-08-01,2026-09-01
-PN07828NM,ftamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - FTAMEX,194,2010-08-01,2026-09-01
-PN07829NM,tasa_preferencial_corp_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,194,2010-08-01,2026-09-01
-PN07850NM,tasa_bancos_corp_grandes_medianas_hasta360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",194,2010-08-01,2026-09-01
-PN07851NM,tasa_bancos_corp_grandes_medianas_mas360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",194,2010-08-01,2026-09-01
-PN07857NM,tasa_bancos_hipotecario_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Hipotecario,298,2001-12-01,2026-09-01
-PN07858NM,tasa_bancos_estructura_constante_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Promedio estructura constante,194,2010-08-01,2026-09-01
-PN07810NM,tasa_pasiva_cuenta_corriente_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Cuenta Corriente,194,2010-08-01,2026-09-01
-PN07811NM,tasa_pasiva_ahorro_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Ahorro,416,1992-02-01,2026-09-01
-PN07812NM,tasa_pasiva_plazo_hasta30d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,194,2010-08-01,2026-09-01
-PN07813NM,tasa_pasiva_plazo_31a180d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,194,2010-08-01,2026-09-01
-PN07814NM,tasa_pasiva_plazo_181a360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,194,2010-08-01,2026-09-01
-PN07815NM,tasa_pasiva_plazo_mas360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,194,2010-08-01,2026-09-01
-PN07817NM,ftipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - FTIPMN,194,2010-08-01,2026-09-01
-PN07830NM,tasa_pasiva_cuenta_corriente_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Cuenta Corriente,194,2010-08-01,2026-09-01
-PN07831NM,tasa_pasiva_ahorro_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Ahorro,416,1992-02-01,2026-09-01
-PN07832NM,tasa_pasiva_plazo_hasta30d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,194,2010-08-01,2026-09-01
-PN07833NM,tasa_pasiva_plazo_31a180d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,194,2010-08-01,2026-09-01
-PN07834NM,tasa_pasiva_plazo_181a360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,194,2010-08-01,2026-09-01
-PN07835NM,tasa_pasiva_plazo_mas360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,194,2010-08-01,2026-09-01
-PN07837NM,ftipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - FTIPMEX,194,2010-08-01,2026-09-01
-PD31895MM,bono_soberano_10a_soles,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en S/),257,2005-05-01,2026-09-01
-PD31896MM,bono_soberano_10a_usd,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en US$),207,2009-07-01,2026-09-01
+PN00493MM,tasa_encaje_bcrp,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de Encaje,417,1992-01-01,2026-09-01
+PN00486MM,emision_primaria_fin,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Fin de Periodo,418,1992-01-01,2026-10-01
+PN00489MM,emision_primaria_prom,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Emisión Primaria Promedio Mes,418,1992-01-01,2026-10-01
+PN00488MM,emision_primaria_fin_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Fin de Periodo,406,1993-01-01,2026-10-01
+PN00491MM,emision_primaria_prom_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Promedio Mes,406,1993-01-01,2026-10-01
+PN00483MM,emision_primaria_encaje,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Encaje,417,1992-01-01,2026-09-01
+PN00494MM,multiplicador_monetario,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Multiplicador Monetario,417,1992-01-01,2026-09-01
+PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6950,1999-01-04,2026-11-06
+PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4887,1997-09-22,2026-11-06
+PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6950,1999-01-04,2026-11-06
+PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4887,1997-09-22,2026-11-06
+PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),3003,1999-01-04,2026-11-06
+PN07801NM,tasa_bancos_corporativo_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,195,2010-08-01,2026-10-01
+PN07802NM,tasa_bancos_grandes_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,195,2010-08-01,2026-10-01
+PN07803NM,tasa_bancos_medianas_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,195,2010-08-01,2026-10-01
+PN07804NM,tasa_bancos_corporativo_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,195,2010-08-01,2026-10-01
+PN07805NM,tasa_bancos_grandes_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,195,2010-08-01,2026-10-01
+PN07806NM,tasa_bancos_medianas_empresas_mas360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,195,2010-08-01,2026-10-01
+PN07841NM,tasa_bancos_corp_grandes_medianas_hasta360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",195,2010-08-01,2026-10-01
+PN07842NM,tasa_bancos_corp_grandes_medianas_mas360_mn,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",195,2010-08-01,2026-10-01
+PN07848NM,tasa_bancos_hipotecario_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Hipotecario,299,2001-12-01,2026-10-01
+PN07849NM,tasa_bancos_estructura_constante_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Promedio estructura constante,195,2010-08-01,2026-10-01
+PN07821NM,tasa_bancos_corporativo_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,195,2010-08-01,2026-10-01
+PN07822NM,tasa_bancos_grandes_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,195,2010-08-01,2026-10-01
+PN07823NM,tasa_bancos_medianas_empresas_hasta360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,195,2010-08-01,2026-10-01
+PN07824NM,tasa_bancos_corporativo_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Corporativos,195,2010-08-01,2026-10-01
+PN07825NM,tasa_bancos_grandes_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Grandes Empresas,195,2010-08-01,2026-10-01
+PN07826NM,tasa_bancos_medianas_empresas_mas360_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Préstamos Mayor a 360 días - Medianas Empresas,195,2010-08-01,2026-10-01
+PN07828NM,ftamex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - FTAMEX,195,2010-08-01,2026-10-01
+PN07829NM,tasa_preferencial_corp_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Activas - Preferencial Corporativa a 90 días,195,2010-08-01,2026-10-01
+PN07850NM,tasa_bancos_corp_grandes_medianas_hasta360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Hasta 360 días",195,2010-08-01,2026-10-01
+PN07851NM,tasa_bancos_corp_grandes_medianas_mas360_me,mensual,tasas,"Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Corporativo, Grandes y Medianas Empresas - Préstamos - Más 360 días",195,2010-08-01,2026-10-01
+PN07857NM,tasa_bancos_hipotecario_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Hipotecario,299,2001-12-01,2026-10-01
+PN07858NM,tasa_bancos_estructura_constante_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Promedio estructura constante,195,2010-08-01,2026-10-01
+PN07810NM,tasa_pasiva_cuenta_corriente_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Cuenta Corriente,195,2010-08-01,2026-10-01
+PN07811NM,tasa_pasiva_ahorro_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Ahorro,417,1992-02-01,2026-10-01
+PN07812NM,tasa_pasiva_plazo_hasta30d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,195,2010-08-01,2026-10-01
+PN07813NM,tasa_pasiva_plazo_31a180d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,195,2010-08-01,2026-10-01
+PN07814NM,tasa_pasiva_plazo_181a360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,195,2010-08-01,2026-10-01
+PN07815NM,tasa_pasiva_plazo_mas360d_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,195,2010-08-01,2026-10-01
+PN07817NM,ftipmn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Pasivas - FTIPMN,195,2010-08-01,2026-10-01
+PN07830NM,tasa_pasiva_cuenta_corriente_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Cuenta Corriente,195,2010-08-01,2026-10-01
+PN07831NM,tasa_pasiva_ahorro_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Ahorro,417,1992-02-01,2026-10-01
+PN07832NM,tasa_pasiva_plazo_hasta30d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - Hasta 30 días,195,2010-08-01,2026-10-01
+PN07833NM,tasa_pasiva_plazo_31a180d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 31 - 180 días,195,2010-08-01,2026-10-01
+PN07834NM,tasa_pasiva_plazo_181a360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 181 - 360 días,195,2010-08-01,2026-10-01
+PN07835NM,tasa_pasiva_plazo_mas360d_me,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - Plazos (días) - 360 a más,195,2010-08-01,2026-10-01
+PN07837NM,ftipmex,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en ME (términos efectivos anuales) - Pasivas - FTIPMEX,195,2010-08-01,2026-10-01
+PD31895MM,bono_soberano_10a_soles,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en S/),258,2005-05-01,2026-10-01
+PD31896MM,bono_soberano_10a_usd,mensual,tasas,Tasas de interés de bonos del gobierno peruano - Rendimiento del Bono del gobierno peruano a 10 años (en US$),208,2009-07-01,2026-10-01
 PN01124MM,tasa_bonos_tesoro_hasta5a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Hasta 5 años,227,2002-01-01,2026-09-01
 PN01125MM,tasa_bonos_tesoro_5a10a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 5 hasta 10 años,211,2004-03-01,2026-09-01
 PN01126MM,tasa_bonos_tesoro_10a15a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 10 hasta 15 años,205,2005-07-01,2026-09-01
 PN01127MM,tasa_bonos_tesoro_15a20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 15 hasta 20 años,206,2006-05-01,2026-09-01
 PN01128MM,tasa_bonos_tesoro_mas20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Más de 20 años,209,2007-07-01,2026-09-01
-PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7329,1995-04-03,2026-11-02
-PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6003,2002-08-01,2026-11-02
-PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3143,2012-12-31,2026-11-02
-PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4285,2009-07-30,2026-11-03
+PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7333,1995-04-03,2026-11-06
+PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6007,2002-08-01,2026-11-06
+PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3147,2012-12-31,2026-11-06
+PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4288,2009-07-30,2026-11-06
 PN00496MM,credito_privado_mn_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito MN (millones S/),417,1992-01-01,2026-09-01
 PN00499MM,credito_privado_me_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito ME (millones US$),417,1992-01-01,2026-09-01
 PN00498MM,credito_privado_mn_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Crédito MN,405,1993-01-01,2026-09-01

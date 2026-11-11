@@ -1,0 +1,243 @@
+<!-- Extensión 20_amplitud (KEY amplitud): % de rubros sobre 3 %, entre 1 % y 3 % y bajo 1 %. Datos: src/inflacion_extra/20_amplitud.py.
+     Fuentes de los textos: docs/inflacion_extra/permanentes_fuentes.md. -->
+<style>
+/* Tramos de las secciones permanentes (mismas ideas que el mapa de calor): por encima de 3 % en morado,
+   dentro de 1 % a 3 % en gris, por debajo de 1 % en azul. Se distinguen también por luminosidad en ambos temas. */
+:root { --xp-up: #876baa; --xp-in: #c9ccd2; --xp-dn: #476399; }
+:root[data-theme="dark"] { --xp-up: #b39ddb; --xp-in: #747a92; --xp-dn: #3d5aa8; }
+.xp-chips { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink2); }
+.xp-chips li { border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px 2px 8px; display: inline-flex; gap: 6px; align-items: center; }
+.xp-chips li b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.xp-text { margin: 10px 0 0; color: var(--ink2); font-size: 14px; max-width: 80ch; }
+.xp-text b { color: var(--ink); }
+.xp-edu { margin-top: 12px; }
+</style>
+<script>
+(function () {
+  const A = XD.amplitud;
+  if (!A) return;
+  const ID = 'amp';
+  let mode = 'n';   // 'n' = por número de rubros; 'w' = ponderado por peso en la canasta
+  const hasW = !!(A.w_hi && A.w_hi.some(v => v != null));
+  const FLOOR = '2002-01';
+  const LAYERS = () => mode === 'w'
+    ? [{k: 'w_hi', label: 'Por encima de 3%', color: 'var(--xp-up)'}, {k: 'w_mid', label: 'Entre 1% y 3%', color: 'var(--xp-in)'}, {k: 'w_lo', label: 'Por debajo de 1%', color: 'var(--xp-dn)'}]
+    : [{k: 'hi', label: 'Por encima de 3%', color: 'var(--xp-up)'}, {k: 'mid', label: 'Entre 1% y 3%', color: 'var(--xp-in)'}, {k: 'lo', label: 'Por debajo de 1%', color: 'var(--xp-dn)'}];
+  const av = (k, i) => (A[k] ? A[k][i] : null) ?? null;
+  const cnt = v => v == null ? null : Math.round(v * A.n / 100);
+  const pc0 = v => v == null ? '—' : fx(v, 0) + '%';
+  const REFS = [];
+  if (A.avg_all != null) REFS.push({v: A.avg_all, dash: '1.5 3', label: `Promedio ${A.avg_all_from}–${A.avg_all_to}`});
+  if (A.avg_hi_near != null) REFS.push({v: A.avg_hi_near, dash: '6 4', label: 'Promedio con inflación total entre 1.5% y 2.5%'});
+  // Posición frente a una referencia: margen de 8 puntos (con 13 rubros, uno vale unos 7.7).
+  const vs = (v, ref) => v - ref >= 8 ? 'por encima' : ref - v >= 8 ? 'por debajo' : 'cerca';
+
+  function visible() {
+    const key = mode === 'w' ? 'w_hi' : 'hi';
+    const first = A[key].findIndex(v => v != null), last = A[key].map(v => v != null).lastIndexOf(true);
+    const a = Math.max(first, idxOf(range.start), idxOf(FLOOR));
+    const out = [];
+    for (let i = a; i <= last; i++) out.push(i);
+    return out;
+  }
+
+  function stackChart(box, idx, layers) {
+    box.replaceChildren();
+    const W = box.clientWidth, n = idx.length;
+    if (!W || n < 2) return;
+    const m = {l: 48, r: 14, t: 12, b: 26}, H = 280, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const x = i => m.l + (i - idx[0]) * pw / (n - 1);
+    const y = v => m.t + (100 - v) / 100 * ph;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Porcentaje de rubros del IPC según su inflación de 12 meses: por encima de 3%, entre 1% y 3% y por debajo de 1%'}, box);
+    drawYGrid(svg, [0, 25, 50, 75, 100], y, m.l, m.l + pw, t => t + '%');
+    drawXTicks(svg, timeTicks(idx.map(i => MONTHS[i]), pw), c => x(idx[0] + c), H - 7);
+    // Áreas apiladas: de abajo hacia arriba en el orden de `layers`. Escalones a mitad de mes (dato mensual).
+    const half = pw / (n - 1) / 2, cx = v => Math.max(m.l, Math.min(m.l + pw, v));
+    let base = idx.map(() => 0);
+    layers.forEach(L => {
+      const top = idx.map((i, j) => { const v = av(L.k, i); return v == null ? null : base[j] + v; });
+      let d = '', run = [];
+      const flush = () => {
+        if (!run.length) return;
+        let up = '', dn = [];
+        run.forEach((j, q) => {
+          const xa = cx(x(idx[j]) - half), xb = cx(x(idx[j]) + half);
+          up += (q ? 'L' : 'M') + xa + ',' + y(top[j]) + 'L' + xb + ',' + y(top[j]);
+          dn.unshift(xb + ',' + y(base[j]), xa + ',' + y(base[j]));
+        });
+        d += up + 'L' + dn.join('L') + 'Z';
+        run = [];
+      };
+      top.forEach((v, j) => { if (v == null) flush(); else run.push(j); });
+      flush();
+      svgEl('path', {d, fill: L.color}, svg);
+      base = top.map((v, j) => v == null ? base[j] : v);
+    });
+    // Referencias de esta misma medida (los valores van en la leyenda): promedio de toda la muestra y promedio con la
+    // inflación total cerca del centro de la meta. Halo del color de fondo para que se lean sobre las áreas.
+    if (mode === 'n') REFS.forEach(r => {
+      const yy = y(r.v);
+      svgEl('line', {x1: m.l, x2: m.l + pw, y1: yy, y2: yy, stroke: 'var(--surface)', 'stroke-width': 4, 'stroke-opacity': 0.7}, svg);
+      svgEl('line', {x1: m.l, x2: m.l + pw, y1: yy, y2: yy, stroke: 'var(--ink)', 'stroke-width': 1.5, 'stroke-dasharray': r.dash}, svg);
+    });
+    const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+    const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+      'aria-label': 'Amplitud de la inflación; use las flechas para recorrer los meses'}, svg);
+    let cur = null;
+    const show = (i, evt) => {
+      i = Math.max(idx[0], Math.min(idx[n - 1], i)); cur = i;
+      cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+      const rows = layers.slice().reverse().map(L => ({value: pc0(av(L.k, i)), color: L.color, sq: true,
+        label: L.label + (mode === 'n' && av(L.k, i) != null ? ` (${cnt(av(L.k, i))} de ${A.n} rubros)` : mode === 'w' ? ' (peso en la canasta)' : '')}));
+      rows.push({value: pct(val('tot12', i)), label: 'Inflación total (12 meses)'});
+      const [ax, ay] = anchorOf(evt, cross);
+      showTip(ax, ay, mLabel(MONTHS[i]), rows);
+    };
+    const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); };
+    hit.addEventListener('pointermove', evt => { const r = svg.getBoundingClientRect(); show(idx[0] + Math.round((evt.clientX - r.left - m.l) / pw * (n - 1)), evt); });
+    hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+    hit.addEventListener('focus', () => show(cur == null ? idx[n - 1] : cur, null));
+    hit.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault(); show((cur == null ? idx[n - 1] : cur) + (e.key === 'ArrowRight' ? 1 : -1), null);
+    });
+  }
+
+  function fillTable() {
+    const wrap = document.getElementById(ID + '-tb');
+    wrap.replaceChildren();
+    const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    const head = ['Mes', 'Rubros por encima de 3%', 'Entre 1% y 3%', 'Por debajo de 1%'];
+    if (hasW) head.push('Peso por encima de 3%', 'Peso entre 1% y 3%', 'Peso por debajo de 1%');
+    head.push('Inflación total');
+    head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+    visible().slice().reverse().forEach(i => {
+      const row = htmlEl('tr', null, tb);
+      const cells = [mLabel(MONTHS[i])].concat(['hi', 'mid', 'lo'].map(k => av(k, i) == null ? '—' : `${cnt(av(k, i))} (${pc0(av(k, i))})`));
+      if (hasW) cells.push(...['w_hi', 'w_mid', 'w_lo'].map(k => pc0(av(k, i))));
+      cells.push(pct(val('tot12', i)));
+      cells.forEach(c => htmlEl('td', {text: c}, row));
+    });
+  }
+
+  function textNow() {
+    const li = idxOf(A.last_m), hi = av('hi', li), mid = av('mid', li), lo = av('lo', li);
+    const k = D.kpi.tot12, t = k ? k.v : val('tot12', li);
+    const above = A.cur.filter(r => r.v > A.hi_t);
+    let s = `En ${mLabel(A.last_m)}, <b>${cnt(hi)} de los ${A.n} rubros</b> (${pc0(hi)}) tenían una inflación de 12 meses mayor a 3%, ` +
+      `${cnt(mid)} estaban entre 1% y 3% y ${cnt(lo)} por debajo de 1%. `;
+    if (A.hi_yago != null) s += `Un año antes, ${cnt(A.hi_yago)} de ${A.n} ${cnt(A.hi_yago) === 1 ? 'estaba' : 'estaban'} por encima de 3%. `;
+    const wi = hasW ? A.w_hi.map(v => v != null).lastIndexOf(true) : -1;
+    if (wi >= 0) s += `Por su peso en la canasta, los rubros por encima de 3% suman el ${pc0(av('w_hi', wi))} del IPC (${mLabel(MONTHS[wi])}). `;
+    if (above.length && above.length <= 6) s += 'Por encima de 3%: ' + above.map(r => `${r.label.toLowerCase()} (${pct(r.v, 1)})`).join(', ') + '. ';
+    if (A.avg_all != null && A.avg_hi_near != null) {
+      const a = vs(hi, A.avg_hi_near), b = vs(hi, A.avg_all);
+      const word = p => p + ' de';
+      const rub = d => Math.round(Math.abs(d) / (100 / A.n));   // diferencia expresada en rubros
+      s += `Con esta medida de 13 grupos (distinta de la del BCRP), el ${pc0(hi)} actual está ${word(a)} su promedio en los ${A.n_near} meses con la inflación total entre 1.5% y 2.5% (${pc0(A.avg_hi_near)}) ` +
+        `y ${word(b)} su promedio de ${A.avg_all_from}–${A.avg_all_to} (${pc0(A.avg_all)}), que incluye años de inflación más alta. ` +
+        'Se cuenta como «cerca» una diferencia menor a 8 puntos, lo que vale un rubro (cada uno es la treceava parte, unos 7.7 puntos). ';
+      const high = t != null && t > T_NOW.hi, slim = rub(hi - A.avg_all) <= 1;
+      if (a === 'por encima' && b === 'por encima') s += slim
+        ? `El alza alcanza a más rubros que lo habitual con la inflación cerca de 2%; frente al promedio de largo plazo la diferencia es de un rubro, apenas sobre el margen.`
+        : 'El alza alcanza a más rubros que lo habitual en ambas comparaciones: es más amplia de lo usual.';
+      else if (a === 'por encima') s += 'El alza alcanza a más rubros que cuando la inflación está cerca de 2%, pero no a más que el promedio de largo plazo.';
+      else if (a === 'cerca') s += high ? 'La inflación total está sobre el rango meta, pero la proporción de rubros que suben más de 3% es la habitual con la inflación cerca de 2%: el alza se concentra en pocos rubros.'
+        : 'La proporción es la habitual con la inflación cerca de 2%.';
+      else s += 'Pocos rubros suben más de 3%: menos que lo habitual incluso con la inflación cerca de 2%.';
+    }
+    return s;
+  }
+
+  const html = `
+  <div class="section-title">¿Inflación generalizada o concentrada?</div>
+  <figure class="card" style="margin:0" id="${ID}-card">
+    <div class="card-head">
+      <div>
+        <h2>Qué parte de la canasta sube más rápido que la meta</h2>
+        <p>De los ${A.n} rubros en que se divide el IPC en la clasificación sectorial del BCRP (los del mapa de calor con sangría, que juntos forman toda la canasta), cuántos tienen una inflación de 12 meses por encima de 3%, entre 1% y 3% y por debajo de 1%. Si muchos rubros están por encima, la inflación es generalizada; si son pocos, se concentra en algunos precios.</p>
+      </div>
+      <div class="card-tools">
+        ${hasW ? '<div class="seg" id="' + ID + '-mode" role="group" aria-label="Forma de contar"><button type="button" data-m="n" aria-pressed="true">Número de rubros</button><button type="button" data-m="w" aria-pressed="false">Peso en la canasta</button></div>' : ''}
+        <button class="btn" id="${ID}-btn" type="button">Ver tabla</button>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--xp-up)"></i>Por encima de 3%</span>
+      <span><i class="sw" style="background:var(--xp-in);box-shadow:inset 0 0 0 1px var(--border)"></i>Entre 1% y 3%${T_NOW.lo === 1 && T_NOW.hi === 3 ? ' (rango meta actual)' : ''}</span>
+      <span><i class="sw" style="background:var(--xp-dn)"></i>Por debajo de 1%</span>
+      ${REFS.map(r => `<span class="${ID}-legref"><svg width="22" height="10" aria-hidden="true"><path d="M1 5h20" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="${r.dash}"/></svg>${r.label}: ${pc0(r.v)}</span>`).join('')}
+    </div>
+    <div class="chart" id="${ID}-ch"></div>
+    <p class="xp-text" id="${ID}-txt"></p>
+    <div class="panel-title">Los ${A.n} rubros en ${mLabel(A.last_m)}, inflación de 12 meses</div>
+    <ul class="xp-chips" id="${ID}-chips"></ul>
+    <div class="table-wrap" id="${ID}-tb" hidden></div>
+    <p class="note" id="${ID}-note"></p>
+  </figure>`;
+
+  registerSection({tab: 'tablero', id: 'amplitud', order: 20, html, render() {
+    const card = document.getElementById(ID + '-card');
+    if (!card) return;
+    stackChart(document.getElementById(ID + '-ch'), visible(), LAYERS());
+    document.querySelectorAll('.' + ID + '-legref').forEach(e => { e.hidden = mode !== 'n'; });
+    document.getElementById(ID + '-txt').innerHTML = textNow();   // solo cifras y etiquetas propias, sin texto externo
+    const ul = document.getElementById(ID + '-chips');
+    ul.replaceChildren();
+    A.cur.forEach(r => {
+      const li = htmlEl('li', null, ul);
+      const sw = htmlEl('i', {cls: 'sw'}, li);
+      sw.style.background = r.v > A.hi_t ? 'var(--xp-up)' : r.v < A.lo_t ? 'var(--xp-dn)' : 'var(--xp-in)';
+      if (r.v >= A.lo_t && r.v <= A.hi_t) sw.style.boxShadow = 'inset 0 0 0 1px var(--border)';
+      li.appendChild(document.createTextNode(r.label));
+      htmlEl('b', {text: pct(r.v, 1)}, li);
+      if (r.w != null) htmlEl('span', {text: '· peso ' + fx(r.w, 1) + '%'}, li);
+    });
+    const idx = visible();
+    document.getElementById(ID + '-note').textContent =
+      `Desde ${mLabel(MONTHS[idx[0]])}. Los tramos son fijos (1% y 3%) en todo el periodo; hasta enero de 2007 el rango meta era de 1.5% a 3.5%. ` +
+      (mode === 'n' ? `Cada rubro cuenta igual aunque pese distinto en la canasta: cada uno vale unos ${fx(100 / A.n, 0)} puntos. ` : `Ponderado con los pesos de cada rubro en la canasta${A.w_src ? ' (' + A.w_src + ')' : ''}. `) +
+      'En su Reporte de Inflación de junio de 2026, el BCRP señaló que su indicador de 188 rubros estaba en un nivel cercano al observado con la inflación alrededor del centro del rango meta y que sus indicadores de tendencia sugerían presiones acotadas (más detalle en «Episodio actual»). ' +
+      'Las rayas son promedios de la proporción de rubros por encima de 3% con esta misma medida. Es una medida propia de 13 grupos, distinta del indicador del BCRP en su Reporte de Inflación, que usa todos los rubros del IPC (188 en la base actual): sus cifras y promedios no coinciden con estos. ' +
+      'La variación de 12 meses de cada rubro se calcula encadenando sus variaciones mensuales (BCRPData).';
+    if (!document.getElementById(ID + '-tb').hidden) fillTable();
+  }});
+
+  // Controles propios (los botones del script principal se enlazan antes de montar las extensiones).
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('#' + ID + '-btn, #' + ID + '-mode button');
+    if (!b) return;
+    if (b.id === ID + '-btn') {
+      const wrap = document.getElementById(ID + '-tb'), open = wrap.hidden;
+      if (open) fillTable();
+      wrap.hidden = !open;
+      b.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+      return;
+    }
+    mode = b.dataset.m;
+    b.parentNode.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    const s = EXTRA.sections.find(z => z.id === 'amplitud');
+    if (s) s.render();
+  });
+  // El filtro de periodo del tablero solo redibuja sus propios gráficos: este también lo sigue.
+  document.getElementById('range').addEventListener('click', e => {
+    if (!e.target.closest('button') || tab !== 'tablero') return;
+    const s = EXTRA.sections.find(z => z.id === 'amplitud');
+    if (s) runSafe(() => s.render(), 'amplitud');
+  });
+
+  // ---------- Aprende ----------
+  const li = idxOf(A.last_m);
+  registerSection({tab: 'aprende', id: 'amplitud-ap', order: 20, html: `
+  <div class="edu xp-edu"><section id="ap-amplitud">
+    <div class="kicker">Para leer el tablero · Amplitud</div>
+    <h2>¿Inflación generalizada o concentrada?</h2>
+    <p>La inflación de 12 meses resume los precios de muchos bienes y servicios. Puede subir porque casi todos suben más rápido o porque unos pocos rubros suben mucho, por ejemplo los combustibles o algunos alimentos. Para distinguir un caso del otro se cuenta qué parte de la canasta tiene una inflación por encima de cierto umbral.</p>
+    <p>El BCRP publica en su Reporte de Inflación el porcentaje de los rubros del IPC (188 en la base actual) con una variación de 12 meses mayor a 3%, y lo compara con su promedio de largo plazo y con su promedio en los periodos en que la inflación estuvo alrededor de 2%. Si la inflación sube pero ese porcentaje se mantiene cerca de lo habitual, el alza se concentra en pocos rubros.</p>
+    <p>En el tablero se usa la misma idea con los ${A.n} rubros de la clasificación sectorial que el BCRP publica en su base de datos: es un indicador propio y más grueso, porque cada rubro agrupa muchos productos, así que sus cifras no coinciden con las del BCRP. En ${mLabel(A.last_m)}, <span class="n">${cnt(av('hi', li))} de ${A.n}</span> estaban por encima de 3%.</p>
+    <ol class="refs">
+      <li>BCRP, <i>Reporte de Inflación, junio 2026</i>, párrafo 100 y gráfico 91 («Porcentaje de rubros del IPC con variación interanual de precios mayor a 3%»). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/junio/reporte-de-inflacion-junio-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+    </ol>
+  </section></div>`});
+})();
+</script>

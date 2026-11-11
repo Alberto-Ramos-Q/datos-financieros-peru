@@ -1,0 +1,192 @@
+<!-- Extensión 22_meta_hist (KEY meta_hist): cumplimiento de la meta por año y rachas fuera del rango.
+     Datos: src/inflacion_extra/22_meta_hist.py. Fuentes: docs/inflacion_extra/permanentes_fuentes.md. -->
+<style>
+.mh-runs td:nth-child(1) { white-space: normal; }
+.mh-runs tr.open td { font-weight: 600; color: var(--ink); }
+.mh-runs tr.ref td { color: var(--muted); }
+.mh-runs tr.sep td { color: var(--ink2); font-weight: 600; background: var(--wash); white-space: normal; text-align: left; }
+.mh-tag { display: inline-flex; align-items: center; gap: 6px; }
+</style>
+<script>
+(function () {
+  const M = XD.meta_hist;
+  if (!M) return;
+  const ID = 'mh';
+  const ST = {'1': 'Por encima del rango', '-1': 'Por debajo del rango', '0': 'Dentro del rango'};
+  const STS = {'1': 'Por encima', '-1': 'Por debajo', '0': 'Dentro'};
+  const STC = {'1': 'var(--xp-up)', '-1': 'var(--xp-dn)', '0': 'var(--xp-in)'};
+  const SIDE = {'1': 'por encima', '-1': 'por debajo', '0': 'dentro'};
+  const ORD = ['', 'más larga', 'segunda más larga', 'tercera más larga', 'cuarta más larga', 'quinta más larga', 'sexta más larga',
+    'séptima más larga', 'octava más larga', 'novena más larga', 'décima más larga'];
+  const meses = n => n + (n === 1 ? ' mes' : ' meses');
+  const REG = mLabel(M.reg_m);   // inicio de la meta vigente (2% ± 1, evaluación continua)
+  const lastY = M.years[M.years.length - 1];
+  const firstReg = M.years.find(r => !r.ref);
+  const refYears = M.years.filter(r => r.ref);
+  const rngTxt = r => r.rng.map(([lo, hi]) => fx(lo, 1) + '–' + fx(hi, 1) + '%').join(' y ');
+  const rangeTxt = t => fx(t.lo, t.lo % 1 ? 1 : 0) + '% a ' + fx(t.hi, t.hi % 1 ? 1 : 0) + '%';
+  const cur = D.targets[D.targets.length - 1];
+  const prevT = D.targets.filter(t => t.c != null && t.desde < cur.desde).pop();
+
+  function bars(box) {
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const Y = M.years, n = Y.length, narrow = W < 600;
+    const m = {l: 44, r: 8, t: 18, b: 26}, H = 240, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const bw = pw / n, gap = Math.max(1, Math.min(6, bw * 0.22));
+    const y = v => m.t + (100 - v) / 100 * ph;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Porcentaje de meses de cada año con la inflación dentro del rango meta'}, box);
+    drawYGrid(svg, [0, 25, 50, 75, 100], y, m.l, m.l + pw, t => t + '%');
+    // Separador entre los años de referencia y la meta vigente.
+    const jr = Y.findIndex(r => !r.ref);
+    if (jr > 0) svgEl('line', {x1: m.l + jr * bw, x2: m.l + jr * bw, y1: m.t - 6, y2: m.t + ph, stroke: 'var(--axis)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+    const step = narrow ? (n > 16 ? 4 : 2) : (bw < 34 ? 2 : 1);
+    Y.forEach((r, j) => {
+      const x0 = m.l + j * bw + gap / 2, w = bw - gap;
+      svgEl('path', {d: barPath(x0, w, y(0), y(r.pct)), fill: 'var(--s1)', 'fill-opacity': r.ref ? 0.35 : 1}, svg);
+      if (bw >= 26) {
+        const t = svgEl('text', {x: x0 + w / 2, y: y(r.pct) - 4, 'text-anchor': 'middle', class: 'lbl'}, svg);
+        t.textContent = fx(r.pct, 0);
+      }
+      if (j % step === 0 || j === n - 1) {
+        const t = svgEl('text', {x: x0 + w / 2, y: H - 7, 'text-anchor': 'middle', class: 'lbl'}, svg);
+        t.textContent = String(r.y) + (r.partial && !narrow ? '*' : '');
+      }
+      const hit = svgEl('rect', {class: 'col-hit', x: m.l + j * bw, y: m.t, width: bw, height: ph, tabindex: 0,
+        'aria-label': `${r.y}: ${fx(r.pct, 0)}% de los meses dentro del rango`}, svg);
+      const show = evt => {
+        const [cx, cy] = anchorOf(evt, hit);
+        const rows = [
+          {value: fx(r.pct, 0) + '%', label: `de los meses dentro del rango (${r.in} de ${r.n})`, color: 'var(--s1)', sq: true},
+          {value: String(r.up), label: 'meses por encima'}, {value: String(r.dn), label: 'meses por debajo'},
+          {value: pct(r.avg), label: 'inflación de 12 meses, promedio'},
+          {value: pct(r.min) + ' a ' + pct(r.max), label: 'mínima y máxima'},
+          {value: rngTxt(r), label: 'rango meta'},
+        ];
+        if (r.dec != null) rows.push({value: pct(r.dec), label: 'en diciembre, ' + SIDE[String(r.dec_state)] + ' del rango' + (r.dec_only ? ' (la meta se evaluaba solo en diciembre)' : '')});
+        if (r.ref) rows.push({value: '', label: 'Referencia: meta anterior, fuera de los récords'});
+        else if (r.partial) rows.push({value: '', label: `Cuenta ${mLabel(r.from_m)} a ${mLabel(r.to_m)} (${meses(r.n)})`});
+        showTip(cx, cy, String(r.y), rows);
+      };
+      hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+      hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    });
+  }
+
+  function runsTable() {
+    const wrap = document.getElementById(ID + '-runs');
+    wrap.replaceChildren();
+    const t = htmlEl('table', {cls: 'mh-runs'}, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    const head = ['Racha', 'Inicio', 'Fin', 'Duración', 'Extremo', 'Mes del extremo', 'Mayor distancia al límite'];
+    head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+    const add = r => {
+      const row = htmlEl('tr', {cls: r.open ? 'open' : r.ref ? 'ref' : ''}, tb);
+      const c0 = htmlEl('td', null, row), tag = htmlEl('span', {cls: 'mh-tag'}, c0);
+      const sw = htmlEl('i', {cls: 'sw'}, tag); sw.style.background = STC[String(r.st)];
+      if (r.st === 0) sw.style.boxShadow = 'inset 0 0 0 1px var(--border)';
+      if (r.ref) sw.style.opacity = '.5';
+      tag.appendChild(document.createTextNode(STS[String(r.st)] + (r.open ? ' (vigente)' : '')));
+      [mLabel(r.from), r.open ? 'sigue a ' + mLabel(r.to) : mLabel(r.to), meses(r.n),
+       (r.st > 0 ? 'máx. ' : r.st < 0 ? 'mín. ' : 'máx. ') + pct(r.ext), mLabel(r.ext_m), r.st === 0 || r.dev_max == null ? '—' : fx(r.dev_max, 2) + ' pp'].forEach(c => htmlEl('td', {text: c}, row));
+    };
+    const rows = M.runs.slice().reverse();
+    if (M.cur.st === 0) rows.unshift(M.cur);
+    rows.forEach(add);
+    if (M.runs_ref && M.runs_ref.length) {
+      const sep = htmlEl('tr', {cls: 'sep'}, tb);
+      htmlEl('td', {colspan: String(head.length), text: `Referencia, antes de ${REG}: meta de ${prevT ? rangeTxt(prevT) : '1.5% a 3.5%'}; hasta 2005 se evaluaba solo en diciembre. No entra en los récords.`}, sep);
+      M.runs_ref.slice().reverse().forEach(add);
+    }
+  }
+  function yearsTable() {
+    XP.table(document.getElementById(ID + '-tb'),
+      ['Año', 'Meses contados', 'Dentro', 'Por encima', 'Por debajo', '% dentro', 'Promedio 12 m', 'Diciembre', 'Rango meta'],
+      M.years.slice().reverse().map(r => [String(r.y) + (r.ref ? ' (referencia' + (r.dec_only ? ', eval. dic.' : '') + ')' : r.partial ? ` (${mLabel(r.from_m)} a ${mLabel(r.to_m)})` : ''),
+        r.n, r.in, r.up, r.dn, fx(r.pct, 0) + '%', pct(r.avg), pct(r.dec), rngTxt(r)]));
+  }
+  function rankTxt(c) {
+    const side = SIDE[String(c.st)];
+    if (M.cur_rank === 1) return `es la racha ${side} del rango más larga desde ${REG}`;
+    const ord = ORD[M.cur_rank] || `número ${M.cur_rank} en duración`;
+    return `es la ${ord} de ${M.cur_of} ${side} del rango desde ${REG}`;
+  }
+  function tiles(box) {
+    box.replaceChildren();
+    const c = M.cur, L = M.longest;
+    const extra = c.st !== 0 && c.ext_m !== M.last_m ? `; ${c.st > 0 ? 'máx.' : 'mín.'} ${pct(c.ext)} en ${mLabel(c.ext_m)}` : '';
+    const items = [
+      {lab: 'Racha vigente', val: meses(c.n), sub: `${ST[String(c.st)].toLowerCase()} desde ${mLabel(c.from)}; ${mLabel(M.last_m)}: ${pct(M.last_v)}${extra}`},
+      {lab: 'Meses dentro del rango desde ' + REG, val: fx(M.pct_since, 0) + '%', sub: `${fx(M.up_since, 0)}% por encima y ${fx(M.dn_since, 0)}% por debajo` +
+        (M.dev_avg != null ? `; fuera del rango, en promedio a ${fx(M.dev_avg, 2)} pp del límite` : '')},
+    ];
+    if (L['1']) items.push({lab: 'Racha más larga por encima, desde ' + REG, val: meses(L['1'].n), sub: `${mLabel(L['1'].from)} a ${mLabel(L['1'].to)}${L['1'].open ? ' (sigue)' : ''}; máx. ${pct(L['1'].ext)}`});
+    if (L['-1']) items.push({lab: 'Racha más larga por debajo, desde ' + REG, val: meses(L['-1'].n), sub: `${mLabel(L['-1'].from)} a ${mLabel(L['-1'].to)}${L['-1'].open ? ' (sigue)' : ''}; mín. ${pct(L['-1'].ext)}`});
+    items.forEach(it => {
+      const d = htmlEl('div', {cls: 'tile'}, box);
+      htmlEl('div', {cls: 'lab', text: it.lab}, d);
+      htmlEl('div', {cls: 'val', text: it.val}, d);
+      htmlEl('div', {cls: 'sub', text: it.sub}, d);
+    });
+  }
+  function textNow() {
+    const c = M.cur, L = M.longest;
+    const slight = c.st !== 0 && M.last_dev != null && M.last_dev <= 0.10 ? 'ligeramente ' : '';
+    let s = `En ${mLabel(M.last_m)} la inflación de 12 meses fue ${pct(M.last_v)} y lleva ${meses(c.n)} seguidos ${slight}${SIDE[String(c.st)]} del rango meta: ${rankTxt(c)}`;
+    const lg = L[String(c.st)];
+    s += c.st !== 0 && lg && !lg.open ? ` (la mayor duró ${meses(lg.n)}, de ${mLabel(lg.from)} a ${mLabel(lg.to)}).` : '.';
+    s += ` Desde ${REG} hubo ${M.n_runs_up} rachas por encima y ${M.n_runs_dn} por debajo del rango` +
+      (M.n_runs_up ? `; en ${M.small_up} de las ${M.n_runs_up} por encima, la inflación nunca pasó de 0.3 pp sobre el límite` : '') +
+      (M.dev_avg != null ? `. En los meses fuera del rango, la inflación estuvo en promedio a ${fx(M.dev_avg, 2)} pp del límite.` : '.') +
+      ' Una salida breve por un choque de precios no es lo mismo que una racha larga.';
+    return s;
+  }
+
+  const html = `
+  <div class="section-title">La inflación dentro y fuera del rango meta</div>
+  <figure class="card" style="margin:0" id="${ID}-card">
+    <div class="card-head">
+      <div>
+        <h2>Meses con la inflación dentro del rango meta, por año</h2>
+        <p>Porcentaje de los meses de cada año en que la inflación de 12 meses estuvo dentro del rango meta. Las cifras y los récords se cuentan desde ${REG}, cuando empezó la meta vigente (${rangeTxt(cur)}, evaluada todos los meses)${firstReg && firstReg.partial ? `; en ${firstReg.y} solo se cuentan los meses desde ${mLabel(firstReg.from_m)}` : ''}. ${refYears.length ? `Los años ${refYears[0].y}–${refYears[refYears.length - 1].y}, en tono más claro, son solo referencia: la meta era ${prevT ? rangeTxt(prevT) : '1.5% a 3.5%'} y hasta 2005 se evaluaba solo con la inflación de diciembre.` : ''}</p>
+      </div>
+      <button class="btn" id="${ID}-btn" type="button">Ver tabla por año</button>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--s1)"></i>Meses dentro del rango, meta vigente desde ${REG}</span>
+      ${refYears.length ? `<span><i class="sw" style="background:var(--s1);opacity:.35"></i>${refYears[0].y}–${refYears[refYears.length - 1].y}: meta anterior (referencia)</span>` : ''}
+    </div>
+    <div class="chart" id="${ID}-ch"></div>
+    <div class="table-wrap" id="${ID}-tb" hidden></div>
+    <div class="xp-tiles" id="${ID}-tiles"></div>
+    <p class="xp-text" id="${ID}-txt"></p>
+    <div class="panel-title">Rachas fuera del rango meta (la más reciente primero)</div>
+    <div class="table-wrap" id="${ID}-runs" style="max-height:300px"></div>
+    <p class="note">Una racha es una serie de meses seguidos en el mismo lado del rango. Extremo: la inflación de 12 meses más alta (por encima) o más baja (por debajo) de la racha; mayor distancia al límite: cuánto se alejó del límite que cruzó. Se compara el valor publicado (2 decimales) con el rango. Las rachas se cortan en ${REG}: las anteriores se listan aparte, como referencia, porque la meta y la forma de evaluarla eran otras. ${lastY.partial && !lastY.ref ? '* ' + lastY.y + ': año en curso, con ' + meses(lastY.n) + ' de dato. ' : ''}Fuente: IPC de Lima Metropolitana (INEI, vía BCRPData); rango meta del BCRP. Cálculo propio.</p>
+  </figure>`;
+
+  registerSection({tab: 'tablero', id: 'meta_hist', order: 22, html, render() {
+    if (!document.getElementById(ID + '-card')) return;
+    bars(document.getElementById(ID + '-ch'));
+    tiles(document.getElementById(ID + '-tiles'));
+    document.getElementById(ID + '-txt').textContent = textNow();
+    runsTable();
+    if (!document.getElementById(ID + '-tb').hidden) yearsTable();
+  }});
+  XP.toggle(ID + '-btn', ID + '-tb', yearsTable, ['Ver tabla por año', 'Ocultar tabla por año']);
+
+  // ---------- Aprende ----------
+  const L = M.longest;
+  registerSection({tab: 'aprende', id: 'meta_hist-ap', order: 22, html: `
+  <div class="edu xp-edu"><section id="ap-cumplimiento">
+    <div class="kicker">Para leer el tablero · Cumplimiento</div>
+    <h2>¿Cuánto tiempo se cumple la meta?</h2>
+    <p>Desde 2006 el BCRP evalúa su meta todos los meses, con la inflación de los últimos 12 meses; hasta 2005 la evaluaba solo con la inflación de diciembre de cada año. La meta no promete que la inflación esté siempre dentro del rango: si sale de él, el BCRP evalúa qué hacer para que vuelva, teniendo en cuenta que su política tarda en surtir efecto.</p>
+    <p>Por eso conviene mirar dos cosas a la vez: qué parte de los meses la inflación estuvo dentro del rango y cuánto duraron las salidas. Una salida breve por un choque de precios no es lo mismo que una racha larga fuera del rango, ni una que apenas cruza el límite es igual a una que se aleja mucho.${M.n_runs_up ? ` Desde ${REG}, en ${M.small_up} de las ${M.n_runs_up} rachas por encima la inflación nunca pasó de 0.3 pp sobre el límite.` : ''}${L['1'] ? ` Desde ${REG}, cuando empezó la meta de ${rangeTxt(cur)}, la racha más larga por encima del rango duró <span class="n">${meses(L['1'].n)}</span> (${mLabel(L['1'].from)} a ${mLabel(L['1'].to)})` : ''}${L['-1'] ? `; la más larga por debajo, <span class="n">${meses(L['-1'].n)}</span> (${mLabel(L['-1'].from)} a ${mLabel(L['-1'].to)})` : ''}.</p>
+    <ol class="refs">
+      <li>BCRP, <i>Reporte de Inflación, enero 2006</i>: prólogo y recuadro «Evaluación continua de la meta de inflación». <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2006/Reporte-Inflacion-Enero-2006.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+      <li>BCRP, <i>Reporte de Inflación, enero 2007</i> (meta de 2%, con tolerancia de 1% a 3%). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2007/enero/Reporte-Inflacion-Enero-2007.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+    </ol>
+  </section></div>`});
+})();
+</script>

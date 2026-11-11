@@ -1,0 +1,174 @@
+<!-- Pestaña «Lo último» (KEY ultimo). Textos y cifras vienen armados desde src/inflacion_extra/90_lo_ultimo.py. -->
+<style>
+#tab-ultimo .lu-intro { margin: 0 0 14px; }
+#tab-ultimo .lu-intro h2 { font-size: 22px; }
+#tab-ultimo .lu-intro p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 780px; }
+#tab-ultimo .tile .when { color: var(--muted); font-size: 12.5px; }
+#tab-ultimo .tile .extra { color: var(--ink2); font-size: 12.5px; margin-top: 8px; }
+#tab-ultimo .tile.hero .val .unit { font-family: var(--font-ui); }
+#tab-ultimo .tile.hero .chip { align-self: flex-start; }
+.lu-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.lu-g { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.lu-g.wide { grid-column: 1 / -1; }
+.lu-g h3 { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+.lu-g ul { margin: 0; padding-left: 18px; }
+.lu-g li { margin: 5px 0; color: var(--ink2); max-width: 80ch; font-size: 14.5px; }
+.lu-rub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin-top: 10px; }
+.lu-rub h3 { font-size: 13.5px; margin: 0 0 4px; }
+.lu-rub ol { list-style: none; margin: 0; padding: 0; }
+.lu-rub li { display: flex; gap: 12px; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--grid); }
+.lu-rub li:last-child { border-bottom: 0; }
+.lu-rub .nm { color: var(--ink); font-size: 13.5px; min-width: 0; }
+.lu-rub .gr { display: block; color: var(--muted); font-size: 12px; }
+.lu-rub .vv { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 860px) { .lu-groups { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .lu-rub { grid-template-columns: 1fr; } }
+</style>
+<script>
+(function () {
+  const U = XD.ultimo;
+  if (!U) return;
+  const MES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+  const mLong = m => MES_L[+m.slice(5, 7) - 1] + ' de ' + m.slice(0, 4);
+  // Marca frente al rango: la decide 90_lo_ultimo.py con el valor a 1 decimal (en el límite = dentro del rango).
+  // Marca frente al rango (la decide 90_lo_ultimo.py con el valor publicado, 2 decimales, estricto; fuera por
+  // 0.10 pp o menos = «ligeramente»). Solo la inflación total lleva marca de «rango meta»; las demás, «Sobre 3%»...
+  function luChip(c, parent) {
+    const lo = fx(U.band.lo, 0) + '%', hi = fx(U.band.hi, 0) + '%';
+    const chip = htmlEl('span', {cls: 'chip' + (c.st === 0 ? ' good' : '')}, parent);
+    chip.innerHTML = c.st === 0 ? CHECK : c.st > 0 ? UP : DOWN;   // íconos fijos; el texto va con textContent
+    let txt;
+    if (c.kind === 'meta') {
+      txt = c.st === 0 ? 'En el rango meta' : (c.slight ? 'Ligeramente ' + (c.st > 0 ? 'sobre' : 'bajo') : (c.st > 0 ? 'Sobre' : 'Bajo')) + ' el rango meta';
+      chip.title = `Rango meta del BCRP: ${lo} a ${hi}, para la inflación de 12 meses del IPC de Lima. «Ligeramente»: fuera por 0.10 pp o menos.`;
+    } else {
+      txt = c.st > 0 ? 'Sobre ' + hi : c.st < 0 ? 'Bajo ' + lo : 'Entre ' + lo + ' y ' + hi;
+      chip.title = `La meta del BCRP (${lo} a ${hi}) se aplica a la inflación total; para esta medida es solo una referencia.`;
+    }
+    chip.appendChild(document.createTextNode(txt));
+  }
+  const sgn = (v, unit) => (Math.round(v * 100) > 0 ? '+' : '') + fx(v) + unit;
+
+  registerTab({
+    id: 'ultimo', label: 'Lo último', before: 'tablero',
+    html: `
+      <div class="lu-intro">
+        <p class="eyebrow">Último dato publicado</p>
+        <h2 id="lu-title"></h2>
+        <p id="lu-sub"></p>
+      </div>
+      <section class="kpis" id="lu-kpis" aria-label="Indicadores del último dato"></section>
+      <figure class="card" style="margin:12px 0 0" id="lu-card-ch">
+        <div class="card-head">
+          <div>
+            <h2>Los últimos 24 meses</h2>
+            <p>Inflación de 12 meses, en %. La franja es el rango meta del BCRP.</p>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="ln" style="background:var(--s1)"></i>Inflación total</span>
+          <span><i class="ln" style="background:var(--s2)"></i>Sin alimentos y energía</span>
+          <span><i class="bandsw"></i>Rango meta del BCRP</span>
+        </div>
+        <div class="chart" id="lu-ch"></div>
+        <p class="note" id="lu-ch-note"></p>
+      </figure>
+      <div class="lu-groups" id="lu-groups"></div>
+      <figure class="card" style="margin:12px 0 0" id="lu-card-rub" hidden>
+        <div class="card-head">
+          <div>
+            <h2 id="lu-rub-title"></h2>
+            <p id="lu-rub-sub"></p>
+          </div>
+        </div>
+        <div class="lu-rub" id="lu-rub"></div>
+      </figure>
+      <p class="note" id="lu-foot"></p>`,
+    render,
+  });
+
+  function renderTiles() {
+    const box = document.getElementById('lu-kpis');
+    box.replaceChildren();
+    for (const t of U.tiles) {
+      const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);
+      htmlEl('div', {cls: 'lab', text: t.lab}, d);
+      const v = htmlEl('div', {cls: 'val', text: pct(t.v)}, d);
+      if (t.m) htmlEl('span', {cls: 'unit', text: mLabel(t.m)}, v);
+      if (t.sub) htmlEl('div', {cls: 'sub', text: t.sub}, d);
+      if (t.chip) luChip(t.chip, d);
+      if (t.extra) htmlEl('div', {cls: 'extra', text: t.extra}, d);
+      if (t.extra2) htmlEl('div', {cls: 'extra', text: t.extra2}, d);
+    }
+  }
+
+  function renderGroups() {
+    const box = document.getElementById('lu-groups');
+    box.replaceChildren();
+    // Los rubros se muestran en su propia tarjeta (lu-card-rub), no en este bloque.
+    U.groups.filter(g => g.id !== 'rub' || !U.rubros).forEach(g => {
+      const d = htmlEl('section', {cls: 'lu-g' + (g.id === 'dato' ? ' wide' : ''), 'aria-label': g.h}, box);
+      htmlEl('h3', {text: g.h}, d);
+      const ul = htmlEl('ul', null, d);
+      g.p.forEach(p => htmlEl('li', {text: p}, ul));
+    });
+  }
+
+  function renderChart() {
+    const b = lastIdx('tot12'), idx = [];
+    for (let i = Math.max(0, b - 23); i <= b; i++) idx.push(i);
+    lineChart(document.getElementById('lu-ch'), {idx, H: 260, band: true, endLabels: true,
+      series: [{k: 'sae12', label: 'Sin alimentos y energía', short: 'Sin alim. y energía', color: 'var(--s2)'},
+               {k: 'tot12', label: 'Inflación total', short: 'Total', color: 'var(--s1)'}],
+      aria: 'Inflación de 12 meses total y sin alimentos y energía, últimos 24 meses, frente al rango meta'});
+    document.getElementById('lu-ch-note').textContent =
+      `De ${mLabel(MONTHS[idx[0]])} a ${mLabel(MONTHS[b])}. Pase el cursor o use las flechas para leer cada mes.`;
+  }
+
+  function renderRubros() {
+    const R = U.rubros, card = document.getElementById('lu-card-rub');
+    if (!R) { card.hidden = true; return; }
+    card.hidden = false;
+    const contrib = R.mode === 'contrib';
+    document.getElementById('lu-rub-title').textContent = (contrib ? 'Aporte de los rubros a la inflación de ' : 'Variación de precios por rubro en ') + mLong(R.m);
+    document.getElementById('lu-rub-sub').textContent = contrib
+      ? 'Aporte a la inflación del mes, en puntos porcentuales: la variación de precio de cada rubro por su peso en la canasta (ponderación oficial, base dic-2021), actualizado por cuánto cambió su precio frente al resto desde dic-2021; por eso no es la simple multiplicación de la variación por la ponderación. Los tres de mayor aporte y los tres de menor aporte, entre los 13 rubros de la clasificación sectorial del BCRP.'
+      : 'Variación de precio en el mes, en %. Sin ponderar: no muestra cuánto aporta cada rubro a la inflación total. Solo se comparan rubros del mismo nivel (sin sumar totales con sus partes).';
+    const box = document.getElementById('lu-rub');
+    box.replaceChildren();
+    for (const [h, rows] of [[R.h_top, R.top], [R.h_bot, R.bot]]) {
+      const col = htmlEl('div', null, box);
+      htmlEl('h3', {text: h}, col);
+      const ol = htmlEl('ol', null, col);
+      for (const r of rows) {
+        const li = htmlEl('li', null, ol);
+        const nm = htmlEl('span', {cls: 'nm', text: r.label}, li);
+        const gr = [r.g, contrib && r.var != null ? 'precio ' + sgn(r.var, '%') : ''].filter(Boolean).join(' · ');
+        if (gr) htmlEl('span', {cls: 'gr', text: gr}, nm);
+        htmlEl('span', {cls: 'vv', text: sgn(r.v, contrib ? ' pp' : '%')}, li);
+      }
+    }
+  }
+
+  function render() {
+    document.getElementById('lu-title').textContent = 'Inflación de ' + mLong(U.m);
+    const dates = ['precios al consumidor a ' + mLabel(U.m)];
+    if (U.exp_m) dates.push('expectativa a ' + mLabel(U.exp_m));
+    if (U.ref_m) dates.push('tasa de referencia a ' + mLabel(U.ref_m));
+    document.getElementById('lu-sub').textContent =
+      'Resumen del último dato publicado, armado automáticamente a partir de las series del BCRP y del INEI: ' +
+      dates.join(', ') + '. Describe las cifras, sin interpretar sus causas.';
+    renderTiles();
+    renderGroups();
+    renderChart();
+    renderRubros();
+    document.getElementById('lu-foot').textContent =
+      'Fuente: BCRPData (IPC de Lima Metropolitana del INEI, medidas de tendencia, encuesta de expectativas y tasa de referencia del BCRP)' +
+      (U.groups.some(g => g.id === 'nac') ? '; IPC nacional: INEI' : '') +
+      (U.rubros && U.rubros.mode === 'contrib' ? '; aportes por rubro: cálculo propio con las ponderaciones del IPC publicadas por el BCRP (Nota Semanal)' : '') +
+      (U.tiles.some(t => t.extra2) ? '; proyección: Reporte de Inflación del BCRP' : '') +
+      '. «La más alta/baja desde» compara con toda la serie publicada. Rango meta del BCRP: ' +
+      fx(U.band.lo, 0) + '% a ' + fx(U.band.hi, 0) + '% para la inflación de 12 meses del IPC de Lima; la posición frente al rango se evalúa con el dato publicado (2 decimales), y «ligeramente» indica que está fuera por 0.10 pp o menos.';
+  }
+})();
+</script>

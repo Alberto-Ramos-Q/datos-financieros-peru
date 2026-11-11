@@ -162,6 +162,7 @@ footer p { margin: 4px 0; }
 .edu p { margin: 0 0 10px; }
 .edu .kicker { font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
 .toc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 4px; }
+.toc-tablero { margin: 14px 0 6px; }
 .toc a { font-size: 13px; color: var(--ink2); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
 .toc a:hover { color: var(--ink); background: var(--wash); }
 .n { font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -227,7 +228,7 @@ footer p { margin: 4px 0; }
   </div>
   <p class="lede" id="lede">Cuánto suben los precios, frente a la meta del BCRP, qué rubros lo explican, cómo responde la política monetaria y cómo se compara el Perú con la región.</p>
 
-  <div class="tabs" role="tablist" aria-label="Secciones">
+  <div class="tabs" id="tabs" role="tablist" aria-label="Secciones">
     <button type="button" role="tab" id="tabbtn-tablero" aria-controls="tab-tablero" aria-selected="true">Tablero</button>
     <button type="button" role="tab" id="tabbtn-aprende" aria-controls="tab-aprende" aria-selected="false" tabindex="-1">Aprende sobre la inflación</button>
   </div>
@@ -282,7 +283,7 @@ footer p { margin: 4px 0; }
     <div class="card-head">
       <div>
         <h2>Tasa de referencia, expectativas e inflación</h2>
-        <p>El BCRP sube su tasa de referencia cuando la inflación proyectada o las expectativas se ubican por encima de la meta, y la baja cuando están por debajo o cuando la economía necesita impulso y la inflación lo permite. Los dos paneles comparten el eje del tiempo; al pasar el cursor por uno se leen ambos.</p>
+        <p>El BCRP fija su tasa de referencia mirando la inflación proyectada y las expectativas en su horizonte de proyección (alrededor de dos años), no el dato de cada mes: la sube cuando esas señales apuntan por encima de la meta y la baja cuando apuntan por debajo o cuando la economía necesita impulso y la inflación lo permite. Ante choques de oferta que considera transitorios, evalúa si se trasladan a otros precios o a las expectativas antes de mover la tasa. Los dos paneles comparten el eje del tiempo; al pasar el cursor por uno se leen ambos.</p>
       </div>
       <button class="btn" data-table="pol">Ver tabla</button>
     </div>
@@ -314,7 +315,7 @@ footer p { margin: 4px 0; }
     <div class="scale" id="heat-scale" aria-label="Escala de colores"></div>
     <div class="chart" id="ch-heat"></div>
     <div class="table-wrap" id="tb-heat" hidden></div>
-    <p class="note">Este tablero no incorpora las ponderaciones de cada rubro (el BCRP las publica en su Reporte de Inflación), así que no calcula cuánto aporta cada uno a la inflación total; aquí solo se comparan sus variaciones. La variación de 12 meses de los rubros se calcula encadenando sus variaciones mensuales.</p>
+    <p class="note">Aquí se comparan las variaciones de precio de cada rubro; cuánto aporta cada uno a la inflación total, con sus ponderaciones oficiales, está en la sección «¿Cuántos puntos de la inflación aporta cada rubro?», a continuación. La variación de 12 meses de los rubros se calcula encadenando sus variaciones mensuales.</p>
   </figure>
 
   <figure class="card" style="margin:12px 0 0" id="card-sm" hidden>
@@ -388,6 +389,7 @@ footer p { margin: 4px 0; }
     <div class="table-wrap" id="tb-reg" hidden></div>
     <p class="note" id="note-reg"></p>
   </figure>
+  <div id="extra-tablero"></div>
   </div>
 
   <div id="tab-aprende" role="tabpanel" aria-labelledby="tabbtn-aprende" hidden>
@@ -439,7 +441,7 @@ footer p { margin: 4px 0; }
             <p>Excluye los alimentos de precios más volátiles y algunos que siguen a los precios internacionales (pan, arroz, fideos, aceites), además de los combustibles, los <b>transportes</b> y los servicios públicos. Hoy: <span class="n" data-v="sub12"></span>.</p>
           </div>
         </div>
-        <p style="margin-top:12px">Ojo: en sus comunicados el BCRP suele llamar «subyacente» a la inflación sin alimentos y energía. La subyacente de este recuadro es otra medida, que el BCRP sigue publicando en su base de datos estadística.</p>
+        <p style="margin-top:12px">Ojo: en la prensa a veces se llama «subyacente» a la inflación sin alimentos y energía. El BCRP publica las dos como medidas distintas; la subyacente de este recuadro es la otra, que sigue en su base de datos estadística.</p>
         <p data-v="diverge"></p>
         <h3>Transables y no transables</h3>
         <p>Los bienes <b>transables</b> se pueden comprar o vender en el exterior (algunos alimentos, ropa y calzado, electrodomésticos, combustibles), así que sus precios siguen a los precios internacionales y al tipo de cambio. Los <b>no transables</b> son sobre todo servicios (alquiler, educación, salud, transporte, comidas fuera del hogar), además de algunos alimentos frescos, como la papa.</p>
@@ -464,7 +466,7 @@ footer p { margin: 4px 0; }
         <h2>¿Cómo responde el BCRP?</h2>
         <p>Desde 2003 su instrumento principal es la <b>tasa de referencia</b>, que el Directorio fija cada mes como guía para los préstamos entre bancos, que suelen ser a un día. Cuando la sube, el crédito se encarece, se gasta menos y la presión sobre los precios cede; cuando la baja, ocurre lo contrario. El efecto no es inmediato: según el BCRP, tarda entre 12 y 18 meses en sentirse plenamente en la inflación, así que decide mirando hacia adelante.</p>
         <p>Por eso importan las <b>expectativas de inflación</b>: si empresas y familias creen que la inflación seguirá alta, fijan precios y salarios con esa idea y la alimentan. El BCRP las mide cada mes con una encuesta a analistas económicos, entidades financieras y empresas. Analistas y entidades financieras esperan hoy <span class="n" data-v="exp"></span> para los próximos 12 meses.</p>
-        <p>La <b>tasa real ex ante</b> resta a la tasa de referencia la inflación esperada: es el costo del dinero ya descontada la inflación. Una tasa real alta frena la economía; una baja la impulsa. En el medio está la tasa <em>neutral</em>, la que ni impulsa ni frena: el BCRP la estima en alrededor de 2% en términos reales. Hoy la tasa real es <span class="n" data-v="real"></span>.</p>
+        <p>La <b>tasa real ex ante</b> resta a la tasa de referencia la inflación esperada: es el costo del dinero ya descontada la inflación. Una tasa real alta frena la economía; una baja la impulsa. En el medio está la tasa <em>neutral</em>, la que ni impulsa ni frena: el BCRP la estima en alrededor de 2% en términos reales. Hoy la tasa real es <span class="n" data-v="real"></span>.<span data-v="real_note"></span></p>
         <p>El BCRP usa además otros instrumentos: el encaje (la parte de los depósitos que los bancos deben guardar como reserva, en caja o en el BCRP), operaciones para dar o retirar liquidez y la intervención en el mercado cambiario para reducir la volatilidad excesiva del tipo de cambio.</p>
       </section>
 
@@ -482,7 +484,7 @@ footer p { margin: 4px 0; }
           </div>
           <div class="box">
             <h3>Reglas de tasa de interés</h3>
-            <p>La regla de Taylor resume cómo mover la tasa de interés según dos señales: la inflación respecto a la meta y la brecha entre el PBI y su tendencia. Por cada punto de inflación adicional, la tasa sube 1.5 puntos, de modo que la tasa real también sube.</p>
+            <p>La regla de Taylor resume cómo mover la tasa de interés según dos señales: la inflación respecto a la meta y la brecha entre el PBI y su tendencia. Por cada punto de inflación adicional, la tasa sube 1.5 puntos, de modo que la tasa real también sube. La regla describe la respuesta a desvíos persistentes; los bancos centrales suelen no reaccionar a los efectos directos de choques de oferta transitorios.</p>
             <ol class="refs">
               <li>Taylor, J. B. (1993). <i>Discretion versus policy rules in practice</i>. Carnegie-Rochester Conference Series on Public Policy, 39, 195–214. <a href="https://doi.org/10.1016/0167-2231(93)90009-L" target="_blank" rel="noopener">doi:10.1016/0167-2231(93)90009-L</a></li>
             </ol>
@@ -526,6 +528,7 @@ footer p { margin: 4px 0; }
         </dl>
       </section>
 
+      <div id="extra-aprende" style="display:grid;gap:12px"></div>
       <section id="fuentes">
         <div class="kicker">8 · Fuentes</div>
         <h2>Fuentes de esta sección</h2>
@@ -584,7 +587,7 @@ const f0 = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
 const fx = (v, d = 2) => v == null ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
 const pct = (v, d = 2) => v == null ? '—' : fx(v, d) + '%';
 const mLabel = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
-const mShort = m => MES[+m.slice(5, 7) - 1] + '-' + m.slice(0, 4);
+const mShort = m => MES[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
 const addMonths = (m, n) => { const k = +m.slice(0, 4) * 12 + (+m.slice(5, 7) - 1) + n; return Math.floor(k / 12) + '-' + String(k % 12 + 1).padStart(2, '0'); };
 const dLabel = s => +s.slice(8, 10) + ' ' + MES[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4);
 
@@ -882,13 +885,18 @@ function lineChart(box, cfg) {
 const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.2 4.7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const UP = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 9.5V3M3 5.5L6 2.5l3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const DOWN = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.5V9M3 6.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-function bandChip(v, parent) {
-  const lo = T_NOW.lo, hi = T_NOW.hi;
-  const st = v > hi ? 1 : v < lo ? -1 : 0;
+function bandChip(v, parent, isTotal) {
+  // Regla única del tablero: valor publicado (2 decimales) frente al límite, estricto; «ligeramente» si sale por 0.10 pp o menos.
+  // Solo la inflación total tiene meta; las demás medidas se comparan con los límites como referencia.
+  const lo = T_NOW.lo, hi = T_NOW.hi, x = Math.round(v * 100) / 100;
+  const st = x > hi ? 1 : x < lo ? -1 : 0, near = st > 0 ? x - hi <= 0.10 + 1e-9 : st < 0 ? lo - x <= 0.10 + 1e-9 : false;
   const chip = htmlEl('span', {cls: 'chip' + (st === 0 ? ' good' : '')}, parent);
   chip.innerHTML = st === 0 ? CHECK : st > 0 ? UP : DOWN;   // íconos fijos; el texto va con textContent
-  chip.title = `Rango meta del BCRP: ${fx(lo, 0)}% a ${fx(hi, 0)}%. La meta se aplica a la inflación total; para las demás medidas se usa como referencia.`;
-  chip.appendChild(document.createTextNode(st === 0 ? 'En el rango meta' : st > 0 ? 'Sobre el rango meta' : 'Bajo el rango meta'));
+  chip.title = `Rango meta del BCRP: ${fx(lo, 0)}% a ${fx(hi, 0)}%. La meta se aplica a la inflación total; para las demás medidas los límites son solo una referencia.`;
+  const txt = isTotal
+    ? (st === 0 ? 'En el rango meta' : (near ? 'Ligeramente ' + (st > 0 ? 'sobre' : 'bajo') : (st > 0 ? 'Sobre' : 'Bajo')) + ' el rango meta')
+    : (st === 0 ? `Entre ${fx(lo, 0)}% y ${fx(hi, 0)}%` : st > 0 ? `Sobre ${fx(hi, 0)}%` : `Bajo ${fx(lo, 0)}%`);
+  chip.appendChild(document.createTextNode(txt));
 }
 function deltaTxt(o, unit = 'pp') {
   if (o.prev == null) return '';
@@ -915,7 +923,7 @@ function renderKpis() {
     const v = htmlEl('div', {cls: 'val', text: t.val}, d);
     if (t.unit) htmlEl('span', {cls: 'unit', text: t.unit}, v);
     htmlEl('div', {cls: 'sub', text: t.sub}, d);
-    if (t.chip != null) bandChip(t.chip, d);
+    if (t.chip != null) bandChip(t.chip, d, !!t.hero);
     if (t.spark) {
       const sp = htmlEl('div', {cls: 'spark'}, d);
       htmlEl('div', {cls: 'sub', text: 'Últimos 3 años, con el rango meta'}, sp);
@@ -1276,7 +1284,7 @@ function renderShock() {
       `Ese mes seguirá dentro del cálculo de 12 meses hasta el dato de ${mLabel(addMonths(sh.m, 11))}. ` +
       `Cuando salga, con el dato de ${mLabel(addMonths(sh.m, 12))}, la inflación de 12 meses debería bajar con fuerza si no hay otra alza parecida: eso es el «efecto base».` : '');
   if (sh && sh.cause) htmlEl('p', {cls: 'note', text: 'Causa del choque según el BCRP (Notas de Estudios sobre la inflación del mes).'}, box);
-  htmlEl('p', {cls: 'note', text: 'Ojo: en la prensa, y a veces en los comunicados del BCRP, se llama «subyacente» a la inflación sin alimentos y energía. Aquí son dos medidas distintas del BCRP.'}, box);
+  htmlEl('p', {cls: 'note', text: 'Ojo: en la prensa a veces se llama «subyacente» a la inflación sin alimentos y energía. El BCRP publica las dos como medidas distintas.'}, box);
 }
 
 // ---------- Tablas (equivalente accesible de cada gráfico) ----------
@@ -1350,6 +1358,19 @@ const V = {
   tot12: K.tot12 ? pct(K.tot12.v) : '—', totm: K.totm ? pct(K.totm.v) : '—', hasta: mLabel(D.hasta),
   sae12: K.sae12 ? pct(K.sae12.v) : '—', sub12: K.sub12 ? pct(K.sub12.v) : '—',
   exp: K.exp ? pct(K.exp.v) : '—', real: K.real ? pct(K.real.v) : '—',
+  real_note: (() => {
+    // Cambio de la tasa real en 12 meses y por qué (descriptivo, desde los datos).
+    const r = S.real, rf = S.ref;
+    if (!r || !rf) return '';
+    let j = r.length - 1;
+    while (j >= 0 && r[j] == null) j--;
+    if (j < 12 || r[j - 12] == null || rf[j] == null || rf[j - 12] == null) return '';
+    const d = r[j] - r[j - 12], dRef = rf[j] - rf[j - 12];
+    if (Math.abs(dRef) > 0.005 || Math.abs(d) < 0.3) return '';
+    const m0 = mLabel(MONTHS[j - 12]);
+    return d < 0 ? ` Bajó desde ${pct(r[j - 12])} en ${m0} porque subieron las expectativas mientras la tasa de referencia se mantuvo.`
+                 : ` Subió desde ${pct(r[j - 12])} en ${m0} porque bajaron las expectativas mientras la tasa de referencia se mantuvo.`;
+  })(),
   max12_m: mLabel(E.max12_m), max12_x: f0.format(Math.round(1 + E.max12 / 100)),
   diverge: K.sae12 && K.sub12 ? (Math.abs(K.sae12.v - K.sub12.v) >= 0.75
     ? (D.shock && D.shock.trans12 != null && D.shock.trans12 - K.sae12.v >= 5
@@ -1357,7 +1378,7 @@ const V = {
       : `Hoy las dos medidas se separan (${pct(K.sae12.v)} frente a ${pct(K.sub12.v)}) porque excluyen rubros distintos.`)
     : `Hoy las dos medidas están cerca (${pct(K.sae12.v)} y ${pct(K.sub12.v)}).`) : '',
   meta_hist: `Desde ${mLabel(E.inside_from)}, la inflación de 12 meses estuvo dentro del rango meta el ${E.inside_pct}% de los meses. ` +
-    `La inflación más alta en ese periodo fue ${pct(E.max02)}, en ${mLabel(E.max02_m)}` + (E.max02_m === '2022-06' ? ', tras el alza de los precios internacionales de alimentos y combustibles. ' : '. ') +
+    `La inflación más alta en ese periodo fue ${pct(E.max02)}, en ${mLabel(E.max02_m)}` + (E.max02_m === '2022-06' ? ', tras el alza de los precios internacionales de alimentos y combustibles y la depreciación del sol, según los reportes del BCRP. ' : '. ') +
     (E.streak_state === 0 ? `Hoy lleva ${E.streak} ${E.streak === 1 ? 'mes' : 'meses'} seguidos dentro del rango.`
       : `Hoy lleva ${E.streak} ${E.streak === 1 ? 'mes' : 'meses'} seguidos ${E.streak_state > 0 ? 'por encima' : 'por debajo'} del rango.`),
 };
@@ -1370,7 +1391,7 @@ function renderEdu() {
   const inds = [
     {lab: 'Lo que costaba S/ 100 en ' + mLabel(E.pp_base), val: 'S/ ' + f0.format(E.pp_val), ref: 'cuesta hoy (' + mLabel(E.pp_m) + '), según el IPC de Lima.'},
     {lab: 'Inflación promedio anual desde 2002', val: fx(E.avg02, 1), unit: '%', ref: 'Desde que rige el esquema de metas de inflación.'},
-    {lab: 'Meses dentro del rango meta', val: String(E.inside_pct), unit: '%', ref: 'Desde ' + mLabel(E.inside_from) + ', cuando empezó la meta de 2% (1% a 3%).'},
+    {lab: 'Meses dentro del rango meta', val: String(E.inside_pct), unit: '%', ref: 'Desde ' + mLabel(E.inside_from) + ', cuando empezó la meta de 2% (1% a 3%). Varias salidas fueron breves o de pocas décimas: ver «La inflación dentro y fuera del rango meta» en el Tablero.'},
     {lab: 'Mayor inflación de 12 meses registrada', val: f0.format(E.max12), unit: '%', ref: 'En ' + mLabel(E.max12_m) + ', durante la hiperinflación.'},
   ];
   for (const i of inds) {
@@ -1393,9 +1414,37 @@ function renderEdu() {
 }
 
 // ---------- Pestañas ----------
-const TABS = ['tablero', 'aprende'];
+// Extensiones: fragmentos que se cargan después de este script y llaman a registerTab / registerSection antes
+// de initPage(). Sus datos vienen en el objeto extra (alias XD). Un render que falla queda en la consola.
+let TABS = ['tablero', 'aprende'];
 let tab = 'tablero';
-function renderVisible() { if (tab === 'tablero') renderAll(); else renderEdu(); }
+const EXTRA = {tabs: {}, sections: []};
+const XD = D.extra || {};
+function registerTab(t) {
+  // t = {id, label, before?: id de una pestaña ya existente (si falta, va al final), html, render()}
+  if (!t || !t.id || EXTRA.tabs[t.id]) return;
+  EXTRA.tabs[t.id] = t;
+  const bar = document.getElementById('tabs');
+  const b = htmlEl('button', {type: 'button', role: 'tab', id: 'tabbtn-' + t.id, 'aria-controls': 'tab-' + t.id, 'aria-selected': 'false', tabindex: '-1', text: t.label});
+  const ref = t.before ? document.getElementById('tabbtn-' + t.before) : null;
+  bar.insertBefore(b, ref);
+  const p = document.createElement('div');
+  p.id = 'tab-' + t.id; p.setAttribute('role', 'tabpanel'); p.setAttribute('aria-labelledby', 'tabbtn-' + t.id); p.hidden = true;
+  p.innerHTML = t.html || '';
+  document.getElementById('tab-tablero').before(p);
+  TABS = [...bar.querySelectorAll('[role="tab"]')].map(x => x.id.replace('tabbtn-', ''));
+}
+function registerSection(s) {
+  // s = {tab: 'tablero' | 'aprende' | id de pestaña extra, id, order (menor = antes), html, render()}
+  if (s && s.id) EXTRA.sections.push(s);
+}
+function runSafe(f, what) { try { f(); } catch (e) { console.error('[inflacion] fallo en ' + what, e); } }
+function renderExtra(t) { EXTRA.sections.filter(s => s.tab === t && s.render).forEach(s => runSafe(() => s.render(), s.id)); }
+function renderVisible() {
+  if (tab === 'tablero') { renderAll(); renderExtra('tablero'); }
+  else if (tab === 'aprende') { renderEdu(); renderExtra('aprende'); }
+  else if (EXTRA.tabs[tab]) { runSafe(() => EXTRA.tabs[tab].render && EXTRA.tabs[tab].render(), tab); renderExtra(tab); }
+}
 function showTab(id, fromUser) {
   tab = id;
   for (const t of TABS) {
@@ -1408,20 +1457,37 @@ function showTab(id, fromUser) {
   renderVisible();
   if (fromUser) { try { history.replaceState(null, '', '#' + id); } catch (e) { /* el visor puede no permitirlo */ } }
 }
-TABS.forEach((t, k) => {
-  const b = document.getElementById('tabbtn-' + t);
-  b.addEventListener('click', () => showTab(t, true));
-  b.addEventListener('keydown', e => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
-    showTab(next, true);
-    document.getElementById('tabbtn-' + next).focus();
+function bindTabs() {
+  TABS.forEach((t, k) => {
+    const b = document.getElementById('tabbtn-' + t);
+    b.addEventListener('click', () => showTab(t, true));
+    b.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const next = TABS[(k + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+      showTab(next, true);
+      document.getElementById('tabbtn-' + next).focus();
+    });
   });
-});
-document.querySelectorAll('.toc a').forEach(a => a.addEventListener('click', e => {
+}
+function mountSections() {
+  EXTRA.sections.sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
+  for (const s of EXTRA.sections) {
+    const box = document.getElementById('extra-' + s.tab) || document.getElementById('tab-' + s.tab);
+    if (!box) continue;
+    const d = document.createElement('div');
+    d.id = 'xsec-' + s.id;
+    d.innerHTML = s.html || '';
+    box.appendChild(d);
+  }
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('.toc a');
+  if (!a || !a.getAttribute('href') || a.getAttribute('href')[0] !== '#') return;
+  const el = document.getElementById(a.getAttribute('href').slice(1));
+  if (!el) return;
   e.preventDefault();
-  document.querySelector(a.getAttribute('href')).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
-}));
+  el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+});
 
 document.getElementById('lede').textContent =
   'Cuánto suben los precios frente a la meta del BCRP, qué rubros lo explican, cómo responde la política monetaria y cómo se compara el Perú con la región. Datos de precios a ' + mLabel(D.hasta) + '.';
@@ -1430,17 +1496,51 @@ const fuentesReg = R ? Object.entries(R.fuentes).filter(([iso]) => iso !== 'PER'
 [
   'Fuente: BCRPData (Banco Central de Reserva del Perú). Precios al consumidor: IPC de Lima Metropolitana elaborado por el INEI: índice y variaciones (PN38705PM, PN01271PM, PN01273PM), sin alimentos y energía (PN01276PM, PN01277PM), subyacente (PN01278PM, PN01279PM), clasificación sectorial y de transables (PN01296PM–PN01382PM), IPC desestacionalizado (PN42109PM, PN42110PM) y otras medidas (PN01281PM, PN01283PM, PN09819PM–PN09822PM, PN40410PM, PN40411PM). Precios al por mayor: INEI, nacional (PN01287PM). Expectativa de inflación a 12 meses: encuesta del BCRP, promedio de analistas económicos y sistema financiero (PD12912AM). Tasa de referencia: BCRP (PD04722MM). Causa del choque de precios: Notas de Estudios del BCRP.',
   (S.nac12 ? 'IPC nacional: ' + (D.src_nac || 'INEI') + '. ' : '') + (R ? 'Comparación regional, institutos de estadística y bancos centrales de cada país: ' + fuentesReg + '. Metas de inflación: comunicados y reportes oficiales de cada banco central o de la autoridad que fija la meta (en Brasil, el Consejo Monetario Nacional; en Uruguay, el Comité de Coordinación Macroeconómica).' : ''),
-  'La tasa real ex ante, las variaciones de 12 meses de los rubros y, para Chile antes de 2011, la inflación de 12 meses compuesta desde la variación mensual son cálculos propios a partir de estas series.',
+  'Secciones de análisis: ponderaciones del IPC de Lima (base dic. 2021): BCRP, Nota Semanal N.° 18-2026, cuadro 63. Proyecciones de inflación: BCRP, Reportes de Inflación (enero de 2015 a setiembre de 2026). Inflación por ciudades: INEI, informe técnico «Variación de los Indicadores de Precios de la Economía». Petróleo WTI (PN01660XM) y tipo de cambio interbancario (PN01207PM): BCRPData. Remuneración mínima vital (PN02124PM), masa salarial del sector formal (PN31885GM) e ingreso mensual de Lima Metropolitana (PN38070GM): BCRPData, con datos del Ministerio de Trabajo y Promoción del Empleo, la SUNAT (planilla electrónica) y el INEI.',
+  'Son cálculos propios a partir de estas series: la tasa real ex ante, las variaciones de 12 meses de los rubros, las contribuciones por rubro, la amplitud, las rachas y el cumplimiento de la meta, las variaciones reales de los ingresos, los errores de proyección y, para Chile antes de 2011, la inflación de 12 meses compuesta desde la variación mensual.',
   'Actualizado el ' + dLabel(D.generado) + '.',
 ].filter(Boolean).forEach(t => htmlEl('p', {text: t}, foot));
 
-renderKpis();
-fillRegPick();
-fillEduText();
-const startTab = location.hash.slice(1);
-showTab(TABS.includes(startTab) ? startTab : 'tablero', false);
-let rt;
-new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+// Índice automático del tablero: un enlace por cada título de bloque (.section-title), incluidas las extensiones.
+function buildToc() {
+  const panel = document.getElementById('tab-tablero'), heads = [...panel.querySelectorAll('.section-title')];
+  if (heads.length < 4) return;
+  const nav = htmlEl('nav', {cls: 'toc toc-tablero', 'aria-label': 'Bloques del tablero'});
+  heads.forEach((h, k) => {
+    if (!h.id) h.id = 'blk-' + k;
+    const a = htmlEl('a', {href: '#' + h.id, text: h.textContent.trim()}, nav);
+    a.addEventListener('click', e => { e.preventDefault(); h.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); });
+  });
+  document.getElementById('kpis').after(nav);
+}
+function extendAprendeToc() {
+  const nav = document.querySelector('#tab-aprende .toc'), fuentes = nav && nav.querySelector('a[href="#fuentes"]');
+  if (!nav) return;
+  document.querySelectorAll('#extra-aprende section[id]').forEach(sec => {
+    if (nav.querySelector('a[href="#' + sec.id + '"]')) return;
+    const h = sec.querySelector('h2');
+    const lab = sec.dataset.toc || (h ? h.textContent.replace(/^¿|\?$/g, '').trim() : sec.id);
+    const a = htmlEl('a', {href: '#' + sec.id, text: lab.length > 34 ? lab.slice(0, 32) + '…' : lab});
+    nav.insertBefore(a, fuentes);
+  });
+  if (fuentes) nav.appendChild(fuentes);
+}
+function initPage() {
+  mountSections();
+  buildToc();
+  extendAprendeToc();
+  bindTabs();
+  renderKpis();
+  fillRegPick();
+  fillEduText();
+  const startTab = location.hash.slice(1);
+  const def = D.defaultTab && TABS.includes(D.defaultTab) ? D.defaultTab : 'tablero';
+  showTab(TABS.includes(startTab) ? startTab : def, false);
+  let rt;
+  new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(renderVisible, 120); }).observe(document.querySelector('main'));
+}
 </script>
+<!--__EXTRA__-->
+<script>initPage();</script>
 </body>
 </html>

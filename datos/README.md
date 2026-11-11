@@ -12,7 +12,7 @@ panel = pd.read_csv(f"{base}/sbs/panel_entidad_mes.csv")
 | Archivo | Qué contiene | Filas | Columnas | Tamaño |
 |---|---|---:|---:|---:|
 | [`sbs/panel_entidad_mes.csv`](sbs/panel_entidad_mes.csv) | Panel entidad × mes: tamaño, calidad de cartera, solvencia, rentabilidad, liquidez y sensibilidad de cada entidad (55 indicadores). | 11 606 | 62 | 5,7 MB |
-| [`sbs/indicadores_ambito_mes.csv.gz`](sbs/indicadores_ambito_mes.csv.gz) | Indicadores por ámbito (sistema, subsistema y entidad) y mes, en formato largo, con numerador y denominador. | 465 668 | 8 | 10,7 MB |
+| [`sbs/indicadores_ambito_mes.csv.gz`](sbs/indicadores_ambito_mes.csv.gz) | Indicadores por ámbito (sistema, subsistema y entidad) y mes, en formato largo, con numerador y denominador. | 465 696 | 8 | 10,7 MB |
 | [`sbs/tasas_activas.csv.gz`](sbs/tasas_activas.csv.gz) | Tasas activas en moneda nacional por tipo de crédito y entidad. | 349 646 | 13 | 2,1 MB |
 | [`sbs/indicadores_financieros.csv.gz`](sbs/indicadores_financieros.csv.gz) | Cuadro de indicadores financieros del Boletín Estadístico (tal como lo publica la SBS, en formato largo). | 219 621 | 12 | 2,4 MB |
 | [`sbs/clasificaciones.csv`](sbs/clasificaciones.csv) | Clasificaciones de riesgo de cada entidad por mes (peor y mejor clasificación vigente, número de clasificadoras, perspectiva). | 6 261 | 9 | 0,7 MB |
@@ -22,7 +22,7 @@ panel = pd.read_csv(f"{base}/sbs/panel_entidad_mes.csv")
 | [`bcrp/bcrp_panel_mensual.csv`](bcrp/bcrp_panel_mensual.csv) | Panel de series mensuales (una columna por serie). | 933 | 967 | 4,7 MB |
 | [`bcrp/bcrp_panel_trimestral.csv`](bcrp/bcrp_panel_trimestral.csv) | Panel de series trimestrales. | 190 | 282 | 0,5 MB |
 | [`bcrp/bcrp_panel_anual.csv`](bcrp/bcrp_panel_anual.csv) | Panel de series anuales. | 104 | 291 | 0,2 MB |
-| [`bcrp/bcrp_panel_diaria.csv`](bcrp/bcrp_panel_diaria.csv) | Panel de series diarias. | 8 283 | 31 | 1,7 MB |
+| [`bcrp/bcrp_panel_diaria.csv`](bcrp/bcrp_panel_diaria.csv) | Panel de series diarias. | 8 286 | 31 | 1,7 MB |
 
 Las columnas de cada tabla están en [`DICCIONARIO.md`](DICCIONARIO.md).
 

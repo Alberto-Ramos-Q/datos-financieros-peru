@@ -1,0 +1,294 @@
+<!-- Extensión 10_contribuciones (KEY contrib): cuántos puntos de la inflación aporta cada rubro.
+     Datos: D.extra.contrib (src/inflacion_extra/10_contribuciones.py). Fuentes: docs/inflacion_extra/contribuciones_fuentes.md -->
+<style>
+/* Los colores de los seis grupos (--ctb-ss … --ctb-np, claro y oscuro) se definen desde los datos
+   (D.extra.contrib.groups, fijados en 10_contribuciones.py), al inicio del script de abajo. */
+#card-contrib .ctb-lead { margin: 10px 0 0; color: var(--ink2); font-size: 14px; max-width: 80ch; }
+#card-contrib .ctb-lead b { color: var(--ink); font-variant-numeric: tabular-nums; }
+#card-contrib .ln.tot { background: var(--ink); height: 2px; }
+#card-contrib .table-wrap h3 { font-size: 13px; margin: 10px 10px 4px; color: var(--ink2); }
+#contribuciones .formula { font-family: var(--font-head); font-size: 17px; background: var(--wash); border-radius: 8px;
+  padding: 10px 14px; margin: 8px 0 12px; max-width: 72ch; overflow-x: auto; white-space: nowrap; }
+#contribuciones .formula sub { font-size: 11px; }
+</style>
+<script>
+(function () {
+  const C = XD.contrib;
+  if (!C) return;
+  // Colores de grupo como tokens CSS (referencia común: otras pestañas pueden usar var(--ctb-<grupo>)).
+  const cst = document.createElement('style');
+  cst.textContent = ':root{' + C.groups.map(g => `${g.css}:${g.color};`).join('') + '}' +
+    ':root[data-theme="dark"]{' + C.groups.map(g => `${g.css}:${g.color_dark};`).join('') + '}';
+  document.head.appendChild(cst);
+  const GCOL = Object.fromEntries(C.groups.map(g => [g.id, `var(${g.css})`]));
+  const GLAB = Object.fromEntries(C.groups.map(g => [g.id, g.label]));
+  const NM = C.totm.length;                       // meses desde C.start (ene-2022)
+  const CM = Array.from({length: NM}, (_, i) => addMonths(C.start, i));
+  const off12 = CM.indexOf(C.start12);            // la de 12 meses empieza en dic-2022
+  const LAST = NM - 1;
+  // Sin «−0.00»: un valor que redondea a cero se muestra como 0.
+  const fz = (v, d = 2) => v == null ? '—' : fx(Math.abs(v) < 0.5 * 10 ** -d ? 0 : v, d);
+  const pp = (v, d = 2) => v == null ? '—' : fz(v, d) + ' pp';
+  const ppS = (v, d = 2) => v == null ? '—' : (+fz(v, d) > 0 ? '+' : '') + pp(v, d);
+  let mode = '12';                                // '12' = contribución a la de 12 meses; 'm' = a la del mes
+  let cur = null;
+  const ser = r => mode === '12' ? r.c12 : r.cm;
+  const tot = () => mode === '12' ? C.tot12 : C.totm;
+  const varOf = r => mode === '12' ? r.v12 : r.vm;
+  const first = () => mode === '12' ? off12 : 0;
+  const groupVal = (g, i) => { let s = 0, any = false; for (const r of C.rubros) if (r.g === g && ser(r)[i] != null) { s += ser(r)[i]; any = true; } return any ? s : null; };
+  const errTxt = () => `La suma de las contribuciones de los 13 rubros reproduce la inflación publicada por el BCRP con una diferencia máxima de ${fx(C.val.err12, 3)} pp en la de 12 meses (desde ${mLabel(C.val.err12_from)}) y de ${fx(C.val.errm, 3)} pp en la del mes (desde ${mLabel(C.val.errm_from)}), por redondeo de las ponderaciones.`;
+
+  const html = `
+  <figure class="card" style="margin:12px 0 0" id="card-contrib">
+    <div class="card-head">
+      <div>
+        <h2>¿Cuántos puntos de la inflación aporta cada rubro?</h2>
+        <p>La inflación es un promedio ponderado de las alzas de precios de cada rubro de la canasta. La contribución de un rubro es su parte de ese promedio, en puntos porcentuales (pp): depende de cuánto subió su precio y de cuánto pesa en el gasto de los hogares. Las contribuciones de todos los rubros suman la inflación total.</p>
+      </div>
+      <div class="card-tools">
+        <div class="seg" id="ctb-mode" role="group" aria-label="Medida">
+          <button type="button" data-m="12" aria-pressed="true">12 meses</button><button type="button" data-m="m" aria-pressed="false">Del mes</button>
+        </div>
+        <button class="btn" id="ctb-tbtn" type="button">Ver tabla</button>
+      </div>
+    </div>
+    <p class="ctb-lead" id="ctb-lead"></p>
+    <div class="legend" id="ctb-legend"></div>
+    <div class="panel-title" id="ctb-t1"></div>
+    <div class="chart" id="ch-ctb"></div>
+    <div class="panel-title" id="ctb-t2"></div>
+    <div class="chart" id="ch-ctb-last"></div>
+    <div class="table-wrap" id="tb-ctb" hidden></div>
+    <p class="note" id="note-ctb"></p>
+  </figure>`;
+
+  // ---------- Barras apiladas en el tiempo ----------
+  function renderTime() {
+    const box = document.getElementById('ch-ctb');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const a = first(), idx = [];
+    for (let i = a; i <= LAST; i++) idx.push(i);
+    const n = idx.length, narrow = W < 600;
+    const m = {l: 44, r: 10, t: 10, b: 26}, H = narrow ? 260 : 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const stacks = idx.map(i => {
+      let p = 0, q = 0;
+      const segs = C.groups.map(g => {
+        const v = groupVal(g.id, i);
+        if (v == null) return null;
+        const s = v >= 0 ? {g: g.id, v, y0: p, y1: p + v} : {g: g.id, v, y0: q, y1: q + v};
+        if (v >= 0) p += v; else q += v;
+        return s;
+      }).filter(Boolean);
+      return {i, segs, pos: p, neg: q, tot: tot()[i]};
+    });
+    const lo = Math.min(0, ...stacks.map(s => s.neg), ...stacks.map(s => s.tot ?? 0));
+    const hi = Math.max(0.5, ...stacks.map(s => s.pos), ...stacks.map(s => s.tot ?? 0));
+    const dom = niceDomain(lo, hi, 5);
+    const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+    const step = pw / n, bw = Math.max(2, Math.min(22, step * 0.72)), x = j => m.l + j * step + (step - bw) / 2;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', tabindex: 0,
+      'aria-label': `Contribución de cada grupo de rubros a la inflación ${mode === '12' ? 'de 12 meses' : 'del mes'}, en puntos porcentuales; use las flechas para recorrer los meses`}, box);
+    drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, t => t === 0 ? '0' : (t < 0 ? '−' : '') + Math.abs(t));
+    drawXTicks(svg, timeTicks(idx.map(i => CM[i]), pw), j => m.l + (j + 0.5) * step, H - 7);
+    stacks.forEach((s, j) => {
+      const xp = x(j);
+      // El segmento más alejado de cero lleva el extremo redondeado; el resto, recto. 1 px de separación.
+      const outerPos = s.segs.filter(z => z.v > 0).pop(), outerNeg = s.segs.filter(z => z.v < 0).pop();
+      for (const z of s.segs) {
+        const ya = y(z.y0), yb = y(z.y1);
+        if (Math.abs(yb - ya) < 0.5) continue;
+        const gap = Math.abs(yb - ya) > 2.5 ? 1 : 0;
+        const yb2 = z.v > 0 ? yb + gap : yb - gap;
+        const d = (z === outerPos || z === outerNeg) ? barPath(xp, bw, ya, yb2)
+          : `M${xp},${ya}V${yb2}H${xp + bw}V${ya}Z`;
+        if (d) svgEl('path', {d, fill: GCOL[z.g]}, svg);
+      }
+    });
+    // Inflación publicada: línea de tinta con puntos.
+    let d = '';
+    stacks.forEach((s, j) => { if (s.tot != null) d += (d ? 'L' : 'M') + (m.l + (j + 0.5) * step) + ',' + y(s.tot); });
+    svgEl('path', {d, fill: 'none', stroke: 'var(--surface)', 'stroke-width': 4, 'stroke-linejoin': 'round'}, svg);
+    svgEl('path', {d, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.75, 'stroke-linejoin': 'round'}, svg);
+    if (step >= 7) stacks.forEach((s, j) => { if (s.tot != null) svgEl('circle', {cx: m.l + (j + 0.5) * step, cy: y(s.tot), r: 2.5, fill: 'var(--ink)', stroke: 'var(--surface)', 'stroke-width': 1}, svg); });
+    const hl = svgEl('rect', {y: m.t, height: ph, width: step, fill: 'var(--wash)', visibility: 'hidden', 'pointer-events': 'none'}, svg);
+    svg.insertBefore(hl, svg.firstChild.nextSibling);
+    const show = (j, evt) => {
+      j = Math.max(0, Math.min(n - 1, j)); cur = idx[j];
+      hl.setAttribute('x', m.l + j * step); hl.setAttribute('visibility', 'visible');
+      const s = stacks[j];
+      const rows = [{value: pct(s.tot), label: mode === '12' ? 'inflación de 12 meses publicada' : 'inflación del mes publicada', em: true, color: 'var(--ink)'}];
+      C.groups.slice().reverse().forEach(g => rows.push({value: ppS(groupVal(g.id, s.i)), label: g.label, color: GCOL[g.id], sq: true}));
+      const node = {getBoundingClientRect: () => { const b = svg.getBoundingClientRect(); return {left: b.left + m.l + j * step, top: b.top + y(Math.max(s.pos, s.tot ?? 0)), width: step}; }};
+      const [cx, cy] = anchorOf(evt, node);
+      showTip(cx, cy, mLabel(CM[s.i]) + ' · contribución en pp', rows);
+    };
+    const hide = () => { hideTip(); hl.setAttribute('visibility', 'hidden'); };
+    svg.addEventListener('pointermove', evt => {
+      const b = svg.getBoundingClientRect(), px = evt.clientX - b.left;
+      if (px < m.l || px > m.l + pw) { hide(); return; }
+      show(Math.floor((px - m.l) / step), evt);
+    });
+    svg.addEventListener('pointerleave', hide); svg.addEventListener('blur', hide);
+    svg.addEventListener('focus', () => show(cur != null && idx.includes(cur) ? idx.indexOf(cur) : n - 1));
+    svg.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const j = cur != null && idx.includes(cur) ? idx.indexOf(cur) : n - 1;
+      show(j + (e.key === 'ArrowRight' ? 1 : -1));
+    });
+  }
+
+  // ---------- Último mes: 13 rubros ----------
+  function renderLast() {
+    const box = document.getElementById('ch-ctb-last');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const data = C.rubros.map(r => ({r, v: ser(r)[LAST]})).filter(o => o.v != null).sort((p, q) => q.v - p.v);
+    const narrow = W < 560, labW = narrow ? 0 : 220, valW = narrow ? 52 : 76, rowH = narrow ? 38 : 26, lblH = narrow ? 16 : 0;
+    const pw = W - labW - valW, H = data.length * rowH + 26;
+    const dom = niceDomain(Math.min(0, ...data.map(o => o.v)), Math.max(0.1, ...data.map(o => o.v)), narrow ? 3 : 5);
+    const x = v => labW + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img',
+      'aria-label': `Contribución de cada rubro a la inflación ${mode === '12' ? 'de 12 meses' : 'del mes'} en ${mLabel(CM[LAST])}`}, box);
+    const g = svgEl('g', {class: 'axis'}, svg);
+    for (const t of dom.ticks) {
+      svgEl('line', {x1: x(t), x2: x(t), y1: 0, y2: H - 22, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+      const tx = svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, g); tx.textContent = (t < 0 ? '−' : '') + Math.abs(t);
+    }
+    data.forEach((o, j) => {
+      const top = j * rowH, by = top + 6 + lblH, bh = 14;
+      // Ancho: nombre a la izquierda; angosto: nombre completo encima de la barra (sin cortes).
+      const lab = narrow ? svgEl('text', {x: 0, y: top + 15, class: 'dlbl', stroke: 'var(--surface)', 'stroke-width': 3, 'paint-order': 'stroke'}, svg)
+        : svgEl('text', {x: labW - 10, y: by + 11, 'text-anchor': 'end', class: 'dlbl'}, svg);
+      lab.textContent = o.r.label;
+      const x0 = x(0), x1 = x(o.v);
+      const d = o.v >= 0 ? hbarPath(x0, x1, by, bh)
+        : (x0 - x1 >= 0.5 ? `M${x0},${by}H${x1 + Math.min(4, x0 - x1)}Q${x1},${by} ${x1},${by + Math.min(4, bh / 2)}V${by + bh - Math.min(4, bh / 2)}Q${x1},${by + bh} ${x1 + Math.min(4, x0 - x1)},${by + bh}H${x0}Z` : '');
+      if (d) svgEl('path', {d, fill: GCOL[o.r.g]}, svg);
+      const vt = svgEl('text', {x: Math.max(x0, x1) + 6, y: by + 11, class: 'dlbl'}, svg);
+      const sp = svgEl('tspan', {class: 'dval'}, vt); sp.textContent = fz(o.v, 2);
+      const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: rowH, tabindex: 0,
+        'aria-label': `${o.r.label}: ${pp(o.v)}`}, svg);
+      const show = evt => {
+        const [cx, cy] = anchorOf(evt, hit);
+        const rows = [{value: ppS(o.v), label: 'contribución', color: GCOL[o.r.g], sq: true, em: true},
+          {value: pct(varOf(o.r)[LAST]), label: mode === '12' ? 'alza de precios en 12 meses' : 'alza de precios en el mes'},
+          {value: fx(o.r.w, 1) + '%', label: 'peso en la canasta (dic 2021)'}];
+        if (mode === '12' && o.r.we12[LAST] != null) rows.push({value: fx(o.r.we12[LAST], 1) + '%', label: 'peso efectivo hace 12 meses'});
+        rows.push({value: '', label: 'Grupo: ' + GLAB[o.r.g]});
+        showTip(cx, cy, o.r.label + ' · ' + mLabel(CM[LAST]), rows);
+      };
+      hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+      hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    });
+  }
+
+  function renderLegend() {
+    const leg = document.getElementById('ctb-legend');
+    leg.replaceChildren();
+    for (const g of C.groups) {
+      const s = htmlEl('span', null, leg); const i = htmlEl('i', {cls: 'sw'}, s); i.style.background = GCOL[g.id];
+      s.appendChild(document.createTextNode(g.label));
+    }
+    const s = htmlEl('span', null, leg); htmlEl('i', {cls: 'ln tot'}, s);
+    s.appendChild(document.createTextNode(mode === '12' ? 'Inflación de 12 meses publicada' : 'Inflación del mes publicada'));
+  }
+
+  function renderText() {
+    const T = tot()[LAST], top = C.rubros.map(r => ({r, v: ser(r)[LAST]})).filter(o => o.v != null).sort((p, q) => q.v - p.v).slice(0, 3);
+    const lead = document.getElementById('ctb-lead');
+    lead.replaceChildren();
+    const b = t => htmlEl('b', {text: t}, lead), tx = t => lead.appendChild(document.createTextNode(t));
+    tx(`En ${mLabel(CM[LAST])} la inflación ${mode === '12' ? 'de 12 meses' : 'del mes'} fue `); b(pct(T)); tx('. Los rubros que más aportaron: ');
+    top.forEach((o, k) => { tx(o.r.label.toLowerCase() + ' '); b(pp(o.v)); tx(k < top.length - 2 ? ', ' : k === top.length - 2 ? ' y ' : '.'); });
+    document.getElementById('ctb-t1').textContent = mode === '12'
+      ? `Contribución a la inflación de 12 meses por grupo de rubros, en pp (desde ${mLabel(C.start12)})`
+      : `Contribución a la inflación del mes por grupo de rubros, en pp (desde ${mLabel(C.start)})`;
+    document.getElementById('ctb-t2').textContent = `${mLabel(CM[LAST])}: contribución de cada rubro, en pp`;
+    document.getElementById('note-ctb').textContent =
+      `Cálculo propio con las ponderaciones oficiales del IPC de Lima base diciembre 2021 = 100 (BCRP, Nota Semanal, cuadro 63, clasificación sectorial) y las variaciones mensuales de cada rubro (BCRPData). ` +
+      `Solo desde 2022: antes el IPC tenía otra base (2009) y otras ponderaciones. La contribución a la inflación de 12 meses empieza en ${mLabel(C.start12)}, el primer mes cuya comparación con 12 meses antes cae entera en la base nueva. ` +
+      errTxt() + ' Los grupos suman sus rubros: bienes subyacentes = alimentos y bebidas, textiles y calzado, electrodomésticos y otros productos industriales; servicios subyacentes = comidas fuera del hogar, educación, salud, alquileres y otros servicios.';
+  }
+
+  function fillTable() {
+    const wrap = document.getElementById('tb-ctb');
+    wrap.replaceChildren();
+    const mk = (title, head, rows) => {
+      htmlEl('h3', {text: title}, wrap);
+      const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+      head.forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+      rows.forEach(r => { const row = htmlEl('tr', null, tb); r.forEach(c => htmlEl('td', {text: c}, row)); });
+    };
+    const lab = mode === '12' ? 'de 12 meses' : 'del mes';
+    mk(`${mLabel(CM[LAST])}: contribución a la inflación ${lab} por rubro`,
+      ['Rubro', 'Grupo', 'Peso dic 2021 (%)'].concat(mode === '12' ? ['Peso efectivo (%)'] : []).concat([mode === '12' ? 'Alza 12 meses (%)' : 'Alza del mes (%)', 'Contribución (pp)']),
+      C.rubros.slice().sort((p, q) => (ser(q)[LAST] ?? -99) - (ser(p)[LAST] ?? -99)).map(r =>
+        [r.label, GLAB[r.g], fx(r.w, 1)].concat(mode === '12' ? [fx(r.we12[LAST], 2)] : []).concat([fx(varOf(r)[LAST], 2), fx(ser(r)[LAST], 3)]))
+        .concat([['Suma de rubros', '', fx(C.val.w_sum, 1)].concat(mode === '12' ? [''] : []).concat(['', fx((mode === '12' ? C.sum12 : C.summ)[LAST], 3)]),
+                 ['Inflación publicada (%)', '', ''].concat(mode === '12' ? [''] : []).concat(['', fx(tot()[LAST], 2)])]));
+    const rows = [];
+    for (let i = LAST; i >= first(); i--) rows.push([mLabel(CM[i])].concat(C.groups.map(g => fx(groupVal(g.id, i), 3)))
+      .concat([fx((mode === '12' ? C.sum12 : C.summ)[i], 3), fx(tot()[i], 2)]));
+    mk(`Contribución a la inflación ${lab} por grupo, en pp`, ['Mes'].concat(C.groups.map(g => g.label)).concat(['Suma', 'Inflación publicada (%)']), rows);
+  }
+
+  let mounted = false;
+  function render() {
+    const node = document.getElementById('xsec-contrib');
+    if (!node) return;
+    if (!mounted) {
+      mounted = true;
+      // Va justo después del mapa de calor por rubro (misma pregunta: qué explica la inflación).
+      const heat = document.getElementById('card-heat');
+      if (heat) heat.after(node);
+      node.querySelectorAll('#ctb-mode button').forEach(btn => btn.addEventListener('click', () => {
+        mode = btn.dataset.m; cur = null;
+        node.querySelectorAll('#ctb-mode button').forEach(z => z.setAttribute('aria-pressed', String(z === btn)));
+        render();
+      }));
+      const tb = document.getElementById('ctb-tbtn');
+      tb.addEventListener('click', () => {
+        const wrap = document.getElementById('tb-ctb'), open = wrap.hidden;
+        if (open) fillTable();
+        wrap.hidden = !open; tb.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+      });
+    }
+    renderLegend(); renderText(); renderTime(); renderLast();
+    if (!document.getElementById('tb-ctb').hidden) fillTable();
+  }
+  registerSection({tab: 'tablero', id: 'contrib', order: 15, html, render});
+
+  // ---------- Aprende: qué es una contribución ----------
+  const by = Object.fromEntries(C.rubros.map(r => [r.k, r]));
+  const ex = (k) => { const r = by[k]; return r ? `${r.label.toLowerCase()} (peso ${fx(r.w, 1)}%) subieron ${pct(r.v12[LAST], 1)} en 12 meses y aportaron ${pp(r.c12[LAST])}` : ''; };
+  const htmlA = `
+  <div class="edu" style="margin-top:12px">
+    <section id="contribuciones" data-toc="Contribuciones">
+      <div class="kicker">Contribuciones</div>
+      <h2>¿Cuánto aporta cada rubro a la inflación?</h2>
+      <p>El IPC es un promedio ponderado de los precios de la canasta. La <b>contribución</b> de un rubro es la parte de la inflación total que le corresponde, en puntos porcentuales (pp). Si se suman las contribuciones de rubros que, juntos, forman toda la canasta, se obtiene la inflación total.</p>
+      <p>Depende de dos cosas: cuánto subió el precio del rubro y cuánto pesa en el gasto de los hogares. Un rubro de poco peso puede subir mucho y aportar poco, y uno de mucho peso con alzas moderadas puede aportar más. En ${mLabel(CM[LAST])}, los ${ex('h_nc')}; las ${ex('h_ssc')}.</p>
+      <h3>Cómo se calcula</h3>
+      <p>El IPC de Lima del INEI se calcula con la fórmula de Laspeyres: cada rubro tiene un peso fijo, medido para diciembre de 2021, y el índice total es el promedio ponderado de los índices de los rubros (todos valen 100 en diciembre de 2021). Por eso, la contribución del rubro <i>i</i> a la inflación de 12 meses es:</p>
+      <div class="formula" role="math" aria-label="contribución igual a peso por índice del rubro hace 12 meses entre índice total hace 12 meses, por la variación de 12 meses del rubro">c<sub>i</sub> = w<sub>i</sub> × (I<sub>i, t−12</sub> / I<sub>total, t−12</sub>) × π<sub>i</sub></div>
+      <p>donde <i>w</i> es el peso oficial del rubro, <i>I</i> los índices (base diciembre 2021 = 100) y <i>π</i> la variación de 12 meses del rubro. El cociente de índices actualiza el peso: si un rubro se encareció más que el resto desde diciembre de 2021, hoy representa una parte algo mayor del gasto que su peso original (el «peso efectivo» del gráfico). Para la contribución del mes se usa el mes anterior en lugar de hace 12 meses.</p>
+      <p>Con este cálculo se reproducen las contribuciones que publica el BCRP en su Reporte de Inflación: por ejemplo, 0.62 pp de las comidas fuera del hogar y 0.31 pp de la educación en la inflación de enero a agosto de 2026. ${errTxt()}</p>
+      <p>Las ponderaciones valen desde enero de 2022, cuando el INEI cambió la base del IPC a diciembre de 2021 con los pesos de la Encuesta Nacional de Presupuestos Familiares 2019–2020. Antes regía la base 2009, con otros pesos; por eso este tablero no calcula contribuciones anteriores a 2022.</p>
+      <h3>Fuentes</h3>
+      <ul class="srcs">
+        <li>BCRP, <i>Nota Semanal</i> N.° 18-2026, cuadro 63 «Índice de precios al consumidor Lima Metropolitana: clasificación sectorial», columna «Ponderación Dic. 21 = 100» (las mismas cifras en la N.° 20-2023). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Nota-Semanal/2026/ns-18-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+        <li>BCRP, <i>Reporte de Inflación, setiembre 2026</i>, cuadros 46 «Inflación» y 47 «Contribución ponderada a la inflación». <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/setiembre/reporte-de-inflacion-setiembre-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+        <li>INEI, metodología del IPC de Lima Metropolitana (base diciembre 2021 = 100), en <i>Indicadores de Precios de la Economía</i>, enero 2025 (fórmula de Laspeyres). <a href="https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1728/Libro58.pdf" target="_blank" rel="noopener">inei.gob.pe</a></li>
+        <li>BCRPData: variaciones mensuales de la clasificación sectorial del IPC de Lima (PN01297PM–PN01311PM) e inflación publicada (PN01271PM, PN01273PM).</li>
+      </ul>
+    </section>
+  </div>`;
+  // El índice de «Aprende» lo arma la plantilla con las secciones de extra-aprende (etiqueta: data-toc).
+  registerSection({tab: 'aprende', id: 'contrib-aprende', order: 15, html: htmlA});
+})();
+</script>

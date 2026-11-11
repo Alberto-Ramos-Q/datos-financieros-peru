@@ -1,0 +1,205 @@
+{
+  "_como_reemplazar": [
+    "Este archivo es el contenido curado de la pestaña «Episodio actual» del tablero de inflación (src/inflacion_extra/80_episodio.py + src/plantillas/inflacion_extra/80_episodio.html). El código no tiene textos del episodio: todo lo que cambia con el tiempo está aquí.",
+    "Las cifras (inicio, meses fuera del rango, nivel, pico, comparaciones, rubros, tasa y expectativas) NO se escriben aquí: salen del panel del BCRP cada vez que se corre python src/visual_inflacion.py.",
+    "Para un episodio nuevo: (1) copia este archivo a config/episodios_anteriores/<id>.json si quieres guardarlo; (2) cambia id, titulo, bajada, inicio_esperado, comparar, causas, politica, fuentes y redactado_con_dato; (3) cada frase de causas y politica debe estar en docs/inflacion_extra/episodio_fuentes.md con su URL y página o párrafo; (4) corre python src/visual_inflacion.py y revisa los AVISOS de consola.",
+    "inicio: 'auto' toma la racha más reciente de inflación de 12 meses fuera del rango meta (por encima o por debajo). Si se pone un mes ('AAAA-MM'), se usa ese mes como inicio. inicio_esperado solo sirve de control: si no coincide con lo que dicen los datos, la consola avisa.",
+    "comparar: episodios anteriores fuera del rango, identificados por el mes en que salieron del rango (consola: 'episodios detectados'). Se alinean por meses desde la salida del rango.",
+    "causas[].fuentes y politica.fuentes usan las claves de 'fuentes'. Solo fuentes oficiales primarias (INEI, BCRP, MEF). Nunca prensa ni bancos privados. Si una causa no está en una fuente oficial, no se escribe.",
+    "redactado_con_dato: mes del IPC con el que se redactaron los textos. Si el panel trae un mes posterior, la consola avisa y la página muestra con qué dato se redactaron, para que nadie lea un texto viejo como nuevo.",
+    "rubros (opcional): lista de [columna_del_panel, etiqueta, id_de_grupo] (ss, sb, na, nt, nc, np: los grupos de la sección de contribuciones) para el gráfico de rubros si no hay aportes; si falta, se usan los 13 rubros de la clasificación sectorial del BCRP. Revisar estos textos cada mes, cuando entra un dato nuevo del IPC.",
+    "comparar[].contexto y contexto_actual: una o dos frases por episodio (de dónde partía la política y qué choques hubo), con fuentes oficiales; se muestran junto al gráfico de comparación. causas[].anexo = 'amplitud' agrega la frase automática con la medida de 13 grupos del Tablero. politica.nota_expectativas: nota fechada sobre cómo describió el BCRP las expectativas."
+  ],
+  "id": "2026-choque-energia",
+  "redactado_con_dato": "2026-10",
+  "redactado_el": "2026-11-07",
+  "titulo": "La inflación sobre el rango meta en 2026",
+  "bajada": "Qué pasó con los precios desde que la inflación salió del rango meta del BCRP, qué lo explica según el INEI y el BCRP, y cómo respondió la política monetaria.",
+  "inicio": "auto",
+  "inicio_esperado": "2026-03",
+  "comparar": [
+    {
+      "inicio": "2007-10",
+      "etiqueta": "2007–2009",
+      "contexto": "La demanda interna crecía por encima de la producción potencial y subieron los precios internacionales de alimentos y combustibles. El BCRP subió la tasa desde julio de 2007, primero de forma preventiva y luego para evitar que esa alza pasara a las expectativas. Desde febrero de 2009 la redujo, con menores presiones inflacionarias, menor crecimiento mundial y caída de los precios internacionales de alimentos y combustibles.",
+      "fuentes": [
+        "ni-2007-07",
+        "ni-2008-09",
+        "ni-2009-02"
+      ]
+    },
+    {
+      "inicio": "2016-09",
+      "etiqueta": "2016–2017",
+      "contexto": "Incluyó el choque de precios de alimentos del Fenómeno El Niño Costero de inicios de 2017. La tasa se mantuvo en 4.25%, nivel fijado en febrero de 2016, y el BCRP la redujo en mayo de 2017, cuando ese choque se estaba disipando y la actividad crecía por debajo de su potencial.",
+      "fuentes": [
+        "ri-2017-06"
+      ]
+    },
+    {
+      "inicio": "2021-06",
+      "etiqueta": "2021–2024",
+      "contexto": "Empezó con la política monetaria en una postura expansiva por la pandemia, con la tasa real en mínimos históricos y la actividad aún por debajo de su nivel potencial. La inflación subió por los precios internacionales de alimentos y combustibles y por el tipo de cambio.",
+      "fuentes": [
+        "ni-2021-08"
+      ]
+    }
+  ],
+  "contexto_actual": {
+    "contexto": "El episodio empezó con la tasa de referencia en 4.25%, el nivel al que el BCRP la bajó en setiembre de 2025 y que entonces describió como «muy cerca del nivel estimado como neutral». La actividad económica está alrededor de su nivel potencial y el BCRP atribuye el alza a choques de oferta (ver «Qué lo explica»).",
+    "fuentes": [
+      "ni-2025-09",
+      "ni-2026-04"
+    ]
+  },
+  "causas": [
+    {
+      "titulo": "Marzo: un choque de energía",
+      "texto": "El BCRP atribuyó el salto de marzo a varios choques de oferta a la vez: el fuerte aumento de los precios internacionales de los combustibles, en el contexto del conflicto en Irán; la interrupción total del suministro de gas natural y de líquidos de gas natural durante la primera quincena del mes, tras la rotura del gasoducto de TGP; y factores climáticos adversos.",
+      "fuentes": [
+        "ni-2026-04",
+        "ne-26-2026"
+      ]
+    },
+    {
+      "titulo": "Pasajes: alza rápida, bajada lenta",
+      "texto": "Con el desabastecimiento de gas natural vehicular y GLP tras la rotura del gasoducto de TGP, y el mayor precio internacional del petróleo, en marzo subieron los pasajes de mototaxi (13.5%), combi (12.7%), ómnibus y microbús (11.8%) y taxi (7.3%). En mayo los combustibles y los pasajes se estabilizaron en niveles altos, sin revertir el alza. Según el BCRP, en el corto plazo las tarifas de transporte suben rápido cuando sube el combustible y bajan poco cuando cae; por eso el choque, que es de energía, se ve también en la inflación sin alimentos y energía, que incluye el transporte.",
+      "fuentes": [
+        "ne-26-2026",
+        "ri-2026-09"
+      ]
+    },
+    {
+      "titulo": "Combustibles más caros",
+      "texto": "En marzo los gasoholes subieron 32.3%: el precio internacional subió 28.7% y, según el BCRP, el margen minorista 66.9% (por la mayor demanda ante el desabastecimiento de gas natural vehicular y GLP). En abril siguieron subiendo por el precio de paridad internacional, ligado al conflicto en Irán. En octubre volvieron a subir el GLP vehicular, el gasohol y el diésel, y el gas doméstico, por el mayor precio internacional del crudo.",
+      "fuentes": [
+        "ne-26-2026",
+        "ne-33-2026",
+        "inei-2026-10"
+      ]
+    },
+    {
+      "titulo": "Alimentos y clima",
+      "texto": "Entre mayo y agosto la inflación subió sobre todo por alimentos como pescado fresco, huevos y carne de pollo. El pescado se encareció por oleajes anómalos que cerraron puertos y por la mayor temperatura del mar. En octubre subieron también choclo, zanahoria, arveja y papa: el INEI lo asocia a los efectos del Fenómeno El Niño Costero sobre la producción agrícola y la pesca, y al traslado del mayor precio de los combustibles a los costos de transporte y distribución.",
+      "fuentes": [
+        "ri-2026-09",
+        "inei-2026-10"
+      ]
+    },
+    {
+      "titulo": "Alzas de inicio de año",
+      "texto": "Educación subió por las pensiones y matrículas del nuevo año escolar y universitario, y el agua potable por el reajuste tarifario dispuesto por la SUNASS desde las facturas de febrero.",
+      "fuentes": [
+        "ne-26-2026",
+        "ri-2026-09"
+      ]
+    },
+    {
+      "titulo": "Las presiones de fondo",
+      "texto": "El BCRP considera que las presiones de fondo siguen acotadas: en agosto la inflación sin alimentos y energía, excluyendo el transporte, fue 1.8% en 12 meses, por debajo de 2% desde abril de 2025. Su indicador de amplitud, con 188 rubros, marcaba 38% de rubros con alzas mayores a 3% al año, similar a julio: cerca de su promedio de 2001–2025 (39%) y por encima del 27% habitual cuando la inflación está alrededor de 2%.",
+      "fuentes": [
+        "ri-2026-09",
+        "ni-2026-08"
+      ],
+      "anexo": "amplitud"
+    }
+  ],
+  "politica": {
+    "texto": [
+      "El BCRP explica que la inflación de estos meses responde principalmente a choques de oferta transitorios, en especial el alza de los combustibles y su efecto en las tarifas de transporte en marzo y abril. Elabora sus proyecciones para un horizonte de 18 a 24 meses y busca que la inflación vuelva al rango meta en ese horizonte. En el Reporte de Inflación de setiembre de 2026 proyectó que la inflación seguiría sobre el rango en los meses siguientes, con más presión a fines de año e inicios de 2027 por El Niño, y que volvería a alrededor de 2% en 2027.",
+      "En las notas del Programa Monetario de abril, mayo, julio y agosto de 2026, el Directorio repite que está «especialmente atento» a la inflación subyacente, las expectativas, la actividad y la duración de los choques de oferta, para ajustar la política si hace falta. Según el indicador de tono de comunicación que estima el propio BCRP, sus Notas Informativas se ubicaron en el tramo contractivo («hawkish») por sexto mes consecutivo en setiembre, es decir, desde abril.",
+      "El BCRP estima la tasa real neutral en alrededor de 2%. En junio de 2026 reportó que la tasa de referencia en términos reales (1.36%) estaba por debajo de ese nivel, en un contexto de choques de oferta y con las expectativas de inflación aún dentro del rango meta. El BCRP calcula la tasa real con la expectativa del mes anterior; el gráfico usa la del mismo mes, por eso en junio muestra 1.43% y no 1.36%."
+    ],
+    "fuentes": [
+      "ni-2026-04",
+      "ni-2026-05",
+      "ni-2026-07",
+      "ni-2026-08",
+      "ri-2026-06",
+      "ri-2026-09"
+    ],
+    "nota_expectativas": {
+      "texto": "En julio de 2026 el BCRP describió la expectativa (3.0% con un decimal) como «en el límite superior» del rango meta.",
+      "fuentes": [
+        "ni-2026-08"
+      ]
+    }
+  },
+  "fuentes": {
+    "ne-26-2026": {
+      "cita": "BCRP, Notas de Estudios N.° 26-2026. Inflación: marzo 2026 (10 de abril de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Publicaciones/Notas-Estudios/2026/nota-de-estudios-26-2026.pdf",
+      "detalle": "pp. 1–3"
+    },
+    "ne-33-2026": {
+      "cita": "BCRP, Notas de Estudios N.° 33-2026. Inflación: abril 2026 (11 de mayo de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Publicaciones/Notas-Estudios/2026/nota-de-estudios-33-2026.pdf",
+      "detalle": "pp. 1–3"
+    },
+    "ni-2026-04": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de abril 2026 (9 de abril de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-04-09.pdf",
+      "detalle": "párrafos 1, 2.i, 2.iv y 3"
+    },
+    "ni-2026-08": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de agosto 2026 (13 de agosto de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-08-13-1.pdf",
+      "detalle": "párrafos 1, 2.i y 3"
+    },
+    "ri-2026-09": {
+      "cita": "BCRP, Reporte de Inflación, setiembre 2026",
+      "url": "https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/setiembre/reporte-de-inflacion-setiembre-2026.pdf",
+      "detalle": "resumen (pp. 8–9), cap. V (pp. 123–124) y cap. VI (pp. 172–182; horizonte de proyección, p. 179)"
+    },
+    "inei-2026-10": {
+      "cita": "INEI, Informe de Precios N.° 11, noviembre 2026: Variación de los indicadores de precios de la economía, octubre 2026 (1 de noviembre de 2026)",
+      "url": "https://www.gob.pe/institucion/inei/informes-publicaciones/8777335-informe-de-precios-n-11-noviembre-2026-variacion-de-los-indicadores-de-precios-de-la-economia",
+      "detalle": "pp. 1, 3 y 7"
+    },
+    "ni-2026-05": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de mayo 2026 (14 de mayo de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-05-14.pdf",
+      "detalle": "párrafos 1 y 3"
+    },
+    "ni-2026-07": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de julio 2026 (9 de julio de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-07-09-1.pdf",
+      "detalle": "párrafos 1 y 3"
+    },
+    "ri-2026-06": {
+      "cita": "BCRP, Reporte de Inflación, junio 2026",
+      "url": "https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/junio/reporte-de-inflacion-junio-2026.pdf",
+      "detalle": "cap. V, párr. 72 y nota 21 (tasa real y tasa neutral)"
+    },
+    "ni-2025-09": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de setiembre 2025 (11 de setiembre de 2025)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2025/nota-informativa-2025-09-11.pdf",
+      "detalle": "párrafo 1"
+    },
+    "ni-2021-08": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de agosto 2021 (12 de agosto de 2021)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2021/nota-informativa-2021-08-12.pdf",
+      "detalle": "párrafos 1, 1.i, 1.ii y 2"
+    },
+    "ri-2017-06": {
+      "cita": "BCRP, Reporte de Inflación, junio 2017",
+      "url": "https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2017/junio/reporte-de-inflacion-junio-2017.pdf",
+      "detalle": "resumen, párrafos v y vii (pp. 8–9)"
+    },
+    "ni-2007-07": {
+      "cita": "BCRP, Nota Informativa N.° 055-2007. Programa Monetario de julio 2007 (5 de julio de 2007)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2007/Nota-Informativa-055-2007-BCRP.pdf",
+      "detalle": "párrafos 1 y 2.b"
+    },
+    "ni-2008-09": {
+      "cita": "BCRP, Nota Informativa N.° 094-2008. Programa Monetario de setiembre 2008 (11 de setiembre de 2008)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2008/Nota-Informativa-094-2008-BCRP.pdf",
+      "detalle": "párrafo 1"
+    },
+    "ni-2009-02": {
+      "cita": "BCRP, Nota Informativa N.° 009-2009. Programa Monetario de febrero 2009",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2009/Nota-Informativa-009-2009-BCRP.pdf",
+      "detalle": "párrafo 1"
+    }
+  }
+}

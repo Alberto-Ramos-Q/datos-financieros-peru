@@ -1,0 +1,101 @@
+<!-- Extensión 24_costos (KEY costos): petróleo, tipo de cambio, precios al por mayor y rubros expuestos al exterior.
+     Datos: src/inflacion_extra/24_costos.py y D.S (ipm12, imp12, vtc12, tot12). Fuentes: docs/inflacion_extra/permanentes_fuentes.md. -->
+<script>
+(function () {
+  const C = XD.costos;
+  if (!C || !window.XP) return;
+  const ID = 'cos';
+  const FLOOR = '2002-01';
+  const cv = (k, i) => (C[k] ? C[k][i] : null) ?? null;
+  const usd = v => v == null ? '—' : 'US$ ' + fx(v, 2);
+  const sol = v => v == null ? '—' : 'S/ ' + fx(v, 3);
+  const PRICES = [
+    {k: 'tot12', label: 'IPC total', short: 'IPC total', color: 'var(--s1)'},
+    {k: 'ipm12', label: 'Precios al por mayor (IPM)', short: 'Por mayor', color: 'var(--s2)'},
+    {k: 'imp12', label: 'IPC: rubros importados', short: 'Importados', color: 'var(--s3)'},
+    {k: 'vtc12', label: 'IPC: vinculados al dólar y a cotizaciones', short: 'Vinculados', color: 'var(--s4)'},
+  ].filter(s => S[s.k]);
+  const idxNow = () => XP.idxFrom([C.wti12, C.tc12].concat(PRICES.map(s => S[s.k])), FLOOR);
+  const lastOf = k => { const l = S[k] ? lastIdx(k) : -1; return l < 0 ? null : {m: MONTHS[l], v: val(k, l)}; };
+
+  function textNow() {
+    const parts = [];
+    if (C.wti_last) parts.push(`En ${mLabel(C.wti_last.m)} el petróleo WTI promedió ${usd(C.wti_last.v)} por barril, ` +
+      (C.wti_last.v12 > 0.05 ? `${pct(C.wti_last.v12, 1)} más` : C.wti_last.v12 < -0.05 ? `${pct(-C.wti_last.v12, 1)} menos` : 'casi lo mismo') + ' que un año antes.');
+    if (C.tc_last) parts.push(`El tipo de cambio promedió ${sol(C.tc_last.v)} por dólar en ${mLabel(C.tc_last.m)}, ` +
+      (C.tc_last.v12 > 0.05 ? `${pct(C.tc_last.v12, 1)} más que un año antes (el sol se depreció).` : C.tc_last.v12 < -0.05 ? `${pct(-C.tc_last.v12, 1)} menos que un año antes (el sol se apreció).` : 'casi igual que un año antes.'));
+    const t = lastOf('tot12'), p = lastOf('ipm12'), im = lastOf('imp12'), vt = lastOf('vtc12');
+    if (t) parts.push(`En ${mLabel(t.m)}, la variación de 12 meses fue ${pct(t.v)} en el IPC total` +
+      (im && im.m === t.m ? `, ${pct(im.v)} en los rubros importados` : '') + (vt && vt.m === t.m ? ` y ${pct(vt.v)} en los vinculados al dólar y a cotizaciones` : '') + '.' +
+      (p ? ` Los precios al por mayor, ${pct(p.v)} en ${mLabel(p.m)}.` : ''));
+    return parts.join(' ');
+  }
+
+  function fillTable() {
+    const idx = idxNow().slice().reverse();
+    XP.table(document.getElementById(ID + '-tb'),
+      ['Mes', 'Petróleo WTI (US$/barril)', 'WTI, var. 12 m', 'Tipo de cambio (S/ por US$)', 'Tipo de cambio, var. 12 m'].concat(PRICES.map(s => s.label + ', var. 12 m')),
+      idx.map(i => [mLabel(MONTHS[i]), cv('wti', i) == null ? '—' : fx(cv('wti', i), 2), pct(cv('wti12', i), 1),
+        cv('tc', i) == null ? '—' : fx(cv('tc', i), 3), pct(cv('tc12', i), 1)].concat(PRICES.map(s => pct(val(s.k, i))))));
+  }
+
+  const html = `
+  <div class="section-title">Costos y precios</div>
+  <figure class="card" style="margin:0" id="${ID}-card">
+    <div class="card-head">
+      <div>
+        <h2>Petróleo, tipo de cambio y precios al por mayor frente al IPC</h2>
+        <p>Variación de 12 meses, en %. Arriba, dos costos que vienen del exterior: el precio del petróleo (en dólares) y el tipo de cambio. Abajo, los precios al por mayor y los rubros del IPC más expuestos a esos costos, junto al IPC total. Cada panel tiene su propia escala; comparten el eje del tiempo y al pasar el cursor por uno se leen todos.</p>
+      </div>
+      <button class="btn" id="${ID}-btn" type="button">Ver tabla</button>
+    </div>
+    ${C.wti12 ? '<div class="panel-title">Petróleo WTI, precio promedio del mes en US$: variación de 12 meses</div><div class="chart" id="' + ID + '-wti"></div>' : ''}
+    ${C.tc12 ? '<div class="panel-title">Tipo de cambio interbancario, promedio del mes (S/ por US$): variación de 12 meses. Positiva: el sol se deprecia</div><div class="chart" id="' + ID + '-tc"></div>' : ''}
+    <div class="panel-title">Precios al por mayor y rubros del IPC: variación de 12 meses</div>
+    <div class="legend">${PRICES.map(s => `<span><i class="ln" style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>
+    <div class="chart" id="${ID}-pr"></div>
+    <div class="table-wrap" id="${ID}-tb" hidden></div>
+    <p class="xp-text" id="${ID}-txt"></p>
+    <p class="note" id="${ID}-note"></p>
+  </figure>`;
+
+  registerSection({tab: 'tablero', id: 'costos', order: 24, html, render() {
+    if (!document.getElementById(ID + '-card')) return;
+    const idx = idxNow(), panels = [];
+    if (C.wti12) panels.push({box: document.getElementById(ID + '-wti'), H: 170, aria: 'Petróleo WTI, variación de 12 meses',
+      series: [{get: i => cv('wti12', i), label: 'Petróleo WTI', short: 'WTI', color: 'var(--s1)'}],
+      fmt: v => pct(v, 1),
+      rows: i => [{value: pct(cv('wti12', i), 1), label: 'Petróleo WTI, var. 12 meses', color: 'var(--s1)'}, {value: usd(cv('wti', i)), label: 'por barril, promedio del mes'}]});
+    if (C.tc12) panels.push({box: document.getElementById(ID + '-tc'), H: 150, aria: 'Tipo de cambio, variación de 12 meses',
+      series: [{get: i => cv('tc12', i), label: 'Tipo de cambio', short: 'Tipo de cambio', color: 'var(--s1)'}],
+      fmt: v => pct(v, 1),
+      rows: i => [{value: pct(cv('tc12', i), 1), label: 'Tipo de cambio, var. 12 meses', color: 'var(--s1)'}, {value: sol(cv('tc', i)), label: 'por US$, promedio del mes'}]});
+    panels.push({box: document.getElementById(ID + '-pr'), H: 260, ticks: 5, aria: 'IPM, rubros importados, vinculados y el IPC total, variación de 12 meses',
+      series: PRICES.map(s => ({get: i => val(s.k, i), label: s.label, short: s.short, color: s.color}))});
+    XP.panels(panels, idx);
+    document.getElementById(ID + '-txt').textContent = textNow();
+    document.getElementById(ID + '-note').textContent =
+      `Desde ${mLabel(MONTHS[idx[0]])}. Que dos series se muevan juntas no prueba que una cause a la otra: los precios dependen también de otros factores, como la demanda, el clima o las tarifas reguladas. ` +
+      'El WTI es un petróleo de referencia de Estados Unidos; en soles, su costo depende además del tipo de cambio. El IPM es nacional (INEI); los rubros importados y los vinculados son parte del IPC de Lima. ' +
+      'Fuente: BCRPData (WTI: Reuters; tipo de cambio: BCRP; precios: INEI). Variaciones de 12 meses del WTI y del tipo de cambio: cálculo propio.';
+    if (!document.getElementById(ID + '-tb').hidden) fillTable();
+  }});
+  XP.toggle(ID + '-btn', ID + '-tb', fillTable);
+  XP.followRange('costos');
+
+  // ---------- Aprende ----------
+  registerSection({tab: 'aprende', id: 'costos-ap', order: 24, html: `
+  <div class="edu xp-edu"><section id="ap-traspaso">
+    <div class="kicker">Para leer el tablero · Traspaso de costos</div>
+    <h2>Cómo pasan los costos a los precios</h2>
+    <p>Un alza del dólar no llega de golpe ni por completo al consumidor. Un estudio publicado por el BCRP lo describe como una cadena de tres etapas: primero suben, en soles, los precios de lo importado; luego los importadores trasladan el alza a los productores locales, cuyos costos suben; y al final los productores la trasladan a sus precios de venta. Los costos de distribución y la lentitud con que se ajustan los precios amortiguan el efecto a lo largo de la cadena.</p>
+    <p>Por eso el traspaso es mayor al inicio de la cadena que al final. Con datos de 1992 a 2011, el estudio estima que el traspaso del tipo de cambio a los precios de importación bajó de alrededor de 70% a fines de los noventa a cerca de 50% una década después; a los precios del productor, de 70% a entre 20% y 30%; y a los precios al consumidor, de 60% a cerca de 10%.</p>
+    <p>Cuánto se traslada depende de la competencia y de cuánto se pueden reemplazar los productos importados por nacionales. También importa si el alza de costos parece pasajera o duradera: si parece pasajera, las empresas pueden absorberla un tiempo en sus márgenes. Con inflación alta, los precios se ajustan más seguido y el traspaso es mayor; según el estudio, la adopción de un régimen creíble de inflación baja fue clave para reducirlo en el Perú.</p>
+    <p>El petróleo sigue un camino parecido: llega directo por los combustibles de la canasta y, de forma indirecta, por el costo del transporte y de producir y distribuir otros bienes. El BCRP agrupa en el IPC los rubros más vinculados al tipo de cambio, a las cotizaciones internacionales y al índice de precios al por mayor para seguir estos canales.</p>
+    <ol class="refs">
+      <li>Winkelried, D. (2012). Traspaso del tipo de cambio y metas de inflación en el Perú. <i>Revista Estudios Económicos</i>, 23, 9–24, BCRP. <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Revista-Estudios-Economicos/23/ree-23-winkelried.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+      <li>BCRP, <i>Reporte de Inflación, junio 2026</i> (rubros vinculados al tipo de cambio, cotizaciones internacionales e IPM; petróleo y costos de transporte). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/junio/reporte-de-inflacion-junio-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+    </ol>
+  </section></div>`});
+})();
+</script>

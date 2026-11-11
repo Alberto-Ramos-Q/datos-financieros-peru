@@ -1,0 +1,349 @@
+<!-- Sección «Proyecciones del BCRP» (KEY proy): tablero + aprende. Datos: src/inflacion_extra/30_proyecciones.py.
+     Fuentes de cada afirmación: docs/inflacion_extra/proyecciones_fuentes.md -->
+<style>
+.pj-sum p { margin: 8px 0 0; color: var(--ink2); font-size: 14px; max-width: 80ch; }
+.pj-sum b { color: var(--ink); font-weight: 600; }
+.pj-tools label { font-size: 13px; color: var(--ink2); }
+#xsec-proy-aprende .edu { margin-top: 12px; }
+:root { --pj-other: var(--other); }
+:root[data-theme="dark"] { --pj-other: #5d678f; }
+</style>
+<script>
+(function () {
+  const P = XD.proy;
+  if (!P || !P.pts || !P.pts.length) return;
+  const RIS = P.ris, REAL = P.real, NOW = P.now;
+  const MES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+  const riLong = i => 'RI de ' + MES_L[+RIS[i].id.slice(8, 10) - 1] + ' de ' + RIS[i].id.slice(3, 7);
+  const f1 = v => fx(v, 1);
+  const sgn = v => (Math.round(v * 10) > 0 ? '+' : Math.round(v * 10) < 0 ? '−' : '') + fx(Math.abs(v), 1) + ' pp';
+  const projTxt = p => p[3] != null ? f1(p[3]) + '–' + f1(p[4]) + '%' : f1(p[2]) + '%';
+  const yearFrac = s => { const d = new Date(s + 'T00:00:00Z'), y = d.getUTCFullYear(); return y + (d - Date.UTC(y, 0, 1)) / (Date.UTC(y + 1, 0, 1) - Date.UTC(y, 0, 1)); };
+  const YEARS = [...new Set(P.pts.map(p => p[1]))].sort((a, b) => a - b);
+  const byYear = {};
+  for (const p of P.pts) (byYear[p[1]] = byYear[p[1]] || []).push(p);
+  for (const y of YEARS) byYear[y].sort((a, b) => a[0] - b[0]);
+  const realOf = y => REAL[String(y)] ?? null;
+  const kind = y => realOf(y) != null ? 'cerrado' : (NOW && NOW.y === y ? 'curso' : 'futuro');
+  let sel = NOW && byYear[NOW.y] ? NOW.y : [...YEARS].reverse().find(y => realOf(y) != null);
+  const ERR = Object.fromEntries(P.err.map(r => [r.y, r]));
+
+  // ---------- Textos condicionales ----------
+  function yearNote(y) {
+    const ps = byYear[y], a = ps[0], b = ps[ps.length - 1];
+    const r = realOf(y);
+    let t;
+    if (kind(y) === 'cerrado') {
+      t = `Para ${y}, el BCRP proyectó ${projTxt(a)} en el primer reporte de esta serie que cubre ese año (${riLong(a[0])}) y ${projTxt(b)} en el último (${riLong(b[0])}). La inflación de 12 meses de diciembre de ${y} fue ${pct(r)}.`;
+      const e = ERR[y];
+      if (e && e.dic) t += ` Frente a lo proyectado en el ${riLong(e.dic.ri)} (${f1(e.dic.p)}%), el desvío fue de ${sgn(e.dic.e)}.`;
+    } else if (kind(y) === 'curso') {
+      t = `Para ${y}, año en curso, la proyección pasó de ${projTxt(a)} (${riLong(a[0])}) a ${projTxt(b)} (${riLong(b[0])}). Último dato: la inflación de 12 meses a ${mLabel(NOW.m)} es ${pct(NOW.v)}.`;
+    } else {
+      t = `Para ${y}, el BCRP proyecta ${projTxt(b)} (${riLong(b[0])})` + (ps.length > 1 ? `; en el ${riLong(a[0])} proyectaba ${projTxt(a)}.` : '.');
+    }
+    if (ps.some(p => p[3] != null)) t += ' Cuando el reporte publicó un rango, la línea pasa por su punto medio y la barra vertical marca el rango.';
+    return t;
+  }
+  function summaryHtml() {
+    const s = P.stats.dic, m = P.stats.mid, out = [];
+    if (!s) return '';
+    out.push(`Cada proyección del BCRP es el escenario base de su reporte: es condicional a supuestos explícitos sobre la economía, los precios y el clima, y sirve de base para las decisiones de política monetaria del propio BCRP. No es un pronóstico incondicional, así que el desvío mide cuánto se apartó la realidad de ese escenario.`);
+    out.push(`Con la proyección publicada en diciembre del año anterior, la inflación de fin de año se desvió en promedio <b>${f1(s.mae)} pp</b> (en valor absoluto) entre ${s.from} y ${s.to}. En la mitad de esos años el desvío fue de ${f1(s.med)} pp o menos, y en ${s.k1} de ${s.n} no pasó de 1 pp.`);
+    if (P.top.length) {
+      const parts = P.top.map(t => `<b>${t.y}</b> (se proyectó ${f1(t.p)}% y terminó en ${pct(t.real)}: ${sgn(t.e)})`);
+      let txt = (P.top.length > 1 ? 'Las mayores sorpresas fueron ' + parts.slice(0, -1).join(', ') + ' y ' + parts[parts.length - 1] : 'La mayor sorpresa fue ' + parts[0]) + '.';
+      for (const t of P.top) {
+        const c = P.causes[String(t.y)];
+        if (c && t.e > 0) txt += ` ${c.t} (${c.src}).`;
+      }
+      out.push(txt);
+    }
+    const sx = P.stats.dic_ex, exY = P.stats.ex_years || [];
+    const biasTxt = b => Math.abs(b) <= 0.25 ? `los desvíos hacia arriba y hacia abajo casi se compensan (${sgn(b)})` : `la inflación terminó ${b > 0 ? 'por encima' : 'por debajo'} de lo proyectado (${sgn(b)})`;
+    let bt = `Con toda la muestra, en promedio ${biasTxt(s.bias)}.`;
+    if (sx) bt += ` Sin ${exY.join(' y ')}, los años del choque global de precios de alimentos y energía, el desvío absoluto medio es <b>${f1(sx.mae)} pp</b> (${sx.n} años) y, en promedio, ${biasTxt(sx.bias)}.`;
+    out.push(bt);
+    if (m) out.push(`Con medio año de información (reporte de junio), el desvío absoluto medio de esos mismos años ${m.mae < s.mae ? 'baja a' : 'es de'} ${f1(m.mae)} pp.`);
+    const miss = P.err.filter(r => !r.dic).map(r => r.y);
+    if (miss.length) out.push(`${miss.join(', ')} no entra${miss.length > 1 ? 'n' : ''} en estos promedios: el reporte anterior a ese año no está en esta base.`);
+    return out.map(t => '<p>' + t + '</p>').join('');
+  }
+
+  // ---------- Gráfico de trayectorias ----------
+  let els = {};
+  function paint(y) {
+    for (const k in els.years) {
+      const e = els.years[k], on = +k === y;
+      e.path.setAttribute('stroke', on ? 'var(--s1)' : 'var(--pj-other)');
+      e.path.setAttribute('stroke-width', on ? 2.5 : 1.5);
+      if (e.conn) e.conn.setAttribute('stroke', on ? 'var(--ink2)' : 'var(--pj-other)');
+      e.dots.forEach(d => { d.setAttribute('fill', on ? 'var(--s1)' : 'var(--pj-other)'); d.setAttribute('r', on ? 3.5 : 2.2); });
+      e.whisk.forEach(w => w.setAttribute('stroke', on ? 'var(--s1)' : 'var(--pj-other)'));
+      if (e.real) { e.real.setAttribute('fill', on ? 'var(--ink)' : 'var(--sys)'); e.real.setAttribute('r', on ? 5 : 3.5); }
+      if (e.now) e.now.setAttribute('stroke', on ? 'var(--s1)' : 'var(--sys)');
+      if (on) els.svg.insertBefore(e.g, els.top);
+    }
+    const e = els.years[y];
+    if (!e) return;
+    const lab = els.lab;
+    lab.replaceChildren();
+    const a = svgEl('tspan', {class: 'dval'}, lab); a.textContent = String(y);
+    const b = svgEl('tspan', {}, lab);
+    b.textContent = realOf(y) != null ? ': ' + pct(realOf(y)) + ' observado' : kind(y) === 'curso' ? ': ' + pct(NOW.v) + ' a ' + mLabel(NOW.m) : ': ' + projTxt(byYear[y][byYear[y].length - 1]) + ' proyectado';
+    const [ex, ey] = e.end;
+    const right = ex + 10 + 150 < els.W;
+    lab.setAttribute('x', right ? ex + 10 : ex - 10);
+    lab.setAttribute('y', Math.max(12, ey - 10));
+    lab.setAttribute('text-anchor', right ? 'start' : 'end');
+    document.getElementById('pj-note').textContent = yearNote(y);
+  }
+  function drawProj() {
+    const box = document.getElementById('pj-ch');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const narrow = W < 600, H = narrow ? 300 : 360;
+    const m = {l: 44, r: 16, t: 24, b: 26}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const x0 = Math.floor(yearFrac(RIS[0].f)), xEnd = Math.max(...RIS.map(r => yearFrac(r.f)), ...YEARS.filter(y => realOf(y) != null).map(y => y + 1), NOW ? NOW.y + (+NOW.m.slice(5, 7)) / 12 : 0);
+    const x1 = Math.ceil(xEnd + 0.02);
+    const vals = P.pts.flatMap(p => [p[2], p[3], p[4]]).concat(Object.values(REAL), NOW ? [NOW.v] : [], [T_NOW.lo, T_NOW.hi]).filter(v => v != null);
+    const dom = niceDomain(Math.min(0, ...vals), Math.max(...vals), narrow ? 4 : 5);
+    const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+    const x = t => m.l + (t - x0) / (x1 - x0) * pw;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Proyecciones de inflación de fin de año del BCRP en cada Reporte de Inflación, por año objetivo, y la inflación observada'}, box);
+    drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, tickFmt);
+    const step = narrow ? 2 : 1, xt = svgEl('g', {class: 'axis'}, svg);
+    for (let t = x0; t <= x1; t += step) { const tx = svgEl('text', {x: x(t), y: H - 7, 'text-anchor': 'middle'}, xt); tx.textContent = String(t); }
+    svgEl('rect', {x: m.l, width: pw, y: y(T_NOW.hi), height: y(T_NOW.lo) - y(T_NOW.hi), fill: 'var(--band)'}, svg);
+    els = {svg, W, years: {}};
+    const marks = [];
+    for (const yr of YEARS) {
+      const g = svgEl('g', {}, svg), ps = byYear[yr];
+      const pxy = ps.map(p => [x(yearFrac(RIS[p[0]].f)), y(p[2])]);
+      const e = {g, dots: [], whisk: []};
+      e.path = svgEl('path', {d: pxy.map((q, k) => (k ? 'L' : 'M') + q[0] + ',' + q[1]).join(''), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, g);
+      ps.forEach((p, k) => {
+        if (p[3] != null) e.whisk.push(svgEl('line', {x1: pxy[k][0], x2: pxy[k][0], y1: y(p[3]), y2: y(p[4]), 'stroke-width': 1.5}, g));
+        e.dots.push(svgEl('circle', {cx: pxy[k][0], cy: pxy[k][1], stroke: 'var(--surface)', 'stroke-width': 1}, g));
+        marks.push({yr, x: pxy[k][0], y: pxy[k][1], p, t: 'p'});
+      });
+      e.end = pxy[pxy.length - 1];
+      const r = realOf(yr);
+      if (r != null) {
+        const rx = x(yr + 1), ry = y(r);
+        e.conn = svgEl('path', {d: `M${e.end[0]},${e.end[1]}L${rx},${ry}`, fill: 'none', 'stroke-width': 1.2, 'stroke-dasharray': '3 3'}, g);
+        g.insertBefore(e.conn, e.path);
+        e.real = svgEl('circle', {cx: rx, cy: ry, stroke: 'var(--surface)', 'stroke-width': 2}, g);
+        e.end = [rx, ry];
+        marks.push({yr, x: rx, y: ry, t: 'r'});
+      } else if (NOW && NOW.y === yr) {
+        const nx = x(yr + (+NOW.m.slice(5, 7)) / 12), ny = y(NOW.v);
+        e.now = svgEl('circle', {cx: nx, cy: ny, r: 4.5, fill: 'var(--surface)', 'stroke-width': 2}, g);
+        e.end = [nx, ny];
+        marks.push({yr, x: nx, y: ny, t: 'n'});
+      }
+      els.years[yr] = e;
+    }
+    els.top = svgEl('g', {}, svg);
+    els.lab = svgEl('text', {class: 'dlbl'}, els.top);
+    const ring = svgEl('circle', {r: 7, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.5, visibility: 'hidden'}, els.top);
+    const hit = svgEl('rect', {class: 'hit', x: 0, y: 0, width: W, height: H, tabindex: 0,
+      'aria-label': 'Proyecciones por año; flechas izquierda y derecha recorren los reportes del año resaltado, arriba y abajo cambian de año'}, svg);
+    let cur = null;
+    const show = (mk, evt) => {
+      cur = mk;
+      paint(mk.yr);
+      ring.setAttribute('cx', mk.x); ring.setAttribute('cy', mk.y); ring.setAttribute('visibility', 'visible');
+      const rows = [], r = realOf(mk.yr), e = ERR[mk.yr];
+      let title;
+      if (mk.t === 'p') {
+        title = `Proyección para ${mk.yr}, ${riLong(mk.p[0])}`;
+        rows.push({value: projTxt(mk.p), label: 'proyectado (publicado el ' + dLabel(RIS[mk.p[0]].f) + ')', color: 'var(--s1)', em: true});
+        if (r != null) {
+          rows.push({value: pct(r), label: 'observado, diciembre de ' + mk.yr, color: 'var(--ink)'});
+          rows.push({value: sgn(r - mk.p[2]), label: 'desvío (observado − proyectado)'});
+        } else if (kind(mk.yr) === 'curso') rows.push({value: pct(NOW.v), label: 'último dato: 12 meses a ' + mLabel(NOW.m), color: 'var(--sys)'});
+      } else if (mk.t === 'r') {
+        title = `Inflación de diciembre de ${mk.yr}`;
+        rows.push({value: pct(r), label: 'observado (12 meses)', color: 'var(--ink)', em: true});
+        if (e && e.dic) rows.push({value: f1(e.dic.p) + '%', label: 'proyectado en el ' + riLong(e.dic.ri), color: 'var(--s1)'});
+        if (e && e.mid) rows.push({value: f1(e.mid.p) + '%', label: 'proyectado en el ' + riLong(e.mid.ri), color: 'var(--s2)'});
+      } else {
+        title = `${mk.yr}, año en curso`;
+        rows.push({value: pct(NOW.v), label: 'inflación de 12 meses a ' + mLabel(NOW.m), color: 'var(--sys)', em: true});
+        const ps = byYear[mk.yr], lp = ps[ps.length - 1];
+        rows.push({value: projTxt(lp), label: 'proyección del ' + riLong(lp[0]), color: 'var(--s1)'});
+      }
+      const [cx, cy] = evt && evt.clientX != null ? [evt.clientX, evt.clientY] : (() => { const b = svg.getBoundingClientRect(); return [b.left + mk.x, b.top + mk.y]; })();
+      showTip(cx, cy, title, rows);
+    };
+    const leave = () => { hideTip(); ring.setAttribute('visibility', 'hidden'); paint(sel); };
+    hit.addEventListener('pointermove', evt => {
+      const b = svg.getBoundingClientRect(), px = evt.clientX - b.left, py = evt.clientY - b.top;
+      let best = null, bd = Infinity;
+      for (const mk of marks) { const d = (mk.x - px) ** 2 + (mk.y - py) ** 2; if (d < bd) { bd = d; best = mk; } }
+      if (best && bd < 60 * 60) show(best, evt); else leave();
+    });
+    hit.addEventListener('pointerleave', leave);
+    hit.addEventListener('blur', leave);
+    const own = yr => marks.filter(mk => mk.yr === yr);
+    hit.addEventListener('focus', () => { const l = own(sel); show(l[l.length - 1], null); });
+    hit.addEventListener('keydown', ev => {
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(ev.key)) return;
+      ev.preventDefault();
+      let yr = cur ? cur.yr : sel;
+      if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+        const k = YEARS.indexOf(yr) + (ev.key === 'ArrowUp' ? 1 : -1);
+        if (k < 0 || k >= YEARS.length) return;
+        yr = YEARS[k]; sel = yr; document.getElementById('pj-pick').value = String(yr);
+        const l = own(yr); show(l[l.length - 1], null); return;
+      }
+      const l = own(yr), k = Math.max(0, Math.min(l.length - 1, l.indexOf(cur) + (ev.key === 'ArrowRight' ? 1 : -1)));
+      show(l[k], null);
+    });
+    paint(sel);
+  }
+
+  // ---------- Gráfico de desvíos ----------
+  function drawErr() {
+    const box = document.getElementById('pj-err');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const rows = P.err, narrow = W < 600, H = narrow ? 240 : 270;
+    const m = {l: 48, r: 10, t: 16, b: 26}, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const vals = rows.flatMap(r => [r.dic && r.dic.e, r.mid && r.mid.e]).filter(v => v != null);
+    const dom = niceDomain(Math.min(0, ...vals), Math.max(0, ...vals), 4);
+    const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': 'Desvío entre la inflación observada y la proyectada por el BCRP, por año'}, box);
+    drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, t => (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + ' pp');
+    const gw = pw / rows.length, bw = Math.min(22, (gw - 8) / 2);
+    rows.forEach((r, j) => {
+      const cx = m.l + gw * (j + 0.5);
+      const lab = svgEl('text', {x: cx, y: H - 7, 'text-anchor': 'middle', class: 'lbl'}, svg);
+      lab.textContent = narrow ? "'" + String(r.y).slice(2) : String(r.y);
+      [['dic', 'var(--s1)', -1], ['mid', 'var(--s2)', 0]].forEach(([k, col, off]) => {
+        if (!r[k]) return;
+        const bx = cx + off * bw - (off ? 1 : -1), v = r[k].e;
+        svgEl('path', {d: barPath(bx, bw, y(0), y(v)), fill: col}, svg);
+        if (!narrow && Math.abs(v) >= 1) {
+          const t = svgEl('text', {x: bx + bw / 2, y: v > 0 ? y(v) - 5 : y(v) + 13, 'text-anchor': 'middle', class: 'dlbl'}, svg);
+          t.textContent = (v > 0 ? '+' : '−') + fx(Math.abs(v), 1);
+        }
+      });
+      const hit = svgEl('rect', {class: 'col-hit', x: cx - gw / 2, y: m.t, width: gw, height: ph, tabindex: 0, 'aria-label': `${r.y}: desvíos de la proyección`}, svg);
+      const show = evt => {
+        const rows2 = [{value: pct(r.real), label: 'inflación observada en diciembre', color: 'var(--ink)'}];
+        if (r.dic) rows2.push({value: sgn(r.dic.e), label: `${riLong(r.dic.ri)}: proyectó ${f1(r.dic.p)}%`, color: 'var(--s1)', sq: true});
+        else rows2.push({value: '—', label: 'sin reporte del año anterior en esta base', color: 'var(--s1)', sq: true});
+        if (r.mid) rows2.push({value: sgn(r.mid.e), label: `${riLong(r.mid.ri)}: proyectó ${f1(r.mid.p)}%`, color: 'var(--s2)', sq: true});
+        const [x0, y0] = anchorOf(evt, hit);
+        showTip(x0, y0, `Desvío en ${r.y} (observado − proyectado)`, rows2);
+      };
+      hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+      hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    });
+  }
+
+  // ---------- Tabla ----------
+  function fillTb() {
+    const wrap = document.getElementById('pj-tb');
+    wrap.replaceChildren();
+    const t = htmlEl('table', null, wrap), tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    ['Reporte de Inflación', 'Publicado', 'Año proyectado', 'Proyección', 'Observado (dic.)', 'Desvío'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+    const ps = P.pts.slice().sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+    for (const p of ps) {
+      const r = realOf(p[1]), row = htmlEl('tr', null, tb);
+      [RIS[p[0]].m, dLabel(RIS[p[0]].f), String(p[1]), p[3] != null ? projTxt(p) + ' (medio ' + fx(p[2], 2) + ')' : f1(p[2]) + '%',
+        r != null ? pct(r) : (kind(p[1]) === 'curso' ? pct(NOW.v) + ' a ' + mLabel(NOW.m) : '—'),
+        r != null ? sgn(r - p[2]) : '—'].forEach(c => htmlEl('td', {text: c}, row));
+    }
+  }
+
+  const first = RIS[0], last = RIS[RIS.length - 1];
+  const midMay = P.err.filter(r => r.mid && RIS[r.mid.ri].id.slice(8, 10) === '05').map(r => r.y);
+  const srcNote = `Fuente: BCRP, Reportes de Inflación de ${first.m} a ${last.m} (${RIS.length} reportes), cuadro «Resumen de las proyecciones», fila «Inflación» (fin de periodo). Inflación observada: BCRPData, IPC de Lima Metropolitana (INEI), variación de 12 meses de diciembre. Desvíos: cálculo propio.`;
+
+  registerSection({
+    tab: 'tablero', id: 'proy', order: 30,
+    html: `
+      <div class="section-title">Proyecciones del BCRP</div>
+      <figure class="card" style="margin:0">
+        <div class="card-head">
+          <div>
+            <h2>Qué proyectó el BCRP para cada año y qué pasó</h2>
+            <p>Cada línea es un año: une la inflación de fin de año (variación de 12 meses a diciembre, en %) que proyectó cada Reporte de Inflación, en la fecha en que se publicó. El punto final es la inflación que hubo en diciembre. La franja es el rango meta del BCRP.</p>
+          </div>
+          <div class="card-tools pj-tools">
+            <label for="pj-pick">Resaltar</label>
+            <select class="btn" id="pj-pick"></select>
+            <button class="btn" id="pj-tbtn" type="button">Ver tabla</button>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="ln" style="background:var(--s1)"></i>Año resaltado: proyección en cada reporte</span>
+          <span><i class="ln" style="background:var(--pj-other)"></i>Otros años</span>
+          <span><i class="sw" style="background:var(--ink);border-radius:50%"></i>Inflación observada en diciembre</span>
+          ${NOW ? '<span><i class="sw" style="background:var(--surface);border:2px solid var(--s1);border-radius:50%"></i>Último dato del año en curso</span>' : ''}
+          <span><i class="bandsw"></i>Rango meta</span>
+        </div>
+        <div class="chart" id="pj-ch"></div>
+        <p class="note" id="pj-note" aria-live="polite"></p>
+        <div class="table-wrap" id="pj-tb" hidden></div>
+      </figure>
+      <figure class="card" style="margin:12px 0 0">
+        <div class="card-head">
+          <div>
+            <h2>Desvío entre lo proyectado y lo observado</h2>
+            <p>Inflación observada en diciembre menos la proyectada, en puntos porcentuales (pp). Sobre cero, la inflación terminó por encima de lo proyectado.</p>
+          </div>
+        </div>
+        <div class="pj-sum" id="pj-sum"></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--s1)"></i>Proyección de diciembre del año anterior</span>
+          <span><i class="sw" style="background:var(--s2)"></i>Proyección de mitad de año (reporte de junio${midMay.length ? '; en ' + midMay.join(', ') + ', de mayo' : ''})</span>
+        </div>
+        <div class="chart" id="pj-err"></div>
+        <p class="note">${srcNote}</p>
+      </figure>`,
+    render() {
+      const pick = document.getElementById('pj-pick');
+      if (!pick.options.length) {
+        for (const yr of [...YEARS].reverse()) htmlEl('option', {value: String(yr), text: yr + (kind(yr) === 'curso' ? ' (en curso)' : kind(yr) === 'futuro' ? ' (proyección)' : '')}, pick);
+        pick.value = String(sel);
+        pick.addEventListener('change', () => { sel = +pick.value; paint(sel); });
+        const btn = document.getElementById('pj-tbtn'), wrap = document.getElementById('pj-tb');
+        btn.addEventListener('click', () => { const open = wrap.hidden; if (open) fillTb(); wrap.hidden = !open; btn.textContent = open ? 'Ocultar tabla' : 'Ver tabla'; });
+        document.getElementById('pj-sum').innerHTML = summaryHtml();   // texto armado desde datos propios (sin entrada del usuario)
+      }
+      drawProj();
+      drawErr();
+    },
+  });
+
+  // ---------- Aprende ----------
+  const s = P.stats.dic, mm = P.stats.mid, sx0 = P.stats.dic_ex;
+  const lastRange = P.last_range ? RIS.find(r => r.id === P.last_range) : null;
+  registerSection({
+    tab: 'aprende', id: 'proy-aprende', order: 30,
+    html: `
+      <div class="edu"><section id="proyecciones">
+        <div class="kicker">Proyecciones</div>
+        <h2>¿Cómo proyecta el BCRP la inflación y cómo leer el desvío?</h2>
+        <p>La tasa de referencia afecta a la inflación con rezagos. Por eso el BCRP fija la tasa con base en proyecciones de la inflación y de sus determinantes. Cada trimestre (hoy, en marzo, junio, setiembre y diciembre) publica el <b>Reporte de Inflación</b>, que trae esas proyecciones y los riesgos que podrían desviarlas.</p>
+        <p>Según el propio reporte, las proyecciones miran entre 18 y 24 meses hacia adelante y usan toda la información macroeconómica y financiera disponible. Pesan sobre todo las expectativas de inflación, la inflación importada (incluido el efecto del tipo de cambio), la inflación sin alimentos y energía y las presiones de demanda y de oferta. La cifra del cuadro es el <b>escenario base</b>. Alrededor de ella, el gráfico de abanico (<i>fan chart</i>) del reporte muestra otros valores posibles: cada par de bandas suma 10% de probabilidad.</p>
+        <h3>Cómo leer el desvío</h3>
+        <p>Las proyecciones del BCRP son condicionales: cada cifra es el escenario base del reporte, con supuestos explícitos (en el de setiembre de 2026, por ejemplo, un fenómeno El Niño Costero extraordinario, una actividad económica alrededor de su nivel potencial y expectativas de inflación que bajan hacia el centro del rango meta), y es la base con la que el BCRP decide su política monetaria. No son pronósticos incondicionales.</p>
+        <p>El desvío es la inflación observada en diciembre menos la proyectada. Si es positivo, los precios subieron más de lo previsto. Cada proyección supone una evolución de los precios internacionales, del tipo de cambio y de la economía; si llega un choque que no estaba en ese escenario (por ejemplo, en el precio del petróleo o de los alimentos), la inflación se aparta de lo proyectado. El propio BCRP advierte que la inflación puede salir temporalmente del rango meta por choques que afectan la oferta de bienes y servicios.</p>
+        ${s ? `<p>En esta serie, la proyección de diciembre para el año siguiente se desvió en promedio ${f1(s.mae)} pp entre ${s.from} y ${s.to}, y en la mitad de los años ${f1(s.med)} pp o menos` + (s.mae >= 2 * s.med ? ': el promedio lo suben unos pocos años de desvíos grandes.' : '.') + (mm && mm.mae < s.mae ? ` Con más información el desvío se achica: con el reporte de junio, el desvío medio de ${s.from}–${s.to} baja a ${f1(mm.mae)} pp.` : '') + (sx0 ? ` Y sin ${(P.stats.ex_years || []).join(' ni ')}, años del choque global de precios de alimentos y energía, el desvío medio de la proyección de diciembre es ${f1(sx0.mae)} pp.` : '') + `</p>` : ''}
+        ${lastRange ? `<p>Hasta el reporte de ${MES_L[+lastRange.id.slice(8, 10) - 1]} de ${lastRange.id.slice(3, 7)}, el BCRP publicaba a veces la proyección como un rango (por ejemplo, «2,0 - 2,5»); aquí se usa su punto medio. Después, como una sola cifra.</p>` : ''}
+        <ul class="srcs">
+          <li>BCRP, <i>Reporte de Inflación, setiembre 2026</i>: Prólogo (proyecciones que sustentan la política monetaria, rezagos, desvíos por choques de oferta) y capítulo VI, «Proyecciones» (horizonte, factores, escenario base, gráfico de abanico). <a href="https://www.bcrp.gob.pe/docs/Publicaciones/Reporte-Inflacion/2026/setiembre/reporte-de-inflacion-setiembre-2026.pdf" target="_blank" rel="noopener">bcrp.gob.pe</a></li>
+          <li>BCRP, Reportes de Inflación de ${first.m} a ${last.m}, cuadro «Resumen de las proyecciones». <a href="${last.url}" target="_blank" rel="noopener">Último reporte (bcrp.gob.pe)</a></li>
+        </ul>
+      </section></div>`,
+    render() {},
+  });
+})();
+</script>

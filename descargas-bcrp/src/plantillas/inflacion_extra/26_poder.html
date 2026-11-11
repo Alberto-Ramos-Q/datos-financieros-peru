@@ -1,0 +1,105 @@
+<!-- Extensión 26_poder (KEY poder): RMV, masa salarial formal e ingreso de Lima en términos reales.
+     Datos: src/inflacion_extra/26_poder.py. Fuentes: docs/inflacion_extra/permanentes_fuentes.md. -->
+<script>
+(function () {
+  const P = XD.poder;
+  if (!P || !window.XP) return;
+  const ID = 'pod';
+  const FLOOR = '2002-01';
+  const pv = (k, i) => (P[k] ? P[k][i] : null) ?? null;
+  const soles = (v, d = 0) => v == null ? '—' : 'S/ ' + Number(v).toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
+  const trim = m => mShort(addMonths(m, -2)).slice(0, 3) + '–' + mLabel(m);   // trimestre móvil que termina en m
+  const SER = [
+    {k: 'rmv', title: 'Remuneración mínima vital (RMV)', label: 'RMV real', short: 'RMV', unit: v => soles(v, 0), note: 'nominal'},
+    {k: 'masa', title: 'Masa salarial del sector formal', label: 'Masa salarial formal real', short: 'Masa salarial', unit: v => v == null ? '—' : soles(v, 0) + ' millones', note: 'nominal del mes'},
+    {k: 'ing', title: 'Ingreso mensual por trabajo en Lima Metropolitana', label: 'Ingreso de Lima real', short: 'Ingreso Lima', unit: v => soles(v, 0), note: 'promedio, trimestre móvil'},
+  ].filter(s => P[s.k]);
+  const idxNow = () => XP.idxFrom(SER.map(s => P[s.k + '_r12']), FLOOR);
+  const signed = v => v == null ? '—' : XP.signed(v, 1) + '%';
+
+  function tiles(box) {
+    box.replaceChildren();
+    SER.forEach(s => {
+      const L = P[s.k + '_last'];
+      if (!L) return;
+      const d = htmlEl('div', {cls: 'tile'}, box);
+      htmlEl('div', {cls: 'lab', text: s.title + ', variación real de 12 meses'}, d);
+      const v = htmlEl('div', {cls: 'val', text: signed(L.r12)}, d);
+      htmlEl('span', {cls: 'unit', text: s.k === 'ing' ? trim(L.r12_m) : mLabel(L.r12_m)}, v);
+      let sub = `${s.unit(L.v)} ${s.note} en ${s.k === 'ing' ? trim(L.m) : mLabel(L.m)}; nominal ${signed(L.n12)} en 12 meses`;
+      if (s.k === 'rmv' && P.rmv_change) {
+        const c = P.rmv_change;
+        sub = `${soles(c.v)} desde ${mLabel(c.m)} (antes ${soles(c.prev)}); ` +
+          (c.ipc_since > 0 ? `desde entonces los precios subieron ${pct(c.ipc_since, 1)} hasta ${mLabel(c.to)}` : c.ipc_since < 0 ? `desde entonces los precios bajaron ${pct(-c.ipc_since, 1)} hasta ${mLabel(c.to)}` : 'los precios no cambiaron desde entonces');
+        if (P.rmv_norma) sub += `. Desde ${mLabel(P.rmv_norma.m)} es ${soles(P.rmv_norma.v)} (${P.rmv_norma.norma})`;
+      }
+      htmlEl('div', {cls: 'sub', text: sub}, d);
+    });
+  }
+  function textNow() {
+    const parts = [];
+    const c = P.rmv_change;
+    const n = P.rmv_norma;
+    if (c && c.loss != null) parts.push((n ? `En la serie del BCRP, que llega a ${mLabel(c.to)}, la RMV era ${soles(c.v)} desde ${mLabel(c.m)}. `
+        : `La RMV es ${soles(c.v)} desde ${mLabel(c.m)}. `) +
+      (c.ipc_since > 0.05 ? `Hasta ${mLabel(c.to)} los precios subieron ${pct(c.ipc_since, 1)}, con la RMV sin cambio (subir ${pct(c.ipc_since, 1)} los precios equivale a perder ${pct(-c.loss, 1)} de poder de compra).`
+        : c.ipc_since < -0.05 ? `Hasta ${mLabel(c.to)} los precios bajaron ${pct(-c.ipc_since, 1)}: con la RMV sin cambio, eso equivale a ${pct(c.loss, 1)} más de poder de compra.`
+        : `Hasta ${mLabel(c.to)} los precios casi no cambiaron, así que su poder de compra tampoco.`));
+    if (c && n) parts.push(`Desde ${mLabel(n.m)} la RMV es ${soles(n.v)} (${n.norma}), un alza nominal de ${pct(n.nom_pct, 1)}; la serie del BCRP todavía no recoge ese cambio.`);
+    const real = SER.filter(s => s.k !== 'rmv' && P[s.k + '_last'] && P[s.k + '_last'].r12 != null).map(s => {
+      const L = P[s.k + '_last'], v = L.r12;
+      return `${s.k === 'masa' ? 'la masa salarial formal' : 'el ingreso promedio de Lima'} ` +
+        (v > 0.05 ? `creció ${pct(v, 1)} por encima de la inflación` : v < -0.05 ? `quedó ${pct(-v, 1)} por debajo de la inflación` : 'creció casi igual que la inflación') +
+        ` (${s.k === 'ing' ? trim(L.r12_m) : mLabel(L.r12_m)})`;
+    });
+    if (real.length) parts.push('En los últimos 12 meses, ' + real.join(', y ') + '.');
+    return parts.join(' ');
+  }
+  function fillTable() {
+    const idx = idxNow().slice().reverse();
+    const head = ['Mes'];
+    SER.forEach(s => head.push(s.title + ' (' + s.note + ')', s.label + ', var. 12 m'));
+    XP.table(document.getElementById(ID + '-tb'), head,
+      idx.map(i => [mLabel(MONTHS[i])].concat(...SER.map(s => [pv(s.k, i) == null ? '—' : s.unit(pv(s.k, i)), pct(pv(s.k + '_r12', i), 1)]))));
+  }
+
+  const html = `
+  <div class="section-title">Poder adquisitivo</div>
+  <figure class="card" style="margin:0" id="${ID}-card">
+    <div class="card-head">
+      <div>
+        <h2>Ingresos frente a la inflación</h2>
+        <p>Variación de 12 meses descontada la inflación del IPC de Lima (variación real), en %. Por encima de cero, el ingreso alcanza para comprar más que un año antes; por debajo de cero, para menos.</p>
+      </div>
+      <button class="btn" id="${ID}-btn" type="button">Ver tabla</button>
+    </div>
+    <div class="xp-tiles" id="${ID}-tiles"></div>
+    <p class="xp-text" id="${ID}-txt"></p>
+    ${SER.map(s => `<div class="panel-title">${s.title}: variación real de 12 meses</div><div class="chart" id="${ID}-${s.k}"></div>`).join('')}
+    <div class="table-wrap" id="${ID}-tb" hidden></div>
+    <p class="note" id="${ID}-note"></p>
+  </figure>`;
+
+  registerSection({tab: 'tablero', id: 'poder', order: 26, html, render() {
+    if (!document.getElementById(ID + '-card')) return;
+    tiles(document.getElementById(ID + '-tiles'));
+    document.getElementById(ID + '-txt').textContent = textNow();
+    const idx = idxNow();
+    XP.panels(SER.map(s => ({box: document.getElementById(ID + '-' + s.k), H: 160, aria: s.label + ', variación real de 12 meses',
+      series: [{get: i => pv(s.k + '_r12', i), label: s.label, short: s.short, color: 'var(--s1)'}],
+      fmt: v => pct(v, 1),
+      rows: i => [{value: pct(pv(s.k + '_r12', i), 1), label: s.label + ', var. 12 meses' + (s.k === 'ing' ? ' (trimestre móvil)' : ''), color: 'var(--s1)'},
+        {value: pv(s.k, i) == null ? '—' : s.unit(pv(s.k, i)), label: s.note}]})), idx);
+    const m = P.masa_last, g = P.ing_last;
+    document.getElementById(ID + '-note').textContent =
+      `Desde ${mLabel(MONTHS[idx[0]])}. Cada serie llega a su último dato publicado. ` +
+      'RMV: la remuneración mínima vital del régimen laboral privado, que fija el Poder Ejecutivo por decreto supremo; sube de a saltos, así que entre un aumento y otro su valor real cae con la inflación. ' +
+      (m ? `Masa salarial: total de remuneraciones del sector formal, con datos desde ${mLabel(m.first)} (variación desde un año después); sube tanto por más puestos de trabajo como por mejores sueldos, así que no es un sueldo promedio. ` : '') +
+      (g ? 'Ingreso: promedio mensual por trabajo de la actividad principal en Lima Metropolitana (no es nacional); cada dato cubre un trimestre móvil que termina en ese mes y se deflacta con el IPC promedio de esos tres meses. ' : '') +
+      'Fuente: BCRPData (RMV: Ministerio de Trabajo y Promoción del Empleo; masa salarial: SUNAT; ingreso: INEI; IPC de Lima: INEI). Variaciones reales: cálculo propio.';
+    if (!document.getElementById(ID + '-tb').hidden) fillTable();
+  }});
+  XP.toggle(ID + '-btn', ID + '-tb', fillTable);
+  XP.followRange('poder');
+})();
+</script>

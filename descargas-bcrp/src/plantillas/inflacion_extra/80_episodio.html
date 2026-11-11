@@ -1,0 +1,432 @@
+<!-- Pestaña «Episodio actual» (KEY episodio). Cifras: src/inflacion_extra/80_episodio.py (desde el panel del BCRP).
+     Textos curados (causas, política, fuentes): config/episodio_actual.json. Fuentes: docs/inflacion_extra/episodio_fuentes.md -->
+<style>
+#tab-episodio .ep-intro { margin: 0 0 14px; }
+#tab-episodio .ep-intro h2 { font-size: 22px; }
+#tab-episodio .ep-intro p { margin: 4px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 780px; }
+#tab-episodio .tile .when { color: var(--muted); font-size: 12.5px; }
+#tab-episodio .tile.hero .val .unit { font-family: var(--font-ui); }
+#tab-episodio .callout p + p { margin-top: 8px; }
+.ep-causes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.ep-cause { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.ep-cause h3 { font-size: 14.5px; margin: 0 0 6px; }
+.ep-cause p { margin: 0; color: var(--ink2); font-size: 14px; max-width: 72ch; }
+#tab-episodio .src { margin-top: 8px; color: var(--muted); font-size: 12px; }
+#tab-episodio .src a, #tab-episodio .srcs a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+.ep-ctx-h { font-size: 13.5px; margin: 16px 0 4px; }
+.ep-ctx { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; }
+.ep-ctx-i h4 { font-size: 13px; margin: 6px 0 2px; display: flex; align-items: center; gap: 8px; }
+.ep-ctx-i h4 .ln { width: 16px; height: 2px; }
+.ep-ctx-i p { margin: 0; color: var(--ink2); font-size: 13.5px; }
+@media (max-width: 700px) { .ep-ctx { grid-template-columns: 1fr; } }
+.ep-axis-cap { font-size: 12px; color: var(--muted); text-align: center; margin: 2px 0 0; }
+.ep-pol p { margin: 6px 0 0; color: var(--ink2); max-width: 80ch; }
+@media (max-width: 860px) { .ep-causes { grid-template-columns: 1fr; } }
+</style>
+<script>
+(function () {
+  const X = XD.episodio;
+  if (!X) return;
+  const C = X.cfg, E = X.ep, A = X.align, P = X.pol;
+  const COLORS = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)'];
+  const sg = (v, d = 2) => v == null ? '—' : (v > 0 ? '+' : '') + pct(v, d);
+  // Mismos colores y grupos que la sección de contribuciones del Tablero (tokens --ctb-*).
+  const GCOL = {ss: 'var(--ctb-ss)', sb: 'var(--ctb-sb)', na: 'var(--ctb-na)', nt: 'var(--ctb-nt)', nc: 'var(--ctb-nc)', np: 'var(--ctb-np)'};
+  const GLAB = Object.fromEntries((X.groups || []).map(g => [g.id, g.label]));
+  const SUBY = g => g === 'ss' || g === 'sb' ? 'Subyacente' : 'No subyacente (la excluye la subyacente)';
+  const ppTxt = v => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + fx(Math.abs(v), 2) + ' pp';
+  const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
+  const sideTxt = E.side > 0 ? 'por encima' : 'por debajo';
+  const srcById = id => (C.fuentes || {})[id];
+
+  // ---------- Gráfico de líneas alineado por meses desde la salida del rango ----------
+  function alignChart(box, cfg) {
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W) return;
+    const narrow = W < 600;
+    const k0 = A.k0, k1 = A.k1, n = k1 - k0 + 1;
+    const showEnd = !narrow && !cfg.noEnd;
+    const m = {l: 48, r: showEnd ? 132 : 14, t: 16, b: 26}, H = cfg.H || 300, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const vals = [];
+    cfg.series.forEach(s => s.v.forEach(v => { if (v != null) vals.push(v); }));
+    if (cfg.band) vals.push(cfg.band[0], cfg.band[1]);
+    const dom = niceDomain(Math.min(0, ...vals), Math.max(...vals), 5);
+    const y = v => m.t + (dom.hi - v) / (dom.hi - dom.lo) * ph;
+    const x = k => m.l + (k - k0) * pw / (n - 1);
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': cfg.aria}, box);
+    if (cfg.band) svgEl('rect', {x: m.l, y: y(cfg.band[1]), width: pw, height: y(cfg.band[0]) - y(cfg.band[1]), fill: 'var(--band)'}, svg);
+    drawYGrid(svg, dom.ticks, y, m.l, m.l + pw, cfg.tickFmt || tickFmt);
+    const step = narrow ? 12 : 6, ticks = [];
+    for (let k = Math.ceil(k0 / step) * step; k <= k1; k += step) ticks.push({i: k - k0, text: k === 0 ? '0' : (k > 0 ? '+' : '−') + Math.abs(k)});
+    drawXTicks(svg, ticks, c => x(k0 + c), H - 7);
+    // Mes de salida del rango.
+    svgEl('line', {x1: x(0), x2: x(0), y1: m.t, y2: m.t + ph, stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '3 3'}, svg);
+    const lt = svgEl('text', {x: x(0) + 5, y: m.t + 11, class: 'lbl'}, svg); lt.textContent = 'sale del rango';
+    const ends = [];
+    cfg.series.slice().reverse().forEach(s => {
+      let d = '', pen = false, li = -1;
+      s.v.forEach((v, j) => {
+        if (v == null) { pen = false; return; }
+        const px = x(k0 + j), py = y(v);
+        d += !pen ? 'M' + px + ',' + py : (cfg.step ? 'H' + px + 'V' + py : 'L' + px + ',' + py);
+        pen = true; li = j;
+      });
+      svgEl('path', {d, fill: 'none', stroke: s.color, 'stroke-width': s.w || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round'}, svg);
+      if (li >= 0) ends.push({s, j: li, v: s.v[li], y: y(s.v[li])});
+    });
+    if (showEnd) {
+      ends.sort((p, q) => p.y - q.y);
+      for (let j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 15) ends[j].y = ends[j - 1].y + 15;
+      for (const e of ends) {
+        svgEl('circle', {cx: x(k0 + e.j), cy: y(e.v), r: 3.5, fill: e.s.color, stroke: 'var(--surface)', 'stroke-width': 2}, svg);
+        const t = svgEl('text', {x: m.l + pw + 10, y: e.y + 4, class: 'dlbl'}, svg);
+        const a = svgEl('tspan', {class: 'dval'}, t); a.textContent = cfg.fmt(e.v);
+        const b = svgEl('tspan', {}, t); b.textContent = ' ' + e.s.short;
+      }
+    }
+    const cross = svgEl('line', {y1: m.t, y2: m.t + ph, stroke: 'var(--ink2)', 'stroke-width': 1, visibility: 'hidden'}, svg);
+    const dots = cfg.series.map(s => svgEl('circle', {r: 4, fill: s.color, stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden'}, svg));
+    const hit = svgEl('rect', {class: 'hit', x: m.l, y: m.t, width: pw, height: ph, tabindex: 0,
+      'aria-label': cfg.aria + '; use las flechas para recorrer los meses'}, svg);
+    let cur = null;
+    const show = (j, evt) => {
+      j = Math.max(0, Math.min(n - 1, j)); cur = j;
+      const k = k0 + j;
+      cross.setAttribute('x1', x(k)); cross.setAttribute('x2', x(k)); cross.setAttribute('visibility', 'visible');
+      const rows = [];
+      cfg.series.forEach((s, i) => {
+        const v = s.v[j];
+        dots[i].setAttribute('visibility', v == null ? 'hidden' : 'visible');
+        if (v != null) { dots[i].setAttribute('cx', x(k)); dots[i].setAttribute('cy', y(v)); }
+        rows.push({value: v == null ? '—' : cfg.fmt(v), label: s.label + ' · ' + mLabel(addMonths(s.start, k)), color: s.color, em: s.now});
+      });
+      if (cfg.band) rows.push({value: fx(cfg.band[0], 0) + '–' + fx(cfg.band[1], 0) + '%', label: 'Rango meta'});
+      const title = k === 0 ? 'Mes en que sale del rango' : (k > 0 ? plural(k, 'mes', 'meses') + ' después de salir del rango' : plural(-k, 'mes', 'meses') + ' antes de salir del rango');
+      const b = svg.getBoundingClientRect();
+      const [cx, cy] = evt && evt.clientX != null ? [evt.clientX, evt.clientY] : [b.left + x(k), b.top + m.t];
+      showTip(cx, cy, title, rows);
+    };
+    const hide = () => { hideTip(); cross.setAttribute('visibility', 'hidden'); dots.forEach(d => d.setAttribute('visibility', 'hidden')); };
+    hit.addEventListener('pointermove', evt => { const b = svg.getBoundingClientRect(); show(Math.round((evt.clientX - b.left - m.l) / pw * (n - 1)), evt); });
+    hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+    hit.addEventListener('focus', () => show(cur == null ? -k0 + E.n - 1 : cur));
+    hit.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault(); show((cur == null ? -k0 + E.n - 1 : cur) + (e.key === 'ArrowRight' ? 1 : -1));
+    });
+  }
+
+  function epSeries(field) {
+    return A.eps.filter(e => e[field]).map((e, i) => ({
+      v: e[field], start: e.start, now: e.now, color: COLORS[A.eps.indexOf(e)] || 'var(--other)', w: e.now ? 2.75 : 1.75,
+      label: e.now ? 'Episodio actual' : e.label, short: e.now ? 'Actual' : e.label,
+    }));
+  }
+  function legendFor(id, extra) {
+    const leg = document.getElementById(id);
+    leg.replaceChildren();
+    const add = (cls, color, text) => { const s = htmlEl('span', null, leg); const i = htmlEl('i', {cls}, s); if (color) i.style.background = color; s.appendChild(document.createTextNode(text)); };
+    A.eps.forEach((e, i) => add('ln', COLORS[i], e.now ? 'Episodio actual (desde ' + mLabel(e.start) + ')' : e.label + ' (desde ' + mLabel(e.start) + ')'));
+    if (extra) add('bandsw', null, extra);
+  }
+
+  // ---------- Barras: variación acumulada por rubro en el episodio ----------
+  function renderRubros() {
+    const box = document.getElementById('ep-ch-rub');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W || !X.rubros.length) return;
+    const useC = !!X.contrib;
+    const data = useC ? X.contrib.slice().sort((p, q) => q.c - p.c).map(r => ({...r, v: r.c})) : X.rubros.map(r => ({...r, v: r.acc}));
+    const narrow = W < 560, labW = narrow ? 118 : 220, valW = narrow ? 58 : 64, rowH = narrow ? 34 : 26;
+    const ref = useC ? null : X.rub_ref.ipc;
+    const vmin = Math.min(0, ...data.map(d => d.v)), vmax = Math.max(...data.map(d => d.v), ref || 0);
+    const dom = niceDomain(vmin, vmax, narrow ? 3 : 5);
+    const pw = W - labW - valW, H = data.length * rowH + 40;
+    const x = v => labW + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': useC ? 'Aporte de cada rubro al alza del IPC en el episodio' : 'Variación acumulada de precios por rubro desde el inicio del episodio'}, box);
+    const g = svgEl('g', {class: 'axis'}, svg);
+    for (const t of dom.ticks) {
+      svgEl('line', {x1: x(t), x2: x(t), y1: 14, y2: H - 22, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+      const tx = svgEl('text', {x: x(t), y: H - 6, 'text-anchor': 'middle'}, g);
+      tx.textContent = useC ? (t === 0 ? '0' : (t < 0 ? '−' : '') + Math.abs(t) + ' pp') : tickFmt(t);
+    }
+    data.forEach((d, j) => {
+      const top = 16 + j * rowH, by = top + (rowH - 16) / 2, bh = 16;
+      const lab = svgEl('text', {x: labW - 10, y: by + 12, 'text-anchor': 'end', class: 'dlbl'}, svg);
+      lab.textContent = d.label;
+      // Si no cabe, el nombre pasa a dos líneas (sin cortarlo).
+      if (lab.getComputedTextLength && lab.getComputedTextLength() > labW - 14) {
+        const words = d.label.split(' ');
+        let best = 1, bestW = Infinity;
+        for (let c = 1; c < words.length; c++) {
+          lab.textContent = words.slice(0, c).join(' '); const a = lab.getComputedTextLength();
+          lab.textContent = words.slice(c).join(' '); const b = lab.getComputedTextLength();
+          if (Math.max(a, b) < bestW) { bestW = Math.max(a, b); best = c; }
+        }
+        lab.textContent = '';
+        [words.slice(0, best).join(' '), words.slice(best).join(' ')].forEach((ln, q) => {
+          const ts = svgEl('tspan', {x: labW - 10, y: by + 12 + (q ? 7 : -7)}, lab); ts.textContent = ln;
+        });
+      }
+      const xa = Math.min(x(0), x(d.v)), xb = Math.max(x(0), x(d.v));
+      svgEl('rect', {x: xa, y: by, width: Math.max(1, xb - xa), height: bh, rx: 3, fill: GCOL[d.g] || 'var(--other)'}, svg);
+      const vt = svgEl('text', {x: xb + 6, y: by + 12, class: 'dlbl'}, svg);
+      const s = svgEl('tspan', {class: 'dval'}, vt); s.textContent = useC ? fx(d.v, 2) + ' pp' : sg(d.v);
+      const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: rowH, tabindex: 0,
+        'aria-label': `${d.label}: ${useC ? fx(d.v, 2) + ' puntos' : sg(d.v)} desde ${mLabel(E.start)}`}, svg);
+      const show = evt => {
+        const b = hit.getBoundingClientRect();
+        const [cx, cy] = evt && evt.clientX != null ? [evt.clientX, evt.clientY] : [b.left + labW, b.top];
+        const rows = [{value: useC ? fx(d.v, 2) + ' pp' : sg(d.v), label: useC ? 'aporte al alza del IPC en el episodio' : 'acumulado ' + mLabel(E.start) + ' a ' + mLabel(d.m || E.last_m),
+          color: GCOL[d.g] || 'var(--other)', sq: true}];
+        if (useC) {
+          rows.push({value: sg(d.acc), label: 'alza de sus precios, ' + mLabel(E.start) + ' a ' + mLabel(E.last_m)});
+          rows.push({value: fx(d.w, 1) + '%', label: 'peso en la canasta (base dic 2021)'});
+        } else if (d.v12 != null) rows.push({value: sg(d.v12), label: 'en 12 meses a ' + mLabel(d.m)});
+        rows.push({value: '', label: (GLAB[d.g] || '') + ' · ' + SUBY(d.g)});
+        showTip(cx, cy, d.label, rows);
+      };
+      hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+      hit.addEventListener('pointerleave', hideTip); hit.addEventListener('blur', hideTip);
+    });
+    if (ref != null) {
+      svgEl('line', {x1: x(ref), x2: x(ref), y1: 12, y2: H - 22, stroke: 'var(--sys)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4', 'pointer-events': 'none'}, svg);
+      const t = svgEl('text', {x: x(ref), y: 9, 'text-anchor': 'middle', class: 'lbl'}, svg); t.textContent = 'IPC total ' + sg(ref);
+    }
+  }
+
+  // ---------- Textos generados desde los datos ----------
+  function whatText() {
+    const box = document.getElementById('ep-what');
+    box.replaceChildren();
+    const cur = A.eps.find(e => e.now), k = E.n - 1;
+    const p1 = htmlEl('p', null, box);
+    p1.textContent = `La inflación de 12 meses salió del rango meta (${fx(E.lo, 0)}% a ${fx(E.hi, 0)}%) en ${mLabel(E.start)}, cuando pasó de ${pct(E.prev_v)} en ${mLabel(E.prev_m)} a ${pct(E.start_v)}. ` +
+      (E.ongoing ? `Lleva ${plural(E.n, 'mes', 'meses')} seguidos ${sideTxt} del rango. ` : `Volvió al rango después de ${plural(E.n, 'mes', 'meses')}. `) +
+      `En ${mLabel(E.last_m)} fue ${pct(E.last_v)}` + (E.peak_m === E.last_m ? ', el más alto del episodio hasta ahora' : `; el máximo del episodio fue ${pct(E.peak_v)}, en ${mLabel(E.peak_m)}`) +
+      (E.level_since ? ` y el más alto desde ${mLabel(E.level_since)}. ` : '. ') +
+      `El salto vino en ${mLabel(E.totm_max_m)}, con un alza de ${pct(E.totm_max)} en un solo mes` + (E.totm_record_since ? `, la mayor desde ${mLabel(E.totm_record_since)}. ` : '. ') +
+      `Desde ${mLabel(E.start)} los precios suben ${pct(E.acc)} en total.`;
+    const prevs = A.eps.filter(e => !e.now);
+    if (prevs.length) {
+      const p2 = htmlEl('p', null, box);
+      const lst = xs => xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' y ' + xs[xs.length - 1];
+      p2.textContent = `Como referencia, ${plural(k, 'mes', 'meses')} después de salir del rango (el mes de salida es el mes 0), la inflación de 12 meses era ` +
+        lst(prevs.map(e => `${pct(e.t12[k - A.k0])} en el episodio de ${e.label}`)) + '. ' +
+        `Esos episodios tuvieron orígenes y puntos de partida distintos (ver el contexto, debajo del gráfico), así que su duración (` +
+        lst(prevs.map(e => `${plural(e.n, 'mes', 'meses')} el de ${e.label}`)) + ') no anticipa la de este.';
+    }
+    if (E.ongoing && E.totm_max != null) {
+      const p3 = htmlEl('p', null, box);
+      p3.textContent = `La inflación de 12 meses acumula las variaciones de los últimos 12 meses: el alza de ${pct(E.totm_max)} de ${mLabel(E.totm_max_m)} seguirá dentro del cálculo hasta el dato de ${mLabel(addMonths(E.totm_max_m, 11))} y saldrá con el de ${mLabel(addMonths(E.totm_max_m, 12))} (efecto base). La meta se evalúa con la inflación de 12 meses, pero el BCRP busca que vuelva al rango en su horizonte de proyección (ver «La respuesta del BCRP»).`;
+    }
+  }
+  function polText() {
+    const box = document.getElementById('ep-pol-data');
+    box.replaceChildren();
+    const lst = xs => xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' y ' + xs[xs.length - 1];
+    if (P.ref_now != null) {
+      const starts = A.eps.filter(e => e.ref0 != null).slice().sort((p, q) => p.start < q.start ? -1 : 1)
+        .map(e => `${pct(e.ref0)} antes ${e.now ? 'del episodio actual' : 'del de ' + e.label}`);
+      htmlEl('p', {text: `La tasa de referencia está en ${pct(P.ref_now)}` + (P.ref_since ? ` desde ${mLabel(P.ref_since)}` : '') +
+        (P.ref_changes === 0 ? ' y no ha cambiado desde que la inflación salió del rango. ' : `; cambió ${plural(P.ref_changes, 'vez', 'veces')} desde que la inflación salió del rango. `) +
+        (starts.length > 1 ? `Cada episodio partió de un nivel distinto de la tasa: ${lst(starts)} (en el mes previo a la salida del rango; ver el contexto de cada uno en «Qué está pasando»).` : '')}, box);
+    }
+    const parts = [];
+    if (P.real_now != null && P.real_start != null) {
+      parts.push(`La tasa real ex ante (tasa de referencia menos expectativa de inflación a 12 meses) pasó de ${pct(P.real_start)} en ${mLabel(P.real_start_m)} a ${pct(P.real_now)} en ${mLabel(P.real_m)}` +
+        (P.ref_changes === 0 && P.exp_now > P.exp_start ? ', porque subieron las expectativas con la tasa de referencia sin cambio. ' : '. '));
+    }
+    const ne = (C.politica || {}).nota_expectativas;
+    if (P.exp_now != null) {
+      const near = P.exp_gap != null && P.exp_gap <= 0.10;
+      parts.push(`Las expectativas de inflación a 12 meses de analistas y entidades financieras pasaron de ${pct(P.exp_start)} en ${mLabel(E.prev_m)} a ${pct(P.exp_now)} en ${mLabel(P.exp_m)}` +
+        (P.exp_state > 0 ? `, ${near ? 'ligeramente ' : ''}por encima del límite superior del rango meta (${fx(E.hi, 0)}%)` + (P.exp_above_since ? ` desde ${mLabel(P.exp_above_since)}` : '') + '.'
+          : P.exp_state === 0 ? ', dentro del rango meta.' : `, ${near ? 'ligeramente ' : ''}por debajo del rango meta.`));
+      if (ne && ne.texto && P.exp_state > 0) parts.push(' ' + ne.texto);
+    }
+    htmlEl('p', {text: parts.join('')}, box);
+    if (ne && ne.fuentes && P.exp_state > 0) srcLine(ne.fuentes, box);
+  }
+  function srcLine(ids, parent) {
+    const p = htmlEl('p', {cls: 'src'}, parent);
+    p.appendChild(document.createTextNode('Fuente: '));
+    ids.map(srcById).filter(Boolean).forEach((s, i) => {
+      if (i) p.appendChild(document.createTextNode('; '));
+      const a = htmlEl('a', {href: s.url, target: '_blank', rel: 'noopener', text: s.cita}, p);
+      if (s.detalle) p.appendChild(document.createTextNode(', ' + s.detalle));
+    });
+  }
+  function fillStatic() {
+    document.getElementById('ep-title').textContent = C.titulo || 'Episodio actual';
+    document.getElementById('ep-sub').textContent = C.bajada || '';
+    document.getElementById('ep-eyebrow').textContent = 'Episodio actual · datos a ' + mLabel(E.last_m);
+    // Tarjetas.
+    const box = document.getElementById('ep-kpis');
+    box.replaceChildren();
+    const tiles = [
+      {hero: true, lab: 'Inflación de los últimos 12 meses', val: pct(E.last_v), unit: mLabel(E.last_m),
+        sub: `${sideTxt[0].toUpperCase() + sideTxt.slice(1)} del rango meta desde ${mLabel(E.start)} (${pct(E.start_v)})`},
+      {lab: E.ongoing ? `Meses seguidos ${sideTxt} del rango` : 'Meses fuera del rango', val: String(E.n), sub: `${mLabel(E.start)} a ${mLabel(E.end)}`},
+      {lab: E.ongoing ? 'Máximo hasta ahora' : 'Máximo del episodio', val: pct(E.peak_v), sub: mLabel(E.peak_m) + (E.peak_m === E.last_m ? ' · último dato' : '')},
+      {lab: 'Mayor alza mensual del episodio', val: pct(E.totm_max), sub: mLabel(E.totm_max_m) + (E.totm_record_since ? ' · la mayor desde ' + mLabel(E.totm_record_since) : '')},
+      {lab: 'Inflación del mes', val: pct(E.totm_last), sub: mLabel(E.last_m)},
+      {lab: 'Alza acumulada en el episodio', val: pct(E.acc), sub: `${mLabel(E.start)} a ${mLabel(E.last_m)}`},
+    ];
+    if (E.sae_last != null) tiles.push({lab: 'Sin alimentos y energía (12 meses)', val: pct(E.sae_last), sub: mLabel(E.sae_m)});
+    for (const t of tiles) {
+      const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);
+      htmlEl('div', {cls: 'lab', text: t.lab}, d);
+      const v = htmlEl('div', {cls: 'val', text: t.val}, d);
+      if (t.unit) htmlEl('span', {cls: 'unit', text: t.unit}, v);
+      htmlEl('div', {cls: 'sub', text: t.sub}, d);
+    }
+    // Causas (curadas).
+    const cb = document.getElementById('ep-causes');
+    cb.replaceChildren();
+    (C.causas || []).forEach(c => {
+      const d = htmlEl('div', {cls: 'ep-cause'}, cb);
+      htmlEl('h3', {text: c.titulo}, d);
+      const amp = c.anexo === 'amplitud' && X.amp
+        ? ` La medida de ${X.amp.n || 13} grupos de la sección de amplitud del Tablero, más gruesa, da ${fx(X.amp.v, 0)}% en ${mLabel(X.amp.m)}.` : '';
+      htmlEl('p', {text: c.texto + amp}, d);
+      srcLine(c.fuentes || [], d);
+    });
+    // Contexto de cada episodio (curado), en el orden del gráfico.
+    const cx = document.getElementById('ep-ctx');
+    cx.replaceChildren();
+    A.eps.filter(e => e.contexto).forEach(e => {
+      const d = htmlEl('div', {cls: 'ep-ctx-i'}, cx);
+      const h = htmlEl('h4', null, d);
+      const sw = htmlEl('i', {cls: 'ln'}, h); sw.style.background = COLORS[A.eps.indexOf(e)];
+      h.appendChild(document.createTextNode((e.now ? 'Episodio actual' : e.label) + ' · desde ' + mLabel(e.start) + (e.ongoing ? '' : ', ' + plural(e.n, 'mes', 'meses'))));
+      htmlEl('p', {text: e.contexto}, d);
+      srcLine(e.fuentes || [], d);
+    });
+    // Política (curada).
+    const pb = document.getElementById('ep-pol-cfg');
+    pb.replaceChildren();
+    ((C.politica || {}).texto || []).forEach(t => htmlEl('p', {text: t}, pb));
+    srcLine((C.politica || {}).fuentes || [], pb);
+    // Fuentes.
+    const ul = document.getElementById('ep-srcs');
+    ul.replaceChildren();
+    Object.values(C.fuentes || {}).forEach(s => {
+      const li = htmlEl('li', null, ul);
+      li.appendChild(document.createTextNode(s.cita + (s.detalle ? ' (' + s.detalle + '). ' : '. ')));
+      htmlEl('a', {href: s.url, target: '_blank', rel: 'noopener', text: s.url.includes('gob.pe/institucion') ? 'gob.pe' : new URL(s.url).hostname.replace('www.', '')}, li);
+    });
+    const late = C.redactado_con_dato && C.redactado_con_dato < E.last_m;
+    document.getElementById('ep-src-note').textContent =
+      `Los textos sobre las causas y la respuesta del BCRP resumen las fuentes oficiales listadas y se redactaron con el dato de ${mLabel(C.redactado_con_dato)}` +
+      (late ? `; los datos ya llegan a ${mLabel(E.last_m)}, así que pueden no recoger lo más reciente. ` : '. ') +
+      'Las cifras de las tarjetas, los gráficos y los párrafos sin fuente salen de las series del BCRP (IPC de Lima del INEI) y se actualizan solas. Las cifras citadas dentro de las causas son las que publicó la fuente en su fecha. El sitio del BCRP a veces muestra una verificación de seguridad antes de abrir sus documentos.';
+    const lr = document.getElementById('ep-leg-rub');
+    lr.replaceChildren();
+    const present = new Set((X.contrib || X.rubros).map(r => r.g));
+    (X.groups || []).filter(g => present.has(g.id)).forEach(g => {
+      const sp = htmlEl('span', null, lr); const i = htmlEl('i', {cls: 'sw'}, sp); i.style.background = GCOL[g.id]; sp.appendChild(document.createTextNode(g.label));
+    });
+    if (!X.contrib) { const sp = htmlEl('span', null, lr); htmlEl('i', {cls: 'ln dash'}, sp); sp.appendChild(document.createTextNode('IPC total')); }
+    document.getElementById('ep-rub-h').textContent = X.contrib ? 'Qué rubros aportaron más al alza' : 'Qué rubros subieron más en el episodio';
+    document.getElementById('ep-rub-note').textContent = X.contrib
+      ? `Cuántos puntos porcentuales aportó cada rubro al alza de ${pct(E.acc)} del IPC entre ${mLabel(E.start)} y ${mLabel(E.last_m)}, según cuánto subieron sus precios y su peso oficial en la canasta. Los aportes suman el alza total, salvo redondeo. Mismos grupos y colores que la sección de contribuciones del Tablero.`
+      : `Cuánto subieron los precios de cada rubro entre ${mLabel(E.start)} y ${mLabel(E.last_m)} (variaciones mensuales encadenadas). No es su aporte a la inflación total: eso depende del peso de cada rubro en la canasta. La línea discontinua es el IPC total; la sin alimentos y energía subió ${sg(X.rub_ref.sae)} en el mismo periodo. Mismos grupos y colores que la sección de contribuciones del Tablero.`;
+  }
+
+  registerTab({
+    id: 'episodio', label: 'Episodio actual', before: 'aprende',
+    html: `
+      <div class="ep-intro">
+        <p class="eyebrow" id="ep-eyebrow">Episodio actual</p>
+        <h2 id="ep-title"></h2>
+        <p id="ep-sub"></p>
+      </div>
+      <section class="kpis" id="ep-kpis" aria-label="El episodio en cifras"></section>
+
+      <div class="section-title">Qué está pasando</div>
+      <div class="callout" id="ep-what"></div>
+      <figure class="card" style="margin:12px 0 0">
+        <div class="card-head"><div>
+          <h2>Este episodio frente a los anteriores</h2>
+          <p>Inflación de 12 meses, en %, alineada por los meses transcurridos desde que cada episodio salió del rango meta. La franja es el rango meta de 1% a 3%, vigente desde 2007.</p>
+        </div></div>
+        <div class="legend" id="ep-leg-t12"></div>
+        <div class="chart" id="ep-ch-t12"></div>
+        <p class="ep-axis-cap">Meses desde que la inflación salió del rango meta</p>
+        <h3 class="ep-ctx-h">Contexto de cada episodio</h3>
+        <div class="ep-ctx" id="ep-ctx"></div>
+      </figure>
+
+      <div class="section-title">Qué lo explica</div>
+      <figure class="card" style="margin:0">
+        <div class="card-head"><div>
+          <h2 id="ep-rub-h">Qué rubros subieron más en el episodio</h2>
+          <p id="ep-rub-note"></p>
+        </div></div>
+        <div class="legend" id="ep-leg-rub"></div>
+        <div class="chart" id="ep-ch-rub"></div>
+      </figure>
+      <div class="ep-causes" id="ep-causes"></div>
+
+      <div class="section-title">La respuesta del BCRP</div>
+      <div class="callout ep-pol"><div id="ep-pol-cfg"></div><div id="ep-pol-data"></div></div>
+      <figure class="card" style="margin:12px 0 0">
+        <div class="card-head"><div>
+          <h2>Tasa de referencia en cada episodio</h2>
+          <p>Tasa de referencia del BCRP, en %, alineada por los meses desde que cada episodio salió del rango meta. Cada episodio partió de un nivel distinto.</p>
+        </div></div>
+        <div class="legend" id="ep-leg-ref"></div>
+        <div class="chart" id="ep-ch-ref"></div>
+        <p class="ep-axis-cap">Meses desde que la inflación salió del rango meta</p>
+      </figure>
+      <figure class="card" style="margin:12px 0 0">
+        <div class="card-head"><div>
+          <h2>Tasa real ex ante en cada episodio</h2>
+          <p>Tasa de referencia menos la expectativa de inflación a 12 meses, en %. El BCRP estima la tasa real neutral, la que ni impulsa ni frena la economía, en alrededor de 2% (Reporte de Inflación de junio de 2026).</p>
+        </div></div>
+        <div class="legend" id="ep-leg-real"></div>
+        <div class="chart" id="ep-ch-real"></div>
+        <p class="ep-axis-cap">Meses desde que la inflación salió del rango meta</p>
+      </figure>
+      <figure class="card" style="margin:12px 0 0">
+        <div class="card-head"><div>
+          <h2>Expectativas de inflación a 12 meses</h2>
+          <p>Promedio de analistas económicos y entidades financieras en la encuesta mensual del BCRP, en %, en cada episodio. La franja es el rango meta.</p>
+        </div></div>
+        <div class="legend" id="ep-leg-exp"></div>
+        <div class="chart" id="ep-ch-exp"></div>
+        <p class="ep-axis-cap">Meses desde que la inflación salió del rango meta</p>
+        <p class="note" id="ep-exp-note"></p>
+      </figure>
+
+      <div class="section-title">Fuentes</div>
+      <div class="callout">
+        <ul class="srcs" id="ep-srcs"></ul>
+        <p class="note" id="ep-src-note"></p>
+      </div>`,
+    render() {
+      fillStatic();
+      whatText();
+      polText();
+      legendFor('ep-leg-t12', 'Rango meta');
+      alignChart(document.getElementById('ep-ch-t12'), {series: epSeries('t12'), band: [E.lo, E.hi], fmt: v => pct(v), H: 320,
+        aria: 'Inflación de 12 meses en este episodio y en los anteriores, alineada por meses desde la salida del rango meta'});
+      renderRubros();
+      legendFor('ep-leg-ref');
+      alignChart(document.getElementById('ep-ch-ref'), {series: epSeries('ref'), step: true, fmt: v => pct(v), H: 240,
+        aria: 'Tasa de referencia en cada episodio, alineada por meses desde la salida del rango meta'});
+      legendFor('ep-leg-real');
+      alignChart(document.getElementById('ep-ch-real'), {series: epSeries('real'), fmt: v => pct(v), H: 240,
+        aria: 'Tasa real ex ante en cada episodio, alineada por meses desde la salida del rango meta'});
+      legendFor('ep-leg-exp', 'Rango meta');
+      alignChart(document.getElementById('ep-ch-exp'), {series: epSeries('exp'), band: [E.lo, E.hi], fmt: v => pct(v), H: 240,
+        aria: 'Expectativas de inflación a 12 meses en cada episodio, alineadas por meses desde la salida del rango meta'});
+      document.getElementById('ep-exp-note').textContent = P.exp_m && P.exp_m < E.last_m
+        ? `La encuesta de expectativas llega hasta ${mLabel(P.exp_m)}; la inflación, hasta ${mLabel(E.last_m)}.` : '';
+    },
+  });
+})();
+</script>

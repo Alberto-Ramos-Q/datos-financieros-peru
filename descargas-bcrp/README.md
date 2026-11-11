@@ -20,6 +20,7 @@ python src/construir_tablas.py               # regenera data/processed/ (paneles
 
 # Tableros (outputs/*.html)
 python src/visual_reservas.py
+python src/descargar_ipc_ciudades.py         # IPC de las 26 ciudades (informes mensuales del INEI), para inflación
 python src/visual_inflacion.py
 python src/visual_transmision.py
 
@@ -30,6 +31,12 @@ python src/descargar_ejecucion_mef.py        # ejecución presupuestal (Consulta
 python src/descargar_fmi.py                  # comparación entre países (FMI, DataMapper)
 python src/visual_finanzas.py
 ```
+
+**Inflación:** las secciones adicionales (contribuciones por rubro, amplitud, cumplimiento de la meta, costos, poder adquisitivo,
+proyecciones del BCRP, ciudades, episodio actual y «Lo último») están en `src/inflacion_extra/` y
+`src/plantillas/inflacion_extra/`. Sus insumos fijos vienen en `config/`: ponderaciones del IPC
+(`ponderaciones_ipc.csv`), proyecciones de los Reportes de Inflación ya extraídas (`proyecciones_inflacion.csv`) y
+textos del episodio (`episodio_actual.json`). Si falta un insumo, esa sección se omite con aviso.
 
 **Finanzas públicas:**
 - Los indicadores de riesgo de la deuda del MEF se bajan a mano, porque el sitio del MEF bloquea las descargas
@@ -64,6 +71,6 @@ python src/descargar_series.py --dry-run                     # solo informa
 - `data/processed/`: paneles por frecuencia. Los principales, ya listos, están en [`../datos/bcrp/`](../datos/bcrp/).
 
 **Requisitos adicionales:** la comparación internacional de `visual_inflacion.py` y `visual_transmision.py`
-usa una capa de datos macro de otros países que aún no está en este repositorio, y `visual_transmision.py`
+usa la capa comparable de [`../data_macro_paises/`](../data_macro_paises/), y `visual_transmision.py`
 usa además las tasas activas de [`../descargas-sbs/`](../descargas-sbs/). Los tableros ya generados de cada
 corte se pueden descargar en Releases (`tableros_<corte>.zip`).

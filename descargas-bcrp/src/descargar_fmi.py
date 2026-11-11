@@ -1,8 +1,10 @@
-"""Descargador de indicadores fiscales del FMI (API pública del DataMapper) para la comparación internacional.
+"""Descargador de indicadores del FMI (API pública del DataMapper) para la comparación internacional.
 
-Todos los indicadores son del gobierno general, con el mismo concepto para todos los países:
+Indicadores fiscales, todos del gobierno general, con el mismo concepto para todos los países:
 - World Economic Outlook: resultado (préstamo neto / endeudamiento neto) y deuda bruta.
 - Fiscal Monitor: resultado primario, deuda neta, ingresos y gasto.
+Indicador laboral (agregado 2026-11-10, para el informe de empleo regional de `../data_macro_paises`):
+- World Economic Outlook: tasa de desempleo (LUR, % de la fuerza laboral; definición nacional de cada país).
 
 Guarda la respuesta JSON de la API tal cual en `data/raw/fmi/<indicador>.json` (todos los países) y la descripción
 de los indicadores (edición, fecha de modificación) en `data/raw/fmi/indicadores.json`.
@@ -30,6 +32,7 @@ INDICATORS = {
     "GGXWDN_G01_GDP_PT": "deuda_neta",            # Fiscal Monitor
     "GGR_G01_GDP_PT": "ingresos",                 # Fiscal Monitor
     "G_X_G01_GDP_PT": "gasto",                    # Fiscal Monitor
+    "LUR": "desempleo",                           # WEO: Unemployment rate (% de la fuerza laboral)
 }
 
 

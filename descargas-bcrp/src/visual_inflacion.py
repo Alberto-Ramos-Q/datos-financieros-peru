@@ -15,8 +15,11 @@ Uso:
 from __future__ import annotations
 
 import datetime as dt
+import importlib.util
 import json
+import re
 import sys
+import traceback
 from pathlib import Path
 
 import numpy as np
@@ -31,6 +34,9 @@ TEMPLATE = PROJECT_DIR / "src" / "plantillas" / "inflacion.html"
 OUT = PROJECT_DIR / "outputs" / "inflacion_bcrp.html"
 OUT_ARTIFACT = PROJECT_DIR / "outputs" / "inflacion_bcrp_artifact.html"
 PLACEHOLDER = "/*__DATA__*/null"
+EXTRA_MARK = "<!--__EXTRA__-->"
+EXTRA_SRC = PROJECT_DIR / "src" / "inflacion_extra"            # módulos: KEY y build(ctx) -> dict | None
+EXTRA_TPL = PROJECT_DIR / "src" / "plantillas" / "inflacion_extra"  # fragmentos HTML (registerTab / registerSection)
 
 # Meta vigente si no se puede leer la tabla de metas (BCRP: 2% ±1 desde feb-2007; 2.5% ±1 en 2002-2007).
 FALLBACK_TARGETS = [
@@ -71,7 +77,7 @@ HEAT_ROWS = [
     ("tot12", "IPC total", 0, "ipc_var12m", "d"),
     ("sub12", "Subyacente", 0, "ipc_subyacente_var12m", "d"),
     ("h_sb", "Bienes", 1, "ipc_sub_bienes_var_mensual", "m"),
-    ("h_sba", "Alimentos y bebidas (resto)", 2, "ipc_sub_bienes_alimentos_var_mensual", "m"),
+    ("h_sba", "Alimentos y bebidas (subyacente)", 2, "ipc_sub_bienes_alimentos_var_mensual", "m"),
     ("h_sbt", "Textiles y calzado", 2, "ipc_sub_bienes_textiles_var_mensual", "m"),
     ("h_sbe", "Electrodomésticos", 2, "ipc_sub_bienes_electrodomesticos_var_mensual", "m"),
     ("h_sbr", "Otros productos industriales", 2, "ipc_sub_bienes_resto_industriales_var_mensual", "m"),
@@ -353,6 +359,54 @@ def build_edu(m: pd.DataFrame, targets: list[dict]) -> dict:
     }
 
 
+def build_extras(ctx: dict) -> dict:
+    """Corre cada módulo de `src/inflacion_extra/` (orden por nombre de archivo; los que empiezan con «_» se
+    saltan). Cada módulo expone `KEY` (str) y `build(ctx) -> dict | None`; su salida queda en `D.extra[KEY]` y
+    en `ctx["extra"][KEY]` para los módulos siguientes. Un módulo que falla se omite con aviso: no rompe el tablero."""
+    out: dict = {}
+    ctx["extra"] = out
+    if not EXTRA_SRC.is_dir():
+        return out
+    for path in sorted(EXTRA_SRC.glob("*.py")):
+        if path.name.startswith("_"):
+            continue
+        try:
+            spec = importlib.util.spec_from_file_location(f"inflacion_extra_{path.stem}", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            key = getattr(mod, "KEY", path.stem)
+            res = mod.build(ctx)
+            if res is None:
+                warn(f"extensión {path.name}: sin datos, se omite")
+                continue
+            out[key] = res
+            print(f"  extensión {path.name} -> D.extra.{key}")
+        except Exception:  # noqa: BLE001
+            warn(f"extensión {path.name} falló y se omite:\n{traceback.format_exc(limit=3)}")
+    return out
+
+
+def extra_fragments() -> str:
+    """Concatena los fragmentos HTML de `src/plantillas/inflacion_extra/` (orden por nombre; «_» se saltan)."""
+    if not EXTRA_TPL.is_dir():
+        return ""
+    raw = "\n".join(p.read_text(encoding="utf-8") for p in sorted(EXTRA_TPL.glob("*.html")) if not p.name.startswith("_"))
+    return strip_internal(raw)
+
+
+INTERNAL_REF = re.compile(r"(src/|docs/|config/|data/(raw|processed)|\.py\b|_fuentes\.md|D\.extra|KEY )")
+
+
+def strip_internal(html: str) -> str:
+    """El tablero es público: quita los comentarios HTML y los comentarios JS/CSS que nombran archivos internos
+    (rutas, scripts, notas de trabajo). Sirven en el código fuente, no en la página publicada."""
+    html = re.sub(r"<!--(?!__)[\s\S]*?-->", "", html)
+    html = re.sub(r"/\*[\s\S]*?\*/", lambda mt: "" if INTERNAL_REF.search(mt.group(0)) else mt.group(0), html)
+    html = re.sub(r"(^|[ \t])//[^\n]*", lambda mt: mt.group(1) if INTERNAL_REF.search(mt.group(0)) else mt.group(0),
+                  html, flags=re.M)
+    return html
+
+
 def main() -> int:
     m = load_panel()
     comp = load_comparada()
@@ -390,16 +444,21 @@ def main() -> int:
         warn("sin series desestacionalizadas (var. 3 meses anualizada): se omite el gráfico de tendencia")
 
     data = {
-        "generado": dt.date.today().isoformat(), "start": month_key(months[0]), "hasta": month_key(months[-1]),
+        "generado": dt.date.today().isoformat(), "defaultTab": "ultimo", "start": month_key(months[0]), "hasta": month_key(months[-1]),
         "S": S, "targets": targets, "kpi": build_kpis(m, real), "heat": heat, "small": small, "shock": shock,
         "region": region, "src_nac": src_nac, "edu": build_edu(m, targets),
     }
+    data["extra"] = build_extras({"m": m, "months": months, "S": S, "targets": targets, "comp": comp,
+                                  "project_dir": PROJECT_DIR, "warn": warn})
 
     html = TEMPLATE.read_text(encoding="utf-8")
     if PLACEHOLDER not in html:
         raise ValueError(f"La plantilla no tiene el marcador {PLACEHOLDER}")
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     OUT.parent.mkdir(parents=True, exist_ok=True)
+    if EXTRA_MARK not in html:
+        raise ValueError(f"La plantilla no tiene el marcador {EXTRA_MARK}")
+    html = html.replace(EXTRA_MARK, extra_fragments())
     OUT.write_text(html.replace(PLACEHOLDER, payload), encoding="utf-8")
     print(f"  {OUT.relative_to(PROJECT_DIR)}  ({OUT.stat().st_size / 1024:.0f} KB; {len(S)} series, "
           f"mapa de calor: {len(heat)} filas; región: {'sí' if region else 'omitida'}; "

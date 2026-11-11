@@ -1,0 +1,281 @@
+<style>
+/* Extensión «ciudades»: inflación de 12 meses por ciudad del IPC nacional (INEI). */
+.cd-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 12px 20px; margin-top: 4px; align-items: start; }
+.cd-sum { margin: 10px 0 0; color: var(--ink2); font-size: 13.5px; max-width: 80ch; }
+.cd-sum b { color: var(--ink); font-weight: 600; }
+.cd-maphead { font-size: 13px; color: var(--ink2); font-weight: 600; margin: 4px 0 0; }
+.cd-map .scale { margin-top: 6px; }
+.cd-map .scale { flex-wrap: nowrap; }
+.cd-map .scale > span { width: auto; flex: 1 1 0; min-width: 0; font-size: 11px; line-height: 1.25; }
+/* Borde de los puntos: en oscuro, el tono claro de tinta para que se distingan del mapa (la escala no cambia). */
+#card-cd { --cd-dot: var(--ink2); --cd-dotw: 1; }
+:root[data-theme="dark"] #card-cd { --cd-dot: var(--ink); --cd-dotw: 1.5; }
+.cd-guide { stroke: var(--ink2); stroke-width: 1; fill: none; }
+.cd-lbl { font-size: 11.5px; fill: var(--ink2); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.cd-tools label { font-size: 13px; color: var(--ink2); }
+#card-cd .col-hit.cd-on { fill: var(--wash); }
+@media (max-width: 860px) { .cd-grid { grid-template-columns: 1fr; } .cd-map svg { max-width: 420px; margin: 0 auto; } }
+</style>
+<script>
+(function () {
+  const C = XD.ciudades;
+  if (!C || !C.months || !C.months.length) return;
+  const NAT = 'Nacional', LIMA = 'Lima Metropolitana';
+  const COL = n => n === NAT ? 'var(--s3)' : n === LIMA ? 'var(--s1)' : 'var(--other)';
+  const mi = m => C.months.indexOf(m);
+  const label = n => n === NAT ? 'Promedio nacional' : n;
+  // Meses elegibles: con dato de 12 meses en al menos la mitad de las ciudades.
+  const MONTHS_OK = C.months.filter((m, i) => C.names.filter(n => n !== NAT && C.v12[n][i] != null).length >= (C.names.length - 1) / 2);
+  let cur = MONTHS_OK[MONTHS_OK.length - 1];
+  let hot = null;   // ciudad resaltada (barra <-> punto)
+
+  const html = `
+  <div class="section-title">Inflación por ciudades</div>
+  <figure class="card" style="margin:0" id="card-cd">
+    <div class="card-head">
+      <div>
+        <h2 id="cd-title">Inflación de 12 meses por ciudad</h2>
+        <p>Variación de los precios en los últimos 12 meses, en %, en cada una de las 26 ciudades donde el INEI mide el índice de precios al consumidor nacional. Se resaltan el promedio nacional y Lima Metropolitana, la ciudad con la que el BCRP evalúa su meta. En el mapa, cada punto es una ciudad, con la misma escala de colores del mapa de calor por rubro.</p>
+      </div>
+      <div class="card-tools cd-tools">
+        <label for="cd-pick">Mes</label>
+        <select class="btn" id="cd-pick"></select>
+        <button class="btn" type="button" id="cd-tbtn" aria-controls="tb-cd" aria-expanded="false">Ver tabla</button>
+      </div>
+    </div>
+    <p class="cd-sum" id="cd-sum"></p>
+    <div class="legend">
+      <span id="cd-lg-nat"><i class="sw" style="background:var(--s3)"></i>Promedio nacional</span>
+      <span><i class="sw" style="background:var(--s1)"></i>Lima Metropolitana</span>
+      <span><i class="sw" style="background:var(--other)"></i>Otras ciudades</span>
+    </div>
+    <div class="cd-grid">
+      <div class="chart" id="ch-cd"></div>
+      <div class="cd-map" id="cd-mapbox">
+        <div class="cd-maphead" id="cd-maphead">Mapa</div>
+        <div class="scale" id="cd-scale" aria-hidden="true"></div>
+        <div class="chart" id="map-cd"></div>
+      </div>
+    </div>
+    <div class="table-wrap" id="tb-cd" hidden></div>
+    <p class="note" id="note-cd"></p>
+  </figure>`;
+
+  // Filas del mes elegido, de mayor a menor inflación de 12 meses.
+  function rowsOf(m) {
+    const i = mi(m);
+    return C.names.map(n => ({n, v: C.v12[n][i], vm: C.vm[n][i], va: C.va[n][i]}))
+      .filter(r => r.v != null).sort((a, b) => b.v - a.v || a.n.localeCompare(b.n, 'es'));
+  }
+  const listNames = a => a.length === 1 ? a[0] : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
+
+  function tipFor(r, m) {
+    const rows = [{value: pct(r.v), label: 'en 12 meses', color: COL(r.n), sq: true, em: true}];
+    if (r.vm != null) rows.push({value: pct(r.vm), label: 'en el mes'});
+    if (r.va != null) rows.push({value: pct(r.va), label: 'en lo que va del año'});
+    const nat = C.v12[NAT][mi(m)];
+    if (r.n !== NAT && nat != null) rows.push({value: (r.v - nat >= 0 ? '+' : '−') + Math.abs(r.v - nat).toFixed(2) + ' pp', label: 'frente al promedio nacional'});
+    return rows;
+  }
+  function setHot(n) {
+    hot = n;
+    document.querySelectorAll('#card-cd [data-city]').forEach(e => {
+      const on = e.dataset.city === n;
+      if (e.tagName === 'circle') { e.style.strokeWidth = on ? '2.75' : 'var(--cd-dotw)'; e.style.stroke = on ? 'var(--accent)' : 'var(--cd-dot)'; }
+      else e.classList.toggle('cd-on', on);
+    });
+  }
+
+  function summary(m, rows) {
+    const box = document.getElementById('cd-sum');
+    box.replaceChildren();
+    const cities = rows.filter(r => r.n !== NAT);
+    if (!cities.length) return;
+    const nat = rows.find(r => r.n === NAT), lima = rows.find(r => r.n === LIMA);
+    const hi = cities[0].v, lo = cities[cities.length - 1].v;
+    const top = cities.filter(r => r.v === hi).map(r => r.n), bot = cities.filter(r => r.v === lo).map(r => r.n);
+    const add = (t, b) => { if (b) htmlEl('b', {text: t}, box); else box.appendChild(document.createTextNode(t)); };
+    add(`En ${mLabel(m)}, la inflación de 12 meses fue más alta en `); add(listNames(top), true); add(` (${pct(hi)}) y más baja en `);
+    add(listNames(bot), true); add(` (${pct(lo)}): una diferencia de ${fx(hi - lo)} puntos porcentuales. `);
+    if (nat) {
+      const above = cities.filter(r => r.v > nat.v).length;
+      add(`El promedio nacional fue ${pct(nat.v)}`);
+      add(lima ? ` y Lima Metropolitana, ${pct(lima.v)}; ` : '; ');
+      add(`${above} de las ${cities.length} ciudades estuvieron por encima del promedio nacional. `);
+    } else if (lima) add(`Lima Metropolitana registró ${pct(lima.v)}. `);
+    const over = cities.filter(r => r.v > 3).length, under = cities.filter(r => r.v < 1).length;
+    add(over === 0 ? 'Ninguna ciudad superó el 3%, el techo del rango meta del BCRP'
+      : over === cities.length ? `Todas las ciudades superaron el 3%, el techo del rango meta del BCRP`
+      : `${over} ${over === 1 ? 'ciudad superó' : 'ciudades superaron'} el 3%, el techo del rango meta del BCRP`);
+    add(under ? `, y ${under} ${under === 1 ? 'quedó' : 'quedaron'} por debajo de 1%` : '');
+    add(' (la meta se evalúa solo con Lima Metropolitana).');
+  }
+
+  function renderBarsCd(m, rows) {
+    const box = document.getElementById('ch-cd');
+    box.replaceChildren();
+    const W = box.clientWidth;
+    if (!W || !rows.length) return;
+    const vals = rows.map(r => r.v);
+    const dom = niceDomain(Math.min(0, ...vals), Math.max(0, ...vals) * 1.04, W < 420 ? 4 : 5);
+    const narrow = W < 480, labW = narrow ? 118 : 140, valW = 52, rowH = 21, H = rows.length * rowH + 24;
+    const pw = W - labW - valW;
+    const x = v => labW + (v - dom.lo) / (dom.hi - dom.lo) * pw;
+    const svg = svgEl('svg', {width: W, height: H, role: 'img', 'aria-label': `Inflación de 12 meses por ciudad en ${mLabel(m)}, ordenada de mayor a menor`}, box);
+    const g = svgEl('g', {class: 'axis'}, svg);
+    for (const t of dom.ticks) {
+      svgEl('line', {x1: x(t), x2: x(t), y1: 0, y2: H - 20, stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1}, g);
+      const tx = svgEl('text', {x: x(t), y: H - 5, 'text-anchor': 'middle'}, g); tx.textContent = tickFmt(t);
+    }
+    rows.forEach((r, j) => {
+      const top = j * rowH, by = top + 4, bh = rowH - 8, ref = r.n === NAT || r.n === LIMA;
+      const lab = svgEl('text', {x: labW - 8, y: by + bh - 2, 'text-anchor': 'end', class: ref ? 'dlbl dval' : 'dlbl'}, svg);
+      lab.textContent = narrow && r.n === LIMA ? 'Lima Metrop.' : narrow && r.n === 'Puerto Maldonado' ? 'Pto. Maldonado' : narrow && r.n === NAT ? 'Prom. nacional' : label(r.n);
+      const x0 = x(0), x1 = x(r.v);
+      // Extremo de dato redondeado; las negativas crecen hacia la izquierda.
+      const d = r.v >= 0 ? hbarPath(x0, x1, by, bh)
+        : (x0 - x1 < 0.5 ? '' : `M${x0},${by}H${x1 + Math.min(4, x0 - x1, bh / 2)}Q${x1},${by} ${x1},${by + Math.min(4, x0 - x1, bh / 2)}V${by + bh - Math.min(4, x0 - x1, bh / 2)}Q${x1},${by + bh} ${x1 + Math.min(4, x0 - x1, bh / 2)},${by + bh}H${x0}Z`);
+      svgEl('path', {d, fill: COL(r.n)}, svg);
+      const vt = svgEl('text', {x: Math.max(x0, x1) + 6, y: by + bh - 2, class: 'dlbl'}, svg);
+      const s = svgEl('tspan', {class: ref ? 'dval' : ''}, vt); s.textContent = pct(r.v);
+      const hit = svgEl('rect', {class: 'col-hit', x: 0, y: top, width: W, height: rowH, tabindex: 0, 'data-city': r.n,
+        'aria-label': `${label(r.n)}: ${pct(r.v)} en 12 meses a ${mLabel(m)}`}, svg);
+      const show = evt => { setHot(r.n); const [cx, cy] = anchorOf(evt, hit); showTip(cx, cy, label(r.n) + ' · ' + mLabel(m), tipFor(r, m)); };
+      const hide = () => { setHot(null); hideTip(); };
+      hit.addEventListener('pointermove', show); hit.addEventListener('focus', show);
+      hit.addEventListener('pointerleave', hide); hit.addEventListener('blur', hide);
+    });
+  }
+
+  function renderMapCd(m, rows) {
+    const wrap = document.getElementById('cd-mapbox'), box = document.getElementById('map-cd');
+    box.replaceChildren();
+    const G = C.map;
+    if (!G) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    document.getElementById('cd-maphead').textContent = 'Mapa de las ciudades, ' + mLabel(m);
+    const sc = document.getElementById('cd-scale');
+    sc.replaceChildren();
+    for (const b of BINS) {
+      const s = htmlEl('span', {cls: b.mid ? 'mid' : ''}, sc);
+      const i = htmlEl('i', null, s); i.style.background = `var(${b.v})`;
+      htmlEl('span', {text: b.label}, s);
+    }
+    const W = Math.min(box.clientWidth, 420);
+    if (!W) return;
+    const k = W / G.w, H = G.h * k;
+    const cities = rows.filter(r => r.n !== NAT);
+    const svg = svgEl('svg', {width: W, height: H, viewBox: `0 0 ${G.w} ${G.h}`, role: 'img',
+      'aria-label': `Mapa del Perú con la inflación de 12 meses de cada ciudad en ${mLabel(m)}; las cifras están en el gráfico de barras y en la tabla`}, box);
+    const gp = svgEl('g', null, svg);
+    for (const code in G.paths) svgEl('path', {d: G.paths[code], fill: 'var(--grid)', stroke: 'var(--surface)', 'stroke-width': 1.2 / k, 'stroke-linejoin': 'round'}, gp);
+    const r0 = 6.5 / k;
+    // Etiquetas: la más alta, la más baja y Lima (las demás, en el tooltip).
+    const labelled = new Set([cities[0] && cities[0].n, cities.length && cities[cities.length - 1].n, LIMA]);
+    // Primero las ciudades sin resaltar, para que Lima quede encima.
+    cities.slice().sort((a, b) => (a.n === LIMA) - (b.n === LIMA)).forEach(r => {
+      const p = G.pts[r.n];
+      if (!p) return;
+      const c = svgEl('circle', {cx: p[0], cy: p[1], r: r.n === LIMA ? r0 * 1.2 : r0, fill: `var(${BINS[binOf(r.v)].v})`,
+        'vector-effect': 'non-scaling-stroke', 'data-city': r.n, style: 'cursor:crosshair;stroke:var(--cd-dot);stroke-width:var(--cd-dotw)'}, svg);
+      const show = evt => { setHot(r.n); const [cx, cy] = anchorOf(evt, c); showTip(cx, cy, r.n + ' · ' + mLabel(m), tipFor(r, m)); };
+      c.addEventListener('pointermove', show);
+      c.addEventListener('pointerleave', () => { setHot(null); hideTip(); });
+    });
+    // Etiquetas: se prueba a la derecha, a la izquierda, arriba y abajo del punto y luego más lejos (con línea
+    // guía); se queda la primera posición que no pisa otros puntos, otras etiquetas ni sale del mapa.
+    const dots = cities.map(r => G.pts[r.n]).filter(Boolean);
+    const boxes = [];
+    const pad = 2 / k, rr = r0 + 1.5 / k;
+    const hits = b => dots.some(([x, y]) => x > b.x - rr && x < b.x + b.width + rr && y > b.y - rr && y < b.y + b.height + rr)
+      || boxes.some(o => b.x < o.x + o.width && b.x + b.width > o.x && b.y < o.y + o.height && b.y + b.height > o.y)
+      || b.x < 0 || b.y < 0 || b.x + b.width > G.w || b.y + b.height > G.h;
+    for (const n of labelled) {
+      const r = cities.find(q => q.n === n), p = r && G.pts[n];
+      if (!p) continue;
+      const t = svgEl('text', {x: 0, y: 0, class: 'cd-lbl', style: `font-size:${11.5 / k}px;stroke-width:${3 / k}px`}, svg);
+      t.textContent = (n === LIMA ? 'Lima' : n) + ' ' + pct(r.v);
+      const bb = t.getBBox(), w = bb.width, h = bb.height, gap = r0 + 4 / k;
+      // Lima prefiere la izquierda (sobre el mar).
+      const sides = n === LIMA ? ['l', 'r', 'u', 'd'] : ['r', 'l', 'u', 'd'];
+      const cands = [];
+      for (const dist of [gap, gap + 14 / k, gap + 30 / k]) for (const sd of sides) {
+        const x = sd === 'r' ? p[0] + dist : sd === 'l' ? p[0] - dist - w : p[0] - w / 2;
+        const yc = sd === 'u' ? p[1] - dist - h / 2 : sd === 'd' ? p[1] + dist + h / 2 : p[1];
+        cands.push({x, y: yc - h / 2, width: w, height: h, far: dist > gap});
+      }
+      const best = cands.find(c => !hits({x: c.x - pad, y: c.y - pad, width: c.width + 2 * pad, height: c.height + 2 * pad})) || cands[0];
+      t.setAttribute('x', best.x); t.setAttribute('y', best.y + h * 0.78);
+      boxes.push(best);
+      if (best.far) {   // línea guía desde el borde del punto hasta la etiqueta
+        const cx = Math.max(best.x, Math.min(p[0], best.x + w)), cy = Math.max(best.y, Math.min(p[1], best.y + h));
+        const dx = cx - p[0], dy = cy - p[1], dd = Math.hypot(dx, dy) || 1;
+        const ln = svgEl('line', {x1: p[0] + dx / dd * r0, y1: p[1] + dy / dd * r0, x2: cx - dx / dd * pad, y2: cy - dy / dd * pad,
+          class: 'cd-guide', 'vector-effect': 'non-scaling-stroke'}, svg);
+        svg.insertBefore(ln, t);
+      }
+    }
+  }
+
+  function fillTableCd(m, rows) {
+    const wrap = document.getElementById('tb-cd');
+    wrap.replaceChildren();
+    const t = htmlEl('table', null, wrap);
+    htmlEl('caption', {text: 'Variación del índice de precios al consumidor por ciudad, ' + mLabel(m) + ', en %', style: 'text-align:left;padding:6px 10px;color:var(--ink2);font-size:12.5px'}, t);
+    const tr = htmlEl('tr', null, htmlEl('thead', null, t)), tb = htmlEl('tbody', null, t);
+    ['Ciudad', 'En el mes', 'En lo que va del año', 'En 12 meses'].forEach(h => htmlEl('th', {text: h, scope: 'col'}, tr));
+    const i = mi(m);
+    // Mismo orden que el gráfico; al final, las que no tienen dato de 12 meses (si las hubiera).
+    const seen = new Set(rows.map(r => r.n));
+    const all = rows.concat(C.names.filter(n => !seen.has(n)).map(n => ({n, v: null, vm: C.vm[n][i], va: C.va[n][i]})));
+    all.forEach(r => {
+      const row = htmlEl('tr', null, tb);
+      htmlEl('th', {text: label(r.n), scope: 'row', style: 'text-align:left;font-weight:' + (r.n === NAT || r.n === LIMA ? 600 : 400)}, row);
+      [r.vm, r.va, r.v].forEach(v => htmlEl('td', {text: pct(v)}, row));
+    });
+  }
+
+  function note(m) {
+    const p = document.getElementById('note-cd');
+    p.replaceChildren();
+    const nat12 = C.v12[NAT][mi(m)];
+    const txt = [
+      `Fuente: ${C.fuente} Cifras tal como las publica el INEI en el informe de cada mes; el último cuadro disponible es el de ${mLabel(C.last)}.`,
+      nat12 == null && C.first12 ? ` El promedio nacional tiene variación de 12 meses desde ${mLabel(C.first12)}.` : '',
+      ' La ubicación de las ciudades en el mapa es aproximada; Lima Metropolitana se dibuja en Lima. ',
+    ].join('');
+    p.appendChild(document.createTextNode(txt));
+    const a = htmlEl('a', {href: C.url, target: '_blank', rel: 'noopener', text: 'Informes de precios del INEI'}, p);
+    a.style.color = 'var(--accent)';
+    p.appendChild(document.createTextNode('.'));
+  }
+
+  function render() {
+    const pick = document.getElementById('cd-pick');
+    if (pick && !pick.options.length) {
+      MONTHS_OK.slice().reverse().forEach(m => htmlEl('option', {value: m, text: mLabel(m)}, pick));
+      pick.value = cur;
+      pick.addEventListener('change', () => { cur = pick.value; hideTip(); render(); });
+      const tb = document.getElementById('cd-tbtn');
+      tb.addEventListener('click', () => {
+        const w = document.getElementById('tb-cd'), open = w.hidden;
+        if (open) fillTableCd(cur, rowsOf(cur));
+        w.hidden = !open;
+        tb.textContent = open ? 'Ocultar tabla' : 'Ver tabla';
+        tb.setAttribute('aria-expanded', String(open));
+      });
+    }
+    const rows = rowsOf(cur);
+    document.getElementById('cd-title').textContent = 'Inflación de 12 meses por ciudad, ' + mLabel(cur);
+    document.getElementById('cd-lg-nat').hidden = !rows.some(r => r.n === NAT);
+    summary(cur, rows);
+    renderBarsCd(cur, rows);
+    renderMapCd(cur, rows);
+    if (!document.getElementById('tb-cd').hidden) fillTableCd(cur, rows);
+    note(cur);
+    if (hot) setHot(hot);
+  }
+
+  registerSection({tab: 'tablero', id: 'ciudades', order: 40, html, render});
+})();
+</script>
