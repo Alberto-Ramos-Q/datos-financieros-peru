@@ -22,7 +22,7 @@ panel = pd.read_csv(f"{base}/sbs/panel_entidad_mes.csv")
 | [`bcrp/bcrp_panel_mensual.csv`](bcrp/bcrp_panel_mensual.csv) | Panel de series mensuales (una columna por serie). | 933 | 967 | 4,7 MB |
 | [`bcrp/bcrp_panel_trimestral.csv`](bcrp/bcrp_panel_trimestral.csv) | Panel de series trimestrales. | 190 | 282 | 0,5 MB |
 | [`bcrp/bcrp_panel_anual.csv`](bcrp/bcrp_panel_anual.csv) | Panel de series anuales. | 104 | 291 | 0,2 MB |
-| [`bcrp/bcrp_panel_diaria.csv`](bcrp/bcrp_panel_diaria.csv) | Panel de series diarias. | 8 286 | 31 | 1,7 MB |
+| [`bcrp/bcrp_panel_diaria.csv`](bcrp/bcrp_panel_diaria.csv) | Panel de series diarias. | 8 291 | 31 | 1,7 MB |
 
 Las columnas de cada tabla están en [`DICCIONARIO.md`](DICCIONARIO.md).
 

@@ -1,0 +1,22 @@
+{
+  "_como_usar": [
+    "Última decisión de tasa de referencia del BCRP, tomada de su Nota Informativa del Programa Monetario (fuente oficial primaria; nunca prensa).",
+    "La usan visual_inflacion.py (indicador de la tasa y pestaña «Lo último») y visual_transmision.py (aviso arriba del tablero).",
+    "Mientras las series de BCRPData (PD04722MM mensual, PD12301MD diaria) no traigan la tasa nueva, los tableros muestran la decisión con una nota que lo dice. Cuando la serie la traiga, la nota se apaga sola (la serie manda).",
+    "En cada Programa Monetario: reemplazar fecha, antes, tasa, frases y fuente; guardar el PDF en data/manual/notas_programa_monetario/."
+  ],
+  "fecha": "2026-11-12",
+  "antes": 4.25,
+  "tasa": 4.5,
+  "titulo": "Programa Monetario de noviembre 2026",
+  "motivo": "con el objetivo de propiciar el retorno de la inflación al rango meta, en un contexto caracterizado por fuertes choques de oferta, un aumento de las expectativas de inflación y un alto dinamismo de la demanda interna",
+  "guia": "Esta decisión no implica necesariamente el inicio de un ciclo de alzas sucesivas de la tasa de referencia.",
+  "corredor": {"overnight": 2.5, "ventanilla": 5.0},
+  "proxima": "2026-12-10",
+  "fuente": {
+    "cita": "BCRP, Nota Informativa. Programa Monetario de noviembre 2026 (12 de noviembre de 2026)",
+    "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-11-12.pdf",
+    "detalle": "párrafos 1, 3, 4 y 5",
+    "archivo": "data/manual/notas_programa_monetario/nota-informativa-2026-11-12.pdf"
+  }
+}

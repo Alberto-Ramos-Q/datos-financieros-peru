@@ -13,6 +13,8 @@ Fuentes de las definiciones: docs/inflacion_extra/lo_ultimo_fuentes.md
 """
 from __future__ import annotations
 
+import json
+
 import re
 import sys
 from pathlib import Path
@@ -470,7 +472,28 @@ def block_rubros(rubros: dict[str, tuple[str, str, pd.Series]], ts: pd.Timestamp
     return [txt], {"mode": mode, "m": mkey(ts), "top": top, "bot": bot, "h_top": h_top, "h_bot": h_bot}
 
 
-def block_politica(exp: pd.Series | None, ref: pd.Series | None, band: dict) -> list[str]:
+DECISION_JSON = Path(__file__).resolve().parents[2] / "config" / "decision_bcrp.json"
+MESES_LARGO = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "setiembre", "octubre",
+               "noviembre", "diciembre"]
+
+
+def load_decision() -> dict | None:
+    """Última decisión del Programa Monetario (config/decision_bcrp.json, desde la Nota Informativa oficial)."""
+    try:
+        return json.loads(DECISION_JSON.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def decision_pendiente(dec: dict | None, ref: pd.Series | None) -> bool:
+    """True si la decisión es posterior al último dato mensual de la serie y la serie no trae aún la tasa nueva."""
+    if not dec or ref is None or ref.empty:
+        return False
+    mes = pd.Timestamp(dec["fecha"]).to_period("M").to_timestamp()
+    return not (ref.index[-1] >= mes and abs(ref.iloc[-1] - dec["tasa"]) < 1e-9)
+
+
+def block_politica(exp: pd.Series | None, ref: pd.Series | None, band: dict, dec: dict | None = None) -> list[str]:
     out = []
     if exp is not None:
         v, ts = exp.iloc[-1], exp.index[-1]
@@ -505,6 +528,11 @@ def block_politica(exp: pd.Series | None, ref: pd.Series | None, band: dict) -> 
                        f"{'subió' if v > before else 'bajó'} desde {pct(before)}; último dato: {mlong(ts)}.")
         else:
             out.append(f"La tasa de referencia del BCRP está en {pct(v)} en {mlong(ts)}, sin cambios en toda la serie.")
+    if decision_pendiente(dec, ref):
+        f = pd.Timestamp(dec["fecha"])
+        out.append(f"El {f.day} de {MESES_LARGO[f.month - 1]} de {f.year}, el BCRP {'subió' if dec['tasa'] > dec['antes'] else 'bajó'} "
+                   f"su tasa de referencia de {pct(dec['antes'])} a {pct(dec['tasa'])} ({dec['titulo']}), {dec['motivo']}. "
+                   f"{dec['guia']} La serie mensual del BCRP aún no incluye ese mes.")
     return out
 
 
@@ -614,7 +642,7 @@ def build_core(ser: dict, targets: list[dict], rubros: dict, contrib=None, proy=
     p = block_proy(proy_from_extra(proy, ts.year), tot12) if proy is not None else []
     if p:
         groups.append({"id": "proy", "h": "Frente a la proyección del BCRP", "p": p})
-    pol = block_politica(exp, ref, band)
+    pol = block_politica(exp, ref, band, load_decision())
     if pol:
         groups.append({"id": "pol", "h": "Expectativas y tasa de referencia", "p": pol})
     nac = block_nacional(nac12, nacm, tot12)
@@ -649,7 +677,15 @@ def build_core(ser: dict, targets: list[dict], rubros: dict, contrib=None, proy=
             sub = f"sin cambio desde {mlabel(chg.index[-1])}"
         else:
             sub = "sin cambios en la serie"
-        tiles.append(tile("Tasa de referencia del BCRP", ref, sub))
+        dec = load_decision()
+        if decision_pendiente(dec, ref):
+            f = pd.Timestamp(dec["fecha"])
+            tiles.append({"lab": "Tasa de referencia del BCRP", "v": round(float(dec["tasa"]), 2), "m": mkey(f),
+                          "sub": f"{'sube' if dec['tasa'] > dec['antes'] else 'baja'} desde {pct(dec['antes'])} el {f.day} de "
+                                 f"{MESES_LARGO[f.month - 1]} ({dec['titulo']}) · la serie mensual del BCRP llega a {mlabel(ref.index[-1])}",
+                          "chip": None, "hero": False, "extra": ""})
+        else:
+            tiles.append(tile("Tasa de referencia del BCRP", ref, sub))
     if nac12 is not None:
         tiles.append(tile("Inflación nacional, 12 meses (INEI)", nac12, delta_txt(nac12),
                           extra="La meta del BCRP se mide con el IPC de Lima, no con el nacional."))

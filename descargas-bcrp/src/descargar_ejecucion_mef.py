@@ -87,7 +87,12 @@ class Navigator:
         time.sleep(PAUSE)
         r = self._check(self._get(f"{BASE}Navegar.aspx?y={year}&ap={ap}"))
         soup = BeautifulSoup(r.text, "html.parser")
-        shown = soup.find("select", {"name": "ctl00$CPH1$DrpYear"}).select_one("option[selected]")
+        # 2026-11-17: el sitio devolvió una vez una página 200 sin el selector de año y el AttributeError tumbó
+        # toda la corrida (los años siguientes quedaron sin bajar). Ahora cuenta como error de esa vista.
+        sel = soup.find("select", {"name": "ctl00$CPH1$DrpYear"})
+        if sel is None:
+            raise RuntimeError(f"la página no trae el selector de año (pedido {year}); empieza: {r.text[:120]!r}")
+        shown = sel.select_one("option[selected]")
         if shown is None or shown.get("value") != str(year):
             raise RuntimeError(f"la página no muestra el año {year}")
         return soup, r.url
@@ -215,6 +220,8 @@ def main() -> int:
                     try:
                         rows = nav.navigate(year, apv, steps)
                         validate(name, rows)
+                    except Blocked:   # un bloqueo detiene todo (abajo); antes caía aquí y se seguía pidiendo
+                        raise
                     except (RuntimeError, ValueError) as e:   # el año aún no existe en el sitio, falta un botón, etc.
                         log.error("%s %s %s: %s (se conserva lo anterior)", year, tipo, name, e)
                         continue
@@ -224,12 +231,20 @@ def main() -> int:
                     log.info("%s %-9s %-24s %3d filas", year, tipo, name, len(rows))
             # Cada gobierno regional por mes (solo inversión), año en curso y anterior.
             if year >= current - 1:
-                deps = [r["codigo"] for r in nav.navigate(year, AP["proyectos"], [("Nivel de Gobierno", "R"), ("Departamento", None)])]
+                try:
+                    deps = [r["codigo"] for r in nav.navigate(year, AP["proyectos"], [("Nivel de Gobierno", "R"), ("Departamento", None)])]
+                except RuntimeError as e:
+                    if isinstance(e, Blocked):
+                        raise
+                    log.error("%s lista de gobiernos regionales: %s (se conserva lo anterior)", year, e)
+                    deps = []
                 for code in deps:
                     path = RAW / str(year) / f"proyectos__nivel_R__dep_{code}__mes.csv"
                     try:
                         rows = nav.navigate(year, AP["proyectos"], [("Nivel de Gobierno", "R"), ("Departamento", code), ("Mes", None)])
                         validate("mes", rows)
+                    except Blocked:
+                        raise
                     except (RuntimeError, ValueError) as e:
                         log.error("%s gobierno regional %s por mes: %s", year, code, e)
                         continue

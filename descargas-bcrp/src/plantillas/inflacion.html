@@ -915,7 +915,14 @@ function renderKpis() {
   if (k.sae12) tiles.push({lab: 'Sin alimentos y energía (12 meses)', val: pct(k.sae12.v), sub: deltaTxt(k.sae12), chip: k.sae12.v});
   if (k.sub12) tiles.push({lab: 'Subyacente (12 meses)', val: pct(k.sub12.v), sub: deltaTxt(k.sub12), chip: k.sub12.v});
   if (k.exp) tiles.push({lab: 'Expectativa de inflación a 12 meses', val: pct(k.exp.v), sub: deltaTxt(k.exp) + ' · encuesta del BCRP', chip: k.exp.v});
-  if (k.ref) tiles.push({lab: 'Tasa de referencia del BCRP', val: pct(k.ref.v), sub: 'vigente en ' + mShort(k.ref.m) + ' · ' + deltaTxt(k.ref)});
+  if (k.ref) {
+    const dec = D.decision;
+    if (dec) {
+      const [y, mo, dd] = dec.fecha.split('-');
+      tiles.push({lab: 'Tasa de referencia del BCRP', val: pct(dec.tasa),
+        sub: `desde el ${+dd} ${mShort(y + '-' + mo)} (${dec.titulo}) · antes ${pct(dec.antes)} · la serie mensual del BCRP llega a ${mShort(k.ref.m)}`});
+    } else tiles.push({lab: 'Tasa de referencia del BCRP', val: pct(k.ref.v), sub: 'vigente en ' + mShort(k.ref.m) + ' · ' + deltaTxt(k.ref)});
+  }
   if (k.real) tiles.push({lab: 'Tasa real ex ante', val: pct(k.real.v), sub: 'tasa de referencia menos expectativa · ' + mShort(k.real.m) + ' · ' + deltaTxt(k.real)});
   for (const t of tiles) {
     const d = htmlEl('div', {cls: 'tile' + (t.hero ? ' hero' : '')}, box);

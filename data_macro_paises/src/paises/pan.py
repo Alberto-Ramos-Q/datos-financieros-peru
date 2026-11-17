@@ -213,11 +213,25 @@ def download_inec(client: comun.Client, redo_history: bool) -> int:
         fetch(client, "inec", "ipc_anexo4.xlsx", pick(links, r"Anexo\s*4\.xlsx$"))
     step("IPC", ipc)
 
-    # Publicaciones: se toma la más reciente.
+    # Publicaciones: se toma la más reciente que traiga el archivo buscado. En la misma
+    # subcategoría el INEC intercala otros boletines (2026-10: «Boletín de Confiabilidad de
+    # las Estimaciones de la EML», cuyo Cuadro2.xls son intervalos de confianza): se saltan
+    # las publicaciones sin el enlace y las de confiabilidad, mirando a lo sumo las 6 últimas.
     def latest_pub(cat, sub, pattern, filename):
-        pub = inec_publications(client, cat, sub)[0]
-        links = page_links(client, INEC_PUB.format(pub=pub, cat=cat, sub=sub))
-        fetch(client, "inec", filename, pick(links, pattern))
+        for pub in inec_publications(client, cat, sub)[:6]:
+            url = INEC_PUB.format(pub=pub, cat=cat, sub=sub)
+            s = client.get(url).content.decode("utf-8", "replace")
+            if re.search(r"Bolet.{1,8}n de Confiabilidad", html.unescape(s), re.I):  # página no UTF-8
+                log.info("  INEC pub %s: boletín de confiabilidad, se salta", pub)
+                continue
+            try:
+                link = pick(page_links(client, url), pattern)
+            except RuntimeError:
+                log.info("  INEC pub %s: sin enlace %r, se salta", pub, pattern)
+                continue
+            fetch(client, "inec", filename, link)
+            return
+        raise RuntimeError(f"no hay enlace que cumpla {pattern!r} en las 6 últimas publicaciones")
     step("PIB trimestral", lambda: latest_pub(4, 73, r"\.xlsx$", "pib_trimestral.xlsx"))
     step("PIB anual", lambda: latest_pub(4, 26, r"\.xlsx$", "pib_anual.xlsx"))
     step("EML", lambda: latest_pub(5, 38, r"Cuadro\s*2\.xlsx$", "eml_cuadro2.xlsx"))
@@ -229,12 +243,15 @@ def download_inec(client: comun.Client, redo_history: bool) -> int:
             raise RuntimeError("no se encontraron páginas PIEM")
         recent = sorted(pages)[-2:]
         for year in sorted(pages):
-            names = {k: f"piem_{year}_{k}.xls" for k in PIEM_FILES}
+            names = {k: f"piem_{year}_{k}.xls" for k in PIEM_FILES
+                     if (year, k) not in PIEM_SIN_ARCHIVO}
             if year not in recent and not redo_history and all(
                     comun.raw_path(ISO3, "inec", n).exists() for n in names.values()):
                 continue
             links = page_links(client, pages[year])
             for key, pattern in PIEM_FILES.items():
+                if key not in names:
+                    continue
                 try:
                     fetch(client, "inec", names[key], pick(links, pattern))
                 except RuntimeError as e:
@@ -266,8 +283,12 @@ def download_inec(client: comun.Client, redo_history: bool) -> int:
     return errors
 
 
+# 2026-10: el INEC subió «2026_transporte_ acp.xls» (con espacio): se tolera espacio o %20.
 PIEM_FILES = {"valor_fob": r"_valor_fob\.xls$", "valor_cif": r"_valor_cif\.xls$",
-              "transporte_acp": r"_transporte_acp\.xls$"}
+              "transporte_acp": r"_transporte_(?:\s|%20)*acp\.xls$"}
+# Archivos que la página de ese año no tiene (2017 publica «transportes.xls», otro formato;
+# sus meses ya vienen en el archivo de 2018). No se buscan ni se avisan.
+PIEM_SIN_ARCHIVO = {(2017, "transporte_acp")}
 
 
 # --------------------------------------------------------------------------- descarga SBP y MEF

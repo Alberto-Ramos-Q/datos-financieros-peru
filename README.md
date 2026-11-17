@@ -5,15 +5,15 @@ Datos públicos del **sistema financiero peruano (SBS)**, de la **macroeconomía
 procesa desde la fuente oficial, y tableros para explorarlas.
 
 **Corte de los datos:** Boletín Estadístico de la SBS a set-2026 · tasas activas y clasificaciones a
-nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 9 de noviembre de 2026.
+nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 16 de noviembre de 2026.
 
 ## Tres formas de usarlo
 
 ### 1. Ver los tableros
 
-**Portada con los 17 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
+**Portada con los 18 tableros: https://alberto-ramos-q.github.io/datos-financieros-peru/**
 
-[![Portada con los 17 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
+[![Portada con los 18 tableros](img/portada_tableros.png)](https://alberto-ramos-q.github.io/datos-financieros-peru/)
 
 | Tablero | Qué muestra |
 |---|---|
@@ -33,6 +33,7 @@ nov-2026 · deudores SF-2103 a jun-2026 · series del BCRP descargadas el 9 de n
 | [PBI del Perú](https://claude.ai/artifact/FEzPx1uETy1GufSNk8v4zZ) | Crecimiento por sectores y por gasto, ingreso nacional, brecha del producto, proyecciones del BCRP y del MEF, y PBI por departamento. |
 | [Finanzas públicas](https://claude.ai/artifact/35mEqSRBxkgDCobSBXrQee) | Ingresos, gasto, deuda, ejecución del presupuesto, reglas fiscales y comparación con la región. |
 | [El Perú frente a la región](https://claude.ai/artifact/W1bjbzArxP2LzBaZL24gfU) | Crecimiento, crédito y fortaleza externa del Perú frente a América Latina, con series oficiales de cada país. |
+| [El empleo en la región](https://claude.ai/artifact/DgKbUH7UbYGAYpC9RgBxUR) | Desempleo, informalidad, participación, jóvenes, empleo registrado e ingresos del Perú frente a América Latina, con las metodologías de cada país. |
 | [Pobreza por departamento](https://claude.ai/artifact/RG2JYt7DCt4APFmY5GWF6o) | Pobreza monetaria 2004–2025 con intervalos de confianza y grupos del INEI. |
 
 Los tableros en línea muestran la versión más reciente publicada. La versión de cada corte se puede descargar

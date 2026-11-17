@@ -172,7 +172,42 @@ CYCLE_CAUSES = {
                 "f": "Notas Informativas del Programa Monetario de agosto de 2021, octubre de 2022 y enero de 2023"},
     "2023-09": {"t": "la inflación bajaba desde inicios de año y las expectativas se acercaban al rango meta; en noviembre de 2024 la nota indica que la tasa de interés real se acerca al nivel estimado como neutral, y en setiembre de 2025, que la tasa se ubica muy cerca de ese nivel",
                 "f": "Notas Informativas del Programa Monetario de setiembre de 2023, noviembre de 2024 y setiembre de 2025"},
+    "2026-11": {"t": "para propiciar el retorno de la inflación al rango meta, en un contexto de fuertes choques de oferta, un aumento de las expectativas de inflación y un alto dinamismo de la demanda interna; la nota precisa que la decisión no implica necesariamente el inicio de un ciclo de alzas sucesivas",
+                "f": "Nota Informativa del Programa Monetario de noviembre de 2026"},
 }
+
+DECISION_JSON = PROJECT_DIR / "config" / "decision_bcrp.json"
+
+
+def load_decision(m: pd.DataFrame, d: pd.DataFrame) -> dict | None:
+    """Última decisión del Programa Monetario (config/decision_bcrp.json, de la Nota Informativa oficial).
+
+    `pendiente` = la serie MENSUAL de BCRPData aún no trae la tasa nueva (el tablero muestra entonces un aviso).
+    Se mira la mensual porque es la que usan los indicadores y el resumen; si solo la diaria la trae, el aviso
+    sigue y lo dice (`diaria_desde`). Corrección de claude3, 2026-11-17: antes bastaba la diaria y el alza a
+    4.50 % desaparecía del tablero mientras los indicadores seguían en 4.25 % «sin cambios».
+    """
+    if not DECISION_JSON.exists():
+        return None
+    dec = json.loads(DECISION_JSON.read_text(encoding="utf-8"))
+    fecha = pd.Timestamp(dec["fecha"])
+    r = m["tasa_referencia"].dropna()
+    rd = d["tasa_referencia_diario"].dropna() if "tasa_referencia_diario" in d.columns else pd.Series(dtype=float)
+    after_d = rd[rd.index > fecha]
+    in_daily = (not after_d.empty) and abs(after_d.iloc[-1] - dec["tasa"]) < 1e-9
+    in_month = r.index.max() >= fecha.to_period("M").to_timestamp() and abs(r.iloc[-1] - dec["tasa"]) < 1e-9
+    pend = not in_month
+    out = {k: dec[k] for k in ("fecha", "antes", "tasa", "titulo", "motivo", "guia", "corredor", "proxima")}
+    out["fuente"] = {k: dec["fuente"][k] for k in ("cita", "url", "detalle")}
+    out["pendiente"] = bool(pend)
+    hit = after_d[(after_d - dec["tasa"]).abs() < 1e-9]
+    out["diaria_desde"] = hit.index.min().strftime("%Y-%m-%d") if in_daily and not hit.empty else None
+    out["serie_m"] = month_key(r.index.max())
+    out["serie_d"] = rd.index.max().strftime("%Y-%m-%d") if not rd.empty else None
+    print(f"  decisión BCRP {dec['fecha']}: {dec['antes']} -> {dec['tasa']}; "
+          f"{'AÚN NO está en la serie mensual (se muestra aviso)' if pend else 'ya está en la serie mensual'}"
+          f"{'; en la diaria desde ' + out['diaria_desde'] if out['diaria_desde'] else ''}")
+    return out
 
 # Países de la comparación regional (capa comparable de data_macro_paises).
 REGION = [("PER", "Perú"), ("CHL", "Chile"), ("COL", "Colombia"), ("MEX", "México"), ("BRA", "Brasil"),
@@ -696,6 +731,7 @@ def main() -> int:
         "S": S, "cycles": cycles, "kpi": kpi, "daily": daily, "liq": liq, "bonds": bonds, "region": region,
         "A": analysis, "neutral": NEUTRAL_RATE, "causes": CYCLE_CAUSES, "codes": build_codes(used_cols),
         "edu": build_edu(m), "breaks": build_breaks(m, sbs), "params": params,
+        "decision": load_decision(m, d),
         "sbs": {"desde": sbs["desde"], "hasta": sbs["hasta"]} if sbs else None,
         "nc": nc,  # nombre_corto del panel -> clave corta de S (el módulo de análisis usa nombre_corto)
     }

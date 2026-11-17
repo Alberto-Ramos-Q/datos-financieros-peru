@@ -12,7 +12,7 @@
   ],
   "id": "2026-choque-energia",
   "redactado_con_dato": "2026-10",
-  "redactado_el": "2026-11-07",
+  "redactado_el": "2026-11-13",
   "titulo": "La inflación sobre el rango meta en 2026",
   "bajada": "Qué pasó con los precios desde que la inflación salió del rango meta del BCRP, qué lo explica según el INEI y el BCRP, y cómo respondió la política monetaria.",
   "inicio": "auto",
@@ -106,11 +106,13 @@
   ],
   "politica": {
     "texto": [
+      "El 12 de noviembre de 2026, el Directorio del BCRP elevó la tasa de referencia en 25 puntos básicos, de 4.25% a 4.50%, «con el objetivo de propiciar el retorno de la inflación al rango meta», en un contexto de fuertes choques de oferta, un aumento de las expectativas de inflación (3.1% a 12 meses en octubre, ligeramente por encima del límite superior del rango) y un alto dinamismo de la demanda interna. Precisó que la decisión no implica necesariamente el inicio de un ciclo de alzas sucesivas, y que sigue atento a la inflación subyacente, las expectativas, la actividad y la duración de los choques de oferta. Mantuvo el riesgo de que El Niño y las tensiones en Medio Oriente tengan efectos más persistentes sobre la inflación.",
       "El BCRP explica que la inflación de estos meses responde principalmente a choques de oferta transitorios, en especial el alza de los combustibles y su efecto en las tarifas de transporte en marzo y abril. Elabora sus proyecciones para un horizonte de 18 a 24 meses y busca que la inflación vuelva al rango meta en ese horizonte. En el Reporte de Inflación de setiembre de 2026 proyectó que la inflación seguiría sobre el rango en los meses siguientes, con más presión a fines de año e inicios de 2027 por El Niño, y que volvería a alrededor de 2% en 2027.",
       "En las notas del Programa Monetario de abril, mayo, julio y agosto de 2026, el Directorio repite que está «especialmente atento» a la inflación subyacente, las expectativas, la actividad y la duración de los choques de oferta, para ajustar la política si hace falta. Según el indicador de tono de comunicación que estima el propio BCRP, sus Notas Informativas se ubicaron en el tramo contractivo («hawkish») por sexto mes consecutivo en setiembre, es decir, desde abril.",
       "El BCRP estima la tasa real neutral en alrededor de 2%. En junio de 2026 reportó que la tasa de referencia en términos reales (1.36%) estaba por debajo de ese nivel, en un contexto de choques de oferta y con las expectativas de inflación aún dentro del rango meta. El BCRP calcula la tasa real con la expectativa del mes anterior; el gráfico usa la del mismo mes, por eso en junio muestra 1.43% y no 1.36%."
     ],
     "fuentes": [
+      "ni-2026-11",
       "ni-2026-04",
       "ni-2026-05",
       "ni-2026-07",
@@ -200,6 +202,11 @@
       "cita": "BCRP, Nota Informativa N.° 009-2009. Programa Monetario de febrero 2009",
       "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2009/Nota-Informativa-009-2009-BCRP.pdf",
       "detalle": "párrafo 1"
+    },
+    "ni-2026-11": {
+      "cita": "BCRP, Nota Informativa. Programa Monetario de noviembre 2026 (12 de noviembre de 2026)",
+      "url": "https://www.bcrp.gob.pe/docs/Transparencia/Notas-Informativas/2026/nota-informativa-2026-11-12.pdf",
+      "detalle": "párrafos 1, 2.ii, 2.iii y 3"
     }
   }
 }

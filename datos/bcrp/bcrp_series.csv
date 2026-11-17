@@ -77,13 +77,13 @@ PN09496TM,bcrp_contado_ventas,mensual,tipo-cambio-reservas,Operaciones cambiaria
 PN09497TM,bcrp_contado_compras_netas,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Al Contado - Compras Netas,226,2008-01-01,2026-10-01
 PN09500TM,bcrp_cdr_emision_neta,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - Certificados de Depósito Reajustables del BCRP - Emisión Neta,226,2008-01-01,2026-10-01
 PN09506TM,bcrp_swap_venta_neto,mensual,tipo-cambio-reservas,Operaciones cambiarias del BCRP con las empresas bancarias (millones US$) - SWAP Cambiarios del BCRP Venta - Pactado Neto,226,2008-01-01,2026-10-01
-PN38714BM,exportaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones,368,1996-01-01,2026-08-01
-PN38715BM,exportaciones_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos Tradicionales,176,2012-01-01,2026-08-01
-PN38716BM,exportaciones_no_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos no Tradicionales,176,2012-01-01,2026-08-01
-PN38718BM,importaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Importaciones,368,1996-01-01,2026-08-01
-PN38723BM,balanza_comercial,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Balanza Comercial,176,2012-01-01,2026-08-01
-PN38923BM,terminos_intercambio_indice,mensual,sector-externo,Términos de intercambio de comercio exterior (índice 2007 = 100) - Términos de Intercambio,368,1996-01-01,2026-08-01
-PN38926BM,terminos_intercambio_var12m,mensual,sector-externo,Términos de intercambio de comercio exterior (var% 12 meses) - Términos de Intercambio,356,1997-01-01,2026-08-01
+PN38714BM,exportaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones,369,1996-01-01,2026-09-01
+PN38715BM,exportaciones_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos Tradicionales,177,2012-01-01,2026-09-01
+PN38716BM,exportaciones_no_tradicionales,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Exportaciones - Productos no Tradicionales,177,2012-01-01,2026-09-01
+PN38718BM,importaciones,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Importaciones,369,1996-01-01,2026-09-01
+PN38723BM,balanza_comercial,mensual,sector-externo,Balanza comercial - valores FOB (millones US$) - Balanza Comercial,177,2012-01-01,2026-09-01
+PN38923BM,terminos_intercambio_indice,mensual,sector-externo,Términos de intercambio de comercio exterior (índice 2007 = 100) - Términos de Intercambio,369,1996-01-01,2026-09-01
+PN38926BM,terminos_intercambio_var12m,mensual,sector-externo,Términos de intercambio de comercio exterior (var% 12 meses) - Términos de Intercambio,357,1997-01-01,2026-09-01
 PN01652XM,cobre,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Cobre - LME (¢US$ por libras),322,2000-01-01,2026-10-01
 PN01654XM,oro,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Oro - LME (US$ por onzas troy),322,2000-01-01,2026-10-01
 PN01655XM,plata,mensual,sector-externo,Cotizaciones de productos (promedio del periodo) - Plata - H. Harman (US$ por onzas troy),322,2000-01-01,2026-10-01
@@ -92,18 +92,18 @@ PN01660XM,petroleo_wti,mensual,sector-externo,Cotizaciones de productos (promedi
 PN01129XM,embig_peru,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Diferencial de Rendimientos del Índice de Bonos de Mercados Emergentes (EMBIG) - Perú,242,2006-08-01,2026-09-01
 PN01137XM,embig_latam,mensual,mercados,Indicadores de riesgo para países emergentes: EMBIG - Latin EMBIG Países Latinoamericanos,242,2006-08-01,2026-09-01
 PN01142MM,igbvl,mensual,mercados,Bolsa de Valores de Lima - Índices Bursátiles - Índice General BVL (base 31/12/91 = 100),331,1999-01-01,2026-10-01
-PN02204FM,ingresos_corrientes_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General,249,2006-01-01,2026-09-01
-PN02205FM,ingresos_tributarios_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios,249,2006-01-01,2026-09-01
-PN02221FM,gasto_no_financiero_gc,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros,381,1995-01-01,2026-09-01
-PN02216FM,resultado_primario_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Primario,249,2006-01-01,2026-09-01
-PN02218FM,resultado_economico_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Económico,249,2006-01-01,2026-09-01
+PN02204FM,ingresos_corrientes_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General,250,2006-01-01,2026-10-01
+PN02205FM,ingresos_tributarios_gg,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios,250,2006-01-01,2026-10-01
+PN02221FM,gasto_no_financiero_gc,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros,382,1995-01-01,2026-10-01
+PN02216FM,resultado_primario_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Primario,250,2006-01-01,2026-10-01
+PN02218FM,resultado_economico_spnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado Económico,250,2006-01-01,2026-10-01
 PN38063GM,desempleo_lima,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (porcentaje) - Tasa de Desempleo (%),305,2001-05-01,2026-09-01
 PN38066GM,desempleo_lima_14_24,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (porcentaje) - Tasa de Desempleo (%) - Por Grupos de Edad - 14 a 24 años,305,2001-05-01,2026-09-01
 PN38070GM,ingreso_mensual_lima,mensual,empleo,Empleo Mensual en Lima Metropolitana - Promedio móvil tres meses (miles de personas) - Ingreso Mensual,305,2001-05-01,2026-09-01
-PN31879GM,puestos_formales,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Puestos de trabajo del sector formal total (miles),140,2015-01-01,2026-08-01
-PN31885GM,masa_salarial_formal,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (millones S/),140,2015-01-01,2026-08-01
-PN31886GM,masa_salarial_formal_var12m,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (var.% 12 meses),128,2016-01-01,2026-08-01
-PN02124PM,rmv,mensual,empleo,Remuneraciones - Remuneración Mínima Vital - Nominal (S/),428,1991-01-01,2026-08-01
+PN31879GM,puestos_formales,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Puestos de trabajo del sector formal total (miles),141,2015-01-01,2026-09-01
+PN31885GM,masa_salarial_formal,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (millones S/),141,2015-01-01,2026-09-01
+PN31886GM,masa_salarial_formal_var12m,mensual,empleo,Puestos de trabajo e ingresos del sector formal - Masa salarial del sector formal total nominal (var.% 12 meses),129,2016-01-01,2026-09-01
+PN02124PM,rmv,mensual,empleo,Remuneraciones - Remuneración Mínima Vital - Nominal (S/),430,1991-01-01,2026-10-01
 PD12912AM,expectativa_inflacion_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de Inflación a 12 meses,298,2002-01-01,2026-10-01
 PD38048AM,expectativa_pbi_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de PBI a 12 meses,239,2006-12-01,2026-10-01
 PD38049AM,expectativa_tc_12m,mensual,expectativas,Expectativas macroeconómicas - Expectativa de TC a 12 meses,239,2006-12-01,2026-10-01
@@ -141,27 +141,27 @@ PM06175MA,rin_flujo_dep_sector_publico_anual,anual,tipo-cambio-reservas,Flujo de
 PM06176MA,rin_flujo_intereses_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Intereses Netos,17,2003-01-01,2019-01-01
 PM06177MA,rin_flujo_otros_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Otros Flujos,23,2003-01-01,2025-01-01
 PM06178MA,rin_flujo_total_anual,anual,tipo-cambio-reservas,Flujo de las reservas internacionales netas (millones US$) - Total,66,1960-01-01,2025-01-01
-PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7434,1997-01-02,2026-11-06
-PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7442,1997-01-02,2026-11-06
-PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6944,1999-01-04,2026-11-06
-PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4958,1995-01-04,2026-11-06
-PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6944,1999-01-04,2026-11-06
-PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6945,1999-01-04,2026-11-06
-PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6945,1999-01-04,2026-11-06
-PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6462,1995-01-04,2026-11-06
-PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3203,1999-01-06,2026-11-06
-PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3336,1999-01-13,2026-11-06
-PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5928,2003-09-05,2026-11-09
-PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",8003,1995-04-03,2026-11-06
-PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1436,2021-05-10,2026-11-09
-PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5307,2005-05-13,2026-11-06
+PD04638PD,tc_interbancario_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Interbancario (S/ por US$) - Venta,7439,1997-01-02,2026-11-13
+PD04640PD,tc_sbs_venta_diario,diaria,tipo-cambio-reservas,Tipo de cambio - TC Sistema bancario SBS (S/ por US$) - Venta,7447,1997-01-02,2026-11-13
+PD04650MD,rin_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Reservas internacionales netas,6948,1999-01-04,2026-11-12
+PD04659MD,compras_netas_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Compras netas en Mesa de Negociación (millones US$),4962,1995-01-04,2026-11-12
+PD04649MD,posicion_cambio_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Posición de cambio,6948,1999-01-04,2026-11-12
+PD04651MD,dep_sist_financiero_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sistema financiero en el BCRP,6949,1999-01-04,2026-11-12
+PD04655MD,dep_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Reservas internacionales (millones US$) - Depósitos del sector público en el BCRP,6949,1999-01-04,2026-11-12
+PD04658MD,op_cambiarias_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones cambiarias BCRP (millones US$),6466,1995-01-04,2026-11-12
+PD04660MD,swaps_netos_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones swaps netas (millones US$),3207,1999-01-06,2026-11-12
+PD04662MD,op_sector_publico_bcrp_diario,diaria,tipo-cambio-reservas,Operaciones cambiarias y monetarias del BCRP - Operaciones con el Sector Público (millones US$),3340,1999-01-13,2026-11-12
+PD12301MD,tasa_referencia_diario,diaria,tasas,Tasas de interés - Tasa de Referencia de la Política Monetaria,5932,2003-09-05,2026-11-13
+PD04692MD,tasa_interbancaria_mn_diario,diaria,tasas,"Tasas de interés - Interbancaria, S/",8007,1995-04-03,2026-11-12
+PD38590DD,tasa_maxima_consumo_mype_mn_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - MN",1441,2021-05-10,2026-11-16
+PD31893DD,bono_soberano_10a_soles_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en S/),5312,2005-05-13,2026-11-13
 PD04709XD,embig_peru_diario,diaria,mercados,Tasas de interés: EMBIG (variación en pbs) - Spread - EMBIG Perú (pbs),7481,1998-01-01,2026-09-03
-PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5361,2006-01-02,2026-11-06
-PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7619,1997-01-14,2026-11-06
-PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7660,1997-01-02,2026-11-06
-PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7724,1997-01-02,2026-11-06
-PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7645,1997-01-02,2026-11-06
-PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1436,2021-05-10,2026-11-09
+PD38026MD,igbvl_diario,diaria,mercados,Indicadores bursátiles - Índice General Bursátil BVL (índice),5365,2006-01-02,2026-11-12
+PD04719XD,ust_10a_diario,diaria,mercados,Tasas de interés internacionales - Bonos del Tesoro EE.UU. - 10 años (%),7624,1997-01-14,2026-11-13
+PD04701XD,cobre_diario,diaria,sector-externo,"Cotizaciones internacionales - Cobre (Londres, cUS$ por libras)",7665,1997-01-02,2026-11-13
+PD04704XD,oro_diario,diaria,sector-externo,"Cotizaciones internacionales - Oro (Londres, US$ por onzas troy)",7729,1997-01-02,2026-11-13
+PD04705XD,petroleo_wti_diario,diaria,sector-externo,"Cotizaciones internacionales - Petróleo (West Texas Intermediate, US$ por barriles)",7650,1997-01-02,2026-11-13
+PD38591DD,tasa_maxima_consumo_mype_me_diario,diaria,tasas,"Tasas de interés compensatorio - Tasa máxima de interés convencional compensatorio para operaciones de créditos de consumo, créditos de consumo de bajo monto y créditos para pequeñas y microempresas otorgadas por empresas del sistema financiero - ME",1441,2021-05-10,2026-11-16
 PN07843NM,tasa_bancos_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
 PN07844NM,tasa_bancos_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
 PN07845NM,tasa_bancos_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,195,2010-08-01,2026-10-01
@@ -172,16 +172,16 @@ PN07853NM,tasa_bancos_pyme_mas360_me,mensual,tasas,Tasas de interés activas pro
 PN07854NM,tasa_bancos_consumo_tarjeta_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Tarjeta de Crédito,195,2010-08-01,2026-10-01
 PN07855NM,tasa_bancos_consumo_prest_hasta360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Hasta 360 días,195,2010-08-01,2026-10-01
 PN07856NM,tasa_bancos_consumo_prest_mas360_me,mensual,tasas,Tasas de interés activas promedio de las empresas bancarias por modalidad (términos efectivos anuales) - ME - Consumo - Préstamos - Más 360 días,195,2010-08-01,2026-10-01
-PN07861NM,tasa_cmac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
-PN07862NM,tasa_cmac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
-PN07863NM,tasa_cmac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,195,2010-07-01,2026-09-01
-PN07864NM,tasa_cmac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
-PN07865NM,tasa_cmac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
-PN07879NM,tasa_crac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
-PN07880NM,tasa_crac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
-PN07881NM,tasa_crac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,154,2013-12-01,2026-09-01
-PN07882NM,tasa_crac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,195,2010-07-01,2026-09-01
-PN07883NM,tasa_crac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,195,2010-07-01,2026-09-01
+PN07861NM,tasa_cmac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,196,2010-07-01,2026-10-01
+PN07862NM,tasa_cmac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,196,2010-07-01,2026-10-01
+PN07863NM,tasa_cmac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,196,2010-07-01,2026-10-01
+PN07864NM,tasa_cmac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,196,2010-07-01,2026-10-01
+PN07865NM,tasa_cmac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas municipales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,196,2010-07-01,2026-10-01
+PN07879NM,tasa_crac_pyme_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Hasta 360 días,196,2010-07-01,2026-10-01
+PN07880NM,tasa_crac_pyme_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Pequeña y Microempresa - Préstamos - Más 360 días,196,2010-07-01,2026-10-01
+PN07881NM,tasa_crac_consumo_tarjeta_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Tarjeta de Crédito,155,2013-12-01,2026-10-01
+PN07882NM,tasa_crac_consumo_prest_hasta360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Hasta 360 días,196,2010-07-01,2026-10-01
+PN07883NM,tasa_crac_consumo_prest_mas360_mn,mensual,tasas,Tasas de interés activas promedio de las cajas rurales de ahorro y crédito por modalidad (% términos efectivos anuales) - MN - Consumo - Préstamos - Más 360 días,196,2010-07-01,2026-10-01
 PN00541MM,credito_consumo_mn_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - MN - Consumo (millones S/)",309,2001-01-01,2026-09-01
 PN00544MM,credito_consumo_me_saldo,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Saldos - ME - Consumo (millones US$)",309,2001-01-01,2026-09-01
 PN01278PM,ipc_subyacente_var_mensual,mensual,precios,Índice de precios Lima Metropolitana (var% mensual) - IPC Subyacente,417,1992-02-01,2026-10-01
@@ -694,98 +694,98 @@ PM05128AA,pesca_fresco_jurel_miles_t_anual,anual,actividad,Extracción pesquera 
 PM05129AA,pesca_fresco_liza_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Liza,21,2005-01-01,2025-01-01
 PM05130AA,pesca_fresco_tollo_miles_t_anual,anual,actividad,Extracción pesquera marítima por destino y principales especies (miles de toneladas) - Consumo Humano - Fresco - Tollo,21,2005-01-01,2025-01-01
 PM05149AA,mineria_oro_t_anual,anual,actividad,Producción minera e hidrocarburos por principales productos (miles de unidades recuperables) - Minería Metálica - Oro (Kilogramos),56,1970-01-01,2025-01-01
-RD12951DM,mineria_dpto_cobre_total_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Total (tm.f),306,2001-01-01,2026-06-01
-RD12952DM,mineria_dpto_cobre_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ancash (tm.f),306,2001-01-01,2026-06-01
-RD12953DM,mineria_dpto_cobre_apurimac_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Apurimac (tm.f),127,2015-12-01,2026-06-01
-RD12954DM,mineria_dpto_cobre_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Arequipa (tm.f),306,2001-01-01,2026-06-01
-RD12955DM,mineria_dpto_cobre_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ayacucho (tm.f),306,2001-01-01,2026-06-01
-RD12956DM,mineria_dpto_cobre_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cajamarca (tm.f),306,2001-01-01,2026-06-01
-RD12957DM,mineria_dpto_cobre_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cusco (tm.f),306,2001-01-01,2026-06-01
-RD12958DM,mineria_dpto_cobre_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huancavelica (tm.f),306,2001-01-01,2026-06-01
-RD12959DM,mineria_dpto_cobre_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huánuco (tm.f),306,2001-01-01,2026-06-01
-RD12960DM,mineria_dpto_cobre_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ica (tm.f),306,2001-01-01,2026-06-01
-RD12961DM,mineria_dpto_cobre_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Junín (tm.f),306,2001-01-01,2026-06-01
-RD12962DM,mineria_dpto_cobre_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - La Libertad (tm.f),305,2001-01-01,2026-06-01
-RD12963DM,mineria_dpto_cobre_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Lima (tm.f),306,2001-01-01,2026-06-01
-RD12964DM,mineria_dpto_cobre_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Moquegua (tm.f),306,2001-01-01,2026-06-01
-RD12965DM,mineria_dpto_cobre_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Pasco (tm.f),306,2001-01-01,2026-06-01
-RD12966DM,mineria_dpto_cobre_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Puno (tm.f),306,2001-01-01,2026-06-01
-RD12967DM,mineria_dpto_cobre_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Tacna (tm.f),306,2001-01-01,2026-06-01
-RD12968DM,mineria_dpto_estano_total_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Total (tm.f),306,2001-01-01,2026-06-01
-RD12969DM,mineria_dpto_estano_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Puno (tm.f),306,2001-01-01,2026-06-01
-RD12970DM,mineria_dpto_hierro_total_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Total (tm.f),306,2001-01-01,2026-06-01
-RD12971DM,mineria_dpto_hierro_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Ica (tm.f),306,2001-01-01,2026-06-01
-RD12972DM,mineria_dpto_molibdeno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Total (tm.f),306,2001-01-01,2026-06-01
-RD12973DM,mineria_dpto_molibdeno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Ancash (tm.f),306,2001-01-01,2026-06-01
-RD12974DM,mineria_dpto_molibdeno_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Arequipa (tm.f),306,2001-01-01,2026-06-01
-RD12975DM,mineria_dpto_molibdeno_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Junín (tm.f),306,2001-01-01,2026-06-01
-RD12976DM,mineria_dpto_molibdeno_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Moquegua (tm.f),306,2001-01-01,2026-06-01
-RD12977DM,mineria_dpto_molibdeno_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Tacna (tm.f),306,2001-01-01,2026-06-01
-RD12978DM,mineria_dpto_oro_total_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Total (grs.f),306,2001-01-01,2026-06-01
-RD12979DM,mineria_dpto_oro_ancash_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ancash (grs.f),306,2001-01-01,2026-06-01
-RD12980DM,mineria_dpto_oro_apurimac_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Apurimac (grs.f),306,2001-01-01,2026-06-01
-RD12981DM,mineria_dpto_oro_arequipa_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Arequipa (grs.f),306,2001-01-01,2026-06-01
-RD12982DM,mineria_dpto_oro_ayacucho_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ayacucho (grs.f),306,2001-01-01,2026-06-01
-RD12983DM,mineria_dpto_oro_cajamarca_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cajamarca (grs.f),306,2001-01-01,2026-06-01
-RD12984DM,mineria_dpto_oro_cusco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cusco (grs.f),306,2001-01-01,2026-06-01
-RD12985DM,mineria_dpto_oro_huancavelica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Huancavelica (grs.f),306,2001-01-01,2026-06-01
-RD12986DM,mineria_dpto_oro_ica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ica (grs.f),306,2001-01-01,2026-06-01
-RD12987DM,mineria_dpto_oro_junin_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Junín (grs.f),306,2001-01-01,2026-06-01
-RD12988DM,mineria_dpto_oro_la_libertad_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - La Libertad (grs.f),306,2001-01-01,2026-06-01
-RD12989DM,mineria_dpto_oro_lambayeque_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lambayeque (grs.f),306,2001-01-01,2026-06-01
-RD12990DM,mineria_dpto_oro_lima_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lima (grs.f),306,2001-01-01,2026-06-01
-RD12991DM,mineria_dpto_oro_madre_de_dios_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Madre de Dios (grs.f),306,2001-01-01,2026-06-01
-RD12992DM,mineria_dpto_oro_moquegua_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Moquegua (grs.f),306,2001-01-01,2026-06-01
-RD12993DM,mineria_dpto_oro_pasco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Pasco (grs.f),306,2001-01-01,2026-06-01
-RD12994DM,mineria_dpto_oro_puno_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Puno (grs.f),306,2001-01-01,2026-06-01
-RD12995DM,mineria_dpto_oro_tacna_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Tacna (grs.f),306,2001-01-01,2026-06-01
-RD12996DM,mineria_dpto_plata_total_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Total (kg.f),306,2001-01-01,2026-06-01
-RD12997DM,mineria_dpto_plata_ancash_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ancash (kg.f),306,2001-01-01,2026-06-01
-RD12998DM,mineria_dpto_plata_apurimac_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Apurímac (kg.f),306,2001-01-01,2026-06-01
-RD12999DM,mineria_dpto_plata_arequipa_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Arequipa (kg.f),306,2001-01-01,2026-06-01
-RD13000DM,mineria_dpto_plata_ayacucho_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ayacucho (kg.f),306,2001-01-01,2026-06-01
-RD13001DM,mineria_dpto_plata_cajamarca_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cajamarca (kg.f),306,2001-01-01,2026-06-01
-RD13002DM,mineria_dpto_plata_cusco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cusco (kg.f),306,2001-01-01,2026-06-01
-RD13003DM,mineria_dpto_plata_huancavelica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huancavelica (kg.f),306,2001-01-01,2026-06-01
-RD13004DM,mineria_dpto_plata_huanuco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huánuco (kg.f),306,2001-01-01,2026-06-01
-RD13005DM,mineria_dpto_plata_ica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ica (kg.f),306,2001-01-01,2026-06-01
-RD13006DM,mineria_dpto_plata_junin_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Junín (kg.f),306,2001-01-01,2026-06-01
-RD13007DM,mineria_dpto_plata_la_libertad_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - La Libertad (kg.f),306,2001-01-01,2026-06-01
-RD13008DM,mineria_dpto_plata_lima_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Lima (kg.f),306,2001-01-01,2026-06-01
-RD13009DM,mineria_dpto_plata_moquegua_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Moquegua (kg.f),306,2001-01-01,2026-06-01
-RD13010DM,mineria_dpto_plata_pasco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Pasco (kg.f),306,2001-01-01,2026-06-01
-RD13011DM,mineria_dpto_plata_puno_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Puno (kg.f),306,2001-01-01,2026-06-01
-RD13012DM,mineria_dpto_plata_tacna_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Tacna (kg.f),306,2001-01-01,2026-06-01
-RD13013DM,mineria_dpto_plomo_total_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Total (tm.f),306,2001-01-01,2026-06-01
-RD13014DM,mineria_dpto_plomo_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ancash (tm.f),306,2001-01-01,2026-06-01
-RD13015DM,mineria_dpto_plomo_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Arequipa (tm.f),306,2001-01-01,2026-06-01
-RD13016DM,mineria_dpto_plomo_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ayacucho (tm.f),306,2001-01-01,2026-06-01
-RD13017DM,mineria_dpto_plomo_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cajamarca (tm.f),306,2001-01-01,2026-06-01
-RD13018DM,mineria_dpto_plomo_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cusco (tm.f),306,2001-01-01,2026-06-01
-RD13019DM,mineria_dpto_plomo_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huancavelica (tm.f),306,2001-01-01,2026-06-01
-RD13020DM,mineria_dpto_plomo_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huánuco (tm.f),306,2001-01-01,2026-06-01
-RD13021DM,mineria_dpto_plomo_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ica (tm.f),306,2001-01-01,2026-06-01
-RD13022DM,mineria_dpto_plomo_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Junín (tm.f),305,2001-01-01,2026-06-01
-RD13023DM,mineria_dpto_plomo_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - La Libertad (tm.f),306,2001-01-01,2026-06-01
-RD13024DM,mineria_dpto_plomo_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Lima (tm.f),306,2001-01-01,2026-06-01
-RD13025DM,mineria_dpto_plomo_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Pasco (tm.f),306,2001-01-01,2026-06-01
-RD13026DM,mineria_dpto_plomo_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Puno (tm.f),306,2001-01-01,2026-06-01
-RD13027DM,mineria_dpto_tungsteno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Total (tm.f),306,2001-01-01,2026-06-01
-RD13028DM,mineria_dpto_tungsteno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Ancash (tm.f),306,2001-01-01,2026-06-01
-RD13029DM,mineria_dpto_zinc_total_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Total (tm.f),306,2001-01-01,2026-06-01
-RD13030DM,mineria_dpto_zinc_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ancash (tm.f),306,2001-01-01,2026-06-01
-RD13031DM,mineria_dpto_zinc_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Arequipa (tm.f),306,2001-01-01,2026-06-01
-RD13032DM,mineria_dpto_zinc_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ayacucho (tm.f),306,2001-01-01,2026-06-01
-RD13033DM,mineria_dpto_zinc_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cajamarca (tm.f),306,2001-01-01,2026-06-01
-RD13034DM,mineria_dpto_zinc_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cusco (tm.f),306,2001-01-01,2026-06-01
-RD13035DM,mineria_dpto_zinc_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huancavelica (tm.f),306,2001-01-01,2026-06-01
-RD13036DM,mineria_dpto_zinc_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huánuco (tm.f),306,2001-01-01,2026-06-01
-RD13037DM,mineria_dpto_zinc_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ica (tm.f),306,2001-01-01,2026-06-01
-RD13038DM,mineria_dpto_zinc_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Junín (tm.f),306,2001-01-01,2026-06-01
-RD13039DM,mineria_dpto_zinc_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - La Libertad (tm.f),305,2001-01-01,2026-06-01
-RD13040DM,mineria_dpto_zinc_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Lima (tm.f),306,2001-01-01,2026-06-01
-RD13041DM,mineria_dpto_zinc_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Pasco (tm.f),306,2001-01-01,2026-06-01
-RD13042DM,mineria_dpto_zinc_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Puno (tm.f),306,2001-01-01,2026-06-01
+RD12951DM,mineria_dpto_cobre_total_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Total (tm.f),308,2001-01-01,2026-08-01
+RD12952DM,mineria_dpto_cobre_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ancash (tm.f),308,2001-01-01,2026-08-01
+RD12953DM,mineria_dpto_cobre_apurimac_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Apurimac (tm.f),129,2015-12-01,2026-08-01
+RD12954DM,mineria_dpto_cobre_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Arequipa (tm.f),308,2001-01-01,2026-08-01
+RD12955DM,mineria_dpto_cobre_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ayacucho (tm.f),308,2001-01-01,2026-08-01
+RD12956DM,mineria_dpto_cobre_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cajamarca (tm.f),308,2001-01-01,2026-08-01
+RD12957DM,mineria_dpto_cobre_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Cusco (tm.f),308,2001-01-01,2026-08-01
+RD12958DM,mineria_dpto_cobre_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huancavelica (tm.f),308,2001-01-01,2026-08-01
+RD12959DM,mineria_dpto_cobre_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Huánuco (tm.f),308,2001-01-01,2026-08-01
+RD12960DM,mineria_dpto_cobre_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Ica (tm.f),308,2001-01-01,2026-08-01
+RD12961DM,mineria_dpto_cobre_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Junín (tm.f),308,2001-01-01,2026-08-01
+RD12962DM,mineria_dpto_cobre_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - La Libertad (tm.f),307,2001-01-01,2026-08-01
+RD12963DM,mineria_dpto_cobre_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Lima (tm.f),308,2001-01-01,2026-08-01
+RD12964DM,mineria_dpto_cobre_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Moquegua (tm.f),308,2001-01-01,2026-08-01
+RD12965DM,mineria_dpto_cobre_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Pasco (tm.f),308,2001-01-01,2026-08-01
+RD12966DM,mineria_dpto_cobre_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Puno (tm.f),308,2001-01-01,2026-08-01
+RD12967DM,mineria_dpto_cobre_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Cobre - Tacna (tm.f),308,2001-01-01,2026-08-01
+RD12968DM,mineria_dpto_estano_total_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Total (tm.f),308,2001-01-01,2026-08-01
+RD12969DM,mineria_dpto_estano_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Estaño - Puno (tm.f),308,2001-01-01,2026-08-01
+RD12970DM,mineria_dpto_hierro_total_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Total (tm.f),308,2001-01-01,2026-08-01
+RD12971DM,mineria_dpto_hierro_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Hierro - Ica (tm.f),308,2001-01-01,2026-08-01
+RD12972DM,mineria_dpto_molibdeno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Total (tm.f),308,2001-01-01,2026-08-01
+RD12973DM,mineria_dpto_molibdeno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Ancash (tm.f),308,2001-01-01,2026-08-01
+RD12974DM,mineria_dpto_molibdeno_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Arequipa (tm.f),308,2001-01-01,2026-08-01
+RD12975DM,mineria_dpto_molibdeno_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Junín (tm.f),308,2001-01-01,2026-08-01
+RD12976DM,mineria_dpto_molibdeno_moquegua_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Moquegua (tm.f),308,2001-01-01,2026-08-01
+RD12977DM,mineria_dpto_molibdeno_tacna_t,mensual,actividad,Producción de productos mineros según departamentos - Molibdeno - Tacna (tm.f),308,2001-01-01,2026-08-01
+RD12978DM,mineria_dpto_oro_total_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Total (grs.f),308,2001-01-01,2026-08-01
+RD12979DM,mineria_dpto_oro_ancash_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ancash (grs.f),308,2001-01-01,2026-08-01
+RD12980DM,mineria_dpto_oro_apurimac_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Apurimac (grs.f),308,2001-01-01,2026-08-01
+RD12981DM,mineria_dpto_oro_arequipa_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Arequipa (grs.f),308,2001-01-01,2026-08-01
+RD12982DM,mineria_dpto_oro_ayacucho_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ayacucho (grs.f),308,2001-01-01,2026-08-01
+RD12983DM,mineria_dpto_oro_cajamarca_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cajamarca (grs.f),308,2001-01-01,2026-08-01
+RD12984DM,mineria_dpto_oro_cusco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Cusco (grs.f),308,2001-01-01,2026-08-01
+RD12985DM,mineria_dpto_oro_huancavelica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Huancavelica (grs.f),308,2001-01-01,2026-08-01
+RD12986DM,mineria_dpto_oro_ica_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Ica (grs.f),308,2001-01-01,2026-08-01
+RD12987DM,mineria_dpto_oro_junin_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Junín (grs.f),308,2001-01-01,2026-08-01
+RD12988DM,mineria_dpto_oro_la_libertad_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - La Libertad (grs.f),308,2001-01-01,2026-08-01
+RD12989DM,mineria_dpto_oro_lambayeque_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lambayeque (grs.f),308,2001-01-01,2026-08-01
+RD12990DM,mineria_dpto_oro_lima_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Lima (grs.f),308,2001-01-01,2026-08-01
+RD12991DM,mineria_dpto_oro_madre_de_dios_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Madre de Dios (grs.f),308,2001-01-01,2026-08-01
+RD12992DM,mineria_dpto_oro_moquegua_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Moquegua (grs.f),308,2001-01-01,2026-08-01
+RD12993DM,mineria_dpto_oro_pasco_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Pasco (grs.f),308,2001-01-01,2026-08-01
+RD12994DM,mineria_dpto_oro_puno_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Puno (grs.f),308,2001-01-01,2026-08-01
+RD12995DM,mineria_dpto_oro_tacna_g,mensual,actividad,Producción de productos mineros según departamentos - Oro - Tacna (grs.f),308,2001-01-01,2026-08-01
+RD12996DM,mineria_dpto_plata_total_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Total (kg.f),308,2001-01-01,2026-08-01
+RD12997DM,mineria_dpto_plata_ancash_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ancash (kg.f),308,2001-01-01,2026-08-01
+RD12998DM,mineria_dpto_plata_apurimac_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Apurímac (kg.f),308,2001-01-01,2026-08-01
+RD12999DM,mineria_dpto_plata_arequipa_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Arequipa (kg.f),308,2001-01-01,2026-08-01
+RD13000DM,mineria_dpto_plata_ayacucho_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ayacucho (kg.f),308,2001-01-01,2026-08-01
+RD13001DM,mineria_dpto_plata_cajamarca_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cajamarca (kg.f),308,2001-01-01,2026-08-01
+RD13002DM,mineria_dpto_plata_cusco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Cusco (kg.f),308,2001-01-01,2026-08-01
+RD13003DM,mineria_dpto_plata_huancavelica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huancavelica (kg.f),308,2001-01-01,2026-08-01
+RD13004DM,mineria_dpto_plata_huanuco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Huánuco (kg.f),308,2001-01-01,2026-08-01
+RD13005DM,mineria_dpto_plata_ica_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Ica (kg.f),308,2001-01-01,2026-08-01
+RD13006DM,mineria_dpto_plata_junin_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Junín (kg.f),308,2001-01-01,2026-08-01
+RD13007DM,mineria_dpto_plata_la_libertad_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - La Libertad (kg.f),308,2001-01-01,2026-08-01
+RD13008DM,mineria_dpto_plata_lima_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Lima (kg.f),308,2001-01-01,2026-08-01
+RD13009DM,mineria_dpto_plata_moquegua_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Moquegua (kg.f),308,2001-01-01,2026-08-01
+RD13010DM,mineria_dpto_plata_pasco_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Pasco (kg.f),308,2001-01-01,2026-08-01
+RD13011DM,mineria_dpto_plata_puno_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Puno (kg.f),308,2001-01-01,2026-08-01
+RD13012DM,mineria_dpto_plata_tacna_kg,mensual,actividad,Producción de productos mineros según departamentos - Plata - Tacna (kg.f),308,2001-01-01,2026-08-01
+RD13013DM,mineria_dpto_plomo_total_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Total (tm.f),308,2001-01-01,2026-08-01
+RD13014DM,mineria_dpto_plomo_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ancash (tm.f),308,2001-01-01,2026-08-01
+RD13015DM,mineria_dpto_plomo_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Arequipa (tm.f),308,2001-01-01,2026-08-01
+RD13016DM,mineria_dpto_plomo_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ayacucho (tm.f),308,2001-01-01,2026-08-01
+RD13017DM,mineria_dpto_plomo_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cajamarca (tm.f),308,2001-01-01,2026-08-01
+RD13018DM,mineria_dpto_plomo_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Cusco (tm.f),308,2001-01-01,2026-08-01
+RD13019DM,mineria_dpto_plomo_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huancavelica (tm.f),308,2001-01-01,2026-08-01
+RD13020DM,mineria_dpto_plomo_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Huánuco (tm.f),308,2001-01-01,2026-08-01
+RD13021DM,mineria_dpto_plomo_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Ica (tm.f),308,2001-01-01,2026-08-01
+RD13022DM,mineria_dpto_plomo_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Junín (tm.f),307,2001-01-01,2026-08-01
+RD13023DM,mineria_dpto_plomo_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - La Libertad (tm.f),308,2001-01-01,2026-08-01
+RD13024DM,mineria_dpto_plomo_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Lima (tm.f),308,2001-01-01,2026-08-01
+RD13025DM,mineria_dpto_plomo_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Pasco (tm.f),308,2001-01-01,2026-08-01
+RD13026DM,mineria_dpto_plomo_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Plomo - Puno (tm.f),308,2001-01-01,2026-08-01
+RD13027DM,mineria_dpto_tungsteno_total_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Total (tm.f),308,2001-01-01,2026-08-01
+RD13028DM,mineria_dpto_tungsteno_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Tungsteno - Ancash (tm.f),308,2001-01-01,2026-08-01
+RD13029DM,mineria_dpto_zinc_total_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Total (tm.f),308,2001-01-01,2026-08-01
+RD13030DM,mineria_dpto_zinc_ancash_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ancash (tm.f),308,2001-01-01,2026-08-01
+RD13031DM,mineria_dpto_zinc_arequipa_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Arequipa (tm.f),308,2001-01-01,2026-08-01
+RD13032DM,mineria_dpto_zinc_ayacucho_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ayacucho (tm.f),308,2001-01-01,2026-08-01
+RD13033DM,mineria_dpto_zinc_cajamarca_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cajamarca (tm.f),308,2001-01-01,2026-08-01
+RD13034DM,mineria_dpto_zinc_cusco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Cusco (tm.f),308,2001-01-01,2026-08-01
+RD13035DM,mineria_dpto_zinc_huancavelica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huancavelica (tm.f),308,2001-01-01,2026-08-01
+RD13036DM,mineria_dpto_zinc_huanuco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Huánuco (tm.f),308,2001-01-01,2026-08-01
+RD13037DM,mineria_dpto_zinc_ica_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Ica (tm.f),308,2001-01-01,2026-08-01
+RD13038DM,mineria_dpto_zinc_junin_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Junín (tm.f),308,2001-01-01,2026-08-01
+RD13039DM,mineria_dpto_zinc_la_libertad_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - La Libertad (tm.f),307,2001-01-01,2026-08-01
+RD13040DM,mineria_dpto_zinc_lima_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Lima (tm.f),308,2001-01-01,2026-08-01
+RD13041DM,mineria_dpto_zinc_pasco_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Pasco (tm.f),308,2001-01-01,2026-08-01
+RD13042DM,mineria_dpto_zinc_puno_t,mensual,actividad,Producción de productos mineros según departamentos - Zinc - Puno (tm.f),308,2001-01-01,2026-08-01
 PD04723MM,tasa_creditos_regulacion_monetaria_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Créditos de Regulación Monetaria en MN,303,2001-08-01,2026-10-01
 PD04724MM,tasa_depositos_overnight_mn,mensual,politica-monetaria,Tasas de interés del Banco Central de Reserva - Tasa de los Depósitos Overnight en MN,310,2001-01-01,2026-10-01
 PN06503OM,tasa_cd_bcrp_saldo,mensual,politica-monetaria,Tasas de interés de los Certificados de Depósito del BCRP - CD BCRP - Tasa de ínteres - Saldo CD BCRP,408,1992-06-01,2026-10-01
@@ -833,11 +833,11 @@ PN00488MM,emision_primaria_fin_var12m,mensual,politica-monetaria,Emisión primar
 PN00491MM,emision_primaria_prom_var12m,mensual,politica-monetaria,Emisión primaria y multiplicador (var% 12 meses) - Emisión Primaria Promedio Mes,406,1993-01-01,2026-10-01
 PN00483MM,emision_primaria_encaje,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Encaje,417,1992-01-01,2026-09-01
 PN00494MM,multiplicador_monetario,mensual,politica-monetaria,Emisión primaria y multiplicador (millones S/) - Multiplicador Monetario,417,1992-01-01,2026-09-01
-PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6950,1999-01-04,2026-11-06
-PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4887,1997-09-22,2026-11-06
-PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6950,1999-01-04,2026-11-06
-PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4887,1997-09-22,2026-11-06
-PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),3003,1999-01-04,2026-11-06
+PD04679MD,tasa_cd_bcrp_saldo_diario,diaria,politica-monetaria,Tasas de interés - Del saldo de CDBCRP,6954,1999-01-04,2026-11-12
+PD04682MD,tasa_repos_bcrp_diario,diaria,politica-monetaria,"Tasas de interés - Operaciones de reporte, total",4891,1997-09-22,2026-11-12
+PD04669MD,cd_bcrp_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Certificados de Depósito BCRP (saldo millones S/),6954,1999-01-04,2026-11-12
+PD04670MD,repos_bcrp_saldo_diario,diaria,politica-monetaria,"Operaciones cambiarias y monetarias del BCRP - Operaciones de reporte, total (saldo millones S/)",4891,1997-09-22,2026-11-12
+PD04666MD,creditos_regulacion_monetaria_saldo_diario,diaria,politica-monetaria,Operaciones cambiarias y monetarias del BCRP - Créditos por regulación monetaria (millones S/),3007,1999-01-04,2026-11-12
 PN07801NM,tasa_bancos_corporativo_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Corporativos,195,2010-08-01,2026-10-01
 PN07802NM,tasa_bancos_grandes_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Grandes Empresas,195,2010-08-01,2026-10-01
 PN07803NM,tasa_bancos_medianas_empresas_hasta360_mn,mensual,tasas,Tasas de interés activas y pasivas promedio de las empresas bancarias en MN (términos efectivos anuales) - Activas - Préstamos Hasta 360 días - Medianas Empresas,195,2010-08-01,2026-10-01
@@ -881,10 +881,10 @@ PN01125MM,tasa_bonos_tesoro_5a10a,mensual,tasas,Bonos del sector privado por mon
 PN01126MM,tasa_bonos_tesoro_10a15a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 10 hasta 15 años,205,2005-07-01,2026-09-01
 PN01127MM,tasa_bonos_tesoro_15a20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - De 15 hasta 20 años,206,2006-05-01,2026-09-01
 PN01128MM,tasa_bonos_tesoro_mas20a,mensual,tasas,Bonos del sector privado por moneda y plazo - Tasas Interés - Memo Tasas Bonos Tesoro Público - Más de 20 años,209,2007-07-01,2026-09-01
-PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7333,1995-04-03,2026-11-06
-PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6007,2002-08-01,2026-11-06
-PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3147,2012-12-31,2026-11-06
-PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4288,2009-07-30,2026-11-06
+PD04693MD,tasa_interbancaria_me_diario,diaria,tasas,"Tasas de interés - Interbancaria, US$",7337,1995-04-03,2026-11-12
+PD04690MD,tasa_bancos_prestamos_hasta360_mn_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, S/",6011,2002-08-01,2026-11-12
+PD04691MD,tasa_bancos_prestamos_hasta360_me_diario,diaria,tasas,"Tasas de interés - Préstamos y descuentos hasta 360 días, US$",3151,2012-12-31,2026-11-12
+PD31894DD,bono_soberano_10a_usd_diario,diaria,tasas,Tasas de interés - Rendimiento del Bono del gobierno peruano a 10 años (en US$),4293,2009-07-30,2026-11-13
 PN00496MM,credito_privado_mn_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito MN (millones S/),417,1992-01-01,2026-09-01
 PN00499MM,credito_privado_me_saldo,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado (fin de periodo) - Crédito ME (millones US$),417,1992-01-01,2026-09-01
 PN00498MM,credito_privado_mn_var12m,mensual,credito-liquidez,Crédito de las sociedades creadoras de depósito al sector privado - fin de periodo (var% 12 meses) - Crédito MN,405,1993-01-01,2026-09-01
@@ -900,21 +900,21 @@ PN00548MM,credito_hipotecario_mn_var12m,mensual,credito-liquidez,"Crédito al se
 PN00549MM,credito_empresas_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - A Empresas",297,2002-01-01,2026-09-01
 PN00550MM,credito_consumo_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Consumo",297,2002-01-01,2026-09-01
 PN00551MM,credito_hipotecario_me_var12m,mensual,credito-liquidez,"Crédito al sector privado de las sociedades creadoras de depósito, por tipo de crédito y por monedas - Tasas de Crecimiento Anual (%) - ME - Hipotecario",297,2002-01-01,2026-09-01
-PN02206FM,spnf_ing_corr_no_trib,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos No Tributarios,249,2006-01-01,2026-09-01
-PN02207FM,spnf_gnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General,249,2006-01-01,2026-09-01
-PN02208FM,spnf_gnf_corriente,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Corriente,249,2006-01-01,2026-09-01
-PN02209FM,spnf_gnf_capital,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital,249,2006-01-01,2026-09-01
-PN02210FM,spnf_gnf_capital_fbk,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital,249,2006-01-01,2026-09-01
-PN02211FM,spnf_gnf_capital_fbk_gn,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02212FM,spnf_gnf_capital_fbk_gr,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02213FM,spnf_gnf_capital_fbk_gl,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN02214FM,spnf_gnf_capital_otros,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Otros Gastos de Capital,249,2006-01-01,2026-09-01
-PN02215FM,spnf_otros,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Otros,249,2006-01-01,2026-09-01
-PN02217FM,spnf_intereses,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Intereses,249,2006-01-01,2026-09-01
-PN39524FM,spnf_res_econ_12m_pct_pbi,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado económico (Acumulado 12 meses - Porcentaje del PBI),237,2007-01-01,2026-09-01
-PN38656FM,spnf_res_prim_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Primario,249,2006-01-01,2026-09-01
-PN38657FM,spnf_intereses_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Intereses,249,2006-01-01,2026-09-01
-PN38658FM,spnf_res_econ_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Económico,249,2006-01-01,2026-09-01
+PN02206FM,spnf_ing_corr_no_trib,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Ingresos Corrientes del Gobierno General - Ingresos No Tributarios,250,2006-01-01,2026-10-01
+PN02207FM,spnf_gnf,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General,250,2006-01-01,2026-10-01
+PN02208FM,spnf_gnf_corriente,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Corriente,250,2006-01-01,2026-10-01
+PN02209FM,spnf_gnf_capital,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital,250,2006-01-01,2026-10-01
+PN02210FM,spnf_gnf_capital_fbk,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital,250,2006-01-01,2026-10-01
+PN02211FM,spnf_gnf_capital_fbk_gn,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02212FM,spnf_gnf_capital_fbk_gr,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02213FM,spnf_gnf_capital_fbk_gl,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Formación Bruta de Capital - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN02214FM,spnf_gnf_capital_otros,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Gasto No Financiero del Gobierno General - Capital - Otros Gastos de Capital,250,2006-01-01,2026-10-01
+PN02215FM,spnf_otros,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Otros,250,2006-01-01,2026-10-01
+PN02217FM,spnf_intereses,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Intereses,250,2006-01-01,2026-10-01
+PN39524FM,spnf_res_econ_12m_pct_pbi,mensual,fiscal,Operaciones del sector público no financiero (millones S/) - Resultado económico (Acumulado 12 meses - Porcentaje del PBI),238,2007-01-01,2026-10-01
+PN38656FM,spnf_res_prim_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Primario,250,2006-01-01,2026-10-01
+PN38657FM,spnf_intereses_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Intereses,250,2006-01-01,2026-10-01
+PN38658FM,spnf_res_econ_real,mensual,fiscal,Operaciones del sector público no financiero (millones de soles diciembre 2021) - Resultado Económico,250,2006-01-01,2026-10-01
 PN03081FQ,spnf_ing_corr_pct_pbi_trim,trimestral,fiscal,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General,82,2006-01-01,2026-04-01
 PN03082FQ,spnf_ing_corr_trib_pct_pbi_trim,trimestral,fiscal,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General - Ingresos Tributarios,82,2006-01-01,2026-04-01
 PN03083FQ,spnf_ing_corr_no_trib_pct_pbi_trim,trimestral,fiscal,Operaciones del sector público no financiero (porcentaje del PBI) - Ingresos Corrientes del Gobierno General - Ingresos No Tributarios,82,2006-01-01,2026-04-01
@@ -961,56 +961,56 @@ PN03129FQ,spnf_fin_financ_externo_amortizacion_pct_pbi_trim,trimestral,fiscal,Re
 PN03130FQ,spnf_fin_financ_externo_otros_pct_pbi_trim,trimestral,fiscal,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Externo - Otros,126,1995-01-01,2026-04-01
 PN03131FQ,spnf_fin_financ_interno_pct_pbi_trim,trimestral,fiscal,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Interno,146,1990-01-01,2026-04-01
 PN03132FQ,spnf_fin_financ_privatizacion_pct_pbi_trim,trimestral,fiscal,Resultado primario del sector público no financiero (porcentaje del PBI) - Financiamiento Neto - Privatización,146,1990-01-01,2026-04-01
-PN02294FM,ing_gg_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios,285,2003-01-01,2026-09-01
-PN02295FM,ing_gg_trib_gn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional,285,2003-01-01,2026-09-01
-PN02296FM,ing_gg_trib_gn_ir,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta,285,2003-01-01,2026-09-01
-PN02297FM,ing_gg_trib_gn_ir_pn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales,285,2003-01-01,2026-09-01
-PN02298FM,ing_gg_trib_gn_ir_pj,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas,285,2003-01-01,2026-09-01
-PN02299FM,ing_gg_trib_gn_ir_regularizacion,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización,285,2003-01-01,2026-09-01
-PN02300FM,ing_gg_trib_gn_importaciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a las Importaciones,285,2003-01-01,2026-09-01
-PN02301FM,ing_gg_trib_gn_igv,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV,285,2003-01-01,2026-09-01
-PN02302FM,ing_gg_trib_gn_igv_interno,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno,285,2003-01-01,2026-09-01
-PN02303FM,ing_gg_trib_gn_igv_importaciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones,285,2003-01-01,2026-09-01
-PN02304FM,ing_gg_trib_gn_isc,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC,285,2003-01-01,2026-09-01
-PN02305FM,ing_gg_trib_gn_isc_combustibles,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles,285,2003-01-01,2026-09-01
-PN02306FM,ing_gg_trib_gn_isc_otros,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros,285,2003-01-01,2026-09-01
-PN02307FM,ing_gg_trib_gn_otros_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios,285,2003-01-01,2026-09-01
-PN02308FM,ing_gg_trib_gn_devoluciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos,285,2003-01-01,2026-09-01
-PN02309FM,ing_gg_trib_gl,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios de los Gobiernos Locales,285,2003-01-01,2026-09-01
-PN02310FM,ing_gg_no_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos No Tributarios,285,2003-01-01,2026-09-01
-PN02311FM,ing_gg_total_ingresos_corrientes,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Total Ingresos Corrientes,285,2003-01-01,2026-09-01
-PN37894FM,ing_gg_no_trib_gn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios del Gobierno Nacional (Mill. S/),285,2003-01-01,2026-09-01
-PN37895FM,ing_gg_contribuciones_sociales,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Contribuciones sociales (Mill. S/),285,2003-01-01,2026-09-01
-PN37896FM,ing_gg_rec_propios_transf,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Recursos propios y transferencias (Mill. S/),285,2003-01-01,2026-09-01
-PN37897FM,ing_gg_canon_y_regalias,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Canon y regalías (Mill. S/),285,2003-01-01,2026-09-01
-PN37898FM,ing_gg_otros,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Otros (Mill. S/),285,2003-01-01,2026-09-01
-PN37899FM,ing_gg_no_trib_gr,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Regionales (Mill. S/),285,2003-01-01,2026-09-01
-PN37900FM,ing_gg_no_trib_gl,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Locales (Mill. S/),285,2003-01-01,2026-09-01
-PN38595FM,ing_gg_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios,285,2003-01-01,2026-09-01
-PN38596FM,ing_gg_trib_gn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional,285,2003-01-01,2026-09-01
-PN38597FM,ing_gg_trib_gn_ir_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta,285,2003-01-01,2026-09-01
-PN38598FM,ing_gg_trib_gn_ir_pn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales,285,2003-01-01,2026-09-01
-PN38599FM,ing_gg_trib_gn_ir_pj_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas,285,2003-01-01,2026-09-01
-PN38600FM,ing_gg_trib_gn_ir_regularizacion_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización,285,2003-01-01,2026-09-01
-PN38601FM,ing_gg_trib_gn_importaciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuestos a las Importaciones,285,2003-01-01,2026-09-01
-PN38602FM,ing_gg_trib_gn_igv_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV,285,2003-01-01,2026-09-01
-PN38603FM,ing_gg_trib_gn_igv_interno_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno,285,2003-01-01,2026-09-01
-PN38604FM,ing_gg_trib_gn_igv_importaciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones,285,2003-01-01,2026-09-01
-PN38605FM,ing_gg_trib_gn_isc_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC,285,2003-01-01,2026-09-01
-PN38606FM,ing_gg_trib_gn_isc_combustibles_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles,285,2003-01-01,2026-09-01
-PN38607FM,ing_gg_trib_gn_isc_otros_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros,285,2003-01-01,2026-09-01
-PN38608FM,ing_gg_trib_gn_otros_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios,285,2003-01-01,2026-09-01
-PN38609FM,ing_gg_trib_gn_devoluciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos,285,2003-01-01,2026-09-01
-PN38610FM,ing_gg_trib_gl_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios de los Gobiernos Locales,285,2003-01-01,2026-09-01
-PN38611FM,ing_gg_no_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos No Tributarios,285,2003-01-01,2026-09-01
-PN38612FM,ing_gg_no_trib_gn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios del Gobierno Nacional,285,2003-01-01,2026-09-01
-PN38613FM,ing_gg_contribuciones_sociales_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Contribuciones sociales,285,2003-01-01,2026-09-01
-PN38614FM,ing_gg_rec_propios_transf_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Recursos propios y transferencias,285,2003-01-01,2026-09-01
-PN38615FM,ing_gg_canon_y_regalias_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Canon y regalías,285,2003-01-01,2026-09-01
-PN38616FM,ing_gg_otros_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Otros,285,2003-01-01,2026-09-01
-PN38617FM,ing_gg_no_trib_gr_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Regionales,285,2003-01-01,2026-09-01
-PN38618FM,ing_gg_no_trib_gl_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Locales,285,2003-01-01,2026-09-01
-PN38619FM,ing_gg_total_ingresos_corrientes_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Total Ingresos Corrientes,285,2003-01-01,2026-09-01
+PN02294FM,ing_gg_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios,286,2003-01-01,2026-10-01
+PN02295FM,ing_gg_trib_gn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional,286,2003-01-01,2026-10-01
+PN02296FM,ing_gg_trib_gn_ir,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta,286,2003-01-01,2026-10-01
+PN02297FM,ing_gg_trib_gn_ir_pn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales,286,2003-01-01,2026-10-01
+PN02298FM,ing_gg_trib_gn_ir_pj,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas,286,2003-01-01,2026-10-01
+PN02299FM,ing_gg_trib_gn_ir_regularizacion,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización,286,2003-01-01,2026-10-01
+PN02300FM,ing_gg_trib_gn_importaciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Impuesto a las Importaciones,286,2003-01-01,2026-10-01
+PN02301FM,ing_gg_trib_gn_igv,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV,286,2003-01-01,2026-10-01
+PN02302FM,ing_gg_trib_gn_igv_interno,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno,286,2003-01-01,2026-10-01
+PN02303FM,ing_gg_trib_gn_igv_importaciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones,286,2003-01-01,2026-10-01
+PN02304FM,ing_gg_trib_gn_isc,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC,286,2003-01-01,2026-10-01
+PN02305FM,ing_gg_trib_gn_isc_combustibles,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles,286,2003-01-01,2026-10-01
+PN02306FM,ing_gg_trib_gn_isc_otros,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros,286,2003-01-01,2026-10-01
+PN02307FM,ing_gg_trib_gn_otros_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios,286,2003-01-01,2026-10-01
+PN02308FM,ing_gg_trib_gn_devoluciones,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos,286,2003-01-01,2026-10-01
+PN02309FM,ing_gg_trib_gl,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos Tributarios de los Gobiernos Locales,286,2003-01-01,2026-10-01
+PN02310FM,ing_gg_no_trib,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos No Tributarios,286,2003-01-01,2026-10-01
+PN02311FM,ing_gg_total_ingresos_corrientes,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Total Ingresos Corrientes,286,2003-01-01,2026-10-01
+PN37894FM,ing_gg_no_trib_gn,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios del Gobierno Nacional (Mill. S/),286,2003-01-01,2026-10-01
+PN37895FM,ing_gg_contribuciones_sociales,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Contribuciones sociales (Mill. S/),286,2003-01-01,2026-10-01
+PN37896FM,ing_gg_rec_propios_transf,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Recursos propios y transferencias (Mill. S/),286,2003-01-01,2026-10-01
+PN37897FM,ing_gg_canon_y_regalias,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Canon y regalías (Mill. S/),286,2003-01-01,2026-10-01
+PN37898FM,ing_gg_otros,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Otros (Mill. S/),286,2003-01-01,2026-10-01
+PN37899FM,ing_gg_no_trib_gr,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Regionales (Mill. S/),286,2003-01-01,2026-10-01
+PN37900FM,ing_gg_no_trib_gl,mensual,fiscal,Ingresos corrientes del gobierno general (millones S/) - Ingresos no tributarios de los Gobiernos Locales (Mill. S/),286,2003-01-01,2026-10-01
+PN38595FM,ing_gg_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios,286,2003-01-01,2026-10-01
+PN38596FM,ing_gg_trib_gn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional,286,2003-01-01,2026-10-01
+PN38597FM,ing_gg_trib_gn_ir_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta,286,2003-01-01,2026-10-01
+PN38598FM,ing_gg_trib_gn_ir_pn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Naturales,286,2003-01-01,2026-10-01
+PN38599FM,ing_gg_trib_gn_ir_pj_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Personas Jurídicas,286,2003-01-01,2026-10-01
+PN38600FM,ing_gg_trib_gn_ir_regularizacion_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuesto a la Renta - Regularización,286,2003-01-01,2026-10-01
+PN38601FM,ing_gg_trib_gn_importaciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Impuestos a las Importaciones,286,2003-01-01,2026-10-01
+PN38602FM,ing_gg_trib_gn_igv_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV,286,2003-01-01,2026-10-01
+PN38603FM,ing_gg_trib_gn_igv_interno_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Interno,286,2003-01-01,2026-10-01
+PN38604FM,ing_gg_trib_gn_igv_importaciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - IGV - Importaciones,286,2003-01-01,2026-10-01
+PN38605FM,ing_gg_trib_gn_isc_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC,286,2003-01-01,2026-10-01
+PN38606FM,ing_gg_trib_gn_isc_combustibles_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Combustibles,286,2003-01-01,2026-10-01
+PN38607FM,ing_gg_trib_gn_isc_otros_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - ISC - Otros,286,2003-01-01,2026-10-01
+PN38608FM,ing_gg_trib_gn_otros_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Otros Ingresos Tributarios,286,2003-01-01,2026-10-01
+PN38609FM,ing_gg_trib_gn_devoluciones_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios del Gobierno Nacional - Devoluciones de Impuestos,286,2003-01-01,2026-10-01
+PN38610FM,ing_gg_trib_gl_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos Tributarios de los Gobiernos Locales,286,2003-01-01,2026-10-01
+PN38611FM,ing_gg_no_trib_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos No Tributarios,286,2003-01-01,2026-10-01
+PN38612FM,ing_gg_no_trib_gn_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios del Gobierno Nacional,286,2003-01-01,2026-10-01
+PN38613FM,ing_gg_contribuciones_sociales_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Contribuciones sociales,286,2003-01-01,2026-10-01
+PN38614FM,ing_gg_rec_propios_transf_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Recursos propios y transferencias,286,2003-01-01,2026-10-01
+PN38615FM,ing_gg_canon_y_regalias_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Canon y regalías,286,2003-01-01,2026-10-01
+PN38616FM,ing_gg_otros_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Otros,286,2003-01-01,2026-10-01
+PN38617FM,ing_gg_no_trib_gr_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Regionales,286,2003-01-01,2026-10-01
+PN38618FM,ing_gg_no_trib_gl_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Ingresos no tributarios de los Gobiernos Locales,286,2003-01-01,2026-10-01
+PN38619FM,ing_gg_total_ingresos_corrientes_real,mensual,fiscal,Ingresos corrientes del gobierno general (millones de soles diciembre 2021) - Total Ingresos Corrientes,286,2003-01-01,2026-10-01
 PN03251FQ,ing_gg_trib_pct_pbi_trim,trimestral,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios,94,2003-01-01,2026-04-01
 PN03252FQ,ing_gg_trib_gn_pct_pbi_trim,trimestral,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional,94,2003-01-01,2026-04-01
 PN03253FQ,ing_gg_trib_gn_ir_pct_pbi_trim,trimestral,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos Tributarios Gobierno Nacional - IR,94,2003-01-01,2026-04-01
@@ -1056,55 +1056,55 @@ PM05892FA,ing_gg_no_trib_regalias_pct_pbi_anual,anual,fiscal,"Ingresos corriente
 PM05893FA,ing_gg_no_trib_canon_petrolero_pct_pbi_anual,anual,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Canon Petrolero,36,1990-01-01,2025-01-01
 PM05894FA,ing_gg_no_trib_otros_ingresos_pct_pbi_anual,anual,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Ingresos No Tributarios - Otros ingresos,36,1990-01-01,2025-01-01
 PM05895FA,ing_gg_total_pct_pbi_anual,anual,fiscal,Ingresos corrientes del gobierno general (porcentaje del PBI) - Total,56,1970-01-01,2025-01-01
-PN02390FM,gnf_gg_corr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes,249,2006-01-01,2026-09-01
-PN02391FM,gnf_gg_corr_remuneraciones,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones,249,2006-01-01,2026-09-01
-PN02392FM,gnf_gg_corr_remuneraciones_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02393FM,gnf_gg_corr_remuneraciones_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02394FM,gnf_gg_corr_remuneraciones_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN02395FM,gnf_gg_corr_bys,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios,249,2006-01-01,2026-09-01
-PN02396FM,gnf_gg_corr_bys_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02397FM,gnf_gg_corr_bys_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02398FM,gnf_gg_corr_bys_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN02399FM,gnf_gg_corr_transferencias,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias,249,2006-01-01,2026-09-01
-PN02400FM,gnf_gg_corr_transferencias_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02401FM,gnf_gg_corr_transferencias_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02402FM,gnf_gg_corr_transferencias_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN02403FM,gnf_gg_capital,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital,249,2006-01-01,2026-09-01
-PN02404FM,gnf_gg_capital_fbk,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital,249,2006-01-01,2026-09-01
-PN02405FM,gnf_gg_capital_fbk_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02406FM,gnf_gg_capital_fbk_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02407FM,gnf_gg_capital_fbk_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN02408FM,gnf_gg_capital_otros,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Otros Gastos de Capital,249,2006-01-01,2026-09-01
-PN02409FM,gnf_gg_gnf_total,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total,249,2006-01-01,2026-09-01
-PN02410FM,gnf_gg_gnf_total_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN02411FM,gnf_gg_gnf_total_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN02412FM,gnf_gg_gnf_total_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN09808FM,gnf_gg_corr_bys_mantenimiento,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios (Mantenimiento),213,2009-01-01,2026-09-01
-PN38072FM,gnf_gg_gasto_total,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto Total del Gobierno General,249,2006-01-01,2026-09-01
-PN38620FM,gnf_gg_corr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes,249,2006-01-01,2026-09-01
-PN38621FM,gnf_gg_corr_remuneraciones_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones,249,2006-01-01,2026-09-01
-PN38622FM,gnf_gg_corr_remuneraciones_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN38623FM,gnf_gg_corr_remuneraciones_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN38624FM,gnf_gg_corr_remuneraciones_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN38625FM,gnf_gg_corr_bys_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios,249,2006-01-01,2026-09-01
-PN38626FM,gnf_gg_corr_bys_mantenimiento_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios (Mantenimiento),213,2009-01-01,2026-09-01
-PN38627FM,gnf_gg_corr_bys_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN38628FM,gnf_gg_corr_bys_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN38629FM,gnf_gg_corr_bys_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN38630FM,gnf_gg_corr_transferencias_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias,249,2006-01-01,2026-09-01
-PN38631FM,gnf_gg_corr_transferencias_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN38632FM,gnf_gg_corr_transferencias_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN38633FM,gnf_gg_corr_transferencias_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN38634FM,gnf_gg_capital_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital,249,2006-01-01,2026-09-01
-PN38635FM,gnf_gg_capital_fbk_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital,249,2006-01-01,2026-09-01
-PN38636FM,gnf_gg_capital_fbk_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN38637FM,gnf_gg_capital_fbk_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN38638FM,gnf_gg_capital_fbk_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales,249,2006-01-01,2026-09-01
-PN38639FM,gnf_gg_capital_otros_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Otros Gastos de Capital,249,2006-01-01,2026-09-01
-PN38640FM,gnf_gg_gnf_total_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total,249,2006-01-01,2026-09-01
-PN38641FM,gnf_gg_gnf_total_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobierno Nacional,249,2006-01-01,2026-09-01
-PN38642FM,gnf_gg_gnf_total_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Regionales,249,2006-01-01,2026-09-01
-PN38643FM,gnf_gg_gnf_total_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Locales,249,2006-01-01,2026-09-01
+PN02390FM,gnf_gg_corr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes,250,2006-01-01,2026-10-01
+PN02391FM,gnf_gg_corr_remuneraciones,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones,250,2006-01-01,2026-10-01
+PN02392FM,gnf_gg_corr_remuneraciones_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02393FM,gnf_gg_corr_remuneraciones_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02394FM,gnf_gg_corr_remuneraciones_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Remuneraciones - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN02395FM,gnf_gg_corr_bys,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios,250,2006-01-01,2026-10-01
+PN02396FM,gnf_gg_corr_bys_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02397FM,gnf_gg_corr_bys_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02398FM,gnf_gg_corr_bys_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN02399FM,gnf_gg_corr_transferencias,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias,250,2006-01-01,2026-10-01
+PN02400FM,gnf_gg_corr_transferencias_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02401FM,gnf_gg_corr_transferencias_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02402FM,gnf_gg_corr_transferencias_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Tranferencias - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN02403FM,gnf_gg_capital,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital,250,2006-01-01,2026-10-01
+PN02404FM,gnf_gg_capital_fbk,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital,250,2006-01-01,2026-10-01
+PN02405FM,gnf_gg_capital_fbk_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02406FM,gnf_gg_capital_fbk_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02407FM,gnf_gg_capital_fbk_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN02408FM,gnf_gg_capital_otros,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto de Capital - Otros Gastos de Capital,250,2006-01-01,2026-10-01
+PN02409FM,gnf_gg_gnf_total,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total,250,2006-01-01,2026-10-01
+PN02410FM,gnf_gg_gnf_total_gn,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN02411FM,gnf_gg_gnf_total_gr,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN02412FM,gnf_gg_gnf_total_gl,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto No Financiero Total - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN09808FM,gnf_gg_corr_bys_mantenimiento,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gastos Corrientes - Bienes y Servicios (Mantenimiento),214,2009-01-01,2026-10-01
+PN38072FM,gnf_gg_gasto_total,mensual,fiscal,Gastos no financieros del gobierno general (millones S/) - Gasto Total del Gobierno General,250,2006-01-01,2026-10-01
+PN38620FM,gnf_gg_corr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes,250,2006-01-01,2026-10-01
+PN38621FM,gnf_gg_corr_remuneraciones_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones,250,2006-01-01,2026-10-01
+PN38622FM,gnf_gg_corr_remuneraciones_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN38623FM,gnf_gg_corr_remuneraciones_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN38624FM,gnf_gg_corr_remuneraciones_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Remuneraciones - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN38625FM,gnf_gg_corr_bys_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios,250,2006-01-01,2026-10-01
+PN38626FM,gnf_gg_corr_bys_mantenimiento_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios (Mantenimiento),214,2009-01-01,2026-10-01
+PN38627FM,gnf_gg_corr_bys_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN38628FM,gnf_gg_corr_bys_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN38629FM,gnf_gg_corr_bys_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Bienes y Servicios - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN38630FM,gnf_gg_corr_transferencias_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias,250,2006-01-01,2026-10-01
+PN38631FM,gnf_gg_corr_transferencias_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN38632FM,gnf_gg_corr_transferencias_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN38633FM,gnf_gg_corr_transferencias_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gastos Corrientes - Tranferencias - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN38634FM,gnf_gg_capital_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital,250,2006-01-01,2026-10-01
+PN38635FM,gnf_gg_capital_fbk_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital,250,2006-01-01,2026-10-01
+PN38636FM,gnf_gg_capital_fbk_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN38637FM,gnf_gg_capital_fbk_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN38638FM,gnf_gg_capital_fbk_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Formación Bruta de Capital - Gobiernos Locales,250,2006-01-01,2026-10-01
+PN38639FM,gnf_gg_capital_otros_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto de Capital - Otros Gastos de Capital,250,2006-01-01,2026-10-01
+PN38640FM,gnf_gg_gnf_total_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total,250,2006-01-01,2026-10-01
+PN38641FM,gnf_gg_gnf_total_gn_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobierno Nacional,250,2006-01-01,2026-10-01
+PN38642FM,gnf_gg_gnf_total_gr_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Regionales,250,2006-01-01,2026-10-01
+PN38643FM,gnf_gg_gnf_total_gl_real,mensual,fiscal,Gastos no financieros del gobierno general (millones de soles diciembre 2021) - Gasto No Financiero Total - Gobiernos Locales,250,2006-01-01,2026-10-01
 PN03329FQ,gnf_gg_corr_pct_pbi_trim,trimestral,fiscal,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes,82,2006-01-01,2026-04-01
 PN03330FQ,gnf_gg_corr_remuneraciones_pct_pbi_trim,trimestral,fiscal,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones,82,2006-01-01,2026-04-01
 PN03331FQ,gnf_gg_corr_remuneraciones_gn_pct_pbi_trim,trimestral,fiscal,Gastos no financieros del gobierno general (porcentaje del PBI) - Gastos Corrientes - Remuneraciones - Gobierno Nacional,82,2006-01-01,2026-04-01
@@ -1152,34 +1152,34 @@ PM05938FA,gasto_gg_gnf_total_pct_pbi_anual,anual,fiscal,Gastos del gobierno gene
 PM05939FA,gasto_gg_gnf_total_gn_pct_pbi_anual,anual,fiscal,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobierno Nacional,23,2003-01-01,2025-01-01
 PM05940FA,gasto_gg_gnf_total_gr_pct_pbi_anual,anual,fiscal,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Regionales,23,2003-01-01,2025-01-01
 PM05941FA,gasto_gg_gnf_total_gl_pct_pbi_anual,anual,fiscal,Gastos del gobierno general (porcentaje del PBI) - Gasto No Financiero Total - Gobiernos Locales,23,2003-01-01,2025-01-01
-PN02219FM,gc_res_prim,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Primario,381,1995-01-01,2026-09-01
-PN02234FM,gc_res_prim_ingresos_de_capital,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Primario - Ingresos de Capital,381,1995-01-01,2026-09-01
-PN02235FM,gc_intereses,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses,381,1995-01-01,2026-09-01
-PN02236FM,gc_intereses_deuda_interna,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses - Deuda Interna,381,1995-01-01,2026-09-01
-PN02237FM,gc_intereses_deuda_externa,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses - Deuda Externa,381,1995-01-01,2026-09-01
-PN02238FM,gc_res_econ,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Económico,381,1995-01-01,2026-09-01
-PN02239FM,gc_financ,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto,381,1995-01-01,2026-09-01
-PN02240FM,gc_financ_externo,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo,381,1995-01-01,2026-09-01
-PN02241FM,gc_financ_externo_desembolsos,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Desembolsos,381,1995-01-01,2026-09-01
-PN02242FM,gc_financ_externo_amortizaciones,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Amortizaciones,381,1995-01-01,2026-09-01
-PN02243FM,gc_financ_interno,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Interno,381,1995-01-01,2026-09-01
-PN02244FM,gc_financ_privatizacion,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Privatización,381,1995-01-01,2026-09-01
-PN02245FM,gc_gasto_no_financiero_neto_de_transferencias_a_entidades_publicas,mensual,fiscal,Operaciones del gobierno central (millones S/) - Gasto No Financiero Neto de Tranferencias a Entidades Públicas,321,2000-01-01,2026-09-01
-PN02246FM,gc_fbk_neto_de_pagos_por_crpaos,mensual,fiscal,Operaciones del gobierno central (millones S/) - Formación Bruta de Capital Neto de Pagos por CRPAOs,285,2003-01-01,2026-09-01
-PN02247FM,gc_corr_totales,mensual,fiscal,Operaciones del gobierno central (millones S/) - Gastos Corrientes Totales,381,1995-01-01,2026-09-01
-PN02248FM,gc_ahorro_cc,mensual,fiscal,Operaciones del gobierno central (millones S/) - Ahorro en Cuenta Corriente,381,1995-01-01,2026-09-01
-PN02222FM,gasto_gc_gnf_corr,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes,381,1995-01-01,2026-09-01
-PN02223FM,gasto_gc_gnf_corr_remuneraciones,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Remuneraciones,381,1995-01-01,2026-09-01
-PN02224FM,gasto_gc_gnf_corr_bys,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Bienes y Servicios,381,1995-01-01,2026-09-01
-PN02225FM,gasto_gc_gnf_corr_transferencias,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias,381,1995-01-01,2026-09-01
-PN02226FM,gasto_gc_gnf_corr_transferencias_pensiones,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Pensiones,381,1995-01-01,2026-09-01
-PN02227FM,gasto_gc_gnf_corr_transferencias_onp_fonahpu,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - ONP - FONAHPU,381,1995-01-01,2026-09-01
-PN02228FM,gasto_gc_gnf_corr_transferencias_foncomun,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - FONCOMUN,381,1995-01-01,2026-09-01
-PN02229FM,gasto_gc_gnf_corr_transferencias_canon,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Canon,381,1995-01-01,2026-09-01
-PN02230FM,gasto_gc_gnf_corr_transferencias_otros,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Otros,381,1995-01-01,2026-09-01
-PN02231FM,gasto_gc_gnf_gastos_de_capital,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital,381,1995-01-01,2026-09-01
-PN02232FM,gasto_gc_gnf_gastos_de_capital_fbk,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Formación Bruta de Capital,381,1995-01-01,2026-09-01
-PN02233FM,gasto_gc_gnf_gastos_de_capital_otros,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Otros,381,1995-01-01,2026-09-01
+PN02219FM,gc_res_prim,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Primario,382,1995-01-01,2026-10-01
+PN02234FM,gc_res_prim_ingresos_de_capital,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Primario - Ingresos de Capital,382,1995-01-01,2026-10-01
+PN02235FM,gc_intereses,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses,382,1995-01-01,2026-10-01
+PN02236FM,gc_intereses_deuda_interna,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses - Deuda Interna,382,1995-01-01,2026-10-01
+PN02237FM,gc_intereses_deuda_externa,mensual,fiscal,Operaciones del gobierno central (millones S/) - Intereses - Deuda Externa,382,1995-01-01,2026-10-01
+PN02238FM,gc_res_econ,mensual,fiscal,Operaciones del gobierno central (millones S/) - Resultado Económico,382,1995-01-01,2026-10-01
+PN02239FM,gc_financ,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto,382,1995-01-01,2026-10-01
+PN02240FM,gc_financ_externo,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo,382,1995-01-01,2026-10-01
+PN02241FM,gc_financ_externo_desembolsos,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Desembolsos,382,1995-01-01,2026-10-01
+PN02242FM,gc_financ_externo_amortizaciones,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Externo - Amortizaciones,382,1995-01-01,2026-10-01
+PN02243FM,gc_financ_interno,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Interno,382,1995-01-01,2026-10-01
+PN02244FM,gc_financ_privatizacion,mensual,fiscal,Operaciones del gobierno central (millones S/) - Financiamiento Neto - Privatización,382,1995-01-01,2026-10-01
+PN02245FM,gc_gasto_no_financiero_neto_de_transferencias_a_entidades_publicas,mensual,fiscal,Operaciones del gobierno central (millones S/) - Gasto No Financiero Neto de Tranferencias a Entidades Públicas,322,2000-01-01,2026-10-01
+PN02246FM,gc_fbk_neto_de_pagos_por_crpaos,mensual,fiscal,Operaciones del gobierno central (millones S/) - Formación Bruta de Capital Neto de Pagos por CRPAOs,286,2003-01-01,2026-10-01
+PN02247FM,gc_corr_totales,mensual,fiscal,Operaciones del gobierno central (millones S/) - Gastos Corrientes Totales,382,1995-01-01,2026-10-01
+PN02248FM,gc_ahorro_cc,mensual,fiscal,Operaciones del gobierno central (millones S/) - Ahorro en Cuenta Corriente,382,1995-01-01,2026-10-01
+PN02222FM,gasto_gc_gnf_corr,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes,382,1995-01-01,2026-10-01
+PN02223FM,gasto_gc_gnf_corr_remuneraciones,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Remuneraciones,382,1995-01-01,2026-10-01
+PN02224FM,gasto_gc_gnf_corr_bys,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Bienes y Servicios,382,1995-01-01,2026-10-01
+PN02225FM,gasto_gc_gnf_corr_transferencias,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias,382,1995-01-01,2026-10-01
+PN02226FM,gasto_gc_gnf_corr_transferencias_pensiones,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Pensiones,382,1995-01-01,2026-10-01
+PN02227FM,gasto_gc_gnf_corr_transferencias_onp_fonahpu,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - ONP - FONAHPU,382,1995-01-01,2026-10-01
+PN02228FM,gasto_gc_gnf_corr_transferencias_foncomun,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - FONCOMUN,382,1995-01-01,2026-10-01
+PN02229FM,gasto_gc_gnf_corr_transferencias_canon,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Canon,382,1995-01-01,2026-10-01
+PN02230FM,gasto_gc_gnf_corr_transferencias_otros,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos Corrientes - Tranferencias - Otros,382,1995-01-01,2026-10-01
+PN02231FM,gasto_gc_gnf_gastos_de_capital,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital,382,1995-01-01,2026-10-01
+PN02232FM,gasto_gc_gnf_gastos_de_capital_fbk,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Formación Bruta de Capital,382,1995-01-01,2026-10-01
+PN02233FM,gasto_gc_gnf_gastos_de_capital_otros,mensual,fiscal,Gastos del gobierno central (millones S/) - Resultado Primario - Gastos No Financieros - Gastos de Capital - Otros,382,1995-01-01,2026-10-01
 PN03371FQ,deuda_total_mill,trimestral,fiscal,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública,110,1999-01-01,2026-04-01
 PN03372FQ,deuda_externa_mill,trimestral,fiscal,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa,110,1999-01-01,2026-04-01
 PN03373FQ,deuda_externa_creditos_mill,trimestral,fiscal,Saldo de la deuda del sector público no financiero (millones S/) - Deuda Pública Externa - Créditos,110,1999-01-01,2026-04-01
@@ -1353,216 +1353,216 @@ PM06047FA,deuda_neta_deuda_neta_mill_anual,anual,fiscal,Deuda neta del sector p�
 PM06048FA,deuda_neta_activos_pct_pbi_anual,anual,fiscal,Deuda neta del sector público no financiero (porcentaje del PBI) - Activos,25,2001-01-01,2025-01-01
 PM06049FA,deuda_neta_pasivos_pct_pbi_anual,anual,fiscal,Deuda neta del sector público no financiero (porcentaje del PBI) - Pasivos,25,2001-01-01,2025-01-01
 PM06050FA,deuda_neta_deuda_neta_pct_pbi_anual,anual,fiscal,Deuda neta del sector público no financiero (porcentaje del PBI) - Deuda Neta,25,2001-01-01,2025-01-01
-RD13774DM,recaud_internos_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Amazonas (millones de soles),391,1994-01-01,2026-07-01
-RD13775DM,recaud_internos_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ancash (millones de soles),391,1994-01-01,2026-07-01
-RD13776DM,recaud_internos_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Apurimac (millones de soles),391,1994-01-01,2026-07-01
-RD13777DM,recaud_internos_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Arequipa (millones de soles),391,1994-01-01,2026-07-01
-RD13778DM,recaud_internos_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ayacucho (millones de soles),391,1994-01-01,2026-07-01
-RD13779DM,recaud_internos_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cajamarca (millones de soles),391,1994-01-01,2026-07-01
-RD13780DM,recaud_internos_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Callao (millones de soles),391,1994-01-01,2026-07-01
-RD13781DM,recaud_internos_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cusco (millones de soles),391,1994-01-01,2026-07-01
-RD13782DM,recaud_internos_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huancavelica (millones de soles),391,1994-01-01,2026-07-01
-RD13783DM,recaud_internos_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huánuco (millones de soles),391,1994-01-01,2026-07-01
-RD13784DM,recaud_internos_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ica (millones de soles),391,1994-01-01,2026-07-01
-RD13785DM,recaud_internos_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Junín (millones de soles),391,1994-01-01,2026-07-01
-RD13786DM,recaud_internos_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - La Libertad (millones de soles),391,1994-01-01,2026-07-01
-RD13787DM,recaud_internos_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lambayeque (millones de soles),391,1994-01-01,2026-07-01
-RD13788DM,recaud_internos_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima Metropolitana (millones de soles),391,1994-01-01,2026-07-01
-RD13789DM,recaud_internos_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima provincias (millones de soles),391,1994-01-01,2026-07-01
-RD13790DM,recaud_internos_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Loreto (millones de soles),391,1994-01-01,2026-07-01
-RD13791DM,recaud_internos_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Madre de Dios (millones de soles),391,1994-01-01,2026-07-01
-RD13792DM,recaud_internos_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Moquegua (millones de soles),391,1994-01-01,2026-07-01
-RD13793DM,recaud_internos_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Pasco (millones de soles),391,1994-01-01,2026-07-01
-RD13794DM,recaud_internos_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Piura (millones de soles),391,1994-01-01,2026-07-01
-RD13795DM,recaud_internos_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Puno (millones de soles),391,1994-01-01,2026-07-01
-RD13796DM,recaud_internos_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - San Martín (millones de soles),391,1994-01-01,2026-07-01
-RD13797DM,recaud_internos_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tacna (millones de soles),391,1994-01-01,2026-07-01
-RD13798DM,recaud_internos_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tumbes (millones de soles),391,1994-01-01,2026-07-01
-RD13799DM,recaud_internos_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ucayali (millones de soles),391,1994-01-01,2026-07-01
-RD13800DM,recaud_internos_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Total (millones de soles),391,1994-01-01,2026-07-01
-RD13882DM,recaud_igv_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Amazonas (millones de soles),391,1994-01-01,2026-07-01
-RD13883DM,recaud_igv_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ancash (millones de soles),391,1994-01-01,2026-07-01
-RD13884DM,recaud_igv_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Apurimac (millones de soles),391,1994-01-01,2026-07-01
-RD13885DM,recaud_igv_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Arequipa (millones de soles),391,1994-01-01,2026-07-01
-RD13886DM,recaud_igv_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ayacucho (millones de soles),391,1994-01-01,2026-07-01
-RD13887DM,recaud_igv_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cajamarca (millones de soles),391,1994-01-01,2026-07-01
-RD13888DM,recaud_igv_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Callao (millones de soles),391,1994-01-01,2026-07-01
-RD13889DM,recaud_igv_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cusco (millones de soles),391,1994-01-01,2026-07-01
-RD13890DM,recaud_igv_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huancavelica (millones de soles),391,1994-01-01,2026-07-01
-RD13891DM,recaud_igv_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huánuco (millones de soles),391,1994-01-01,2026-07-01
-RD13892DM,recaud_igv_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ica (millones de soles),391,1994-01-01,2026-07-01
-RD13893DM,recaud_igv_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Junín (millones de soles),391,1994-01-01,2026-07-01
-RD13894DM,recaud_igv_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - La Libertad (millones de soles),391,1994-01-01,2026-07-01
-RD13895DM,recaud_igv_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lambayeque (millones de soles),391,1994-01-01,2026-07-01
-RD13896DM,recaud_igv_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima Metropolitana (millones de soles),391,1994-01-01,2026-07-01
-RD13897DM,recaud_igv_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima provincias (millones de soles),391,1994-01-01,2026-07-01
-RD13898DM,recaud_igv_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Loreto (millones de soles),391,1994-01-01,2026-07-01
-RD13899DM,recaud_igv_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Madre de Dios (millones de soles),391,1994-01-01,2026-07-01
-RD13900DM,recaud_igv_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Moquegua (millones de soles),391,1994-01-01,2026-07-01
-RD13901DM,recaud_igv_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Pasco (millones de soles),391,1994-01-01,2026-07-01
-RD13902DM,recaud_igv_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Piura (millones de soles),391,1994-01-01,2026-07-01
-RD13903DM,recaud_igv_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Puno (millones de soles),391,1994-01-01,2026-07-01
-RD13904DM,recaud_igv_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - San Martín (millones de soles),391,1994-01-01,2026-07-01
-RD13905DM,recaud_igv_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tacna (millones de soles),391,1994-01-01,2026-07-01
-RD13906DM,recaud_igv_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tumbes (millones de soles),391,1994-01-01,2026-07-01
-RD13907DM,recaud_igv_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ucayali (millones de soles),391,1994-01-01,2026-07-01
-RD13908DM,recaud_igv_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Total (millones de soles),391,1994-01-01,2026-07-01
-RD13828DM,recaud_ir_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Amazonas (millones de soles),391,1994-01-01,2026-07-01
-RD13829DM,recaud_ir_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ancash (millones de soles),391,1994-01-01,2026-07-01
-RD13830DM,recaud_ir_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Apurimac (millones de soles),391,1994-01-01,2026-07-01
-RD13831DM,recaud_ir_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Arequipa (millones de soles),391,1994-01-01,2026-07-01
-RD13832DM,recaud_ir_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ayacucho (millones de soles),391,1994-01-01,2026-07-01
-RD13833DM,recaud_ir_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cajamarca (millones de soles),391,1994-01-01,2026-07-01
-RD13834DM,recaud_ir_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Callao (millones de soles),391,1994-01-01,2026-07-01
-RD13835DM,recaud_ir_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cusco (millones de soles),391,1994-01-01,2026-07-01
-RD13836DM,recaud_ir_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huancavelica (millones de soles),391,1994-01-01,2026-07-01
-RD13837DM,recaud_ir_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huánuco (millones de soles),391,1994-01-01,2026-07-01
-RD13838DM,recaud_ir_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ica (millones de soles),391,1994-01-01,2026-07-01
-RD13839DM,recaud_ir_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Junín (millones de soles),391,1994-01-01,2026-07-01
-RD13840DM,recaud_ir_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - La Libertad (millones de soles),391,1994-01-01,2026-07-01
-RD13841DM,recaud_ir_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lambayeque (millones de soles),391,1994-01-01,2026-07-01
-RD13842DM,recaud_ir_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima Metropolitana (millones de soles),391,1994-01-01,2026-07-01
-RD13843DM,recaud_ir_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima provincias (millones de soles),391,1994-01-01,2026-07-01
-RD13844DM,recaud_ir_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Loreto (millones de soles),391,1994-01-01,2026-07-01
-RD13845DM,recaud_ir_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Madre de Dios (millones de soles),391,1994-01-01,2026-07-01
-RD13846DM,recaud_ir_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Moquegua (millones de soles),391,1994-01-01,2026-07-01
-RD13847DM,recaud_ir_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Pasco (millones de soles),391,1994-01-01,2026-07-01
-RD13848DM,recaud_ir_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Piura (millones de soles),391,1994-01-01,2026-07-01
-RD13849DM,recaud_ir_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Puno (millones de soles),391,1994-01-01,2026-07-01
-RD13850DM,recaud_ir_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - San Martín (millones de soles),391,1994-01-01,2026-07-01
-RD13851DM,recaud_ir_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tacna (millones de soles),391,1994-01-01,2026-07-01
-RD13852DM,recaud_ir_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tumbes (millones de soles),391,1994-01-01,2026-07-01
-RD13853DM,recaud_ir_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ucayali (millones de soles),391,1994-01-01,2026-07-01
-RD13854DM,recaud_ir_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Total (millones de soles),391,1994-01-01,2026-07-01
-RD14092DM,inv_gn_amazonas,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Amazonas,223,2008-01-01,2026-07-01
-RD14093DM,inv_gn_ancash,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ancash,223,2008-01-01,2026-07-01
-RD14094DM,inv_gn_apurimac,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Apurímac,223,2008-01-01,2026-07-01
-RD14095DM,inv_gn_arequipa,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Arequipa,223,2008-01-01,2026-07-01
-RD14096DM,inv_gn_ayacucho,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ayacucho,223,2008-01-01,2026-07-01
-RD14097DM,inv_gn_cajamarca,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cajamarca,223,2008-01-01,2026-07-01
-RD14098DM,inv_gn_callao,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Callao,223,2008-01-01,2026-07-01
-RD14099DM,inv_gn_cusco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cusco,223,2008-01-01,2026-07-01
-RD14100DM,inv_gn_huancavelica,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huancavelica,223,2008-01-01,2026-07-01
-RD14101DM,inv_gn_huanuco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huánuco,223,2008-01-01,2026-07-01
-RD14102DM,inv_gn_ica,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ica,223,2008-01-01,2026-07-01
-RD14103DM,inv_gn_junin,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Junín,223,2008-01-01,2026-07-01
-RD14104DM,inv_gn_la_libertad,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - La Libertad,223,2008-01-01,2026-07-01
-RD14105DM,inv_gn_lambayeque,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lambayeque,223,2008-01-01,2026-07-01
-RD14106DM,inv_gn_lima,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lima,223,2008-01-01,2026-07-01
-RD14107DM,inv_gn_loreto,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Loreto,223,2008-01-01,2026-07-01
-RD14108DM,inv_gn_madre_de_dios,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Madre de Dios,223,2008-01-01,2026-07-01
-RD14109DM,inv_gn_moquegua,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Moquegua,223,2008-01-01,2026-07-01
-RD14110DM,inv_gn_pasco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Pasco,223,2008-01-01,2026-07-01
-RD14111DM,inv_gn_piura,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Piura,223,2008-01-01,2026-07-01
-RD14112DM,inv_gn_puno,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Puno,223,2008-01-01,2026-07-01
-RD14113DM,inv_gn_san_martin,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - San Martín,223,2008-01-01,2026-07-01
-RD14114DM,inv_gn_tacna,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tacna,223,2008-01-01,2026-07-01
-RD14115DM,inv_gn_tumbes,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tumbes,223,2008-01-01,2026-07-01
-RD14116DM,inv_gn_ucayali,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ucayali,223,2008-01-01,2026-07-01
-RD14117DM,inv_gn_total,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Total,223,2008-01-01,2026-07-01
-RD14144DM,inv_gr_amazonas,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Amazonas,223,2008-01-01,2026-07-01
-RD14145DM,inv_gr_ancash,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ancash,223,2008-01-01,2026-07-01
-RD14146DM,inv_gr_apurimac,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Apurímac,223,2008-01-01,2026-07-01
-RD14147DM,inv_gr_arequipa,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Arequipa,223,2008-01-01,2026-07-01
-RD14148DM,inv_gr_ayacucho,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ayacucho,223,2008-01-01,2026-07-01
-RD14149DM,inv_gr_cajamarca,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Cajamarca,223,2008-01-01,2026-07-01
-RD14150DM,inv_gr_cusco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Cusco,223,2008-01-01,2026-07-01
-RD14151DM,inv_gr_huancavelica,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Huancavelica,223,2008-01-01,2026-07-01
-RD14152DM,inv_gr_huanuco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Huánuco,223,2008-01-01,2026-07-01
-RD14153DM,inv_gr_ica,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ica,223,2008-01-01,2026-07-01
-RD14154DM,inv_gr_junin,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Junín,223,2008-01-01,2026-07-01
-RD14155DM,inv_gr_la_libertad,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - La Libertad,223,2008-01-01,2026-07-01
-RD14156DM,inv_gr_lambayeque,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Lambayeque,223,2008-01-01,2026-07-01
-RD14157DM,inv_gr_loreto,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Loreto,223,2008-01-01,2026-07-01
-RD14158DM,inv_gr_madre_de_dios,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Madre de Dios,223,2008-01-01,2026-07-01
-RD14159DM,inv_gr_moquegua,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Moquegua,223,2008-01-01,2026-07-01
-RD14160DM,inv_gr_pasco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Pasco,223,2008-01-01,2026-07-01
-RD14161DM,inv_gr_piura,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Piura,223,2008-01-01,2026-07-01
-RD14162DM,inv_gr_puno,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Puno,223,2008-01-01,2026-07-01
-RD14163DM,inv_gr_san_martin,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - San Martín,223,2008-01-01,2026-07-01
-RD14164DM,inv_gr_tacna,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Tacna,223,2008-01-01,2026-07-01
-RD14165DM,inv_gr_tumbes,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Tumbes,223,2008-01-01,2026-07-01
-RD14166DM,inv_gr_ucayali,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ucayali,223,2008-01-01,2026-07-01
-RD14167DM,inv_gr_lima,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Lima,223,2008-01-01,2026-07-01
-RD14168DM,inv_gr_callao,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Callao,223,2008-01-01,2026-07-01
-RD14169DM,inv_gr_municipalidad_metropolitana_de_lima,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Municipalidad Metropolitana de Lima,223,2008-01-01,2026-07-01
-RD14170DM,inv_gr_total,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Total,223,2008-01-01,2026-07-01
-RD14118DM,inv_gl_amazonas,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Amazonas,223,2008-01-01,2026-07-01
-RD14119DM,inv_gl_ancash,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ancash,223,2008-01-01,2026-07-01
-RD14120DM,inv_gl_apurimac,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Apurímac,223,2008-01-01,2026-07-01
-RD14121DM,inv_gl_arequipa,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Arequipa,223,2008-01-01,2026-07-01
-RD14122DM,inv_gl_ayacucho,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ayacucho,223,2008-01-01,2026-07-01
-RD14123DM,inv_gl_cajamarca,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cajamarca,223,2008-01-01,2026-07-01
-RD14124DM,inv_gl_callao,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Callao,223,2008-01-01,2026-07-01
-RD14125DM,inv_gl_cusco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cusco,223,2008-01-01,2026-07-01
-RD14126DM,inv_gl_huancavelica,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huancavelica,223,2008-01-01,2026-07-01
-RD14127DM,inv_gl_huanuco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huánuco,223,2008-01-01,2026-07-01
-RD14128DM,inv_gl_ica,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ica,223,2008-01-01,2026-07-01
-RD14129DM,inv_gl_junin,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Junín,223,2008-01-01,2026-07-01
-RD14130DM,inv_gl_la_libertad,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - La Libertad,223,2008-01-01,2026-07-01
-RD14131DM,inv_gl_lambayeque,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lambayeque,223,2008-01-01,2026-07-01
-RD14132DM,inv_gl_lima,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lima,223,2008-01-01,2026-07-01
-RD14133DM,inv_gl_loreto,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Loreto,223,2008-01-01,2026-07-01
-RD14134DM,inv_gl_madre_de_dios,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Madre de Dios,223,2008-01-01,2026-07-01
-RD14135DM,inv_gl_moquegua,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Moquegua,223,2008-01-01,2026-07-01
-RD14136DM,inv_gl_pasco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Pasco,222,2008-01-01,2026-07-01
-RD14137DM,inv_gl_piura,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Piura,223,2008-01-01,2026-07-01
-RD14138DM,inv_gl_puno,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Puno,223,2008-01-01,2026-07-01
-RD14139DM,inv_gl_san_martin,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - San Martín,223,2008-01-01,2026-07-01
-RD14140DM,inv_gl_tacna,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tacna,223,2008-01-01,2026-07-01
-RD14141DM,inv_gl_tumbes,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tumbes,223,2008-01-01,2026-07-01
-RD14142DM,inv_gl_ucayali,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ucayali,223,2008-01-01,2026-07-01
-RD14143DM,inv_gl_total,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Total,223,2008-01-01,2026-07-01
-RD14038DM,gnf_gr_amazonas,mensual,fiscal,Gastos no financiero de gobiernos regionales - Amazonas (millones de soles),271,2004-01-01,2026-07-01
-RD14039DM,gnf_gr_ancash,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ancash (millones de soles),271,2004-01-01,2026-07-01
-RD14040DM,gnf_gr_apurimac,mensual,fiscal,Gastos no financiero de gobiernos regionales - Apurímac (millones de soles),271,2004-01-01,2026-07-01
-RD14041DM,gnf_gr_arequipa,mensual,fiscal,Gastos no financiero de gobiernos regionales - Arequipa (millones de soles),271,2004-01-01,2026-07-01
-RD14042DM,gnf_gr_ayacucho,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ayacucho (millones de soles),271,2004-01-01,2026-07-01
-RD14043DM,gnf_gr_cajamarca,mensual,fiscal,Gastos no financiero de gobiernos regionales - Cajamarca (millones de soles),271,2004-01-01,2026-07-01
-RD14044DM,gnf_gr_cusco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Cusco (millones de soles),271,2004-01-01,2026-07-01
-RD14045DM,gnf_gr_huancavelica,mensual,fiscal,Gastos no financiero de gobiernos regionales - Huancavelica (millones de soles),271,2004-01-01,2026-07-01
-RD14046DM,gnf_gr_huanuco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Huánuco (millones de soles),271,2004-01-01,2026-07-01
-RD14047DM,gnf_gr_ica,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ica (millones de soles),271,2004-01-01,2026-07-01
-RD14048DM,gnf_gr_junin,mensual,fiscal,Gastos no financiero de gobiernos regionales - Junín (millones de soles),271,2004-01-01,2026-07-01
-RD14049DM,gnf_gr_la_libertad,mensual,fiscal,Gastos no financiero de gobiernos regionales - La Libertad (millones de soles),271,2004-01-01,2026-07-01
-RD14050DM,gnf_gr_lambayeque,mensual,fiscal,Gastos no financiero de gobiernos regionales - Lambayeque (millones de soles),271,2004-01-01,2026-07-01
-RD14051DM,gnf_gr_loreto,mensual,fiscal,Gastos no financiero de gobiernos regionales - Loreto (millones de soles),271,2004-01-01,2026-07-01
-RD14052DM,gnf_gr_madre_de_dios,mensual,fiscal,Gastos no financiero de gobiernos regionales - Madre de Dios (millones de soles),271,2004-01-01,2026-07-01
-RD14053DM,gnf_gr_moquegua,mensual,fiscal,Gastos no financiero de gobiernos regionales - Moquegua (millones de soles),271,2004-01-01,2026-07-01
-RD14054DM,gnf_gr_pasco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Pasco (millones de soles),271,2004-01-01,2026-07-01
-RD14055DM,gnf_gr_piura,mensual,fiscal,Gastos no financiero de gobiernos regionales - Piura (millones de soles),271,2004-01-01,2026-07-01
-RD14056DM,gnf_gr_puno,mensual,fiscal,Gastos no financiero de gobiernos regionales - Puno (millones de soles),271,2004-01-01,2026-07-01
-RD14057DM,gnf_gr_san_martin,mensual,fiscal,Gastos no financiero de gobiernos regionales - San Martín (millones de soles),271,2004-01-01,2026-07-01
-RD14058DM,gnf_gr_tacna,mensual,fiscal,Gastos no financiero de gobiernos regionales - Tacna (millones de soles),271,2004-01-01,2026-07-01
-RD14059DM,gnf_gr_tumbes,mensual,fiscal,Gastos no financiero de gobiernos regionales - Tumbes (millones de soles),271,2004-01-01,2026-07-01
-RD14060DM,gnf_gr_ucayali,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ucayali (millones de soles),271,2004-01-01,2026-07-01
-RD14061DM,gnf_gr_lima,mensual,fiscal,Gastos no financiero de gobiernos regionales - Lima (millones de soles),271,2004-01-01,2026-07-01
-RD14062DM,gnf_gr_callao,mensual,fiscal,Gastos no financiero de gobiernos regionales - Callao (millones de soles),271,2004-01-01,2026-07-01
-RD14063DM,gnf_gr_municipalidad_metropolitana_de_lima,mensual,fiscal,Gastos no financiero de gobiernos regionales - Municip. Metrop. de Lima (millones de soles),271,2004-01-01,2026-07-01
-RD14064DM,gnf_gr_total,mensual,fiscal,Gastos no financiero de gobiernos regionales - Total (millones de soles),271,2004-01-01,2026-07-01
-RD13986DM,gnf_gl_amazonas,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Amazonas (millones de soles),223,2008-01-01,2026-07-01
-RD13987DM,gnf_gl_ancash,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ancash (millones de soles),223,2008-01-01,2026-07-01
-RD13988DM,gnf_gl_apurimac,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Apurímac (millones de soles),223,2008-01-01,2026-07-01
-RD13989DM,gnf_gl_arequipa,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Arequipa (millones de soles),223,2008-01-01,2026-07-01
-RD13990DM,gnf_gl_ayacucho,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ayacucho (millones de soles),223,2008-01-01,2026-07-01
-RD13991DM,gnf_gl_cajamarca,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Cajamarca (millones de soles),223,2008-01-01,2026-07-01
-RD13992DM,gnf_gl_callao,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Callao (millones de soles),223,2008-01-01,2026-07-01
-RD13993DM,gnf_gl_cusco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Cusco (millones de soles),223,2008-01-01,2026-07-01
-RD13994DM,gnf_gl_huancavelica,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Huancavelica (millones de soles),223,2008-01-01,2026-07-01
-RD13995DM,gnf_gl_huanuco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Huánuco (millones de soles),223,2008-01-01,2026-07-01
-RD13996DM,gnf_gl_ica,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ica (millones de soles),223,2008-01-01,2026-07-01
-RD13997DM,gnf_gl_junin,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Junín (millones de soles),223,2008-01-01,2026-07-01
-RD13998DM,gnf_gl_la_libertad,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - La Libertad (millones de soles),223,2008-01-01,2026-07-01
-RD13999DM,gnf_gl_lambayeque,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Lambayeque (millones de soles),223,2008-01-01,2026-07-01
-RD14000DM,gnf_gl_lima,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Lima (millones de soles),223,2008-01-01,2026-07-01
-RD14001DM,gnf_gl_loreto,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Loreto (millones de soles),223,2008-01-01,2026-07-01
-RD14002DM,gnf_gl_madre_de_dios,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Madre de Dios (millones de soles),223,2008-01-01,2026-07-01
-RD14003DM,gnf_gl_moquegua,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Moquegua (millones de soles),223,2008-01-01,2026-07-01
-RD14004DM,gnf_gl_pasco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Pasco (millones de soles),223,2008-01-01,2026-07-01
-RD14005DM,gnf_gl_piura,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Piura (millones de soles),223,2008-01-01,2026-07-01
-RD14006DM,gnf_gl_puno,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Puno (millones de soles),223,2008-01-01,2026-07-01
-RD14007DM,gnf_gl_san_martin,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - San Martín (millones de soles),223,2008-01-01,2026-07-01
-RD14008DM,gnf_gl_tacna,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Tacna (millones de soles),223,2008-01-01,2026-07-01
-RD14009DM,gnf_gl_tumbes,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Tumbes (millones de soles),223,2008-01-01,2026-07-01
-RD14010DM,gnf_gl_ucayali,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ucayali (millones de soles),223,2008-01-01,2026-07-01
-RD14011DM,gnf_gl_total,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Total (millones de soles),223,2008-01-01,2026-07-01
+RD13774DM,recaud_internos_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Amazonas (millones de soles),392,1994-01-01,2026-08-01
+RD13775DM,recaud_internos_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ancash (millones de soles),392,1994-01-01,2026-08-01
+RD13776DM,recaud_internos_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Apurimac (millones de soles),392,1994-01-01,2026-08-01
+RD13777DM,recaud_internos_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Arequipa (millones de soles),392,1994-01-01,2026-08-01
+RD13778DM,recaud_internos_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ayacucho (millones de soles),392,1994-01-01,2026-08-01
+RD13779DM,recaud_internos_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cajamarca (millones de soles),392,1994-01-01,2026-08-01
+RD13780DM,recaud_internos_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Callao (millones de soles),392,1994-01-01,2026-08-01
+RD13781DM,recaud_internos_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Cusco (millones de soles),392,1994-01-01,2026-08-01
+RD13782DM,recaud_internos_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huancavelica (millones de soles),392,1994-01-01,2026-08-01
+RD13783DM,recaud_internos_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Huánuco (millones de soles),392,1994-01-01,2026-08-01
+RD13784DM,recaud_internos_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ica (millones de soles),392,1994-01-01,2026-08-01
+RD13785DM,recaud_internos_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Junín (millones de soles),392,1994-01-01,2026-08-01
+RD13786DM,recaud_internos_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - La Libertad (millones de soles),392,1994-01-01,2026-08-01
+RD13787DM,recaud_internos_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lambayeque (millones de soles),392,1994-01-01,2026-08-01
+RD13788DM,recaud_internos_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima Metropolitana (millones de soles),392,1994-01-01,2026-08-01
+RD13789DM,recaud_internos_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Lima provincias (millones de soles),392,1994-01-01,2026-08-01
+RD13790DM,recaud_internos_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Loreto (millones de soles),392,1994-01-01,2026-08-01
+RD13791DM,recaud_internos_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Madre de Dios (millones de soles),392,1994-01-01,2026-08-01
+RD13792DM,recaud_internos_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Moquegua (millones de soles),392,1994-01-01,2026-08-01
+RD13793DM,recaud_internos_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Pasco (millones de soles),392,1994-01-01,2026-08-01
+RD13794DM,recaud_internos_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Piura (millones de soles),392,1994-01-01,2026-08-01
+RD13795DM,recaud_internos_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Puno (millones de soles),392,1994-01-01,2026-08-01
+RD13796DM,recaud_internos_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - San Martín (millones de soles),392,1994-01-01,2026-08-01
+RD13797DM,recaud_internos_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tacna (millones de soles),392,1994-01-01,2026-08-01
+RD13798DM,recaud_internos_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Tumbes (millones de soles),392,1994-01-01,2026-08-01
+RD13799DM,recaud_internos_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Ucayali (millones de soles),392,1994-01-01,2026-08-01
+RD13800DM,recaud_internos_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - tributos internos según departamento - Total (millones de soles),392,1994-01-01,2026-08-01
+RD13882DM,recaud_igv_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Amazonas (millones de soles),392,1994-01-01,2026-08-01
+RD13883DM,recaud_igv_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ancash (millones de soles),392,1994-01-01,2026-08-01
+RD13884DM,recaud_igv_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Apurimac (millones de soles),392,1994-01-01,2026-08-01
+RD13885DM,recaud_igv_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Arequipa (millones de soles),392,1994-01-01,2026-08-01
+RD13886DM,recaud_igv_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ayacucho (millones de soles),392,1994-01-01,2026-08-01
+RD13887DM,recaud_igv_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cajamarca (millones de soles),392,1994-01-01,2026-08-01
+RD13888DM,recaud_igv_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Callao (millones de soles),392,1994-01-01,2026-08-01
+RD13889DM,recaud_igv_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Cusco (millones de soles),392,1994-01-01,2026-08-01
+RD13890DM,recaud_igv_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huancavelica (millones de soles),392,1994-01-01,2026-08-01
+RD13891DM,recaud_igv_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Huánuco (millones de soles),392,1994-01-01,2026-08-01
+RD13892DM,recaud_igv_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ica (millones de soles),392,1994-01-01,2026-08-01
+RD13893DM,recaud_igv_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Junín (millones de soles),392,1994-01-01,2026-08-01
+RD13894DM,recaud_igv_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - La Libertad (millones de soles),392,1994-01-01,2026-08-01
+RD13895DM,recaud_igv_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lambayeque (millones de soles),392,1994-01-01,2026-08-01
+RD13896DM,recaud_igv_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima Metropolitana (millones de soles),392,1994-01-01,2026-08-01
+RD13897DM,recaud_igv_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Lima provincias (millones de soles),392,1994-01-01,2026-08-01
+RD13898DM,recaud_igv_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Loreto (millones de soles),392,1994-01-01,2026-08-01
+RD13899DM,recaud_igv_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Madre de Dios (millones de soles),392,1994-01-01,2026-08-01
+RD13900DM,recaud_igv_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Moquegua (millones de soles),392,1994-01-01,2026-08-01
+RD13901DM,recaud_igv_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Pasco (millones de soles),392,1994-01-01,2026-08-01
+RD13902DM,recaud_igv_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Piura (millones de soles),392,1994-01-01,2026-08-01
+RD13903DM,recaud_igv_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Puno (millones de soles),392,1994-01-01,2026-08-01
+RD13904DM,recaud_igv_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - San Martín (millones de soles),392,1994-01-01,2026-08-01
+RD13905DM,recaud_igv_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tacna (millones de soles),392,1994-01-01,2026-08-01
+RD13906DM,recaud_igv_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Tumbes (millones de soles),392,1994-01-01,2026-08-01
+RD13907DM,recaud_igv_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Ucayali (millones de soles),392,1994-01-01,2026-08-01
+RD13908DM,recaud_igv_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - Impuesto General a las Ventas interno según departamento - Total (millones de soles),392,1994-01-01,2026-08-01
+RD13828DM,recaud_ir_amazonas,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Amazonas (millones de soles),392,1994-01-01,2026-08-01
+RD13829DM,recaud_ir_ancash,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ancash (millones de soles),392,1994-01-01,2026-08-01
+RD13830DM,recaud_ir_apurimac,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Apurimac (millones de soles),392,1994-01-01,2026-08-01
+RD13831DM,recaud_ir_arequipa,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Arequipa (millones de soles),392,1994-01-01,2026-08-01
+RD13832DM,recaud_ir_ayacucho,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ayacucho (millones de soles),392,1994-01-01,2026-08-01
+RD13833DM,recaud_ir_cajamarca,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cajamarca (millones de soles),392,1994-01-01,2026-08-01
+RD13834DM,recaud_ir_callao,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Callao (millones de soles),392,1994-01-01,2026-08-01
+RD13835DM,recaud_ir_cusco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Cusco (millones de soles),392,1994-01-01,2026-08-01
+RD13836DM,recaud_ir_huancavelica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huancavelica (millones de soles),392,1994-01-01,2026-08-01
+RD13837DM,recaud_ir_huanuco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Huánuco (millones de soles),392,1994-01-01,2026-08-01
+RD13838DM,recaud_ir_ica,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ica (millones de soles),392,1994-01-01,2026-08-01
+RD13839DM,recaud_ir_junin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Junín (millones de soles),392,1994-01-01,2026-08-01
+RD13840DM,recaud_ir_la_libertad,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - La Libertad (millones de soles),392,1994-01-01,2026-08-01
+RD13841DM,recaud_ir_lambayeque,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lambayeque (millones de soles),392,1994-01-01,2026-08-01
+RD13842DM,recaud_ir_lima_metropolitana,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima Metropolitana (millones de soles),392,1994-01-01,2026-08-01
+RD13843DM,recaud_ir_lima_provincias,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Lima provincias (millones de soles),392,1994-01-01,2026-08-01
+RD13844DM,recaud_ir_loreto,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Loreto (millones de soles),392,1994-01-01,2026-08-01
+RD13845DM,recaud_ir_madre_de_dios,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Madre de Dios (millones de soles),392,1994-01-01,2026-08-01
+RD13846DM,recaud_ir_moquegua,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Moquegua (millones de soles),392,1994-01-01,2026-08-01
+RD13847DM,recaud_ir_pasco,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Pasco (millones de soles),392,1994-01-01,2026-08-01
+RD13848DM,recaud_ir_piura,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Piura (millones de soles),392,1994-01-01,2026-08-01
+RD13849DM,recaud_ir_puno,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Puno (millones de soles),392,1994-01-01,2026-08-01
+RD13850DM,recaud_ir_san_martin,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - San Martín (millones de soles),392,1994-01-01,2026-08-01
+RD13851DM,recaud_ir_tacna,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tacna (millones de soles),392,1994-01-01,2026-08-01
+RD13852DM,recaud_ir_tumbes,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Tumbes (millones de soles),392,1994-01-01,2026-08-01
+RD13853DM,recaud_ir_ucayali,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Ucayali (millones de soles),392,1994-01-01,2026-08-01
+RD13854DM,recaud_ir_total,mensual,fiscal,Ingresos tributarios recaudados por SUNAT - impuesto a la renta según departamento - Total (millones de soles),392,1994-01-01,2026-08-01
+RD14092DM,inv_gn_amazonas,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Amazonas,225,2008-01-01,2026-09-01
+RD14093DM,inv_gn_ancash,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ancash,225,2008-01-01,2026-09-01
+RD14094DM,inv_gn_apurimac,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Apurímac,225,2008-01-01,2026-09-01
+RD14095DM,inv_gn_arequipa,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Arequipa,225,2008-01-01,2026-09-01
+RD14096DM,inv_gn_ayacucho,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ayacucho,225,2008-01-01,2026-09-01
+RD14097DM,inv_gn_cajamarca,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cajamarca,225,2008-01-01,2026-09-01
+RD14098DM,inv_gn_callao,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Callao,225,2008-01-01,2026-09-01
+RD14099DM,inv_gn_cusco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Cusco,225,2008-01-01,2026-09-01
+RD14100DM,inv_gn_huancavelica,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huancavelica,225,2008-01-01,2026-09-01
+RD14101DM,inv_gn_huanuco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Huánuco,225,2008-01-01,2026-09-01
+RD14102DM,inv_gn_ica,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ica,225,2008-01-01,2026-09-01
+RD14103DM,inv_gn_junin,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Junín,225,2008-01-01,2026-09-01
+RD14104DM,inv_gn_la_libertad,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - La Libertad,225,2008-01-01,2026-09-01
+RD14105DM,inv_gn_lambayeque,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lambayeque,225,2008-01-01,2026-09-01
+RD14106DM,inv_gn_lima,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Lima,225,2008-01-01,2026-09-01
+RD14107DM,inv_gn_loreto,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Loreto,225,2008-01-01,2026-09-01
+RD14108DM,inv_gn_madre_de_dios,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Madre de Dios,225,2008-01-01,2026-09-01
+RD14109DM,inv_gn_moquegua,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Moquegua,225,2008-01-01,2026-09-01
+RD14110DM,inv_gn_pasco,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Pasco,225,2008-01-01,2026-09-01
+RD14111DM,inv_gn_piura,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Piura,225,2008-01-01,2026-09-01
+RD14112DM,inv_gn_puno,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Puno,225,2008-01-01,2026-09-01
+RD14113DM,inv_gn_san_martin,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - San Martín,225,2008-01-01,2026-09-01
+RD14114DM,inv_gn_tacna,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tacna,225,2008-01-01,2026-09-01
+RD14115DM,inv_gn_tumbes,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Tumbes,225,2008-01-01,2026-09-01
+RD14116DM,inv_gn_ucayali,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Ucayali,225,2008-01-01,2026-09-01
+RD14117DM,inv_gn_total,mensual,fiscal,Inversión bruta fija del gobierno nacional por departamentos (millones S/) - Total,225,2008-01-01,2026-09-01
+RD14144DM,inv_gr_amazonas,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Amazonas,225,2008-01-01,2026-09-01
+RD14145DM,inv_gr_ancash,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ancash,225,2008-01-01,2026-09-01
+RD14146DM,inv_gr_apurimac,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Apurímac,225,2008-01-01,2026-09-01
+RD14147DM,inv_gr_arequipa,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Arequipa,225,2008-01-01,2026-09-01
+RD14148DM,inv_gr_ayacucho,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ayacucho,225,2008-01-01,2026-09-01
+RD14149DM,inv_gr_cajamarca,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Cajamarca,225,2008-01-01,2026-09-01
+RD14150DM,inv_gr_cusco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Cusco,225,2008-01-01,2026-09-01
+RD14151DM,inv_gr_huancavelica,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Huancavelica,225,2008-01-01,2026-09-01
+RD14152DM,inv_gr_huanuco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Huánuco,225,2008-01-01,2026-09-01
+RD14153DM,inv_gr_ica,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ica,225,2008-01-01,2026-09-01
+RD14154DM,inv_gr_junin,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Junín,225,2008-01-01,2026-09-01
+RD14155DM,inv_gr_la_libertad,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - La Libertad,225,2008-01-01,2026-09-01
+RD14156DM,inv_gr_lambayeque,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Lambayeque,225,2008-01-01,2026-09-01
+RD14157DM,inv_gr_loreto,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Loreto,225,2008-01-01,2026-09-01
+RD14158DM,inv_gr_madre_de_dios,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Madre de Dios,225,2008-01-01,2026-09-01
+RD14159DM,inv_gr_moquegua,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Moquegua,225,2008-01-01,2026-09-01
+RD14160DM,inv_gr_pasco,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Pasco,225,2008-01-01,2026-09-01
+RD14161DM,inv_gr_piura,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Piura,225,2008-01-01,2026-09-01
+RD14162DM,inv_gr_puno,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Puno,225,2008-01-01,2026-09-01
+RD14163DM,inv_gr_san_martin,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - San Martín,225,2008-01-01,2026-09-01
+RD14164DM,inv_gr_tacna,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Tacna,225,2008-01-01,2026-09-01
+RD14165DM,inv_gr_tumbes,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Tumbes,225,2008-01-01,2026-09-01
+RD14166DM,inv_gr_ucayali,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Ucayali,225,2008-01-01,2026-09-01
+RD14167DM,inv_gr_lima,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Lima,225,2008-01-01,2026-09-01
+RD14168DM,inv_gr_callao,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Callao,225,2008-01-01,2026-09-01
+RD14169DM,inv_gr_municipalidad_metropolitana_de_lima,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Municipalidad Metropolitana de Lima,225,2008-01-01,2026-09-01
+RD14170DM,inv_gr_total,mensual,fiscal,Inversión bruta fija de los gobiernos regionales (millones S/) - Total,225,2008-01-01,2026-09-01
+RD14118DM,inv_gl_amazonas,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Amazonas,225,2008-01-01,2026-09-01
+RD14119DM,inv_gl_ancash,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ancash,225,2008-01-01,2026-09-01
+RD14120DM,inv_gl_apurimac,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Apurímac,225,2008-01-01,2026-09-01
+RD14121DM,inv_gl_arequipa,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Arequipa,225,2008-01-01,2026-09-01
+RD14122DM,inv_gl_ayacucho,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ayacucho,225,2008-01-01,2026-09-01
+RD14123DM,inv_gl_cajamarca,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cajamarca,225,2008-01-01,2026-09-01
+RD14124DM,inv_gl_callao,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Callao,225,2008-01-01,2026-09-01
+RD14125DM,inv_gl_cusco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Cusco,225,2008-01-01,2026-09-01
+RD14126DM,inv_gl_huancavelica,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huancavelica,225,2008-01-01,2026-09-01
+RD14127DM,inv_gl_huanuco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Huánuco,225,2008-01-01,2026-09-01
+RD14128DM,inv_gl_ica,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ica,225,2008-01-01,2026-09-01
+RD14129DM,inv_gl_junin,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Junín,225,2008-01-01,2026-09-01
+RD14130DM,inv_gl_la_libertad,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - La Libertad,225,2008-01-01,2026-09-01
+RD14131DM,inv_gl_lambayeque,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lambayeque,225,2008-01-01,2026-09-01
+RD14132DM,inv_gl_lima,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Lima,225,2008-01-01,2026-09-01
+RD14133DM,inv_gl_loreto,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Loreto,225,2008-01-01,2026-09-01
+RD14134DM,inv_gl_madre_de_dios,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Madre de Dios,225,2008-01-01,2026-09-01
+RD14135DM,inv_gl_moquegua,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Moquegua,225,2008-01-01,2026-09-01
+RD14136DM,inv_gl_pasco,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Pasco,224,2008-01-01,2026-09-01
+RD14137DM,inv_gl_piura,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Piura,225,2008-01-01,2026-09-01
+RD14138DM,inv_gl_puno,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Puno,225,2008-01-01,2026-09-01
+RD14139DM,inv_gl_san_martin,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - San Martín,225,2008-01-01,2026-09-01
+RD14140DM,inv_gl_tacna,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tacna,225,2008-01-01,2026-09-01
+RD14141DM,inv_gl_tumbes,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Tumbes,225,2008-01-01,2026-09-01
+RD14142DM,inv_gl_ucayali,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Ucayali,225,2008-01-01,2026-09-01
+RD14143DM,inv_gl_total,mensual,fiscal,Inversión bruta fija de gobiernos locales por departamentos (millones S/) - Total,225,2008-01-01,2026-09-01
+RD14038DM,gnf_gr_amazonas,mensual,fiscal,Gastos no financiero de gobiernos regionales - Amazonas (millones de soles),273,2004-01-01,2026-09-01
+RD14039DM,gnf_gr_ancash,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ancash (millones de soles),273,2004-01-01,2026-09-01
+RD14040DM,gnf_gr_apurimac,mensual,fiscal,Gastos no financiero de gobiernos regionales - Apurímac (millones de soles),273,2004-01-01,2026-09-01
+RD14041DM,gnf_gr_arequipa,mensual,fiscal,Gastos no financiero de gobiernos regionales - Arequipa (millones de soles),273,2004-01-01,2026-09-01
+RD14042DM,gnf_gr_ayacucho,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ayacucho (millones de soles),273,2004-01-01,2026-09-01
+RD14043DM,gnf_gr_cajamarca,mensual,fiscal,Gastos no financiero de gobiernos regionales - Cajamarca (millones de soles),273,2004-01-01,2026-09-01
+RD14044DM,gnf_gr_cusco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Cusco (millones de soles),273,2004-01-01,2026-09-01
+RD14045DM,gnf_gr_huancavelica,mensual,fiscal,Gastos no financiero de gobiernos regionales - Huancavelica (millones de soles),273,2004-01-01,2026-09-01
+RD14046DM,gnf_gr_huanuco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Huánuco (millones de soles),273,2004-01-01,2026-09-01
+RD14047DM,gnf_gr_ica,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ica (millones de soles),273,2004-01-01,2026-09-01
+RD14048DM,gnf_gr_junin,mensual,fiscal,Gastos no financiero de gobiernos regionales - Junín (millones de soles),273,2004-01-01,2026-09-01
+RD14049DM,gnf_gr_la_libertad,mensual,fiscal,Gastos no financiero de gobiernos regionales - La Libertad (millones de soles),273,2004-01-01,2026-09-01
+RD14050DM,gnf_gr_lambayeque,mensual,fiscal,Gastos no financiero de gobiernos regionales - Lambayeque (millones de soles),273,2004-01-01,2026-09-01
+RD14051DM,gnf_gr_loreto,mensual,fiscal,Gastos no financiero de gobiernos regionales - Loreto (millones de soles),273,2004-01-01,2026-09-01
+RD14052DM,gnf_gr_madre_de_dios,mensual,fiscal,Gastos no financiero de gobiernos regionales - Madre de Dios (millones de soles),273,2004-01-01,2026-09-01
+RD14053DM,gnf_gr_moquegua,mensual,fiscal,Gastos no financiero de gobiernos regionales - Moquegua (millones de soles),273,2004-01-01,2026-09-01
+RD14054DM,gnf_gr_pasco,mensual,fiscal,Gastos no financiero de gobiernos regionales - Pasco (millones de soles),273,2004-01-01,2026-09-01
+RD14055DM,gnf_gr_piura,mensual,fiscal,Gastos no financiero de gobiernos regionales - Piura (millones de soles),273,2004-01-01,2026-09-01
+RD14056DM,gnf_gr_puno,mensual,fiscal,Gastos no financiero de gobiernos regionales - Puno (millones de soles),273,2004-01-01,2026-09-01
+RD14057DM,gnf_gr_san_martin,mensual,fiscal,Gastos no financiero de gobiernos regionales - San Martín (millones de soles),273,2004-01-01,2026-09-01
+RD14058DM,gnf_gr_tacna,mensual,fiscal,Gastos no financiero de gobiernos regionales - Tacna (millones de soles),273,2004-01-01,2026-09-01
+RD14059DM,gnf_gr_tumbes,mensual,fiscal,Gastos no financiero de gobiernos regionales - Tumbes (millones de soles),273,2004-01-01,2026-09-01
+RD14060DM,gnf_gr_ucayali,mensual,fiscal,Gastos no financiero de gobiernos regionales - Ucayali (millones de soles),273,2004-01-01,2026-09-01
+RD14061DM,gnf_gr_lima,mensual,fiscal,Gastos no financiero de gobiernos regionales - Lima (millones de soles),273,2004-01-01,2026-09-01
+RD14062DM,gnf_gr_callao,mensual,fiscal,Gastos no financiero de gobiernos regionales - Callao (millones de soles),273,2004-01-01,2026-09-01
+RD14063DM,gnf_gr_municipalidad_metropolitana_de_lima,mensual,fiscal,Gastos no financiero de gobiernos regionales - Municip. Metrop. de Lima (millones de soles),273,2004-01-01,2026-09-01
+RD14064DM,gnf_gr_total,mensual,fiscal,Gastos no financiero de gobiernos regionales - Total (millones de soles),273,2004-01-01,2026-09-01
+RD13986DM,gnf_gl_amazonas,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Amazonas (millones de soles),225,2008-01-01,2026-09-01
+RD13987DM,gnf_gl_ancash,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ancash (millones de soles),225,2008-01-01,2026-09-01
+RD13988DM,gnf_gl_apurimac,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Apurímac (millones de soles),225,2008-01-01,2026-09-01
+RD13989DM,gnf_gl_arequipa,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Arequipa (millones de soles),225,2008-01-01,2026-09-01
+RD13990DM,gnf_gl_ayacucho,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ayacucho (millones de soles),225,2008-01-01,2026-09-01
+RD13991DM,gnf_gl_cajamarca,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Cajamarca (millones de soles),225,2008-01-01,2026-09-01
+RD13992DM,gnf_gl_callao,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Callao (millones de soles),225,2008-01-01,2026-09-01
+RD13993DM,gnf_gl_cusco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Cusco (millones de soles),225,2008-01-01,2026-09-01
+RD13994DM,gnf_gl_huancavelica,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Huancavelica (millones de soles),225,2008-01-01,2026-09-01
+RD13995DM,gnf_gl_huanuco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Huánuco (millones de soles),225,2008-01-01,2026-09-01
+RD13996DM,gnf_gl_ica,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ica (millones de soles),225,2008-01-01,2026-09-01
+RD13997DM,gnf_gl_junin,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Junín (millones de soles),225,2008-01-01,2026-09-01
+RD13998DM,gnf_gl_la_libertad,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - La Libertad (millones de soles),225,2008-01-01,2026-09-01
+RD13999DM,gnf_gl_lambayeque,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Lambayeque (millones de soles),225,2008-01-01,2026-09-01
+RD14000DM,gnf_gl_lima,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Lima (millones de soles),225,2008-01-01,2026-09-01
+RD14001DM,gnf_gl_loreto,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Loreto (millones de soles),225,2008-01-01,2026-09-01
+RD14002DM,gnf_gl_madre_de_dios,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Madre de Dios (millones de soles),225,2008-01-01,2026-09-01
+RD14003DM,gnf_gl_moquegua,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Moquegua (millones de soles),225,2008-01-01,2026-09-01
+RD14004DM,gnf_gl_pasco,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Pasco (millones de soles),225,2008-01-01,2026-09-01
+RD14005DM,gnf_gl_piura,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Piura (millones de soles),225,2008-01-01,2026-09-01
+RD14006DM,gnf_gl_puno,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Puno (millones de soles),225,2008-01-01,2026-09-01
+RD14007DM,gnf_gl_san_martin,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - San Martín (millones de soles),225,2008-01-01,2026-09-01
+RD14008DM,gnf_gl_tacna,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Tacna (millones de soles),225,2008-01-01,2026-09-01
+RD14009DM,gnf_gl_tumbes,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Tumbes (millones de soles),225,2008-01-01,2026-09-01
+RD14010DM,gnf_gl_ucayali,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Ucayali (millones de soles),225,2008-01-01,2026-09-01
+RD14011DM,gnf_gl_total,mensual,fiscal,Gastos no financieros de gobiernos locales por departamentos - Total (millones de soles),225,2008-01-01,2026-09-01

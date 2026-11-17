@@ -257,6 +257,7 @@ footer p { margin: 4px 0; }
   <div id="tab-tablero" role="tabpanel" aria-labelledby="tabbtn-tablero">
   <section class="kpis" id="kpis" aria-label="Indicadores del último dato"></section>
   <p class="kpi-note" id="kpi-note"></p>
+  <div class="callout" id="dec-box" hidden></div>
 
   <div class="callout readbox" id="read-box" hidden>
     <div class="kicker">Lo que muestran los datos</div>
@@ -1600,6 +1601,8 @@ function renderKpis() {
     const n = monthsBetween(r.last_move_m, r.m);
     hero.subs.push(`Último cambio: ${spp(r.last_move)} en ${mLabel(r.last_move_m)}` + (n > 0 ? `; sin cambios desde entonces (${plural(n, 'mes', 'meses')})` : ''));
   }
+  if (D.decision && D.decision.pendiente) hero.subs.unshift(`Decisión del ${dLabel(D.decision.fecha)}: sube a ${pct(D.decision.tasa)} (` +
+    (D.decision.diaria_desde ? `en la serie diaria desde el ${dLabel(D.decision.diaria_desde)}; la mensual aún no la incluye` : 'la serie aún no la incluye') + '; ver el aviso abajo)');
   if (r.peak) hero.subs.push(`${pct(r.peak.v)} → ${pct(r.v)}: ${spp(r.v - r.peak.v)} ${r.peak.tipo === 'alza' ? 'desde el pico del ciclo de alzas' : 'desde el mínimo del ciclo de recortes'} (${mShort(r.peak.m)})`);
   const li = lastIdx('ref');
   if (val('on', li) != null && val('vent', li) != null) hero.subs.push(`Corredor: overnight ${pct(val('on', li))} · ventanilla ${pct(val('vent', li))}`);
@@ -1646,6 +1649,27 @@ function renderKpis() {
   if (K.pref) latest.push(mLabel(K.pref.m) + ' (las demás series del BCRP)');
   document.getElementById('kpi-note').textContent = (CUR ? `Las variaciones son en puntos porcentuales (pp) desde ${mLabel(antesOf(CUR))}, el ${cycPrevTxt(CUR)} del ciclo vigente. ` : '') +
     'Cada valor lleva su último dato: ' + latest.join('; ') + '.';
+}
+function renderDecision() {
+  const x = D.decision, box = document.getElementById('dec-box');
+  if (!x || !x.pendiente) { box.hidden = true; return; }
+  box.replaceChildren();
+  const [y, mo, dd] = x.fecha.split('-');
+  const f = new Date(+y, +mo - 1, +dd).toLocaleDateString('es-PE', {day: 'numeric', month: 'long', year: 'numeric'});
+  const [py, pm, pd] = x.proxima.split('-');
+  const fp = new Date(+py, +pm - 1, +pd).toLocaleDateString('es-PE', {day: 'numeric', month: 'long'});
+  htmlEl('div', {cls: 'kicker', text: 'Última decisión · ' + x.titulo}, box);
+  const p1 = htmlEl('p', {}, box);
+  htmlEl('b', {text: `El ${f}, el BCRP subió la tasa de referencia de ${fx(x.antes)}% a ${fx(x.tasa)}%`}, p1);
+  p1.append(`, ${x.motivo}. ${x.guia} Tasas de ventanilla: depósitos overnight ${fx(x.corredor.overnight)}% y operaciones de reporte y créditos de regulación monetaria ${fx(x.corredor.ventanilla)}%. Próxima sesión: ${fp}.`);
+  const p2 = htmlEl('p', {}, box);
+  if (x.diaria_desde) p2.append(`Los indicadores y los gráficos mensuales aún muestran ${fx(x.antes)}%: la serie mensual del BCRP (BCRPData) llega a ${mLabel(x.serie_m)}; ` +
+    `la diaria ya registra ${fx(x.tasa)}% desde el ${dLabel(x.diaria_desde)}. Se actualizarán cuando el BCRP publique el dato mensual. Fuente: `);
+  else p2.append(`Los gráficos aún muestran ${fx(x.antes)}%: la serie del BCRP (BCRPData) llega a ${mLabel(x.serie_m)} en datos mensuales` +
+    (x.serie_d ? ` y al ${dLabel(x.serie_d)} en diarios` : '') + '; se actualizarán cuando el BCRP publique el dato. Fuente: ');
+  htmlEl('a', {href: x.fuente.url, text: x.fuente.cita}, p2);
+  p2.append(`, ${x.fuente.detalle}.`);
+  box.hidden = false;
 }
 function renderSpark() {
   const box = document.getElementById('ch-spark');
@@ -2644,7 +2668,7 @@ function renderEdu() {
 // ---------- Pestañas ----------
 const TABS = ['tablero', 'aprende'];
 let tab = 'tablero';
-function renderVisible() { if (tab === 'tablero') { renderKpis(); renderAll(); } else renderEdu(); }
+function renderVisible() { if (tab === 'tablero') { renderKpis(); renderDecision(); renderAll(); } else renderEdu(); }
 function showTab(id, fromUser) {
   tab = id;
   for (const t of TABS) {

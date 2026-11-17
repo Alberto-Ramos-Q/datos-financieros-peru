@@ -313,6 +313,22 @@ def build_kpis(m: pd.DataFrame, real: pd.Series | None) -> dict:
     return k
 
 
+def decision_pendiente_kpi(m: pd.DataFrame) -> dict | None:
+    """Última decisión del Programa Monetario si la serie mensual aún no la trae (config/decision_bcrp.json)."""
+    f = PROJECT_DIR / "config" / "decision_bcrp.json"
+    if not f.exists() or "tasa_referencia" not in m.columns:
+        return None
+    dec = json.loads(f.read_text(encoding="utf-8"))
+    r = m["tasa_referencia"].dropna()
+    mes = pd.Timestamp(dec["fecha"]).to_period("M").to_timestamp()
+    if r.index[-1] >= mes and abs(r.iloc[-1] - dec["tasa"]) < 1e-9:
+        print(f"  decisión BCRP {dec['fecha']}: ya está en la serie mensual")
+        return None
+    print(f"  decisión BCRP {dec['fecha']}: {dec['antes']} -> {dec['tasa']}, AÚN NO en la serie mensual (se muestra en el indicador)")
+    return {"fecha": dec["fecha"], "antes": dec["antes"], "tasa": dec["tasa"], "titulo": dec["titulo"],
+            "cita": dec["fuente"]["cita"], "url": dec["fuente"]["url"]}
+
+
 def decade_table(m: pd.DataFrame) -> list[dict]:
     """Inflación promedio anual (geométrica) por década, desde la var% mensual."""
     s = m["ipc_var_mensual"].dropna()
@@ -445,7 +461,7 @@ def main() -> int:
 
     data = {
         "generado": dt.date.today().isoformat(), "defaultTab": "ultimo", "start": month_key(months[0]), "hasta": month_key(months[-1]),
-        "S": S, "targets": targets, "kpi": build_kpis(m, real), "heat": heat, "small": small, "shock": shock,
+        "S": S, "targets": targets, "kpi": build_kpis(m, real), "decision": decision_pendiente_kpi(m), "heat": heat, "small": small, "shock": shock,
         "region": region, "src_nac": src_nac, "edu": build_edu(m, targets),
     }
     data["extra"] = build_extras({"m": m, "months": months, "S": S, "targets": targets, "comp": comp,
